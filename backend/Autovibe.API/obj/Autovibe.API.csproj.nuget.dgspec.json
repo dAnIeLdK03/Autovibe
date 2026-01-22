@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj": {}
+    "C:\\D\\Projects\\AutoVibe\\backend\\Autovibe.API\\Autovibe.API.csproj": {}
   },
   "projects": {
-    "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj": {
+    "C:\\D\\Projects\\AutoVibe\\backend\\Autovibe.API\\Autovibe.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj",
+        "projectUniqueName": "C:\\D\\Projects\\AutoVibe\\backend\\Autovibe.API\\Autovibe.API.csproj",
         "projectName": "Autovibe.API",
-        "projectPath": "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj",
+        "projectPath": "C:\\D\\Projects\\AutoVibe\\backend\\Autovibe.API\\Autovibe.API.csproj",
         "packagesPath": "C:\\Users\\danik\\.nuget\\packages\\",
-        "outputPath": "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\obj\\",
+        "outputPath": "C:\\D\\Projects\\AutoVibe\\backend\\Autovibe.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -57,21 +57,21 @@
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[10.0.2, )"
-            },
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[10.0.0, )"
+              "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[9.0.0, )"
             },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.2, )"
+              "version": "[9.0.0, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[9.0.0, )"
             },
             "MySqlConnector": {
               "target": "Package",

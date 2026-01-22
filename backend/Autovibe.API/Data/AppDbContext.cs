@@ -8,22 +8,28 @@ public class AppDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
-            .Property(c => c.Email)
-            .IsRequired()
-            .Unique();
-        modelBuilder.Entity<User>()
-            .Property(c => c.PasswordHash)
+            .Property(u => u.Email)
             .IsRequired();
 
-        modelBuilder.Entity<Car>()
-            .Property(c => c.UserId)
-            .ForeignKey("User")
-            .CascadeDelete();
-    }
-    public AppDbContext(DbContextOprions<AppDbContext> options) : base(options)
-    {}
-    
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
 
-    public DbSet<Car> Cars {get; set; }
-    public DbSet<User> Users {get; set; }
+        modelBuilder.Entity<User>()
+            .Property(u => u.PasswordHash)
+            .IsRequired();
+
+
+        modelBuilder.Entity<Car>()
+            .HasOne(c => c.User)
+            .WithMany(u => u.Cars)
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    { }
+
+
+    public DbSet<Car> Cars { get; set; }
+    public DbSet<User> Users { get; set; }
 }
