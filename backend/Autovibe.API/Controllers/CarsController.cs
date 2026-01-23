@@ -34,7 +34,7 @@ namespace Autovibe.API.Controllers
                     FuelType = c.FuelType,
                     Transmission = c.Transmission,
                     Color = c.Color,
-                    Description = c.Description != null && c.Description.Length > 100
+                    ShortDescription = c.Description != null && c.Description.Length > 100
                     ? c.Description.Substring(0, 100) + "..."
                     : c.Description
                 })
@@ -91,7 +91,7 @@ namespace Autovibe.API.Controllers
                 return BadRequest("User is missing.");
             }
 
-            if (!_context.Users.Any(u => u.Id == createDto.UserId))
+            if (!await _context.Users.AnyAsync(u => u.Id == createDto.UserId))
             {
                 return BadRequest("User does not exist.");
             }
@@ -166,21 +166,16 @@ namespace Autovibe.API.Controllers
                 return NotFound();
             }
 
-            var carDetails = new CarDetailsDto
-            {
-                Make = updateDto.Make,
-                Model = updateDto.Model,
-                Year = updateDto.Year,
-                Price = updateDto.Price,
-                Mileage = updateDto.Mileage,
-                FuelType = updateDto.FuelType,
-                Transmission = updateDto.Transmission,
-                Color = updateDto.Color,
-                Description = updateDto.Description,
-
-                UpdatedAt = DateTime.Now
-
-            };
+            car.Make = updateDto.Make;
+            car.Model = updateDto.Model;
+            car.Year = updateDto.Year;
+            car.Price = updateDto.Price;
+            car.Mileage = updateDto.Mileage;
+            car.FuelType = updateDto.FuelType;
+            car.Transmission = updateDto.Transmission;
+            car.Color = updateDto.Color;
+            car.Description = updateDto.Description;
+            car.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
 
@@ -215,6 +210,23 @@ namespace Autovibe.API.Controllers
         
             return Ok(result);
             
+        }
+
+        //DELETE: api/cars/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteCar(int id)
+        {
+            var car = await _context.Cars
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+                if(car == null)
+            {
+                return NotFound();
+            }
+            _context.Cars.Remove(car);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

@@ -14,6 +14,6 @@ public class CarListDto
     public string FuelType {get; set; } = string.Empty;
     public string Transmission {get; set; } = string.Empty;
     public string Color {get; set; } = string.Empty;
-    public string? Description {get; set; } = string.Empty;
+    public string? ShortDescription {get; set; } = string.Empty;
 
 }
