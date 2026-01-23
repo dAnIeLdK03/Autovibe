@@ -78,6 +78,74 @@ namespace Autovibe.API.Controllers
             return Ok(carDetails);
         }
         
+        [HttpPost]
+        public async Task<ActionResult<CarDetailsDto>> CreateCar([FromBody] CarCreateDto createDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if(createDto.UserId == 0)
+            {
+                return BadRequest("User is missing.");
+            }
+
+            if(!_context.Users.Any(u => u.Id == createDto.UserId)){
+                return BadRequest("User does not exist.");
+            }
+
+            var car = new Car
+            {
+                Make = createDto.Make,
+                Model = createDto.Model,
+                Year = createDto.Year,
+                Price = createDto.Price,
+                Mileage = createDto.Mileage,
+                FuelType = createDto.FuelType,
+                Transmission = createDto.Transmission,
+                Color = createDto.Color,
+                Description = createDto.Description,
+                UserId = createDto.UserId,
+                CreatedAt = DateTime.Now,
+                UpdatedAt = null
+            };
+
+            _context.Cars.Add(car);
+            await _context.SaveChangesAsync();
+
+            var createdCar = await _context.Cars
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == car.Id);
+
+                if(createdCar == null)
+            {
+                return BadRequest("Car could not be created.");
+            }
+
+            var result = new CarDetailsDto
+            {
+                Id = createdCar.Id,
+                Make = createdCar.Make,
+                Model = createdCar.Model,
+                Year = createdCar.Year,
+                Price = createdCar.Price,
+                Mileage = createdCar.Mileage,
+                FuelType = createdCar.FuelType,
+                Transmission = createdCar.Transmission,
+                Color = createdCar.Color,
+                Description = createdCar.Description,
+                CreatedAt = createdCar.CreatedAt,
+                UpdatedAt = createdCar.UpdatedAt,
+
+                SellerId = createdCar.UserId,
+                SellerFirstName = createdCar.User.FirstName,
+                SellerLastName = createdCar.User.LastName,
+                SellerPhoneNumber = createdCar.User.PhoneNumber
+            };
+
+            return CreatedAtAction(nameof(GetCar), new { id = result.Id }, result);
+
+        }
     }
 
 }
