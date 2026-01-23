@@ -54,7 +54,7 @@ namespace Autovibe.API.Controllers
             {
                 return NotFound();
             }
-            
+
             var carDetails = new CarDetailsDto
             {
                 Id = car.Id,
@@ -77,7 +77,8 @@ namespace Autovibe.API.Controllers
             };
             return Ok(carDetails);
         }
-        
+
+        //POST: api/cars
         [HttpPost]
         public async Task<ActionResult<CarDetailsDto>> CreateCar([FromBody] CarCreateDto createDto)
         {
@@ -85,12 +86,13 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if(createDto.UserId == 0)
+            if (createDto.UserId == 0)
             {
                 return BadRequest("User is missing.");
             }
 
-            if(!_context.Users.Any(u => u.Id == createDto.UserId)){
+            if (!_context.Users.Any(u => u.Id == createDto.UserId))
+            {
                 return BadRequest("User does not exist.");
             }
 
@@ -117,7 +119,7 @@ namespace Autovibe.API.Controllers
                 .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == car.Id);
 
-                if(createdCar == null)
+            if (createdCar == null)
             {
                 return BadRequest("Car could not be created.");
             }
@@ -146,6 +148,73 @@ namespace Autovibe.API.Controllers
             return CreatedAtAction(nameof(GetCar), new { id = result.Id }, result);
 
         }
-    }
 
+        //PUT: api/cars/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult<CarDetailsDto>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var car = await _context.Cars
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            var carDetails = new CarDetailsDto
+            {
+                Make = updateDto.Make,
+                Model = updateDto.Model,
+                Year = updateDto.Year,
+                Price = updateDto.Price,
+                Mileage = updateDto.Mileage,
+                FuelType = updateDto.FuelType,
+                Transmission = updateDto.Transmission,
+                Color = updateDto.Color,
+                Description = updateDto.Description,
+
+                UpdatedAt = DateTime.Now
+
+            };
+
+            await _context.SaveChangesAsync();
+
+            var createdCar = await _context.Cars
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == car.Id);
+
+            if(createdCar == null)
+            {
+                return BadRequest("Car could not be updated.");
+            }
+            var result = new CarDetailsDto
+            {
+                Id = createdCar.Id,
+                Make = createdCar.Make,
+                Model = createdCar.Model,
+                Year = createdCar.Year,
+                Price = createdCar.Price,
+                Mileage = createdCar.Mileage,
+                FuelType = createdCar.FuelType,
+                Transmission = createdCar.Transmission,
+                Color = createdCar.Color,
+                Description = createdCar.Description,
+                CreatedAt = createdCar.CreatedAt,
+                UpdatedAt = createdCar.UpdatedAt,
+
+                SellerId = createdCar.UserId,
+                SellerFirstName = createdCar.User.FirstName,
+                SellerLastName = createdCar.User.LastName,
+                SellerPhoneNumber = createdCar.User.PhoneNumber
+            };
+        
+            return Ok(result);
+            
+        }
+    }
 }
