@@ -20,7 +20,7 @@ namespace Autovibe.API.Controllers
             _context = context;
         }
 
-        [HttpGet ("{me}")]
+        [HttpGet]
         public async Task<ActionResult<UserDto>> GetMe()
         {
             try
