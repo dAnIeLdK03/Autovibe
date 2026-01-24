@@ -2,6 +2,9 @@ using Autovibe.API.Data;
 using Autovibe.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +12,25 @@ var builder = WebApplication.CreateBuilder(args);
 
 //services
 builder.Services.AddControllers();
+
+var jwtKey = builder.Configuration["Jwt:Key"] ??
+    throw new InvalidOperationException("Jwt:Key not found in configuration.");
+var SymmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]));
+
+var tokenValidationParameters = new TokenValidationParameters
+{
+    ValidateIssuerSigningKey = true,
+    IssuerSigningKey = SymmetricSecurityKey,
+    ValidateIssuer = false,
+    ValidateAudience = false,
+    ClockSkew = TimeSpan.Zero
+};
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = tokenValidationParameters;
+    });
 
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection'not found.");
@@ -19,6 +41,9 @@ var app = builder.Build();
 
 //middleware
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
