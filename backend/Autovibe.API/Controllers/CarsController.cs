@@ -3,11 +3,13 @@ using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Autovibe.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CarsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -19,6 +21,7 @@ namespace Autovibe.API.Controllers
         }
 
         //GET: api/cars
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CarListDto>>> GetCars()
         {
@@ -43,6 +46,7 @@ namespace Autovibe.API.Controllers
             return Ok(cars);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<CarDetailsDto>> GetCar(int id)
         {

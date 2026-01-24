@@ -8,6 +8,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace Autovibe.API.Controllers
@@ -26,6 +27,7 @@ namespace Autovibe.API.Controllers
             _configuration = configuration;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register([FromBody] UserRegisterDto registerDto)
         {
@@ -84,6 +86,7 @@ namespace Autovibe.API.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponseDto>> Login([FromBody] UserLoginDto loginDto)
         {

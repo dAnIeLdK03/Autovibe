@@ -3,11 +3,14 @@ using Autovibe.API.DTOs.Users;
 using Autovibe.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace Autovibe.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -17,15 +20,24 @@ namespace Autovibe.API.Controllers
             _context = context;
         }
 
-        [HttpGet("{me}")]
-        public async Task<ActionResult<UserDto>> GetMe(int me)
+        [HttpGet ("{me}")]
+        public async Task<ActionResult<UserDto>> GetMe()
         {
             try
             {
-                var query = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Id == me);
+                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                if(userId == null)
+                {
+                    return Unauthorized("User not found.");
+                }
+                if(!int.TryParse(userId, out int userIdInt))
+                {
+                    return Unauthorized("Invalid user id.");
+                }
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Id == userIdInt);
 
-                if (query == null)
+                if (user == null)
                 {
                     Console.WriteLine("User not found.");
                     return NotFound();
@@ -33,13 +45,13 @@ namespace Autovibe.API.Controllers
 
                 var result = new UserDto
                 {
-                    Id = query.Id,
-                    Email = query.Email,
-                    FirstName = query.FirstName,
-                    LastName = query.LastName,
-                    PhoneNumber = query.PhoneNumber,
-                    CreatedAt = query.CreatedAt ?? DateTime.Now,
-                    UpdatedAt = query.UpdatedAt ?? DateTime.Now
+                    Id = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    CreatedAt = user.CreatedAt ?? DateTime.Now,
+                    UpdatedAt = user.UpdatedAt ?? DateTime.Now
                 };
 
                 return Ok(result);
