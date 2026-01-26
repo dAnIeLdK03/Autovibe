@@ -10,53 +10,53 @@ interface Car{
     FuelType: string;
     Transmission: string;
     Color: string;
-    shortDescription: string;
+    shortDescription?: string;
 };
 
 interface CarDetails{
-    Id: number;
-    Make: string;
-    Model: string;
-    Year: number;
-    Price: number;
-    Mileage: number;
-    FuelType: string;
-    Transmission: string;
-    Color: string;
-    Description: string;
-    CreatedAt: Date;
-    UpdatedAt: Date;
+    id: number;
+    make: string;
+    model: string;
+    year: number;
+    price: number;
+    mileage: number;
+    fuelType: string;
+    transmission: string;
+    color: string;
+    description: string;
+    createdAt: Date;
+    updatedAt: Date;
 
-    SellerId: number;
-    SellerFirstName: string;
-    SellerLastName: string;
-    SellerPhoneNumber: string;
+    sellerId: number;
+    sellerFirstName: string;
+    sellerLastName: string;
+    sellerPhoneNumber: string;
 };
 
 interface CreateCarRequest{
-    Make: string;
-    Model: string;
-    Year: number;
-    Price: number;
-    Mileage: number;
-    FuelType: string;
-    Transmission: string;
-    Color: string;
-    Description: string;
+    make: string;
+    model: string;
+    year: number;
+    price: number;
+    mileage: number;
+    fuelType: string;
+    transmission: string;
+    color: string;
+    description: string;
 
-    UserId: number;
+    userId: number;
 };
 
 interface UpdateCarRequest{
-    Make: string;
-    Model: string;
-    Year: number;
-    Price: number;
-    Mileage: number;
-    FuelType: string;
-    Transmission: string;
-    Color: string;
-    Description: string;
+    make: string;
+    model: string;
+    year: number;
+    price: number;
+    mileage: number;
+    fuelType: string;
+    transmission: string;
+    color: string;
+    description: string;
 };
 
 export const getCars = async(): Promise<Car[]> => {

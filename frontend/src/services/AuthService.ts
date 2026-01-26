@@ -8,7 +8,7 @@ interface LoginRequest{
 interface RegisterRequest{
     email: string;
     password: string;
-    confrimPassword: string;
+    confirmPassword: string;
     firstName?: string;
     lastName?: string;
     phoneNumber?: string;
@@ -40,7 +40,7 @@ export const login = async(data: LoginRequest): Promise<AuthResponse> => {
 }
 
 export const register = async(data: RegisterRequest): Promise<User> => {
-    const response = await api.post("/auth/register", data);
+    const response = await api.post("auth/register", data);
     return response.data;
 }
 
