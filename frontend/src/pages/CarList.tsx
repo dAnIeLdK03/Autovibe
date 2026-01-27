@@ -15,7 +15,6 @@ function CarList() {
     const fetchCars = async() =>{
       dispatch(setLoading(true));
       dispatch(clearError());
-      getCars();
       try{
         const data = await getCars();
         dispatch(setCars(data));
@@ -24,8 +23,8 @@ function CarList() {
       }finally{
         dispatch(setLoading(false));
       }
-      fetchCars();
     }
+    fetchCars();
   }, [])
 
   if(loading){
@@ -34,9 +33,7 @@ function CarList() {
   if(error){
     return <h2>{error}</h2>
   }
-  if(cars.length === 0){
-    return <h2>No cars found.</h2>
-  }
+  
 
   return (
     <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12">
@@ -85,8 +82,6 @@ function CarList() {
 
                 <div className="mt-auto flex items-center justify-between pt-4 border-t border-slate-700/50">
                   <div className="flex space-x-3 text-slate-500 text-xs">
-                    <span className="flex items-center">⛽ Hybrid</span>
-                    <span className="flex items-center">⚙️ Auto</span>
                   </div>
                   
                   <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg">

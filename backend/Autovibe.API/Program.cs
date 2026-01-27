@@ -13,6 +13,17 @@ var builder = WebApplication.CreateBuilder(args);
 //services
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000", "http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+        });
+});
+
 var SymmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty));
 
 var tokenValidationParameters = new TokenValidationParameters
@@ -40,6 +51,7 @@ var app = builder.Build();
 //middleware
 app.UseHttpsRedirection();
 
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 
