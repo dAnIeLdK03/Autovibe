@@ -22,7 +22,7 @@ function Login() {
       dispatch(setCredentials({ user: data.user, token: data.token }));
       navigate("/cars");
     } catch (err: any) {
-      setError("Невалиден имейл или парола.");
+      setError("Incorrect email or password.");
     } finally {
       setLoading(false);
     }
@@ -36,9 +36,9 @@ function Login() {
         {/* Хедър */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-black text-white tracking-tight mb-2">
-            Вход
+            Login
           </h1>
-          <p className="text-slate-400">Добре дошли!</p>
+          <p className="text-slate-400">Welcome!</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -51,7 +51,7 @@ function Login() {
           {/* Имейл поле */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
-              Имейл
+              Email
             </label>
             <input
               type="email"
@@ -66,7 +66,7 @@ function Login() {
           {/* Парола поле */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
-              Парола
+              Paswword
             </label>
             <input
               type="password"
@@ -89,17 +89,17 @@ function Login() {
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
-            ) : "Влез в системата"}
+            ) : "Login"}
           </button>
 
           {/* Линк за регистрация */}
           <p className="text-center text-slate-400 text-sm mt-6">
-            Нямате профил?{" "}
+            Don't have an account?{" "}
             <Link 
               to="/register" 
               className="text-[#70FFE2] font-bold hover:text-white transition-colors duration-200"
             >
-              Създай нов
+              Register
             </Link>
           </p>
         </form>
