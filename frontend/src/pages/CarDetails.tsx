@@ -6,7 +6,7 @@ import type { CarDetails } from '../services/carsService';
 
 
 
-function CarDetails() {
+export default function CarDetails() {
     const [car, setCar] = useState<CarDetails | null>({
         id: 0,
         make: "",
@@ -138,5 +138,3 @@ function CarDetails() {
 );
 
 }
-
-export default CarDetails
