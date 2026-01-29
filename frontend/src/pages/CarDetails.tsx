@@ -28,13 +28,14 @@ export default function CarDetails() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
 
-  const { id } = useParams();
-  if (id === null) {
+  const { id } = useParams<{ id: string }>();
+  if (!id) {
     return <h2>No car selected.</h2>;
   }
+
+  const carId = Number(id);
 
   const { user } = useSelector((state: RootState) => state.auth);
   const isOwner = user && user.id === car?.sellerId;
@@ -42,9 +43,10 @@ export default function CarDetails() {
   useEffect(() => {
     setLoading(true);
     setError(null);
+    
     const fetchCar = async () => {
       try {
-        const data = await getCarById(Number(id));
+        const data = await getCarById(carId);
         setCar(data);
       } catch (error) {
         setError("Unable to load car.");
@@ -52,7 +54,9 @@ export default function CarDetails() {
         setLoading(false);
       }
     };
-    fetchCar();
+    if(id && !isNaN(Number(id))){
+      fetchCar();
+    }
   }, [id]);
 
   if (loading) {

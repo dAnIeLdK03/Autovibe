@@ -39,7 +39,8 @@ namespace Autovibe.API.Controllers
                     Color = c.Color,
                     ShortDescription = c.Description != null && c.Description.Length > 100
                     ? c.Description.Substring(0, 100) + "..."
-                    : c.Description
+                    : c.Description,
+                    UserId = c.UserId
                 })
                 .ToListAsync();
 

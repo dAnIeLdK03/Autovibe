@@ -24,7 +24,7 @@ function App() {
         <Route path="/cars/:id" element={<CarDetails />} />
         <Route path="/cars/new" element={<CarCreate />} />
         <Route path="/cars/:id/edit" element={<CarEdit />} />
-        <Route path="/home" element={<MyCars />} />
+        <Route path="/cars/my" element={<MyCars />} />
       </Routes>
     </BrowserRouter>
   );

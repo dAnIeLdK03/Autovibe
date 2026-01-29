@@ -16,4 +16,5 @@ public class CarListDto
     public string Color {get; set; } = string.Empty;
     public string? ShortDescription {get; set; } = string.Empty;
 
+    public int UserId {get; set; }
 }

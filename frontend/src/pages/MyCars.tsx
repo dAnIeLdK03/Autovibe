@@ -1,10 +1,10 @@
-import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import type { RootState } from "../stores/store";
 import { deleteCar, getCars } from "../services/carsService";
 import { setCars, setLoading, setError, clearError } from "../stores/carsSlice";
+import React from "react";
 
 function MyCars() {
   const navigate = useNavigate();
@@ -17,22 +17,27 @@ function MyCars() {
     return null;
   }
   useEffect(() => {
+    if (!user || !user.id) {
+      return;
+    }
     dispatch(setLoading(true));
     dispatch(clearError());
     const fetchCars = async () => {
       try {
         const allCars = await getCars();
-        const myCars = allCars.filter((car) => car.userId === user.id);
+        // Filter cars where userId matches, handling undefined userId
+        const myCars = allCars.filter((car) => car.userId !== undefined && car.userId === user.id);
         dispatch(setCars(myCars));
-      } catch (error) {
-        dispatch(setError("Unable to load your cars."));
+      } catch (error: any) {
+        console.error("Error loading cars:", error);
+        const errorMessage = error.response?.data?.message || error.message || "Unable to load your cars.";
+        dispatch(setError(errorMessage));
       } finally {
         dispatch(setLoading(false));
       }
     };
     fetchCars();
-    dispatch(setLoading(false));
-  }, [user?.id]);
+  }, [user?.id, dispatch]);
 
   const { cars, loading, error } = useSelector(
     (state: RootState) => state.cars,
