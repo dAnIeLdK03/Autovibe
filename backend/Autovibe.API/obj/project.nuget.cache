@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "S4Oyh5h5TU4=",
+  "dgSpecHash": "i3Wc4fV7wxg=",
   "success": true,
-  "projectFilePath": "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj",
+  "projectFilePath": "C:\\D\\Projects\\Autovibe\\backend\\autovibe.api\\Autovibe.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\danik\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\danik\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

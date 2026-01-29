@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj": {}
+    "C:\\D\\Projects\\Autovibe\\backend\\autovibe.api\\Autovibe.API.csproj": {}
   },
   "projects": {
-    "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj": {
+    "C:\\D\\Projects\\Autovibe\\backend\\autovibe.api\\Autovibe.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj",
+        "projectUniqueName": "C:\\D\\Projects\\Autovibe\\backend\\autovibe.api\\Autovibe.API.csproj",
         "projectName": "Autovibe.API",
-        "projectPath": "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\Autovibe.API.csproj",
+        "projectPath": "C:\\D\\Projects\\Autovibe\\backend\\autovibe.api\\Autovibe.API.csproj",
         "packagesPath": "C:\\Users\\danik\\.nuget\\packages\\",
-        "outputPath": "C:\\D\\Projects\\Autovibe\\backend\\Autovibe.API\\obj\\",
+        "outputPath": "C:\\D\\Projects\\Autovibe\\backend\\autovibe.api\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

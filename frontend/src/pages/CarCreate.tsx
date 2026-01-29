@@ -31,11 +31,62 @@ export function CarCreate() {
         e.preventDefault();
         setLoading(true);
         setError(null);
+        
+        // Client-side validation
+        if (!car.make.trim()) {
+            setError("Марката е задължителна.");
+            setLoading(false);
+            return;
+        }
+        if (!car.model.trim()) {
+            setError("Моделът е задължителен.");
+            setLoading(false);
+            return;
+        }
+        if (car.year < 1900 || car.year > 2100) {
+            setError("Годината трябва да е между 1900 и 2100.");
+            setLoading(false);
+            return;
+        }
+        if (car.price <= 0) {
+            setError("Цената трябва да е по-голяма от 0.");
+            setLoading(false);
+            return;
+        }
+        if (!user || !user.id) {
+            setError("Потребителят не е намерен. Моля, влезте отново.");
+            setLoading(false);
+            return;
+        }
+        
         try{
            await createCar({ ...car, userId: user.id });
             navigate("/cars");
-        }catch(error){
-            setError("Unable to create car.");
+        }catch(error: any){
+            let errorMessage = "Unable to create car.";
+            
+            if (error.response?.data) {
+                const data = error.response.data;
+                
+                if (typeof data === 'object' && !data.message) {
+                    const errors: string[] = [];
+                    for (const key in data) {
+                        if (Array.isArray(data[key])) {
+                            errors.push(...data[key]);
+                        } else if (typeof data[key] === 'string') {
+                            errors.push(data[key]);
+                        }
+                    }
+                    errorMessage = errors.length > 0 ? errors.join(', ') : JSON.stringify(data);
+                } else {
+                    errorMessage = data.message || data || errorMessage;
+                }
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+            
+            console.error("Create car error:", error.response?.data || error);
+            setError(errorMessage);
         }finally{
             setLoading(false);
         }
