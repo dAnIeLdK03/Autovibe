@@ -48,7 +48,7 @@ function CarList() {
             Explore Our <span className="text-[#70FFE2]">Fleet</span>
           </h1>
           <p className="text-slate-400">Discover the perfect ride for your next journey.</p>
-          <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={() => navigate(`/cars/new`)}>
+          <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={() => isAuthenticated? navigate(`/cars/new`) : navigate("/login")}>
             {isAuthenticated? "Create new ad" : "Login to create new ad"}
           </button>
         </div>

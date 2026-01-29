@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate  } from 'react-router-dom'
 import { getCarById } from '../services/carsService';
 import type { CarDetails } from '../services/carsService';
+import { useSelector } from 'react-redux';
+import type { RootState } from '../stores/store';
 
 
 
@@ -28,11 +30,16 @@ export default function CarDetails() {
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const {isAuthenticated} = useSelector((state: RootState) => state.auth);
+    const navigate = useNavigate();
 
     const {id} = useParams();
     if(id === null){
         return <h2>No car selected.</h2>
     }
+
+    const {user} = useSelector((state: RootState) => state.auth);
+    const isOwner = user && user.id === car?.sellerId;
 
     useEffect(() => {
         setLoading(true);
@@ -130,6 +137,16 @@ export default function CarDetails() {
             <span className="font-semibold">Телефон:</span>{" "}
             {car.sellerPhoneNumber}
           </p>
+        </div>
+        <div>
+          {isOwner && (
+            <div className="flex justify-end">
+            <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={() => navigate(`/cars/${car.id}/edit`)}>
+              Edit
+            </button>
+            
+            </div>
+          )}
         </div>
 
       </div>
