@@ -98,12 +98,7 @@ function MyCars() {
         {!loading && cars.length === 0 ? (
           <div className="text-center py-20 bg-slate-800/30 rounded-3xl border border-dashed border-slate-700">
             <p className="text-slate-400 text-lg mb-6">Нямате създадени обяви. Създайте първата!</p>
-            <button 
-              className="px-8 py-3 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all"
-              onClick={() => navigate("/cars/new")}
-            >
-              Публикувай обява
-            </button>
+            
           </div>
         ) : (
           /* 4. Grid List */
