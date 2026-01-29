@@ -12,11 +12,12 @@ function MyCars() {
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
-  if (!isAuthenticated || user === null) {
-    navigate("/login");
-    return null;
-  }
+  
   useEffect(() => {
+    if (!isAuthenticated || user === null) {
+      navigate("/login");
+      return;
+    }
     if (!user || !user.id) {
       return;
     }
