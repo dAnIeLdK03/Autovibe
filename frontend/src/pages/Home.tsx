@@ -23,7 +23,7 @@ function Home() {
 
         {/* Subheading */}
         <p className="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
-          Autovibe - Вашият път към перфектния автомобил. Разгледайте нашата колекция от качествени превозни средства на достъпни цени.
+          Autovibe - Your journey to the perfect car. Browse our collection of high-quality vehicles at affordable prices.
         </p>
 
         {/* CTA Бутони */}
@@ -31,17 +31,12 @@ function Home() {
           {!isAuthenticated ? (
             <>
               <button
-                onClick={() => navigate('/register')}
+                onClick={() => navigate('/cars')}
                 className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-[#70FFE2] hover:from-blue-700 hover:to-[#5ee6cb] text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
               >
-                Започнете сега
+                 Look around
               </button>
-              <button
-                onClick={() => navigate('/login')}
-                className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold text-lg rounded-xl border-2 border-slate-600 hover:border-[#70FFE2] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
-              >
-                Влезте
-              </button>
+             
             </>
           ) : (
             <>

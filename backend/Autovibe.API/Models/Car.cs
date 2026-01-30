@@ -23,8 +23,10 @@ public class Car
     public string Color {get; set; } = string.Empty;
     public string Description {get; set; } = string.Empty;
     public int UserId {get; set; }
-    public User User {get; set; } = null!; //navigation property, not a column in the database.
+    public User User {get; set; } = null!; 
     public DateTime? CreatedAt {get; set; }
     public DateTime? UpdatedAt {get; set; }
 
+    public List<string> ImageUrls {get; set; } = new List<string>();
+ 
 }
