@@ -233,5 +233,33 @@ namespace Autovibe.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("{id}/upload-image")]
+        [Authorize]
+        public async Task<ActionResult> UploadImage(int id, IFormFile file)
+        {
+            if(file == null || file.Length == 0)
+            {
+                return BadRequest("No file uploaded.");
+            }
+            string folderPath = Path.Combine("images", "cars");
+            string serverPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "cars");
+            if (!Directory.Exists(serverPath))
+            {
+                Directory.CreateDirectory(serverPath);
+            }
+
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            string fullPath = Path.Combine(serverPath, fileName);
+
+            using (var stream = new FileStream(fullPath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            string imageUrl = $"/{folderPath}/{fileName}".Replace("\\", "/");
+
+            return Ok(new {url = imageUrl});
+        }
     }
 }

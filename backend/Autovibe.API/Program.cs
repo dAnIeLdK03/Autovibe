@@ -47,6 +47,8 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
     ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();
+app.UseStaticFiles();
+
 
 //middleware
 app.UseHttpsRedirection();
@@ -54,7 +56,6 @@ app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();
