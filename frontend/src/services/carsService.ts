@@ -13,6 +13,8 @@ export interface Car{
     shortDescription?: string;
 
     userId: number;
+
+    imageUrls?: string;
 };
 
 export interface CarDetails{
@@ -33,6 +35,9 @@ export interface CarDetails{
     sellerFirstName: string;
     sellerLastName: string;
     sellerPhoneNumber: string;
+
+    imageUrls?: string;
+
 };
 
 interface CreateCarRequest{
@@ -47,6 +52,9 @@ interface CreateCarRequest{
     description: string;
 
     userId: number | null;
+
+    imageUrls?: string;
+
 };
 
 interface UpdateCarRequest{
@@ -59,6 +67,9 @@ interface UpdateCarRequest{
     transmission: string;
     color: string;
     description: string;
+
+    imageUrls?: string;
+
 };
 
 export const getCars = async(): Promise<Car[]> => {

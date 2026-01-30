@@ -14,6 +14,8 @@ export interface Car{
     shortDescription?: string;
 
     userId: number;
+
+    imageUrls?: string;
 }
 
 export interface CarState{
