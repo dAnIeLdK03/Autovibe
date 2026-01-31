@@ -167,8 +167,8 @@ export default function CarEdit() {
   }
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Редактирай обява</h2>
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md mt-10">
+        <h2 className="text-2xl font-bold text-center mb-6">Edit Ad</h2>
 
         {error && (
           <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-center">
@@ -288,8 +288,15 @@ export default function CarEdit() {
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               </div>
             ) : (
-              "Редактирай обява"
+              "Еdit Ad"
             )}
+          </button>
+          <button
+            type="button"
+            onClick={() => navigate(`/cars/${id}`)}
+            className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+          >
+            Cancel
           </button>
         </form>
       </div>
