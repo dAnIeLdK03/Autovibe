@@ -4,7 +4,6 @@ import { useNavigate } from "react-router";
 import type { RootState } from "../stores/store";
 import { deleteCar, getCars } from "../services/carsService";
 import { setCars, setLoading, setError, clearError } from "../stores/carsSlice";
-import React from "react";
 
 function MyCars() {
   const navigate = useNavigate();

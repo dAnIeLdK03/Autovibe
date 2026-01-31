@@ -11,9 +11,11 @@ function Navbar() {
     (state: RootState) => state.auth,
   );
   const location = useLocation();
+  
   if(location.pathname === "/login" || location.pathname === "/register"){
     return null;
   }
+
 
   const handleLogout = async () => {
     dispatch(logout());

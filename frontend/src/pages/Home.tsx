@@ -47,7 +47,7 @@ function Home() {
                 Разгледайте колите
               </button>
               <button
-                onClick={() => navigate('/my-cars')}
+                onClick={() => navigate('/cars/my')}
                 className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold text-lg rounded-xl border-2 border-slate-600 hover:border-[#70FFE2] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
               >
                 Моите коли
