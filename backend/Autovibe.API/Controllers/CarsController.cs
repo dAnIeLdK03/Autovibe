@@ -181,18 +181,7 @@ namespace Autovibe.API.Controllers
                 return NotFound();
             }
 
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
             
-            if(userIdClaim == null && int.TryParse(userIdClaim.Value, out int loggedInUserId))
-            {
-                return Unauthorized("User not authenticated.");
-            }
-            else
-            {
-                if(car.UserId != loggedInUserId){
-                    return Unauthorized("You are not the owner of this car.");
-                }
-            }
 
             car.Make = updateDto.Make;
             car.Model = updateDto.Model;
@@ -254,17 +243,6 @@ namespace Autovibe.API.Controllers
                 if(car == null)
             {
                 return NotFound();
-            }
-
-            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
-            
-            if(userIdClaim == null && int.TryParse(userIdClaim.Value, out int userId))
-            {
-                return Unauthorized("User not authenticated.");
-            }
-            if(car.UserId != userId)
-            {
-                return Unauthorized("You are not the owner of this car.");
             }
             
             _context.Cars.Remove(car);

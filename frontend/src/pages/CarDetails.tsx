@@ -86,14 +86,17 @@ export default function CarDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
+    <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
+       <button className=" px-6 py-3 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={() => navigate("/cars")}>
+          🡰 Back
+        </button>
       <div className="max-w-3xl mx-auto">
-        {/* Заглавие */}
+        {/* Heading */}
         <h1 className="text-4xl font-bold text-white mb-6 text-center">
           {car.make} {car.model} {car.year}
         </h1>
         
-        {/* Главна снимка */}
+        {/* Main image */}
         <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl">
           {car.imageUrls && car.imageUrls.length > 0 ? (
             <div className="relative">
