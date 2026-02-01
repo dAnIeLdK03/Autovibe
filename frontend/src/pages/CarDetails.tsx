@@ -162,7 +162,7 @@ export default function CarDetails() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <p>
-                <span className="font-semibold">Цена:</span> {car.price} лв.
+                <span className="font-semibold">Цена:</span> {car.price.toLocaleString('bg-BG')}
               </p>
               <p>
                 <span className="font-semibold">Пробег:</span> {car.mileage} км
