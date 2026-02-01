@@ -18,8 +18,6 @@ function CarList() {
       dispatch(clearError());
       try{
         const data = await getCars();
-        console.log("Cars data:", data);
-        console.log("First car imageUrls:", data[0]?.imageUrls);
         dispatch(setCars(data));
       }catch{
         dispatch(setError("Unable to load cars."));
