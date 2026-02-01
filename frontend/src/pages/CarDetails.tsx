@@ -61,7 +61,10 @@ export default function CarDetails() {
   }, [id]);
 
   if (loading) {
-    return <h2>Loading...</h2>;
+    return (<div className="flex justify-center">
+      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">loading</div>
+    </div>
+    );
   }
   if (error) {
     return <h2>{error}</h2>;
@@ -180,7 +183,7 @@ export default function CarDetails() {
             </div>
           </div>
 
-          {/* Описание */}
+          {/* Description */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
               Описание
