@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../stores/store';
 import { getCars } from '../services/carsService';
@@ -11,6 +11,10 @@ function CarList() {
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const [fuelType, setFuelType] = useState("All");
+  const filteredCars = cars.filter((car) => 
+    fuelType === "All" || car.fuelType === fuelType
+  );
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -72,9 +76,22 @@ function CarList() {
           </button>
         </div>
 
+        <div className="mb-12">
+          <select
+            value={fuelType}
+            onChange={(e) => setFuelType(e.target.value)}
+            className="w-full border p-2 rounded"
+          >
+            <option value= "All">All</option>
+            <option value= "Petrol">Petrol</option>
+            <option value= "Diesel">Diesel</option>
+            <option value= "Hybrid">Hybrid</option>
+          </select>
+          
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cars.map((car) => (
+          {filteredCars.map((car) => (
             <div
               key={car.id}
               className="group relative bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 overflow-hidden hover:border-[#70FFE2]/50 transition-all duration-500 shadow-2xl flex flex-col"
