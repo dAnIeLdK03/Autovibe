@@ -35,7 +35,9 @@ function CarList() {
     );
   }
   if (error) {
-    return <h2>{error}</h2>
+    <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6">
+            {error}
+          </div>
   }
 
   if (!loading && !error && cars.length === 0) {
