@@ -12,10 +12,27 @@ function CarList() {
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [fuelType, setFuelType] = useState("All");
+  const [sortType, setSortType] = useState("None");
   const filteredCars = cars.filter((car) => 
     fuelType === "All" || car.fuelType === fuelType
   );
+  const sortedCars = [...filteredCars].sort((a, b) => {
+    switch(sortType){
+      case 'Newest':
+        return b.id - a.id;
+      case 'None':
+        return 0;
+      case 'PriceAsc':
+        return a.price - b.price;
+      case 'PriceDesc':
+        return b.price - a.price;
+      case 'YearDesc':
+        return b.year - a.year;
+      default:
+        return 0;
 
+    }
+  })
   useEffect(() => {
     const fetchCars = async () => {
       dispatch(setLoading(true));
@@ -77,6 +94,9 @@ function CarList() {
         </div>
 
         <div className="mb-12">
+          <label className="block text-sm font-medium text-white m-1.5">
+            Fuel type
+          </label>
           <select
             value={fuelType}
             onChange={(e) => setFuelType(e.target.value)}
@@ -88,10 +108,24 @@ function CarList() {
             <option value= "Hybrid">Hybrid</option>
           </select>
           
+          <label className="block text-sm font-medium text-white m-1.5">
+            Sort by
+          </label>
+          <select
+            value={sortType}
+            onChange={(e) => setSortType(e.target.value)}
+            className="w-full border p-2 rounded"    
+          >
+            <option value = "None">None</option>
+            <option value = 'Newest'>Newest</option>
+            <option value = "PriceAsc">PriceAsc</option>
+            <option value = "PriceDesc">PriceDesc</option>
+            <option value = "YearDesc">YearDesc</option>
+          </select>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredCars.map((car) => (
+          {sortedCars.map((car) => (
             <div
               key={car.id}
               className="group relative bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 overflow-hidden hover:border-[#70FFE2]/50 transition-all duration-500 shadow-2xl flex flex-col"
