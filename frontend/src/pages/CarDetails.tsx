@@ -67,7 +67,9 @@ export default function CarDetails() {
     );
   }
   if (error) {
-    return <h2>{error}</h2>;
+    <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6">
+            {error}
+          </div>
   }
   if (car === null) {
     return <h2>Car not found.</h2>;
