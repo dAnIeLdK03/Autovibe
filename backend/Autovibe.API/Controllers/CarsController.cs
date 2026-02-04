@@ -104,6 +104,10 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest("User does not exist.");
             }
+            if(createDto.Year < 1900 || createDto.Year > 2100)
+            {
+                return BadRequest("Year is not valid.");
+            }
 
             var car = new Car
             {
@@ -170,8 +174,6 @@ namespace Autovibe.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            
-
             var car = await _context.Cars
                 .FirstOrDefaultAsync(c => c.Id == id);
 
@@ -205,6 +207,10 @@ namespace Autovibe.API.Controllers
             if(createdCar == null)
             {
                 return BadRequest("Car could not be updated.");
+            }
+            if(createdCar.Year < 1900 || createdCar.Year > 2100)
+            {
+                return BadRequest("Year is not valid.");
             }
             var result = new CarDetailsDto
             {
