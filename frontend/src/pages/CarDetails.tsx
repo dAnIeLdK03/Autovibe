@@ -42,6 +42,7 @@ export default function CarDetails() {
   const isOwner = user && user.id === car?.sellerId;
 
   useEffect(() => {
+    
     setLoading(true);
     setError(null);
     
