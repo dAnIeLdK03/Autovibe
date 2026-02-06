@@ -14,34 +14,16 @@ import CarCreate from "./pages/CarCreate";
 import CarEdit from "./pages/CarEdit";
 import MyCars from "./pages/MyCars";
 import Navbar from "./components/Navbar";
-import { useEffect } from "react";
-import { getCurrentUser } from "./services/AuthService";
-import { useDispatch } from "react-redux";
-import { logout, setCredentials } from "./stores/authSlice";
+import AuthRestore from "./components/AuthRestore";
 
 
 
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    const fetchToken = async () => {
-      try{
-        const token = localStorage.getItem("token");
-        if(token){
-          const user = await getCurrentUser();
-          dispatch(setCredentials({ user: JSON.stringify(user), token: token }));
-        }
-      }catch(error){
-        console.error("Error fetching current user:", error);
-        localStorage.removeItem("token");
-        dispatch(logout());
-      }
-    }
-    fetchToken();
-  },[])
+  
 
   return (
     <BrowserRouter>
+      <AuthRestore/> /* This component will restore the auth state on page refresh */
       <Navbar />
       <Routes>
         <Route path="/" element={<Home /> } />
