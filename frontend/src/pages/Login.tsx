@@ -19,7 +19,7 @@ function Login() {
     setError(null);
     try {
       const data = await login({ email, password });
-      dispatch(setCredentials({ user: data.user, token: data.token }));
+      dispatch(setCredentials({ user: JSON.stringify(data.user), token: data.token }));
       navigate("/cars");
     } catch (err: any) {
       setError("Incorrect email or password.");

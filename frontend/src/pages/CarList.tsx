@@ -5,7 +5,6 @@ import { getCars } from '../services/carsService';
 import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
 import { useNavigate } from 'react-router-dom';
 
-
 function CarList() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,6 +36,7 @@ function CarList() {
     const fetchCars = async () => {
       dispatch(setLoading(true));
       dispatch(clearError());
+      
       try {
         const data = await getCars();
         dispatch(setCars(data));
