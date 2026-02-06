@@ -103,6 +103,12 @@ export default function CarEdit() {
         return;
       }
     }
+    if(car.sellerId !== user?.id){
+      setError("You are not the owner of this car.");
+      setLoading(false);
+      return;
+    }
+    
     
     try {
       const {sellerId, ...payload } = car;

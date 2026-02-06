@@ -76,7 +76,12 @@ export default function CarDetails() {
     return <h2>Car not found.</h2>;
   }
 
+
   const handleDelete = async () => {
+    if(car.sellerId !== user?.id){  
+      setError("You are not the owner of this car.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
