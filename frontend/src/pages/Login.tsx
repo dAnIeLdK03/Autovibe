@@ -30,10 +30,10 @@ function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
-      {/* Основна карта */}
+      {/* Main card */}
       <div className="w-full max-w-md p-8 bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 shadow-2xl">
         
-        {/* Хедър */}
+        {/* Header */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-black text-white tracking-tight mb-2">
             Login
@@ -48,7 +48,7 @@ function Login() {
             </div>
           )}
 
-          {/* Имейл поле */}
+          {/* Email field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
               Email
@@ -63,10 +63,10 @@ function Login() {
             />
           </div>
 
-          {/* Парола поле */}
+          {/* Password field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
-              Paswword
+              Password
             </label>
             <input
               type="password"
@@ -78,7 +78,7 @@ function Login() {
             />
           </div>
 
-          {/* Бутон */}
+          {/* Button */}
           <button
             type="submit"
             disabled={loading}
@@ -92,7 +92,7 @@ function Login() {
             ) : "Login"}
           </button>
 
-          {/* Линк за регистрация */}
+          {/* Link to register */}
           <p className="text-center text-slate-400 text-sm mt-6">
             Don't have an account?{" "}
             <Link 

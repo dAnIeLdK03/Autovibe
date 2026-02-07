@@ -39,27 +39,27 @@ export function CarCreate() {
         
         // Client-side validation
         if (!car.make.trim()) {
-            setError("Марката е задължителна.");
+            setError("Make is required.");
             setLoading(false);
             return;
         }
         if (!car.model.trim()) {
-            setError("Моделът е задължителен.");
+            setError("Model is required.");
             setLoading(false);
             return;
         }
         if (car.year < 1900 || car.year > 2100) {
-            setError("Годината трябва да е между 1900 и 2100.");
+            setError("Year must be between 1900 and 2100.");
             setLoading(false);
             return;
         }
         if (car.price <= 0) {
-            setError("Цената трябва да е по-голяма от 0.");
+            setError("Price must be greater than 0.");
             setLoading(false);
             return;
         }
         if (!user || !user.id) {
-            setError("Потребителят не е намерен. Моля, влезте отново.");
+            setError("User not found. Please login again.");
             setLoading(false);
             return;
         }
@@ -127,7 +127,7 @@ export function CarCreate() {
       }
     };
 
-    // Cleanup: освободи URL при unmount или промяна на imagePreview
+    // Cleanup: Free URL on unmount or imagePreview change
     useEffect(() => {
       return () => {
         if (imagePreview) {
@@ -138,62 +138,65 @@ export function CarCreate() {
 
 
     return (
-  <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-    <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
+    <div className="w-full max-w-md p-8 bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 m-3 shadow-2xl">
 
-      <h2 className="text-2xl font-bold text-center mb-6">Създай обява</h2>
+      {/* Header */}
+      <div className="mb-10 text-center">
+      <h2 className="text-4xl font-black text-white tracking-tight mb-2">Create Ad</h2>
+      </div>
 
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-center">
+        <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6">
           {error}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-5">
 
         <input
           type="text"
           name="make"
-          placeholder="Марка"
+          placeholder="Make"
           value={car.make}
           onChange={(e) => setCar({ ...car, make: e.target.value })}
-          className="w-full border p-2 rounded"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
 
         <input
           type="text"
           name="model"
-          placeholder="Модел"
+          placeholder="Model"
           value={car.model}
           onChange={(e) => setCar({ ...car, model: e.target.value })}
-          className="w-full border p-2 rounded"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
 
         <input
           type="number"
           name="year"
-          placeholder="Година"
+          placeholder="Year"
           value={car.year}
           onChange={(e) => setCar({ ...car, year: Number (e.target.value) })}
-          className="w-full border p-2 rounded"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
 
         <input
           type="number"
           name="price"
-          placeholder="Цена"
+          placeholder="Price"
           value={car.price}
           onChange={(e) => setCar({ ...car, price: Number(e.target.value) })}
-          className="w-full border p-2 rounded"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
 
         <input
           type="number"
           name="mileage"
-          placeholder="Пробег"
+          placeholder="Mileage"
           value={car.mileage}
           onChange={(e) => setCar({ ...car, mileage: Number(e.target.value) })}
-          className="w-full border p-2 rounded"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
 
         <select
@@ -201,9 +204,9 @@ export function CarCreate() {
           name="fuelType"
           value={car.fuelType}
           onChange={(e) => setCar({ ...car, fuelType: e.target.value })}
-          className="w-full border p-2 rounded"
+              className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         >
-          <option value="">Гориво</option>
+          <option value="">Fuel Type</option>
           <option value="Petrol">Petrol</option>
           <option value="Diesel">Diesel</option>
           <option value="Hybrid">Hybrid</option>
@@ -214,9 +217,9 @@ export function CarCreate() {
           name="transmission"
           value={car.transmission}
           onChange={(e) => setCar({ ...car, transmission: e.target.value })}
-          className="w-full border p-2 rounded"
+              className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         >
-          <option value="">Трансмисия</option>
+          <option value="">Transmission</option>
           <option value="Manual">Manual</option>
           <option value="Automatic">Automatic</option>
         </select>
@@ -224,27 +227,27 @@ export function CarCreate() {
         <input
           type="text"
           name="color"
-          placeholder="Цвят"
+          placeholder="Color"
           value={car.color}
           onChange={(e) => setCar({ ...car, color: e.target.value })}
-          className="w-full border p-2 rounded"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
 
         <textarea
           name="description"
-          placeholder="Описание"
+          placeholder="Description"
           value={car.description}
           onChange={(e) => setCar({ ...car, description: e.target.value })}
-          className="w-full border p-2 rounded h-24"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
-        <label className="block text-sm font-medium text-gray-700">
+        <label className="block text-sm font-medium text-slate-400">
           Image
         <input 
           type='file'
           name="image"
           accept='image/*'
           onChange={handleImageChange}
-          className="w-full border p-2 rounded"
+          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
         </label>
         {imagePreview && <img src={imagePreview} alt="Image preview" className="w-full h-auto" />}
@@ -259,7 +262,7 @@ export function CarCreate() {
               <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
             </div>
           ) : (
-            "Създай обява"
+            "Create Ad"
           )}
         </button>
 
