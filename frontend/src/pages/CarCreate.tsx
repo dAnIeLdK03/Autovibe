@@ -238,7 +238,7 @@ export function CarCreate() {
           placeholder="Description"
           value={car.description}
           onChange={(e) => setCar({ ...car, description: e.target.value })}
-          className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+          className="w-full px-5 py-10 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
         />
         <label className="block text-sm font-medium text-slate-400">
           Image
