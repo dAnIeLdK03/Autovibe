@@ -85,6 +85,8 @@ namespace Autovibe.API.Controllers
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
             user.PhoneNumber = updateDto.PhoneNumber;
+            
+            user.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
 

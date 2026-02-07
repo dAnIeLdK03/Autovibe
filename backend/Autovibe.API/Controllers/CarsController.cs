@@ -3,6 +3,7 @@ using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 
 namespace Autovibe.API.Controllers
@@ -238,7 +239,7 @@ namespace Autovibe.API.Controllers
             };
         
             if(car.UserId != userId){
-                return Forbidden("You are not the owner of this car.");
+                return BadRequest("You are not the owner of this car.");
             }else{
                 _context.Cars.Update(car);
                 await _context.SaveChangesAsync();
@@ -260,7 +261,7 @@ namespace Autovibe.API.Controllers
             }
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if(car.UserId != userId){
-                return Forbidden("You are not the owner of this car.");
+                return BadRequest("You are not the owner of this car.");
             }
             
             _context.Cars.Remove(car);

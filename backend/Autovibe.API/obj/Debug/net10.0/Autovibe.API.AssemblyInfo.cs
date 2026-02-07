@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Autovibe.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+386e34e980603f6534a35edc94ce64d89c3dc0ff")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+10305f5c53c227dd5e7499aada21548979f39c79")]
 [assembly: System.Reflection.AssemblyProductAttribute("Autovibe.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Autovibe.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
