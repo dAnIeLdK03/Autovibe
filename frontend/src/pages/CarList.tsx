@@ -185,6 +185,9 @@ function CarList() {
                   <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={() => navigate(`/cars/${car.id}`)}>
                     Details
                   </button>
+                  <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={() => navigate(`/profile`)}>
+                    Profile
+                  </button>
                 </div>
               </div>
             </div>

@@ -31,6 +31,13 @@ const authSlice = createSlice({
             state.isAuthenticated = true;
             localStorage.setItem("token", action.payload.token);
         },
+        updateUserData: (state, action: PayloadAction<{ firstName?: string; lastName?: string; phoneNumber?: string }>) => {
+            if (state.user) {
+                if (action.payload.firstName !== undefined) state.user.firstName = action.payload.firstName;
+                if (action.payload.lastName !== undefined) state.user.lastName = action.payload.lastName;
+                if (action.payload.phoneNumber !== undefined) state.user.phoneNumber = action.payload.phoneNumber;
+            }
+        },
         logout: (state) => {
             state.user = null;
             state.token = null;
@@ -44,6 +51,6 @@ const authSlice = createSlice({
 
 
 
-export const { setCredentials, logout } = authSlice.actions;
+export const { setCredentials, updateUserData, logout } = authSlice.actions;
 
 export default authSlice.reducer;
