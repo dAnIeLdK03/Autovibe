@@ -62,5 +62,53 @@ namespace Autovibe.API.Controllers
                 return StatusCode(500, "An error occurred while retrieving the user.");
             }
         }
+
+        //PUT: api/user/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult<UserDto>>UpdateUser(int id, [FromBody] UserUpdateDto updateDto)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+            
+            if(user == null)
+            {
+                return NotFound();
+            }
+
+            var userId =int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            user.FirstName = updateDto.FirstName;
+            user.LastName = updateDto.LastName;
+            user.PhoneNumber = updateDto.PhoneNumber;
+
+            await _context.SaveChangesAsync();
+
+            var updatedUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+
+                if(updatedUser == null)
+            {
+                return BadRequest("User could not be updated.");
+            }
+            
+            var result = new UserDto
+            {
+                Id = updatedUser.Id,
+                Email = updatedUser.Email,
+                FirstName = updatedUser.FirstName,
+                LastName = updatedUser.LastName,
+                PhoneNumber = updatedUser.PhoneNumber,
+                CreatedAt = updatedUser.CreatedAt ?? DateTime.Now,
+                UpdatedAt = updatedUser.UpdatedAt ?? DateTime.Now
+            };
+
+            return Ok(result);
+
+        }
     }
 }
