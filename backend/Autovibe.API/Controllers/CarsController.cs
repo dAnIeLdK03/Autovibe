@@ -105,9 +105,12 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest("User does not exist.");
             }
-            if(createDto.Year < 1900 || createDto.Year > 2100)
+            if(createDto.Year < 1900 || createDto.Year > DateTime.Now.Year)
             {
-                return BadRequest("Year is not valid.");
+                return BadRequest("The year must be between 1900 and current year.");
+            }
+            if(createDto.price <= 0){
+                return BadRequest("Price must be greater than 0.");
             }
 
             var car = new Car
@@ -173,6 +176,13 @@ namespace Autovibe.API.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+
+            if(createDto.Year < 1900 || createDto.Year > DateTime.Now.Year){
+                return BadRequest("The year must be between 1900 and current year.");
+            }
+            if(createDto.price <= 0){
+                return BadRequest("Price must be greater than 0.");
             }
 
             var car = await _context.Cars
