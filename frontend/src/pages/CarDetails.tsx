@@ -38,8 +38,10 @@ export default function CarDetails() {
 
   const carId = Number(id);
 
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const isOwner = user && user.id === car?.sellerId;
+
+  
 
   useEffect(() => {
     
@@ -75,6 +77,7 @@ export default function CarDetails() {
   if (car === null) {
     return <h2>Car not found.</h2>;
   }
+  
 
 
   const handleDelete = async () => {
@@ -216,22 +219,32 @@ export default function CarDetails() {
             </p>
           </div>
 
+
           {/* Продавач */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
+          {!isAuthenticated && (
+            <div>
+              <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
+                Информация за продавача <br/>
+                Please login to view seller information.
+              </h2>
+            </div>
+          )}
+            {isAuthenticated && user && (
+              <div>
+                <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
               Информация за продавача
             </h2>
-
             <p>
               <span className="font-semibold">Име:</span> {car.sellerFirstName}{" "}
               {car.sellerLastName}
             </p>
-
+             
             <p>
               <span className="font-semibold">Телефон:</span>{" "}
               {car.sellerPhoneNumber}
             </p>
           </div>
+            )}
           <div>
             {isOwner && (
               <div className="flex justify-end">
