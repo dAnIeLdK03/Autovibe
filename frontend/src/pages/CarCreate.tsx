@@ -48,8 +48,8 @@ export function CarCreate() {
             setLoading(false);
             return;
         }
-        if (car.year < 1900 || car.year > 2100) {
-            setError("Year must be between 1900 and 2100.");
+        if (car.year < 1900 || car.year > new Date().getFullYear()) {
+            setError("Year must be between 1900 and current year.");
             setLoading(false);
             return;
         }
@@ -74,6 +74,7 @@ export function CarCreate() {
             return;
           }
         }
+
         
         try{
            await createCar({ ...car, userId: user.id, imageUrls: imageUrls });

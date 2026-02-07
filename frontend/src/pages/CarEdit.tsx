@@ -82,11 +82,11 @@ export default function CarEdit() {
       setLoading(false);
       return;
     }
-    if (car.year < 1900 || car.year > 2100) {
-      setError("Годината трябва да е между 1900 и 2100.");
-      setLoading(false);
-      return;
-    }
+    if (car.year < 1900 || car.year > new Date().getFullYear()) {
+            setError("Year must be between 1900 and current year.");
+            setLoading(false);
+            return;
+        }
     if (car.price <= 0) {
       setError("Цената трябва да е по-голяма от 0.");
       setLoading(false);
