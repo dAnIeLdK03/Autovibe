@@ -118,9 +118,6 @@ export default function CarDetails() {
                 src={`http://localhost:5258${car.imageUrls[0]}`} 
                 alt={`${car.make} ${car.model}`} 
                 className="w-full h-[500px] md:h-[600px] object-cover"
-                onError={() => {
-                  console.error("Image failed to load:", car.imageUrls?.[0]);
-                }}
               />
               <div className="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md text-[#70FFE2] text-sm font-bold px-4 py-2 rounded-full border border-slate-700">
                 {car.year}

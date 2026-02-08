@@ -102,7 +102,6 @@ export function CarCreate() {
                 errorMessage = error.message;
             }
             
-            console.error("Create car error:", error.response?.data || error);
             setError(errorMessage);
         }finally{
             setLoading(false);

@@ -109,7 +109,7 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest("The year must be between 1900 and current year.");
             }
-            if(createDto.price <= 0){
+            if(createDto.Price <= 0){
                 return BadRequest("Price must be greater than 0.");
             }
 
@@ -178,10 +178,10 @@ namespace Autovibe.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(createDto.Year < 1900 || createDto.Year > DateTime.Now.Year){
+            if(updateDto.Year < 1900 || updateDto.Year > DateTime.Now.Year){
                 return BadRequest("The year must be between 1900 and current year.");
             }
-            if(createDto.price <= 0){
+            if(updateDto.Price <= 0){
                 return BadRequest("Price must be greater than 0.");
             }
 

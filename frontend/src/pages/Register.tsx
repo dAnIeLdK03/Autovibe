@@ -28,7 +28,6 @@ function Register() {
       await register({ email, password, confirmPassword, firstName, lastName, phoneNumber});
       navigate("/login");
     }catch(error : any){
-      console.error("Registration error:", error);
       const errorMessage = error.response?.data || error.message || "Something went wrong.";
       setError(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
     }

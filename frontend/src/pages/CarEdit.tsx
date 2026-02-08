@@ -139,7 +139,6 @@ export default function CarEdit() {
         errorMessage = error.message;
       }
       
-      console.error("Update car error:", error.response?.data || error);
       setError(errorMessage);
     } finally {
       setLoading(false);
