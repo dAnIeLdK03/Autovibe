@@ -4,6 +4,7 @@ import type { RootState } from '../stores/store';
 import { getCars } from '../services/carsService';
 import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../components/pagePagination';
 
 function CarList() {
   const navigate = useNavigate();
@@ -12,11 +13,15 @@ function CarList() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [fuelType, setFuelType] = useState("All");
   const [sortType, setSortType] = useState("None");
-  const filteredCars = cars.filter((car) => 
+  const filteredCars = cars.filter((car) =>
     fuelType === "All" || car.fuelType === fuelType
   );
+
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
   const sortedCars = [...filteredCars].sort((a, b) => {
-    switch(sortType){
+    switch (sortType) {
       case 'Newest':
         return b.id - a.id;
       case 'None':
@@ -31,39 +36,44 @@ function CarList() {
         return 0;
 
     }
-  })
+  });
   useEffect(() => {
     const fetchCars = async () => {
       dispatch(setLoading(true));
       dispatch(clearError());
-      
+
       try {
-        const data = await getCars();
-        dispatch(setCars(data));
+        const response = await getCars(page, 10);
+        dispatch(setCars(response.items ?? []));
+        setTotalPages(response.totalPages ?? 0);
       } catch {
         dispatch(setError("Unable to load cars."));
       } finally {
         dispatch(setLoading(false));
       }
-    }
+    };
     fetchCars();
-  }, [])
+  }, [page, dispatch])
 
   if (loading) {
     return (<div className="flex justify-center">
       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">
         <svg className="animate-spin h-6 w-6 text-slate-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-              </svg>
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
       </div>
     </div>
     );
   }
   if (error) {
-    <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6">
-            {error}
-          </div>
+    return (
+      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
+        <div className="max-w-7xl mx-auto bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6">
+          {error}
+        </div>
+      </div>
+    );
   }
 
   if (!loading && !error && cars.length === 0) {
@@ -103,19 +113,19 @@ function CarList() {
             Fuel type
           </label>
           <select
-            value={fuelType} 
+            value={fuelType}
             onChange={(e) => setFuelType(e.target.value)}
             className="w-full apperance-none bg-late-800 border border-slate-700 text-slate-200 
             py-2.5 px-4 pr-10 rounded-xl cursor-pointer focus:outline-none
             focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500
             transition-all duration-200 hover:bg-slate-750 shadow-lg text-black m-1"
           >
-            <option value= "All">All Types</option>
-            <option value= "Petrol">Petrol</option>
-            <option value= "Diesel">Diesel</option>
-            <option value= "Hybrid">Hybrid</option>
+            <option value="All">All Types</option>
+            <option value="Petrol">Petrol</option>
+            <option value="Diesel">Diesel</option>
+            <option value="Hybrid">Hybrid</option>
           </select>
-          
+
           <label className="block text-slate-400 text-sm font-medium mb-1.5 text-white mt-2 ml-2">
             Sort by
           </label>
@@ -125,13 +135,13 @@ function CarList() {
             className="w-full apperance-none bg-late-800 border border-slate-700 text-slate-200 
             py-2.5 px-4 pr-10 rounded-xl cursor-pointer focus:outline-none
             focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500
-            transition-all duration-200 hover:bg-slate-750 shadow-lg text-black m-1 mb-2"   
+            transition-all duration-200 hover:bg-slate-750 shadow-lg text-black m-1 mb-2"
           >
-            <option value = "None">None</option>
-            <option value = 'Newest'>Newest</option>
-            <option value = "PriceAsc">PriceAsc</option>
-            <option value = "PriceDesc">PriceDesc</option>
-            <option value = "YearDesc">YearDesc</option>
+            <option value="None">None</option>
+            <option value='Newest'>Newest</option>
+            <option value="PriceAsc">PriceAsc</option>
+            <option value="PriceDesc">PriceDesc</option>
+            <option value="YearDesc">YearDesc</option>
           </select>
         </div>
 
@@ -141,6 +151,7 @@ function CarList() {
               key={car.id}
               className="group relative bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 overflow-hidden hover:border-[#70FFE2]/50 transition-all duration-500 shadow-2xl flex flex-col"
             >
+              
               <div className="relative h-56 bg-slate-700 overflow-hidden">
                 {car.imageUrls && car.imageUrls.length > 0 ? (
                   <img
@@ -194,6 +205,15 @@ function CarList() {
             </div>
           ))}
         </div>
+
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage: number) => {
+            setPage(newPage);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
       </div>
     </div>
   );

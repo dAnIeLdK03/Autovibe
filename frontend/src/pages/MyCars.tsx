@@ -24,8 +24,8 @@ function MyCars() {
     dispatch(clearError());
     const fetchCars = async () => {
       try {
-        const allCars = await getCars();
-        // Filter cars where userId matches, handling undefined userId
+        const response = await getCars(1, 500);
+        const allCars = response.items ?? [];
         const myCars = allCars.filter((car) => car.userId !== undefined && car.userId === user.id);
         dispatch(setCars(myCars));
       } catch (error: any) {

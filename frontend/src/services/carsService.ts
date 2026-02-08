@@ -72,9 +72,20 @@ interface UpdateCarRequest{
 
 };
 
-export const getCars = async(): Promise<Car[]> => {
-    const response = await api.get("/cars");
-    return response.data;
+export interface CarsPageResponse {
+    items: Car[];
+    totalPages: number;
+    pageNumber: number;
+    pageSize: number;
+}
+
+export const getCars = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
+    const response = await api.get<CarsPageResponse>(`/cars?pageNumber=${page}&pageSize=${pageSize}`);
+    const data = response.data;
+    if (!data || !Array.isArray(data.items)) {
+        throw new Error("Unable to load cars.");
+    }
+    return { items: data.items, totalPages: data.totalPages ?? 0, pageNumber: data.pageNumber ?? page, pageSize: data.pageSize ?? pageSize };
 };
 
 export const getCarById = async(id: number): Promise<CarDetails> => {
