@@ -24,12 +24,16 @@ namespace Autovibe.API.Controllers
         //GET: api/cars
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CarListDto>>> GetCars()
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetCars(int pageNumber = 1, int pageSize = 10)
         {
-            var cars = await _context.Cars
-                .ToListAsync();
+            if(pageNumber < 1) pageNumber = 1;
+            var query = _context.Cars.AsQueryable();
+            var totalItems = await query.CountAsync();
 
-            var carDtos = cars.Select(c => new CarListDto
+            var cars = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(c => new CarListDto
             {
                 Id = c.Id,
                 Make = c.Make,
@@ -45,9 +49,18 @@ namespace Autovibe.API.Controllers
                 : c.Description,
                 UserId = c.UserId,
                 ImageUrls = c.ImageUrls ?? new List<string>()
-            }).ToList();
+            }).ToListAsync();
 
-            return Ok(carDtos);
+            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+
+            return Ok(new PageResponse<CarListDto>
+            {
+                Items = cars,
+                TotalPages = totalPages,
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            });
         }
 
         [AllowAnonymous]
@@ -85,6 +98,8 @@ namespace Autovibe.API.Controllers
                 
                 ImageUrls = car.ImageUrls ?? new List<string>()
             };
+
+            
             return Ok(carDetails);
         }
 
