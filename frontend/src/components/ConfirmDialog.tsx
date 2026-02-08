@@ -1,32 +1,16 @@
 import React from 'react';
-
-interface ConfirmDialogProps{
-    isOpen : boolean,
-    title : string,
-    message : string,
-    onConfirm : () => void,
-    onCancel : () => void,
-}
-
-
+import type { ConfirmDialogProps } from '../services/carsService';
 
 const ConfirmDialog : React.FC<ConfirmDialogProps> = ({
     isOpen,
     title,
     message,
-    onConfirm,
-    onCancel
+    onConfirmClick,
+    onClose
 }) => {
     
     if(!isOpen) return null;
 
-    const onClose = () => {
-        onCancel();
-    };
-    const onConfirmClick = () => {
-        onConfirm();
-        onClose();
-    };
     
 
   return (

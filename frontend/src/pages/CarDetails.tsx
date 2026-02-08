@@ -259,8 +259,8 @@ export default function CarDetails() {
                   isOpen={showDeleteConfirm}
                   title="Delete Car"
                   message="Are you sure you want to delete this car?"
-                  onConfirm={handleDelete}
-                  onCancel={() => setShowDeleteConfirm(false)}
+                  onConfirmClick={handleDelete}
+                  onClose={() => setShowDeleteConfirm(false)}
                 />
               </div>
             )}

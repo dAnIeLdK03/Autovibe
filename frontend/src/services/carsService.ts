@@ -1,6 +1,6 @@
 import { api } from './api';
 
-export interface Car{
+export interface Car {
     id: number;
     make: string;
     model: string;
@@ -17,7 +17,7 @@ export interface Car{
     imageUrls?: string[];
 };
 
-export interface CarDetails{
+export interface CarDetails {
     id: number;
     make: string;
     model: string;
@@ -40,7 +40,7 @@ export interface CarDetails{
 
 };
 
-interface CreateCarRequest{
+interface CreateCarRequest {
     make: string;
     model: string;
     year: number;
@@ -57,7 +57,7 @@ interface CreateCarRequest{
 
 };
 
-interface UpdateCarRequest{
+interface UpdateCarRequest {
     make: string;
     model: string;
     year: number;
@@ -71,12 +71,38 @@ interface UpdateCarRequest{
     imageUrls?: string[];
 
 };
+export interface CarCardProps {
+    car: {
+        id: number,
+        make: string,
+        model: string,
+        year: number,
+        price: number,
+        mileage: number,
+        fuelType: string,
+        transmission: string,
+        color: string,
+        shortDescription?: string,
+        imageUrls?: string[];
+    }
+    onDeleteClick?: (id: number) => void;
+    showDeletebutton?: boolean;
+}
 
 export interface CarsPageResponse {
     items: Car[];
     totalPages: number;
     pageNumber: number;
     pageSize: number;
+}
+
+export interface ConfirmDialogProps {
+    isOpen: boolean;
+    title: string;
+    message: string;
+    /** Called when user clicks Confirm. Must be a function with no arguments (dialog does not pass any). */
+    onConfirmClick?: () => void | Promise<void>;
+    onClose?: () => void;
 }
 
 export const getCars = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
@@ -88,21 +114,21 @@ export const getCars = async (page: number, pageSize: number): Promise<CarsPageR
     return { items: data.items, totalPages: data.totalPages ?? 0, pageNumber: data.pageNumber ?? page, pageSize: data.pageSize ?? pageSize };
 };
 
-export const getCarById = async(id: number): Promise<CarDetails> => {
+export const getCarById = async (id: number): Promise<CarDetails> => {
     const response = await api.get(`/cars/${id}`);
     return response.data;
 };
 
-export const createCar = async(data: CreateCarRequest): Promise<CarDetails> => {
+export const createCar = async (data: CreateCarRequest): Promise<CarDetails> => {
     const response = await api.post("/cars", data);
     return response.data;
 };
 
-export const updateCar = async(id: number, data: UpdateCarRequest, imageUrls?: string[]): Promise<CarDetails> => {
+export const updateCar = async (id: number, data: UpdateCarRequest, imageUrls?: string[]): Promise<CarDetails> => {
     const response = await api.put(`/cars/${id}`, { ...data, imageUrls: imageUrls });
     return response.data;
 };
 
-export const deleteCar = async(id: number): Promise<void> => {
+export const deleteCar = async (id: number): Promise<void> => {
     await api.delete(`/cars/${id}`);
 }
