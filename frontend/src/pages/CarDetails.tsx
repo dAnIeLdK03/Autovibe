@@ -4,6 +4,7 @@ import { deleteCar, getCarById } from "../services/carsService";
 import type { CarDetails } from "../services/carsService";
 import { useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 export default function CarDetails() {
   const [car, setCar] = useState<CarDetails | null>({
@@ -41,7 +42,7 @@ export default function CarDetails() {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const isOwner = user && user.id === car?.sellerId;
 
-  
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);  
 
   useEffect(() => {
     
@@ -88,11 +89,8 @@ export default function CarDetails() {
     setLoading(true);
     setError(null);
     try {
-      const confirm = window.confirm("Are you sure you want to delete this car?");
-      if (!confirm) {
-        return;
-      }
-      await deleteCar(car.id);
+      setShowDeleteConfirm(true);
+      await deleteCar(carId);
       navigate("/cars");
     } catch (error) {
       setError("Unable to delete car.");
@@ -253,10 +251,17 @@ export default function CarDetails() {
                 </button>
                 <button
                   className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg"
-                  onClick={handleDelete}
+                  onClick={() => setShowDeleteConfirm(true)}
                 >
                   Delete
                 </button>
+                <ConfirmDialog 
+                  isOpen={showDeleteConfirm}
+                  title="Delete Car"
+                  message="Are you sure you want to delete this car?"
+                  onConfirm={handleDelete}
+                  onCancel={() => setShowDeleteConfirm(false)}
+                />
               </div>
             )}
           </div>

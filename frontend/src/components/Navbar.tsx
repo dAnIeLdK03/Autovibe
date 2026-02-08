@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
@@ -7,7 +6,7 @@ import { logout } from "../stores/authSlice";
 function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isAuthenticated } = useSelector(
+  const { user } = useSelector(
     (state: RootState) => state.auth,
   );
   const location = useLocation();

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../stores/store';
 import { updateUserData } from '../stores/authSlice';

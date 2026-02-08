@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import type { RootState } from "../stores/store";
 import { deleteCar, getCars } from "../services/carsService";
 import { setCars, setLoading, setError, clearError } from "../stores/carsSlice";
+import ConfirmDialog from "../components/ConfirmDialog";
 
 function MyCars() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ function MyCars() {
   const { user, isAuthenticated } = useSelector(
     (state: RootState) => state.auth,
   );
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   
   useEffect(() => {
     if (!isAuthenticated || user === null) {
@@ -42,19 +44,14 @@ function MyCars() {
     (state: RootState) => state.cars,
   );
 
-  const handleDelete = async (carId: string | number) => {
+  const handleDelete = async (carId: number) => {
       dispatch(setLoading(true));
       dispatch(clearError());
       try {
-        const confirm = window.confirm("Are you sure you want to delete this car?");
-        if (!confirm) {
-          dispatch(setLoading(false));
-          return;
-        }
-        const id = Number(carId);
-        await deleteCar(id);
+        setShowDeleteConfirm(true);
+        await deleteCar(carId);
         // remove deleted car from local state
-        dispatch(setCars(cars.filter((c) => c.id !== id)));
+        dispatch(setCars(cars.filter((c) => c.id !== carId)));
         navigate("/cars");
       } catch (error) {
         dispatch(setError("Unable to delete car."));
@@ -167,10 +164,17 @@ function MyCars() {
                     </button>
                     <button 
                       className="flex-1 px-3 py-2 bg-red-600/20 hover:bg-red-600 text-red-400 hover:text-white text-xs font-bold rounded-lg transition-all"
-                      onClick={() => handleDelete(car.id)}
+                      onClick={() => setShowDeleteConfirm(true)}
                     >
                       Delete
                     </button>
+                    <ConfirmDialog 
+                      isOpen={showDeleteConfirm}
+                      title="Delete Car"
+                      message="Are you sure you want to delete this car?"
+                      onConfirm={() => handleDelete(car.id)}
+                      onCancel={() => setShowDeleteConfirm(false)}
+                    />
                      
                   </div>
                 </div>
