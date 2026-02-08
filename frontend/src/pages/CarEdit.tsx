@@ -108,6 +108,11 @@ export default function CarEdit() {
       setLoading(false);
       return;
     }
+    if(car.description.length <= 10 || car.description.trim() === ""){
+      setError("Description must be at least 10 characters long.");
+      setLoading(false);
+      return;
+    }
     
     
     try {

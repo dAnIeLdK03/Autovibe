@@ -127,6 +127,9 @@ namespace Autovibe.API.Controllers
             if(createDto.Price <= 0){
                 return BadRequest("Price must be greater than 0.");
             }
+            if(createDto.Description.Length <= 10){
+                return BadRequest("Description must be at least 10 characters long.");
+            }
 
             var car = new Car
             {
