@@ -10,7 +10,7 @@ export interface Car {
     fuelType: string;
     transmission: string;
     color: string;
-    shortDescription?: string;
+    shortDescription: string;
 
     userId: number;
 
@@ -57,7 +57,7 @@ interface CreateCarRequest {
 
 };
 
-interface UpdateCarRequest {
+export interface UpdateCarRequest {
     make: string;
     model: string;
     year: number;
@@ -82,12 +82,13 @@ export interface CarCardProps {
         fuelType: string,
         transmission: string,
         color: string,
-        shortDescription?: string,
+        shortDescription: string,
         imageUrls?: string[];
     }
     onDeleteClick?: (id: number) => void;
     showDeletebutton?: boolean;
 }
+
 
 export interface CarsPageResponse {
     items: Car[];

@@ -11,7 +11,7 @@ export interface Car{
     fuelType: string;
     transmission: string;
     color: string;
-    shortDescription?: string;
+    shortDescription: string;
 
     userId: number;
 

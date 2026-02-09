@@ -4,6 +4,8 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { createCar } from '../services/carsService';
 import { uploadImage } from '../services/imageService';
+import CarCreateValidaions from "../Validations/CarValidations/CarCreateValidaions";
+import type { CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
 
 export function CarCreate() {
     const {user} = useSelector((state: RootState) => state.auth);
@@ -12,6 +14,7 @@ export function CarCreate() {
         navigate("/login");
         return null;
     }
+    
     const [car, setCar] = useState({
         make: "",
         model: "",
@@ -34,30 +37,17 @@ export function CarCreate() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setLoading(true);
         setError(null);
         
         // Client-side validation
-        if (!car.make.trim()) {
-            setError("Make is required.");
-            setLoading(false);
+        const errorMessage = CarCreateValidaions(car as CarFormValues);
+        if(errorMessage){
+            setError(errorMessage);
             return;
         }
-        if (!car.model.trim()) {
-            setError("Model is required.");
-            setLoading(false);
-            return;
-        }
-        if (car.year < 1900 || car.year > new Date().getFullYear()) {
-            setError("Year must be between 1900 and current year.");
-            setLoading(false);
-            return;
-        }
-        if (car.price <= 0) {
-            setError("Price must be greater than 0.");
-            setLoading(false);
-            return;
-        }
+        setLoading(true);
+        
+        
         if (!user || !user.id) {
             setError("User not found. Please login again.");
             setLoading(false);

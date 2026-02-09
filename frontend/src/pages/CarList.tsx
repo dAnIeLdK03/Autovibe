@@ -5,7 +5,7 @@ import { getCars } from '../services/carsService';
 import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/pagePagination';
-import CarCard from '../components/CarCard';
+import CarCard from '../components/Car/CarCard';
 
 function CarList() {
   const navigate = useNavigate();
@@ -150,12 +150,13 @@ function CarList() {
           </select>
         </div>
 
+        {/* Cars Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedCars.map((car) => (
             <CarCard key={car.id} car={car} showDeletebutton={false} />
           ))}
         </div>
-
+        {/* Pagination */}
         <Pagination
           currentPage={page}
           totalPages={totalPages}

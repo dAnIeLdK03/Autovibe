@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import type { CarCardProps } from '../services/carsService';
+import type { CarCardProps } from '../../services/carsService';
 
 
 const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton }) => {

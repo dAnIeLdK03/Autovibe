@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import type { RootState } from "../stores/store";
 import { deleteCar, getCars } from "../services/carsService";
-import type { CarCardProps } from "../services/carsService";
 import { setCars, setLoading, setError, clearError } from "../stores/carsSlice";
-import CarCard from "../components/CarCard";
+import CarCard from "../components/Car/CarCard";
 import ConfirmDialog from "../components/ConfirmDialog";
 
 function MyCars() {

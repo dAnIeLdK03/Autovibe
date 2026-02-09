@@ -5,6 +5,7 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { getCarById, updateCar } from "../services/carsService";
 import { uploadImage } from "../services/imageService";
+import CarCreateValidaions, { type CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
 
 export default function CarEdit() {
   const { id } = useParams();
@@ -68,30 +69,16 @@ export default function CarEdit() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if(!id) return;
-    setLoading(true);
     setError(null);
-    
     // Client-side validation
-    if (!car.make.trim()) {
-      setError("Марката е задължителна.");
-      setLoading(false);
-      return;
-    }
-    if (!car.model.trim()) {
-      setError("Моделът е задължителен.");
-      setLoading(false);
-      return;
-    }
-    if (car.year < 1900 || car.year > new Date().getFullYear()) {
-            setError("Year must be between 1900 and current year.");
-            setLoading(false);
+    const errorMessage = CarCreateValidaions(car as CarFormValues);
+        if(errorMessage){
+            setError(errorMessage);
             return;
         }
-    if (car.price <= 0) {
-      setError("Цената трябва да е по-голяма от 0.");
-      setLoading(false);
-      return;
-    }
+    setLoading(true);
+    
+    
     let imageUrls: string[] | undefined;
     if(imageFile){
       try{
@@ -105,11 +92,6 @@ export default function CarEdit() {
     }
     if(car.sellerId !== user?.id){
       setError("You are not the owner of this car.");
-      setLoading(false);
-      return;
-    }
-    if(car.description.length <= 10 || car.description.trim() === ""){
-      setError("Description must be at least 10 characters long.");
       setLoading(false);
       return;
     }
