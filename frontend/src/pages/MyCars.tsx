@@ -106,7 +106,7 @@ function MyCars() {
             </p>
           </div>
           <button
-            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all shadow-lg"
+            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all"
             onClick={() => navigate("/cars/new")}
           >
             + Create New Ad

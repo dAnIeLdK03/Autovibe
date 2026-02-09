@@ -5,7 +5,7 @@ import { getCars } from '../services/carsService';
 import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/pagePagination';
-import  CarCard from '../components/CarCard';
+import CarCard from '../components/CarCard';
 
 function CarList() {
   const navigate = useNavigate();
@@ -88,8 +88,10 @@ function CarList() {
         <h2 className="text-2xl font-semibold text-gray-600">No cars yet</h2>
         <p className="text-gray-500 mt-2">Add one by clicking the button belows.</p>
 
-        <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg mt-3" onClick={() => isAuthenticated ? navigate(`/cars/new`) : navigate("/login")}>
-          {isAuthenticated ? "Create new ad" : "Login to create new ad"}
+        <button 
+            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all shadow-lg"
+          onClick={() => isAuthenticated ? navigate(`/cars/new`) : navigate("/login")}>
+          {isAuthenticated ? " + Create New Ad" : "Login to create new ad"}
         </button>
       </div>
     );
@@ -105,9 +107,9 @@ function CarList() {
           </h1>
           <p className="text-slate-400">Discover the perfect ride for your next journey.</p>
           <button
-            className="flex-1 px-2 py-3 bg-slate-700 hover:bg-slate-600 text-white text-md font-bold rounded-lg transition-all"
+            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all"
             onClick={() => isAuthenticated ? navigate(`/cars/new`) : navigate("/login")}>
-            {isAuthenticated ? "Create new ad" : "Login to create new ad"}
+            {isAuthenticated ? " + Create New Ad" : "Login to create new ad"}
           </button>
         </div>
 
