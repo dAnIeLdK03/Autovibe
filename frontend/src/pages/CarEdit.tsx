@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { getCarById, updateCar } from "../services/carsService";
-import { uploadImage } from "../services/imageService";
 import CarCreateValidaions, { type CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
+import { extractApiErrorMessage, uploadCarImageIfPresent, validateCarOwner } from "../Validations/CarValidations/carSubmitHelpers";
 
 export default function CarEdit() {
   const { id } = useParams();
@@ -77,56 +77,27 @@ export default function CarEdit() {
             return;
         }
     setLoading(true);
-    
-    
-    let imageUrls: string[] | undefined;
-    if(imageFile){
-      try{
-        const imageUrl = await uploadImage(imageFile);
-        imageUrls = [imageUrl];
-      }catch(error){
-        setError("Unable to upload image.");
-        setLoading(false);
-        return;
-      }
-    }
-    if(car.sellerId !== user?.id){
-      setError("You are not the owner of this car.");
+
+    const { imageUrls, error: uploadError } = await uploadCarImageIfPresent(imageFile);
+    if (uploadError) {
+      setError(uploadError);
       setLoading(false);
       return;
     }
-    
-    
+
+    const ownerError = validateCarOwner(car.sellerId, user?.id);
+    if (ownerError) {
+      setError(ownerError);
+      setLoading(false);
+      return;
+    }
+
     try {
       const {sellerId, ...payload } = car;
       await updateCar(Number(id), payload, imageUrls);
       navigate(`/cars/${id}`);
     } catch (error: any) {
-      // Extract the actual error message from the backend
-      let errorMessage = "Unable to update car.";
-      
-      if (error.response?.data) {
-        const data = error.response.data;
-        
-        // Handle ModelState errors (validation errors from ASP.NET)
-        if (typeof data === 'object' && !data.message) {
-          const errors: string[] = [];
-          for (const key in data) {
-            if (Array.isArray(data[key])) {
-              errors.push(...data[key]);
-            } else if (typeof data[key] === 'string') {
-              errors.push(data[key]);
-            }
-          }
-          errorMessage = errors.length > 0 ? errors.join(', ') : JSON.stringify(data);
-        } else {
-          errorMessage = data.message || data || errorMessage;
-        }
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      setError(errorMessage);
+      setError(extractApiErrorMessage(error, "Unable to create car."));
     } finally {
       setLoading(false);
     }
