@@ -3,15 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../stores/store';
 import { getCars } from '../services/carsService';
 import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
-import { useNavigate } from 'react-router-dom';
 import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
 
 function CarList() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
-  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [fuelType, setFuelType] = useState("All");
   const [sortType, setSortType] = useState("None");
   const filteredCars = cars.filter((car) =>
@@ -88,11 +85,7 @@ function CarList() {
         <h2 className="text-2xl font-semibold text-gray-600">No cars yet</h2>
         <p className="text-gray-500 mt-2">Add one by clicking the button belows.</p>
 
-        <button 
-            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all shadow-lg"
-          onClick={() => isAuthenticated ? navigate(`/cars/new`) : navigate("/login")}>
-          {isAuthenticated ? " + Create New Ad" : "Login to create new ad"}
-        </button>
+        
       </div>
     );
   }
@@ -106,11 +99,7 @@ function CarList() {
             Explore Our <span className="text-[#70FFE2]">Fleet</span>
           </h1>
           <p className="text-slate-400">Discover the perfect ride for your next journey.</p>
-          <button
-            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all"
-            onClick={() => isAuthenticated ? navigate(`/cars/new`) : navigate("/login")}>
-            {isAuthenticated ? " + Create New Ad" : "Login to create new ad"}
-          </button>
+         
         </div>
 
         <div className="relative group max-w-xs">

@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import type { RootState } from "../stores/store";
 
 interface MenuItem {
     label: string;
@@ -12,6 +14,8 @@ const Menu: React.FC = () => {
     const navigate = useNavigate();
 
     const toggleMenu = () => setIsOpen((prev) => !prev);
+
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
     useEffect(() => {
         const listener = (event: MouseEvent) => {
@@ -26,6 +30,7 @@ const Menu: React.FC = () => {
     const menuItems: MenuItem[] = [
         { label: "Home", onClick: () => navigate("/cars") },
         { label: "Profile", onClick: () => navigate("/profile") },
+        { label: "Create New Ad", onClick: () => isAuthenticated ? navigate("/cars/new") : navigate("/login") },
         { label: "My Cars", onClick: () => navigate("/cars/my") },
         { label: "Logout", onClick: () => navigate("/logout") },
     ];
@@ -55,6 +60,7 @@ const Menu: React.FC = () => {
                                 }}
                                 className="block w-full text-left px-4 py-3 text-sm text-slate-300 hover:bg-slate-700 hover:text-[#70FFE2] transition-colors border-b border-slate-700/50 last:border-0"
                             >
+                                
                                 {item.label}
                             </button>
                         ))}
