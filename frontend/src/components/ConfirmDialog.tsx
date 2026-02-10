@@ -1,6 +1,5 @@
 import React from 'react';
 import type { ConfirmDialogProps } from '../services/carsService';
-import  Menu from './Menu';
 
 const ConfirmDialog : React.FC<ConfirmDialogProps> = ({
     isOpen,
@@ -16,20 +15,20 @@ const ConfirmDialog : React.FC<ConfirmDialogProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* 1. Backdrop (Затъмнен фон) */}
+      {/* 1. Backdrop (dark background) */}
       <div 
         className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
-        onClick={onClose} // Затваря се при клик извън картата
+        onClick={onClose} // Close dialog when clicking outside the card
       />
 
-      {/* 2. Карта по средата */}
+      {/* 2. Card (centered dialog) */}
       <div className="relative bg-slate-800 border border-slate-700 p-8 rounded-3xl shadow-2xl max-w-sm w-full transform transition-all">
         <div className="text-center mb-6">
           <h3 className="text-white text-xl font-bold mb-2">{title}</h3>
           <p className="text-slate-400">{message}</p>
         </div>
 
-        {/* 3. Бутони */}
+        {/* 3. Buttons */}
         <div className="flex flex-col gap-3">
           <button
             onClick={onConfirmClick}

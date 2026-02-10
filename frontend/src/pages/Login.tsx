@@ -9,6 +9,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -74,6 +75,7 @@ function Login() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
               placeholder="••••••••"
+
               required
             />
           </div>

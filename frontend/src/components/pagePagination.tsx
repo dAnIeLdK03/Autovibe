@@ -18,11 +18,11 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                    disabled:opacity-30 disabled:cursor-not-allowed hover:border-[#70FFE2] 
                    transition-all duration-300 font-bold"
       >
-        ← Назад
+        ← Prev
       </button>
 
       <div className="text-slate-400 font-medium bg-slate-800/50 px-4 py-2 rounded-lg border border-slate-700">
-        Страница <span className="text-[#70FFE2]">{currentPage}</span> от {pages}
+        Page <span className="text-[#70FFE2]">{currentPage}</span> of {pages}
       </div>
 
       <button
@@ -32,7 +32,7 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                    disabled:opacity-30 disabled:cursor-not-allowed hover:border-[#70FFE2] 
                    transition-all duration-300 font-bold"
       >
-        Напред →
+        Next →
       </button>
     </div>
   );

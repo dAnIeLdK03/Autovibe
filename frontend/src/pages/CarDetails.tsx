@@ -122,38 +122,37 @@ export default function CarDetails() {
               </div>
               {car.imageUrls.length > 1 && (
                 <div className="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-md text-white text-sm font-bold px-4 py-2 rounded-full border border-slate-700">
-                  {car.imageUrls.length} снимки
+                  {car.imageUrls.length} images
                 </div>
               )}
             </div>
           ) : (
             <div className="w-full h-[500px] md:h-[600px] bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
               <div className="text-center">
-                <span className="text-slate-500 text-lg block mb-2">Няма снимка</span>
-                <span className="text-slate-600 text-sm">Снимката ще бъде добавена скоро</span>
+                <span className="text-slate-500 text-lg block mb-2">No image yet</span>
+                <span className="text-slate-600 text-sm">The image will be added soon.</span>
               </div>
             </div>
           )}
         </div>
 
-        {/* Галерия с миниатюри (ако има повече снимки) */}
+        {/* Gallery with thumbnails (if there are more images) */}
         {car.imageUrls && car.imageUrls.length > 1 && (
           <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white mb-4">Допълнителни снимки</h2>
+            <h2 className="text-xl font-semibold text-white mb-4">Additional images</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {car.imageUrls.slice(1).map((imageUrl, index) => (
                 <div 
                   key={index}
                   className="relative aspect-video rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity border-2 border-slate-700 hover:border-[#70FFE2]"
                   onClick={() => {
-                    // Може да добавиш функционалност за промяна на главната снимка
                     const newUrls = [imageUrl, ...car.imageUrls!.filter((_, i) => i !== index + 1)];
                     setCar({ ...car, imageUrls: newUrls });
                   }}
                 >
                   <img 
                     src={`http://localhost:5258${imageUrl}`} 
-                    alt={`${car.make} ${car.model} - Снимка ${index + 2}`}
+                    alt={`${car.make} ${car.model} - Image ${index + 2}`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -161,30 +160,30 @@ export default function CarDetails() {
             </div>
           </div>
         )}
-        {/* Карта */}
+        {/* Card */}
         <div className="bg-slate-800 shadow-xl rounded-xl p-8 text-slate-200 space-y-8">
-          {/* Основна информация */}
+          {/* Main info */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
-              Основна информация
+              Main information
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <p>
-                <span className="font-semibold">Цена:</span> {car.price.toLocaleString('bg-BG')}
+                <span className="font-semibold">Price:</span> {car.price.toLocaleString('bg-BG')}
               </p>
               <p>
-                <span className="font-semibold">Пробег:</span> {car.mileage} км
+                <span className="font-semibold">Mileage:</span> {car.mileage} км
               </p>
               <p>
-                <span className="font-semibold">Гориво:</span> {car.fuelType}
+                <span className="font-semibold">Fuel:</span> {car.fuelType}
               </p>
               <p>
-                <span className="font-semibold">Трансмисия:</span>{" "}
+                <span className="font-semibold">Transmssion:</span>{" "}
                 {car.transmission}
               </p>
               <p>
-                <span className="font-semibold">Цвят:</span> {car.color}
+                <span className="font-semibold">Color:</span> {car.color}
               </p>
             </div>
           </div>
@@ -192,50 +191,50 @@ export default function CarDetails() {
           {/* Description */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
-              Описание
+              Description
             </h2>
             <p className="break-words leading-relaxed text-slate-300 ">{car.description}</p>
           </div>
 
-          {/* Дати */}
+          {/* Dates */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
-              Дати
+              Dates
             </h2>
 
             <p>
-              <span className="font-semibold">Създадено на:</span>{" "}
+              <span className="font-semibold">Created on:</span>{" "}
               {new Date(car.createdAt).toLocaleString()}
             </p>
 
             <p>
-              <span className="font-semibold">Обновено на:</span>{" "}
+              <span className="font-semibold">Updated on :</span>{" "}
               {new Date(car.updatedAt).toLocaleString()}
             </p>
           </div>
 
 
-          {/* Продавач */}
+          {/* Seller */}
           {!isAuthenticated && (
             <div>
               <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
-                Информация за продавача <br/>
-                Please login to view seller information.
+                Seller Information <br/>
+                <span className="text-sm text-slate-500 font-normal">Login to see the seller's information.</span>
               </h2>
             </div>
           )}
             {isAuthenticated && user && (
               <div>
                 <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
-              Информация за продавача
+              Seller Information
             </h2>
             <p>
-              <span className="font-semibold">Име:</span> {car.sellerFirstName}{" "}
+              <span className="font-semibold">Seller: </span> {car.sellerFirstName}{" "}
               {car.sellerLastName}
             </p>
              
             <p>
-              <span className="font-semibold">Телефон:</span>{" "}
+              <span className="font-semibold">Phone: </span>{" "}
               {car.sellerPhoneNumber}
             </p>
           </div>

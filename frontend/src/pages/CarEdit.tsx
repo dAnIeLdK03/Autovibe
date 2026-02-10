@@ -71,6 +71,7 @@ export default function CarEdit() {
     e.preventDefault();
     if (!id) return;
     setError(null);
+
     // Client-side validation
     const errorMessage = CarCreateValidaions(car as CarFormValues);
     if (errorMessage) {
@@ -92,7 +93,7 @@ export default function CarEdit() {
       return;
     }
     if(imageFile){
-      const {imageUrls, error: uploadError } = await uploadCarImageIfPresent(imageFile);
+      const { error: uploadError } = await uploadCarImageIfPresent(imageFile);
       if (uploadError) {
         setError(uploadError);
         setLoading(false);
@@ -134,7 +135,7 @@ export default function CarEdit() {
           <input
             type="text"
             name="make"
-            placeholder="Марка"
+            placeholder="Make"
             value={car.make}
             onChange={(e) => setCar({ ...car, make: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
@@ -143,7 +144,7 @@ export default function CarEdit() {
           <input
             type="text"
             name="model"
-            placeholder="Модел"
+            placeholder="Model"
             value={car.model}
             onChange={(e) => setCar({ ...car, model: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
@@ -152,7 +153,7 @@ export default function CarEdit() {
           <input
             type="number"
             name="year"
-            placeholder="Година"
+            placeholder="Year"
             value={car.year}
             onChange={(e) => setCar({ ...car, year: Number(e.target.value) })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
@@ -161,7 +162,7 @@ export default function CarEdit() {
           <input
             type="number"
             name="price"
-            placeholder="Цена"
+            placeholder="Price"
             value={car.price}
             onChange={(e) => setCar({ ...car, price: Number(e.target.value) })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
@@ -170,7 +171,7 @@ export default function CarEdit() {
           <input
             type="number"
             name="mileage"
-            placeholder="Пробег"
+            placeholder="Mileage"
             value={car.mileage}
             onChange={(e) =>
               setCar({ ...car, mileage: Number(e.target.value) })
@@ -185,7 +186,7 @@ export default function CarEdit() {
             onChange={(e) => setCar({ ...car, fuelType: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
           >
-            <option value="">Гориво</option>
+            <option value="">Fuel Type</option>
             <option value="Petrol">Petrol</option>
             <option value="Diesel">Diesel</option>
             <option value="Hybrid">Hybrid</option>
@@ -198,7 +199,7 @@ export default function CarEdit() {
             onChange={(e) => setCar({ ...car, transmission: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
           >
-            <option value="">Трансмисия</option>
+            <option value="">Transmission</option>
             <option value="Manual">Manual</option>
             <option value="Automatic">Automatic</option>
           </select>
@@ -206,7 +207,7 @@ export default function CarEdit() {
           <input
             type="text"
             name="color"
-            placeholder="Цвят"
+            placeholder="Color"
             value={car.color}
             onChange={(e) => setCar({ ...car, color: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
@@ -214,7 +215,7 @@ export default function CarEdit() {
 
           <textarea
             name="description"
-            placeholder="Описание"
+            placeholder="Description"
             value={car.description}
             onChange={(e) => setCar({ ...car, description: e.target.value })}
             className="w-full px-5 py-10 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
@@ -252,7 +253,7 @@ export default function CarEdit() {
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
               </div>
             ) : (
-              "Еdit Ad"
+              "Edit Ad"
             )}
           </button>
           <button

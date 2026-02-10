@@ -26,7 +26,7 @@ function Home() {
           Autovibe - Your journey to the perfect car. Browse our collection of high-quality vehicles at affordable prices.
         </p>
 
-        {/* CTA Бутони */}
+        {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           {!isAuthenticated ? (
             <>
@@ -44,13 +44,7 @@ function Home() {
                 onClick={() => navigate('/cars')}
                 className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-[#70FFE2] hover:from-blue-700 hover:to-[#5ee6cb] text-white font-bold text-lg rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
               >
-                Разгледайте колите
-              </button>
-              <button
-                onClick={() => navigate('/cars/my')}
-                className="w-full sm:w-auto px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white font-bold text-lg rounded-xl border-2 border-slate-600 hover:border-[#70FFE2] transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
-              >
-                Моите коли
+                Browse Cars
               </button>
             </>
           )}
