@@ -94,7 +94,7 @@ function CarList() {
     <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
       <div className="max-w-7xl mx-auto">
 
-        <div className="mb-12">
+        <div className="mb-12 text-center">
           <h1 className="text-4xl font-black text-white tracking-tight mb-2">
             Explore Our <span className="text-[#70FFE2]">Fleet</span>
           </h1>
