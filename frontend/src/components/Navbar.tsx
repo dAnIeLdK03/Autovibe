@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
 import { logout } from "../stores/authSlice";
+import Menu from "./Menu";
 
 function Navbar() {
   const dispatch = useDispatch();
@@ -55,10 +56,10 @@ function Navbar() {
           </div>
 
           {/* Дясна част: Auth секция */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 flex-1 justify-end w-full">
             {user ? (
               // Интерфейс при логнат потребител
-              <div className="flex items-center space-x-4">
+              <div className="flex flex-1 justify-end items-center space-x-4">
                 <span className="hidden sm:inline text-gray-300 text-sm italic">
                   Hello, {user.firstName}
                 </span>
@@ -68,6 +69,7 @@ function Navbar() {
                 >
                   Изход
                 </button>
+                <Menu label="Menu" onClick={() => console.log("Menu clicked!")} />
               </div>
             ) : (
               // Интерфейс при нелогнат потребител
@@ -85,6 +87,7 @@ function Navbar() {
                   Регистрация
                 </Link>
               </div>
+              
             )}
           </div>
         </div>
