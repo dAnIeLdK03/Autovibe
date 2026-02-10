@@ -99,7 +99,9 @@ export default function CarDetails() {
 
   return (
     <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
-       <button className=" px-6 py-3 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={() => navigate("/cars")}>
+       <button 
+          className="flex-1 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg transition-all"
+          onClick={() => navigate("/cars")}>
           🡰 Back
         </button>
       <div className="max-w-3xl mx-auto">
@@ -243,13 +245,13 @@ export default function CarDetails() {
             {isOwner && (
               <div className="flex justify-end">
                 <button
-                  className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg"
+                  className="mr-2 flex-1 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg transition-all"
                   onClick={() => navigate(`/cars/${car.id}/edit`)}
                 >
                   Edit
                 </button>
                 <button
-                  className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg"
+                    className="ml-2 flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-all"
                   onClick={() => setShowDeleteConfirm(true)}
                 >
                   Delete

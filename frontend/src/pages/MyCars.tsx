@@ -104,12 +104,7 @@ function MyCars() {
               Manage your listings ({cars.length} {cars.length === 1 ? "ad" : "ads"})
             </p>
           </div>
-          <button
-            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all"
-            onClick={() => navigate("/cars/new")}
-          >
-            + Create New Ad
-          </button>
+         
         </div>
 
         {error && (
