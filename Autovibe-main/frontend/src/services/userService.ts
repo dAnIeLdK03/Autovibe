@@ -15,6 +15,10 @@ export interface UserData{
     phoneNumber?: string;
 }
 
+export const deleteUser = async(id: number): Promise<void> => {
+    await api.delete(`/user/${id}`);
+}
+
 export const updateUser = async(id: number, data: UserData): Promise<UserData> => {
     const response = await api.put(`/user/${id}`, data);
     return response.data;

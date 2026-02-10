@@ -3,48 +3,86 @@ import { useSelector, useDispatch } from 'react-redux';
 import type { RootState } from '../stores/store';
 import { updateUserData } from '../stores/authSlice';
 import EditUserModal from '../components/EditUserModal';
+import ConfirmDialog from '../components/ConfirmDialog';
+import { deleteUser } from '../services/userService';
+import { useNavigate } from 'react-router-dom';
 
 function Profile() {
     const { user } = useSelector((state: RootState) => state.auth);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
     const dispatch = useDispatch();
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const navigate = useNavigate();
 
     const handleEdit = () => {
         setIsEditOpen(true);
     };
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);  
+
 
     const handleSave = (data: { firstName?: string; lastName?: string; phoneNumber?: string }) => {
         dispatch(updateUserData(data));
     };
 
-  return (
-    <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
-        <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl font-black text-white tracking-tight mb-2">
-                Profile
-            </h1>
-            <p className="text-slate-400">Welcome, {user?.firstName} {user?.lastName}</p>
+    const handleDelete = async () => {
+        if(!user){  
+          setError("You are not logged in.");
+          return;
+        }
+        setLoading(true);
+        setError(null);
+        try {
+          setShowDeleteConfirm(true);
+          await deleteUser(user.id);
+          navigate("/cars");
+        } catch (error) {
+          setError("Unable to delete account.");
+        }
+      };
+
+    return (
+        <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
+            <div className="max-w-7xl mx-auto mb-8">
+                <h1 className="text-4xl font-black text-white tracking-tight mb-2">
+                    Profile
+                </h1>
+                <p className="text-slate-400 text-2xl">Welcome, {user?.firstName} {user?.lastName}</p>
+            </div>
+            <div className="max-w-7xl mx-auto mt-20 justify-center flex flex-col">
+                <h1 className="text-4xl font-black text-white tracking-tight mb-2 justify-center flex">
+                    Information:
+                </h1>
+                <p className="text-slate-400 m-2 justify-center flex">Email: {user?.email}</p>
+                <p className="text-slate-400 m-2 justify-center flex">First Name: {user?.firstName}</p>
+                <p className="text-slate-400 m-2 justify-center flex">Last Name: {user?.lastName}</p>
+                <p className="text-slate-400 m-2 justify-center flex">Phone Number: {user?.phoneNumber}</p>
+            </div>
+            <div className="max-w-7xl mx-auto justify-center max-w-35">
+                <h1 className="text-4xl font-black text-white tracking-tight mb-2 justify-center flex flex-col mt-20 ">
+                    Actions:
+                </h1>
+                <button
+                  className="mr-2 flex-1 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg transition-all"
+                    onClick={handleEdit}>
+                    Edit Profile
+                </button>
+                <button 
+                    className="ml-2 flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-lg transition-all"
+                  onClick={() => setShowDeleteConfirm(true)}>
+                    Delete Account
+                    </button>
+                    <ConfirmDialog 
+                  isOpen={showDeleteConfirm}
+                  title="Delete Account"
+                  message="Are you sure you want to delete your account?"
+                  onConfirmClick={handleDelete}
+                  onClose={() => setShowDeleteConfirm(false)}
+                />
+            </div>
+            {isEditOpen && <EditUserModal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} user={user} onSave={handleSave} />}
         </div>
-        <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl font-black text-white tracking-tight mb-2">
-                Information:
-            </h1>
-            <p className="text-slate-400">Email: {user?.email}</p>
-            <p className="text-slate-400">First Name: {user?.firstName}</p>
-            <p className="text-slate-400">Last Name: {user?.lastName}</p>
-            <p className="text-slate-400">Phone Number: {user?.phoneNumber}</p>
-        </div>
-        <div className="max-w-7xl mx-auto">
-            <h1 className="text-4xl font-black text-white tracking-tight mb-2">
-                Actions:
-            </h1>
-            <button className="px-5 py-2.5 bg-slate-700 hover:bg-[#70FFE2] text-white hover:text-slate-900 font-bold rounded-xl transition-all duration-300 text-sm shadow-lg" onClick={handleEdit}>
-                Edit Profile
-            </button>
-        </div>
-        {isEditOpen && <EditUserModal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} user={user} onSave={handleSave} />}
-    </div>
-  )
+    )
 }
 
 export default Profile;
