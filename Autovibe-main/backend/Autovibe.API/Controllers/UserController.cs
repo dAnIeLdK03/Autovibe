@@ -72,6 +72,12 @@ namespace Autovibe.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if(id != userId)
+            {
+                return Unauthorized("You are not authorized to update this user.");
+            }
+
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
             
