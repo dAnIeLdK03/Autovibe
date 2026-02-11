@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Autovibe.API.Controllers.CarsHelper;
 
 namespace Autovibe.API.Controllers
 {
@@ -31,32 +32,18 @@ namespace Autovibe.API.Controllers
             var totalItems = await query.CountAsync();
 
             var cars = await query
+                .Include(c => c.User)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(c => new CarListDto
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Year = c.Year,
-                    Price = c.Price,
-                    Mileage = c.Mileage,
-                    FuelType = c.FuelType,
-                    Transmission = c.Transmission,
-                    Color = c.Color,
-                    ShortDescription = c.Description != null && c.Description.Length > 100
-                ? c.Description.Substring(0, 100) + "..."
-                : c.Description,
-                    UserId = c.UserId,
-                    ImageUrls = c.ImageUrls ?? new List<string>()
-                }).ToListAsync();
-
+                .ToListAsync();
+               
+            var carDtos = cars.Select(c => c.ToDetailsDto(c.User)).ToList();
             var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
 
-            return Ok(new PageResponse<CarListDto>
+            return Ok(new PageResponse<CarDetailsDto>
             {
-                Items = cars,
+                Items = carDtos,
                 TotalPages = totalPages,
                 PageNumber = pageNumber,
                 PageSize = pageSize
@@ -76,31 +63,9 @@ namespace Autovibe.API.Controllers
                 return NotFound();
             }
 
-            var carDetails = new CarDetailsDto
-            {
-                Id = car.Id,
-                Make = car.Make,
-                Model = car.Model,
-                Year = car.Year,
-                Price = car.Price,
-                Mileage = car.Mileage,
-                FuelType = car.FuelType,
-                Transmission = car.Transmission,
-                Color = car.Color,
-                Description = car.Description,
-                CreatedAt = car.CreatedAt,
-                UpdatedAt = car.UpdatedAt,
+            
 
-                SellerId = car.UserId,
-                SellerFirstName = car.User.FirstName,
-                SellerLastName = car.User.LastName,
-                SellerPhoneNumber = car.User.PhoneNumber,
-
-                ImageUrls = car.ImageUrls ?? new List<string>()
-            };
-
-
-            return Ok(carDetails);
+            return Ok(car.ToDetailsDto(car.User));
         }
 
         //POST: api/cars
@@ -143,28 +108,9 @@ namespace Autovibe.API.Controllers
             if (createdCar == null)
                 return BadRequest("Car could not be created.");
 
-            var result = new CarDetailsDto
-            {
-                Id = createdCar.Id,
-                Make = createdCar.Make,
-                Model = createdCar.Model,
-                Year = createdCar.Year,
-                Price = createdCar.Price,
-                Mileage = createdCar.Mileage,
-                FuelType = createdCar.FuelType,
-                Transmission = createdCar.Transmission,
-                Color = createdCar.Color,
-                Description = createdCar.Description,
-                CreatedAt = createdCar.CreatedAt,
-                UpdatedAt = createdCar.UpdatedAt,
-                SellerId = createdCar.UserId,
-                SellerFirstName = createdCar.User.FirstName,
-                SellerLastName = createdCar.User.LastName,
-                SellerPhoneNumber = createdCar.User.PhoneNumber,
-                ImageUrls = createdCar.ImageUrls ?? new List<string>()
-            };
+            
 
-            return CreatedAtAction(nameof(GetCar), new { id = result.Id }, result);
+            return CreatedAtAction(nameof(GetCar), new { id = car.Id }, car.ToDetailsDto(car.User));
         }
 
         //PUT: api/cars/{id}
@@ -202,28 +148,9 @@ namespace Autovibe.API.Controllers
 
             await _context.SaveChangesAsync();
 
-            var result = new CarDetailsDto
-            {
-                Id = car.Id,
-                Make = car.Make,
-                Model = car.Model,
-                Year = car.Year,
-                Price = car.Price,
-                Mileage = car.Mileage,
-                FuelType = car.FuelType,
-                Transmission = car.Transmission,
-                Color = car.Color,
-                Description = car.Description,
-                CreatedAt = car.CreatedAt,
-                UpdatedAt = car.UpdatedAt,
-                SellerId = car.UserId,
-                SellerFirstName = car.User.FirstName,
-                SellerLastName = car.User.LastName,
-                SellerPhoneNumber = car.User.PhoneNumber,
-                ImageUrls = car.ImageUrls ?? new List<string>()
-            };
+            
 
-            return Ok(result);
+            return Ok(car.ToDetailsDto(car.User));
         }
 
         //DELETE: api/cars/{id}
