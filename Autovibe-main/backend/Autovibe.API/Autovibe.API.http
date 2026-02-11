@@ -1,6 +1,0 @@
-@Autovibe.API_HostAddress = http://localhost:5258
-
-GET {{Autovibe.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
