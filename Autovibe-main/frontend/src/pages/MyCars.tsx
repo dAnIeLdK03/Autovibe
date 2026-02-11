@@ -16,6 +16,8 @@ function MyCars() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [carIdToDelete, setCarIdToDelete] = useState<number | null>(null);
 
+  if (!isAuthenticated) return null;
+
   useEffect(() => {
     if (!isAuthenticated || !user?.id) {
       navigate("/login");
@@ -65,7 +67,6 @@ function MyCars() {
     setCarIdToDelete(null);
   };
 
-  if (!isAuthenticated) return null;
 
   if (loading) {
     return (<div className="flex justify-center">

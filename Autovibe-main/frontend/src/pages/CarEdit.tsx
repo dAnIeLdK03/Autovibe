@@ -53,9 +53,7 @@ export default function CarEdit() {
           }, 2000);
           return;
         }
-
         setCar(data);
-
       } catch (error) {
         setError("Unable to load car.");
       } finally {

@@ -10,8 +10,14 @@ import type { CarFormValues } from "../Validations/CarValidations/CarCreateValid
 export function CarCreate() {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
-  if (user === null) {
-    navigate("/login");
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
+  if (!user) {
     return null;
   }
 
