@@ -72,11 +72,7 @@ namespace Autovibe.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if(id != userId)
-            {
-                return Unauthorized("You are not authorized to update this user.");
-            }
+            
 
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
@@ -86,7 +82,12 @@ namespace Autovibe.API.Controllers
                 return NotFound();
             }
 
-            var userId =int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if(id != userId)
+            {
+                return Unauthorized("You are not authorized to update this user.");
+            }
+
 
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
