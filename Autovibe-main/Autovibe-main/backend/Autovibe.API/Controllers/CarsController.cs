@@ -199,8 +199,8 @@ namespace Autovibe.API.Controllers
                 return NotFound();
             }
 
-             if(car.UserId != userId){
-                return BadRequest("You are not the owner of this car.");
+             if(userId == null || int.Parse(userId.ToString()) != car.UserId) {
+                return Unauthorized("You are not the owner of this car.");
             }
             
            

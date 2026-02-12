@@ -82,6 +82,11 @@ namespace Autovibe.API.Controllers
 
             var userId =int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
+            if(userId != user.Id)
+            {
+                return Unauthorized("You are not allowed to update this user.");
+            }
+
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
             user.PhoneNumber = updateDto.PhoneNumber;
