@@ -186,19 +186,22 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            
+           
 
             var car = await _context.Cars
                 .FirstOrDefaultAsync(c => c.Id == id);
 
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+             if(car.UserId != userId){
+                return BadRequest("You are not the owner of this car.");
+            }
             
             if (car == null)
             {
                 return NotFound();
             }
 
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
             car.Make = updateDto.Make;
             car.Model = updateDto.Model;
@@ -213,7 +216,6 @@ namespace Autovibe.API.Controllers
 
             car.ImageUrls = updateDto.ImageUrls;
 
-            await _context.SaveChangesAsync();
 
             var createdCar = await _context.Cars
                 .Include(c => c.User)
@@ -249,12 +251,9 @@ namespace Autovibe.API.Controllers
                 ImageUrls = createdCar.ImageUrls ?? new List<string>()
             };
         
-            if(car.UserId != userId){
-                return BadRequest("You are not the owner of this car.");
-            }else{
                 _context.Cars.Update(car);
                 await _context.SaveChangesAsync();
-            }
+
             return Ok(result);
             
         }
