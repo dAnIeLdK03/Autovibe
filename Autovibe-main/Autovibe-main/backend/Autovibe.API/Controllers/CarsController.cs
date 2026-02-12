@@ -111,12 +111,14 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (createDto.UserId == 0)
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            if (userId == null)
             {
                 return BadRequest("User is missing.");
             }
 
-            if (!await _context.Users.AnyAsync(u => u.Id == createDto.UserId))
+            if (!await _context.Users.AnyAsync(u => u.Id == int.Parse(userId)))
             {
                 return BadRequest("User does not exist.");
             }
@@ -133,10 +135,10 @@ namespace Autovibe.API.Controllers
                 Transmission = createDto.Transmission,
                 Color = createDto.Color,
                 Description = createDto.Description,
-                UserId = createDto.UserId,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = null,
-                ImageUrls = createDto.ImageUrls
+                ImageUrls = createDto.ImageUrls,
+                UserId = int.Parse(userId)
             };
 
             _context.Cars.Add(car);
@@ -166,7 +168,7 @@ namespace Autovibe.API.Controllers
                 CreatedAt = createdCar.CreatedAt,
                 UpdatedAt = createdCar.UpdatedAt,
 
-                SellerId = createdCar.UserId,
+                SellerId = createdCar.UserId,   
                 SellerFirstName = createdCar.User.FirstName,
                 SellerLastName = createdCar.User.LastName,
                 SellerPhoneNumber = createdCar.User.PhoneNumber,
@@ -198,7 +200,7 @@ namespace Autovibe.API.Controllers
             }
 
              if(car.UserId != userId){
-                return Forbidden("You are not the owner of this car.");
+                return BadRequest("You are not the owner of this car.");
             }
             
            

@@ -51,7 +51,6 @@ interface CreateCarRequest {
     color: string;
     description: string;
 
-    userId: number | null;
 
     imageUrls?: string[];
 

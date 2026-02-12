@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { getCarById, updateCar } from "../services/carsService";
 import CarCreateValidaions, { type CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
-import { extractApiErrorMessage, uploadCarImageIfPresent, validateCarOwner } from "../Validations/CarValidations/CarSubmitHelpers";
+import { extractApiErrorMessage, uploadCarImageIfPresent } from "../Validations/CarValidations/CarSubmitHelpers";
 import { useImageUpload } from "../Validations/CarValidations/CarImageUpload";
 
 
@@ -86,12 +86,7 @@ export default function CarEdit() {
       return;
     }
 
-    const ownerError = validateCarOwner(car.sellerId, user?.id);
-    if (ownerError) {
-      setError(ownerError);
-      setLoading(false);
-      return;
-    }
+    
 
     if(imageFile){
       const { error: uploadError } = await uploadCarImageIfPresent(imageFile);

@@ -14,15 +14,7 @@ export const uploadCarImageIfPresent = async (
   }
 };
 
-export const validateCarOwner = (
-  carSellerId: number,
-  userId: number | undefined
-): string | null => {
-  if (carSellerId !== userId) {
-    return 'You are not the owner of this car.';
-  }
-  return null;
-};
+
 
 export const extractApiErrorMessage = (error: any, fallback: string) : string => {
   let errorMessage = fallback;

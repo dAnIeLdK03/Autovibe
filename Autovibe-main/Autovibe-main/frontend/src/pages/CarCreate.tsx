@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 import { createCar } from '../services/carsService';
 import CarCreateValidaions from "../Validations/CarValidations/CarCreateValidaions";
-import { extractApiErrorMessage, uploadCarImageIfPresent, validateCarOwner } from "../Validations/CarValidations/CarSubmitHelpers";
+import { extractApiErrorMessage, uploadCarImageIfPresent } from "../Validations/CarValidations/CarSubmitHelpers";
 import type { CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
 
 export function CarCreate() {
@@ -26,7 +26,6 @@ export function CarCreate() {
     color: "",
     description: "",
 
-    userId: user.id
   });
 
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -51,15 +50,9 @@ export function CarCreate() {
       setLoading(false);
       return;
     }
-    const errorSeller = await validateCarOwner(car.userId, user?.id);
-    if (errorSeller) {
-      setError(errorSeller);
-      setLoading(false);
-      return;
-    }
     setLoading(true);
     try {
-      await createCar({ ...car, userId: user.id, imageUrls: errorImage.imageUrls });
+      await createCar({ ...car, imageUrls: errorImage.imageUrls });
       navigate("/cars");
     } catch (error: any) {
       setError(extractApiErrorMessage(error, "Unable to create car."));
