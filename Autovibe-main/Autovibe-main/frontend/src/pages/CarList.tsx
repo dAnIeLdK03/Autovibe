@@ -109,12 +109,9 @@ function CarList() {
           <select
             value={fuelType}
             onChange={(e) => setFuelType(e.target.value)}
-            className="w-full apperance-none bg-late-800 border border-slate-700 text-slate-200 
-            py-2.5 px-4 pr-10 rounded-xl cursor-pointer focus:outline-none
-            focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500
-            transition-all duration-200 hover:bg-slate-750 shadow-lg text-black m-1"
+            className="block w-full text-left px-4 py-3 text-sm text-slate-900 hover:bg-slate-700 hover:text-[#70FFE2] transition-colors border-b border-slate-700/50 last:border-0"
           >
-            <option value="All">All Types</option>
+            <option value="All" >All Types</option>
             <option value="Petrol">Petrol</option>
             <option value="Diesel">Diesel</option>
             <option value="Hybrid">Hybrid</option>
@@ -126,11 +123,8 @@ function CarList() {
           <select
             value={sortType}
             onChange={(e) => setSortType(e.target.value)}
-            className="w-full apperance-none bg-late-800 border border-slate-700 text-slate-200 
-            py-2.5 px-4 pr-10 rounded-xl cursor-pointer focus:outline-none
-            focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500
-            transition-all duration-200 hover:bg-slate-750 shadow-lg text-black m-1 mb-2"
-          >
+            className="block w-full text-left px-4 py-3 text-sm text-slate-900 hover:bg-slate-700 hover:text-[#70FFE2] transition-colors border-b border-slate-700/50 last:border-0 mb-6"
+            >
             <option value="None">None</option>
             <option value='Newest'>Newest</option>
             <option value="PriceAsc">PriceAsc</option>

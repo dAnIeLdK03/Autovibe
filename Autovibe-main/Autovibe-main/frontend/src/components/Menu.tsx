@@ -58,7 +58,8 @@ const Menu: React.FC = () => {
             </button>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-48 origin-top-right rounded-xl bg-slate-800 border border-slate-700 shadow-2xl ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
+                <div 
+                className="absolute right-0 mt-2 w-48 origin-top-right rounded-xl bg-slate-800 border border-slate-700 shadow-2xl ring-1 ring-black ring-opacity-5 z-50 overflow-hidden">
                     <div className="py-1">
                         {menuItems.map((item, index) => (
                             <button
