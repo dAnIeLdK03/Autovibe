@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "../stores/store";
+import { useDispatch } from "react-redux";
+import { logout } from "../stores/authSlice";
 
 interface MenuItem {
     label: string;
@@ -9,6 +11,7 @@ interface MenuItem {
 }
 
 const Menu: React.FC = () => {
+    const dispatch = useDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
@@ -27,12 +30,18 @@ const Menu: React.FC = () => {
         return () => document.removeEventListener("mousedown", listener);
     }, []);
 
+     const handleLogout = async () => {
+        dispatch(logout());
+        localStorage.removeItem("token");
+        navigate("/login");
+     };
+
     const menuItems: MenuItem[] = [
         { label: "Home", onClick: () => navigate("/cars") },
         { label: "Profile", onClick: () => navigate("/profile") },
         { label: "Create New Ad", onClick: () => isAuthenticated ? navigate("/cars/new") : navigate("/login") },
         { label: "My Cars", onClick: () => navigate("/cars/my") },
-        { label: "Logout", onClick: () => navigate("/logout") },
+        { label: "Logout", onClick: () => handleLogout() },
     ];
 
     return (

@@ -17,6 +17,8 @@
     "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.3",
     "lucide-react": "^0.563.0",
+    "node": "^25.6.1",
+    "nuget": "^2.0.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-redux": "^9.2.0",
