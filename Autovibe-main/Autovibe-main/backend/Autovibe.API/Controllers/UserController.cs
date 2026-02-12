@@ -26,11 +26,11 @@ namespace Autovibe.API.Controllers
             try
             {
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if(userId == null)
+                if (userId == null)
                 {
                     return Unauthorized("User not found.");
                 }
-                if(!int.TryParse(userId, out int userIdInt))
+                if (!int.TryParse(userId, out int userIdInt))
                 {
                     return Unauthorized("Invalid user id.");
                 }
@@ -65,24 +65,24 @@ namespace Autovibe.API.Controllers
 
         //PUT: api/user/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult<UserDto>>UpdateUser(int id, [FromBody] UserUpdateDto updateDto)
+        public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] UserUpdateDto updateDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
-            
-            if(user == null)
+
+            if (user == null)
             {
                 return NotFound();
             }
 
-            var userId =int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            if(userId != user.Id)
+            if (userId != user.Id)
             {
                 return Unauthorized("You are not allowed to update this user.");
             }
@@ -90,7 +90,7 @@ namespace Autovibe.API.Controllers
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
             user.PhoneNumber = updateDto.PhoneNumber;
-            
+
             user.UpdatedAt = DateTime.Now;
 
             await _context.SaveChangesAsync();
@@ -98,11 +98,11 @@ namespace Autovibe.API.Controllers
             var updatedUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == user.Id);
 
-                if(updatedUser == null)
+            if (updatedUser == null)
             {
                 return BadRequest("User could not be updated.");
             }
-            
+
             var result = new UserDto
             {
                 Id = updatedUser.Id,
@@ -117,5 +117,29 @@ namespace Autovibe.API.Controllers
             return Ok(result);
 
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteUser(int id)
+        {
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            int UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (UserId != user.Id)
+            {
+                return Unauthorized("You are not allowed to delete this user.");
+            }
+
+            _context.Users.Remove(user);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
+
+
 }
