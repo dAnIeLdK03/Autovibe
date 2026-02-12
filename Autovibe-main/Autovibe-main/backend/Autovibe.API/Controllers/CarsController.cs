@@ -120,16 +120,7 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest("User does not exist.");
             }
-            if(createDto.Year < 1900 || createDto.Year > DateTime.Now.Year)
-            {
-                return BadRequest("The year must be between 1900 and current year.");
-            }
-            if(createDto.Price <= 0){
-                return BadRequest("Price must be greater than 0.");
-            }
-            if(createDto.Description.Length <= 10){
-                return BadRequest("Description must be at least 10 characters long.");
-            }
+           
 
             var car = new Car
             {
@@ -196,12 +187,7 @@ namespace Autovibe.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(updateDto.Year < 1900 || updateDto.Year > DateTime.Now.Year){
-                return BadRequest("The year must be between 1900 and current year.");
-            }
-            if(updateDto.Price <= 0){
-                return BadRequest("Price must be greater than 0.");
-            }
+            
 
             var car = await _context.Cars
                 .FirstOrDefaultAsync(c => c.Id == id);
@@ -239,10 +225,7 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest("Car could not be updated.");
             }
-            if(createdCar.Year < 1900 || createdCar.Year > 2100)
-            {
-                return BadRequest("Year is not valid.");
-            }
+            
             var result = new CarDetailsDto
             {
                 Id = createdCar.Id,

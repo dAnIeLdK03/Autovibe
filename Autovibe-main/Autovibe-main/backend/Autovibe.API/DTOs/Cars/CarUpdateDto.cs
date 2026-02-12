@@ -9,8 +9,8 @@ public class CarUpdateDto
     [Required]
     public string Model {get; set; } = string.Empty;
 
-    [Required]
-    [Range(1900,2100)]
+    [Required(ErrorMessage = "Year is required")]
+    [PastOrPresentDate(ErrorMessage = "Year cannot be in the future")]
     public int Year {get; set; }
 
     [Required]
