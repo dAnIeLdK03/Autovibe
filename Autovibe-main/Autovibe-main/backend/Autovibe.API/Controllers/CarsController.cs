@@ -186,21 +186,22 @@ namespace Autovibe.API.Controllers
             {
                 return BadRequest(ModelState);
             }
-           
 
             var car = await _context.Cars
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-             if(car.UserId != userId){
-                return BadRequest("You are not the owner of this car.");
-            }
-            
-            if (car == null)
+             if (car == null)
             {
                 return NotFound();
             }
+
+             if(car.UserId != userId){
+                return Forbidden("You are not the owner of this car.");
+            }
+            
+           
 
 
             car.Make = updateDto.Make;
