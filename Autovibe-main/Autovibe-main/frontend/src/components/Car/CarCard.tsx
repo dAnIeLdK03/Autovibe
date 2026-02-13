@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { CarCardProps } from '../../services/carsService';
+import { getImageUrl } from '../../utils/getImageUrl';
 
 
 const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton }) => {
@@ -18,7 +19,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton 
                 {car.imageUrls && car.imageUrls.length > 0 ? (
                   <img
                     className="w-full h-full object-cover"
-                    src={`http://localhost:5258${car.imageUrls[0]}`}
+                    src={getImageUrl(car.imageUrls[0])}
                     alt={`${car.make} ${car.model}`}
                     onError={(e) => e.currentTarget.src = "https://via.placeholder.com/150"}
                   />

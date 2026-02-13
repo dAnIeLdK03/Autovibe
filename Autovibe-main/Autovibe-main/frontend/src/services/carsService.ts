@@ -27,7 +27,7 @@ export interface CarDetails {
     fuelType: string;
     transmission: string;
     color: string;
-    description: string;
+    shortDescription: string;
     createdAt: Date;
     updatedAt: Date;
 

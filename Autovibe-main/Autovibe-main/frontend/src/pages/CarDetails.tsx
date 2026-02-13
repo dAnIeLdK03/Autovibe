@@ -5,6 +5,7 @@ import type { CarDetails } from "../services/carsService";
 import { useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
 import ConfirmDialog from "../components/ConfirmDialog";
+import { getImageUrl } from "../utils/getImageUrl";
 
 export default function CarDetails() {
   const [car, setCar] = useState<CarDetails | null>({
@@ -17,7 +18,7 @@ export default function CarDetails() {
     fuelType: "",
     transmission: "",
     color: "",
-    description: "",
+    shortDescription: "",
     createdAt: new Date(),
     updatedAt: new Date(),
 
@@ -115,7 +116,7 @@ export default function CarDetails() {
           {car.imageUrls && car.imageUrls.length > 0 ? (
             <div className="relative">
               <img 
-                src={`http://localhost:5258${car.imageUrls[0]}`} 
+                src={getImageUrl(car.imageUrls[0])} 
                 alt={`${car.make} ${car.model}`} 
                 className="w-full h-[500px] md:h-[600px] object-cover"
               />
@@ -138,7 +139,7 @@ export default function CarDetails() {
           )}
         </div>
 
-       
+        
         {/* Card */}
         <div className="bg-slate-800 shadow-xl rounded-xl p-8 text-slate-200 space-y-8">
           {/* Main info */}
@@ -172,7 +173,7 @@ export default function CarDetails() {
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
               Description
             </h2>
-            <p className="break-words leading-relaxed text-slate-300 ">{car.description}</p>
+            <p className="break-words leading-relaxed text-slate-300 ">{car.shortDescription}</p>
           </div>
 
           {/* Dates */}
