@@ -57,15 +57,15 @@ interface CreateCarRequest {
 };
 
 export interface UpdateCarRequest {
-    make: string;
-    model: string;
-    year: number;
-    price: number;
-    mileage: number;
-    fuelType: string;
-    transmission: string;
-    color: string;
-    description: string;
+    make?: string;
+    model?: string;
+    year?: number;
+    price?: number;
+    mileage?: number;
+    fuelType?: string;
+    transmission?: string;
+    color?: string;
+    shortDescription?: string;
 
     imageUrls?: string[];
 

@@ -7,7 +7,7 @@ export interface CarFormValues {
     fuelType: string;
     transmission: string;
     color: string;
-    description: string;
+    shortDescription: string;
    
 }
 
@@ -25,8 +25,8 @@ const CarCreateValidaions = (form : CarFormValues) : string | null => {
           return "Price must be greater than 0.";
         }
        
-        if(form.description.length <= 10 || form.description.trim() === ""){
-            return "Description must be at least 10 characters long.";
+        if(form.shortDescription.length <= 10 || form.shortDescription.trim() === ""){
+            return "Short description must be at least 10 characters long.";
         }
         if(form.mileage <= 0){
             return "Mileage must be greater than 0.";

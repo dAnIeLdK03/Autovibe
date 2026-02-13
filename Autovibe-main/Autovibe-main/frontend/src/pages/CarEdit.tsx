@@ -7,6 +7,7 @@ import { getCarById, updateCar } from "../services/carsService";
 import CarCreateValidaions, { type CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
 import { extractApiErrorMessage, uploadCarImageIfPresent } from "../Validations/CarValidations/CarSubmitHelpers";
 import { useImageUpload } from "../Validations/CarValidations/CarImageUpload";
+import type { CarDetails } from "../services/carsService";
 
 
 export default function CarEdit() {
@@ -19,20 +20,20 @@ export default function CarEdit() {
 
   const navigate = useNavigate();
 
-  const [car, setCar] = useState({
-    make: "",
-    model: "",
-    year: 0,
-    price: 0,
-    mileage: 0,
-    fuelType: "",
-    transmission: "",
-    color: "",
-    description: "",
-
-    sellerId: 0,
-
-  });
+  const [car, setCar] = useState<Partial<CarDetails>>({
+  id: 0,
+  make: "",
+  model: "",
+  year: 0,
+  price: 0,
+  mileage: 0,
+  fuelType: "",
+  transmission: "",
+  color: "",
+  shortDescription: "",
+  sellerId: 0,
+  imageUrls: [],
+});
   const { imageFile, imagePreview, handleImageChange } = useImageUpload();
  
 
@@ -71,6 +72,7 @@ export default function CarEdit() {
     e.preventDefault();
     if (!id) return;
     setError(null);
+    
 
     // Client-side validation
     const errorMessage = CarCreateValidaions(car as CarFormValues);
@@ -79,31 +81,20 @@ export default function CarEdit() {
       return;
     }
 
-    const { imageUrls, error: uploadError } = await uploadCarImageIfPresent(imageFile);
+    const { imageUrls,error: uploadError } = await uploadCarImageIfPresent(imageFile);
     if (uploadError) {
       setError(uploadError);
       setLoading(false);
       return;
     }
 
-    
-
-    if(imageFile){
-      const { error: uploadError } = await uploadCarImageIfPresent(imageFile);
-      if (uploadError) {
-        setError(uploadError);
-        setLoading(false);
-        return;
-      }
-    }
-
     setLoading(true);
     try {
       const { sellerId, ...payload } = car;
-      await updateCar(Number(id), payload, imageUrls);
+      await updateCar(Number(id), payload, [...(car.imageUrls ?? []), ...(imageUrls ?? [])]);
       navigate(`/cars/${id}`);
     } catch (error: any) {
-      setError(extractApiErrorMessage(error, "Unable to create car."));
+      setError(extractApiErrorMessage(error, "Unable to update car."));
     } finally {
       setLoading(false);
     }
@@ -213,8 +204,8 @@ export default function CarEdit() {
           <textarea
             name="description"
             placeholder="Description"
-            value={car.description}
-            onChange={(e) => setCar({ ...car, description: e.target.value })}
+            value={car.shortDescription}
+            onChange={(e) => setCar({ ...car, shortDescription: e.target.value })}
             className="w-full px-5 py-10 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
           />
 
@@ -225,7 +216,6 @@ export default function CarEdit() {
               name="image"
               accept='image/*'
               onChange={handleImageChange}
-              
               className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
             />
           </label>

@@ -10,7 +10,7 @@ export const useImageUpload = () =>  {
             if(imagePreview){
                 URL.revokeObjectURL(imagePreview);
             }
-
+            
             setImageFile(selectedFile);
             const objectUrl = URL.createObjectURL(selectedFile);
             setImagePreview(objectUrl);
