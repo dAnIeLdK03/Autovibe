@@ -9,6 +9,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
+using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Options;
+
 
 
 namespace Autovibe.API.Controllers
@@ -22,11 +25,11 @@ namespace Autovibe.API.Controllers
         private readonly IConfiguration _configuration;
         private readonly JwtSettings _jwtSettings;
 
-        public AuthController(AppDbContext context, IConfiguration configuration, JwtSettings jwtSettings)
+        public AuthController(AppDbContext context, IConfiguration configuration, IOptions<JwtSettings> jwtOptions)
         {
             _context = context;
             _configuration = configuration;
-            _jwtSettings = jwtSettings;
+            _jwtSettings = jwtOptions.Value;
         }
 
         [AllowAnonymous]
@@ -111,8 +114,8 @@ namespace Autovibe.API.Controllers
                     return Unauthorized("Invalid password.");
                 }
 
-                var jwtKey = _configuration["Jwt:Key"];
-                var expirationMinutes = int.Parse(_configuration["Jwt:ExpirationInMinutes"] ?? "60");
+                var jwtKey = _jwtSettings.Key;
+                var expirationMinutes = _jwtSettings.ExpirationInMinutes;
 
                 var claims = new List<Claim>
                 {

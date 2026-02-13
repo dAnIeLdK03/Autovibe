@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Options;
+
 
 namespace Autovibe.API.Controllers
 {
@@ -14,11 +17,9 @@ namespace Autovibe.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly JwtSettings _jwtSettings;
 
-        public UserController(JwtSettings jwtSettings, AppDbContext context)
+        public UserController(AppDbContext context)
         {
-            _jwtSettings = jwtSettings;
             _context = context;
         }
 

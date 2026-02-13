@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace Autovibe.API.Controllers
 {
@@ -13,13 +14,11 @@ namespace Autovibe.API.Controllers
     [Authorize]
     public class CarsController : ControllerBase
     {
-        private readonly JwtSettings _jwtSettings;
         private readonly AppDbContext _context;
 
         //contructor
-        public CarsController(JwtSettings jwtSettings, AppDbContext context)
+        public CarsController(AppDbContext context)
         {
-            _jwtSettings = jwtSettings;
             _context = context;
         }
 
