@@ -57,7 +57,7 @@ app.UseStaticFiles();
 
 //middleware
 
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 app.UseCors();
 app.UseAuthentication();
