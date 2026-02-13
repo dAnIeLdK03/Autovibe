@@ -138,30 +138,7 @@ export default function CarDetails() {
           )}
         </div>
 
-        {/* Gallery with thumbnails (if there are more images) */}
-        {car.imageUrls && car.imageUrls.length > 1 && (
-          <div className="mb-8">
-            <h2 className="text-xl font-semibold text-white mb-4">Additional images</h2>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {car.imageUrls.slice(1).map((imageUrl, index) => (
-                <div 
-                  key={index}
-                  className="relative aspect-video rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity border-2 border-slate-700 hover:border-[#70FFE2]"
-                  onClick={() => {
-                    const newUrls = [imageUrl, ...car.imageUrls!.filter((_, i) => i !== index + 1)];
-                    setCar({ ...car, imageUrls: newUrls });
-                  }}
-                >
-                  <img 
-                    src={`http://localhost:5258${imageUrl}`} 
-                    alt={`${car.make} ${car.model} - Image ${index + 2}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+       
         {/* Card */}
         <div className="bg-slate-800 shadow-xl rounded-xl p-8 text-slate-200 space-y-8">
           {/* Main info */}
