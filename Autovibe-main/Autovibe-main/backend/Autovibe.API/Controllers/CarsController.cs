@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
+using System.Reflection.Metadata;
 
 namespace Autovibe.API.Controllers
 {
@@ -185,78 +186,15 @@ namespace Autovibe.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<CarDetailsDto>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
         {
-            if (!ModelState.IsValid)
+            //take the id of the current user of the token
+            var userId = int.Parse(UserStringHandle.FindFirstValue(ClaimTypes.NameIdentifier)?.Value);
+
+            var result = await _carService.UpdateAsync(id, request, userId);
+
+            if (result == null)
             {
-                return BadRequest(ModelState);
+                return NotFound(new { message = "Car not found or you do not have permission to update this car." });
             }
-
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-             if (car == null)
-            {
-                return NotFound();
-            }
-
-             if(userId == null || int.Parse(userId.ToString()) != car.UserId) {
-                return Unauthorized("You are not the owner of this car.");
-            }
-            
-           
-
-
-            car.Make = updateDto.Make;
-            car.Model = updateDto.Model;
-            car.Year = updateDto.Year;
-            car.Price = updateDto.Price;
-            car.Mileage = updateDto.Mileage;
-            car.FuelType = updateDto.FuelType;
-            car.Transmission = updateDto.Transmission;
-            car.Color = updateDto.Color;
-            car.Description = updateDto.Description;
-            car.UpdatedAt = DateTime.Now;
-
-            car.ImageUrls = updateDto.ImageUrls;
-
-
-            var createdCar = await _context.Cars
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.Id == car.Id);
-
-
-
-            if(createdCar == null)
-            {
-                return BadRequest("Car could not be updated.");
-            }
-            
-            var result = new CarDetailsDto
-            {
-                Id = createdCar.Id,
-                Make = createdCar.Make,
-                Model = createdCar.Model,
-                Year = createdCar.Year,
-                Price = createdCar.Price,
-                Mileage = createdCar.Mileage,
-                FuelType = createdCar.FuelType,
-                Transmission = createdCar.Transmission,
-                Color = createdCar.Color,
-                Description = createdCar.Description,
-                CreatedAt = createdCar.CreatedAt,
-                UpdatedAt = createdCar.UpdatedAt,
-
-                SellerId = createdCar.UserId,
-                SellerFirstName = createdCar.User.FirstName,
-                SellerLastName = createdCar.User.LastName,
-                SellerPhoneNumber = createdCar.User.PhoneNumber,
-
-                ImageUrls = createdCar.ImageUrls ?? new List<string>()
-            };
-        
-                _context.Cars.Update(car);
-                await _context.SaveChangesAsync();
 
             return Ok(result);
             
