@@ -1,15 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 
-export interface AuthState{
-    user: {
-        id: number;
-        email: string;
-        firstName?: string;
-        lastName?: string;
-        phoneNumber?: string;
-    } | null;
+export interface User {
+    id: number;
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    phoneNumber?: string;
+}
 
+export interface AuthState{
+    user: User | null;
     token: string | null;
     
     isAuthenticated: boolean;
@@ -18,24 +19,22 @@ export interface AuthState{
 const initialState: AuthState = {
     user: null,
     token: localStorage.getItem("token"),
-    isAuthenticated: false
+    isAuthenticated: !!localStorage.getItem("token")
 }
 
 const authSlice = createSlice({
     name: 'auth',
     initialState,
     reducers: {
-            setCredentials: (state, action: PayloadAction<{ user: string, token: string }>) => {
-            state.user = JSON.parse(action.payload.user);
+            setCredentials: (state, action: PayloadAction<{ user: User, token: string }>) => {
+            state.user = action.payload.user;
             state.token = action.payload.token;
             state.isAuthenticated = true;
             localStorage.setItem("token", action.payload.token);
         },
         updateUserData: (state, action: PayloadAction<{ firstName?: string; lastName?: string; phoneNumber?: string }>) => {
             if (state.user) {
-                if (action.payload.firstName !== undefined) state.user.firstName = action.payload.firstName;
-                if (action.payload.lastName !== undefined) state.user.lastName = action.payload.lastName;
-                if (action.payload.phoneNumber !== undefined) state.user.phoneNumber = action.payload.phoneNumber;
+                Object.assign(state.user, action.payload);
             }
         },
         logout: (state) => {

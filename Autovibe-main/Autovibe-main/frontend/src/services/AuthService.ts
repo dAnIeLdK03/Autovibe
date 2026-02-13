@@ -48,7 +48,7 @@ export const logout = async(): Promise<void> => {
     localStorage.removeItem("token");
 }
 
-export const getCurrentUser = async(): Promise<string | null> => {
+export const getCurrentUser = async(): Promise<User | null> => {
     const token = await api.get("/user");
     return token.data;
 }
