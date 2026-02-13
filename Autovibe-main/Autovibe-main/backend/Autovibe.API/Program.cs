@@ -24,7 +24,10 @@ builder.Services.AddCors(options =>
         });
 });
 
-var SymmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? string.Empty));
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("JWT key not found in configuration.");
+
+var SymmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey ?? throw new InvalidOperationException("JWT key not found in configuration.")));
 
 var tokenValidationParameters = new TokenValidationParameters
 {
@@ -41,6 +44,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = tokenValidationParameters;
     });
 
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection'not found.");
     builder.Services.AddDbContext<AppDbContext>(op => op.UseMySql(connectionString,
@@ -51,6 +56,7 @@ app.UseStaticFiles();
 
 
 //middleware
+
 app.UseHttpsRedirection();
 
 app.UseCors();

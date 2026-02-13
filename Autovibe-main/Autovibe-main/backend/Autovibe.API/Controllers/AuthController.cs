@@ -20,11 +20,13 @@ namespace Autovibe.API.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly JwtSettings _jwtSettings;
 
-        public AuthController(AppDbContext context, IConfiguration configuration)
+        public AuthController(AppDbContext context, IConfiguration configuration, JwtSettings jwtSettings)
         {
             _context = context;
             _configuration = configuration;
+            _jwtSettings = jwtSettings;
         }
 
         [AllowAnonymous]

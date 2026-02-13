@@ -14,9 +14,11 @@ namespace Autovibe.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly JwtSettings _jwtSettings;
 
-        public UserController(AppDbContext context)
+        public UserController(JwtSettings jwtSettings, AppDbContext context)
         {
+            _jwtSettings = jwtSettings;
             _context = context;
         }
 

@@ -13,11 +13,13 @@ namespace Autovibe.API.Controllers
     [Authorize]
     public class CarsController : ControllerBase
     {
+        private readonly JwtSettings _jwtSettings;
         private readonly AppDbContext _context;
 
         //contructor
-        public CarsController(AppDbContext context)
+        public CarsController(JwtSettings jwtSettings, AppDbContext context)
         {
+            _jwtSettings = jwtSettings;
             _context = context;
         }
 
