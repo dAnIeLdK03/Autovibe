@@ -43,6 +43,17 @@ namespace Autovibe.API.Controllers
             });
         }
 
+        [HttpGet("my-cars")]
+        [Authorize]
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetMyCars(int pageNumber = 1, int pageSize = 10)
+        {
+            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+
+            var result = await _carService.GetUserCarsAsync(userId, pageNumber, pageSize);
+
+            return Ok(result);        
+        }
+
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<CarDetailsDto>> GetCar(int id)

@@ -100,7 +100,6 @@ export interface ConfirmDialogProps {
     isOpen: boolean;
     title: string;
     message: string;
-    /** Called when user clicks Confirm. Must be a function with no arguments (dialog does not pass any). */
     onConfirmClick?: () => void | Promise<void>;
     onClose?: () => void;
 }
@@ -108,6 +107,14 @@ export interface ConfirmDialogProps {
 export const getCars = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
     const response = await api.get<CarsPageResponse>(`/cars?pageNumber=${page}&pageSize=${pageSize}`);
     const data = response.data;
+    if (!data || !Array.isArray(data.items)) {
+        throw new Error("Unable to load cars.");
+    }
+    return { items: data.items, totalPages: data.totalPages ?? 0, pageNumber: data.pageNumber ?? page, pageSize: data.pageSize ?? pageSize };
+};
+
+export const getCarsByUserId = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
+    const response = await api.get<CarsPageResponse>(`/cars/my-cars?pageNumber=${page}&pageSize=${pageSize}`);const data = response.data;
     if (!data || !Array.isArray(data.items)) {
         throw new Error("Unable to load cars.");
     }

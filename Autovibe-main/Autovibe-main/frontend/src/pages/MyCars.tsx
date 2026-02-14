@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
 import type { RootState } from "../stores/store";
-import { deleteCar, getCars } from "../services/carsService";
+import { deleteCar, getCarsByUserId } from "../services/carsService";
 import { setCars, setLoading, setError, clearError } from "../stores/carsSlice";
 import CarCard from "../components/Car/CarCard";
 import ConfirmDialog from "../components/ConfirmDialog";
@@ -25,7 +25,7 @@ function MyCars() {
     dispatch(clearError());
     const fetchCars = async () => {
       try {
-        const response = await getCars(1, 500);
+        const response = await getCarsByUserId(1, 10);
         const allCars = response.items ?? [];
         const myCars = allCars.filter((c) => c.userId === user.id);
         dispatch(setCars(myCars));

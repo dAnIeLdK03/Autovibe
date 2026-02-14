@@ -220,5 +220,46 @@ namespace Autovibe.API.Services
 
             return $"/images/cars/{fileName}";
         }
+
+        public async Task<PageResponse<CarListDto>> GetUserCarsAsync(int userId, int pageNumber, int pageSize)
+        {
+            var query = _context.Cars
+            .AsNoTracking()
+            .Where(c => c.UserId == userId);
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(c => new CarListDto
+                {
+                    Id = c.Id,
+                    Make = c.Make,
+                    Model = c.Model,
+                    Year = c.Year,
+                    Price = c.Price,
+                    Mileage = c.Mileage,
+                    FuelType = c.FuelType,
+                    Transmission = c.Transmission,
+                    Color = c.Color,
+                    ShortDescription = c.Description != null && c.Description.Length > 100
+                    ? c.Description.Substring(0, 100) + "..."
+                    : c.Description,
+
+                    UserId = c.UserId,
+
+                    ImageUrls = c.ImageUrls ?? new List<string>()
+                })
+                .ToListAsync();
+
+                return new PageResponse<CarListDto>
+                {
+                    Items = items,
+                    TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                    PageNumber = pageNumber,
+                    PageSize = pageSize
+                };
+        }
     }
 }

@@ -9,5 +9,6 @@ public interface ICarService
     Task<CarDetailsDto?> CreateAsync(CarCreateDto request, int userId);
     Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId);
     Task DeleteAsync(int id, int userId);
+    Task<PageResponse<CarListDto>> GetUserCarsAsync(int userId, int pageNumber, int pageSize);
     Task<string> UploadImageAsync(IFormFile file);
 }
