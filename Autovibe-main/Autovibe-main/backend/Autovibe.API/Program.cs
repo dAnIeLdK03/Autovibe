@@ -59,6 +59,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 builder.Services.AddScoped<ICarService, CarService>();
 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection'not found.");
     builder.Services.AddDbContext<AppDbContext>(op => op.UseMySql(connectionString,
@@ -72,6 +75,8 @@ app.UseStaticFiles();
 //middleware
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.UseCors();
 app.UseAuthentication();

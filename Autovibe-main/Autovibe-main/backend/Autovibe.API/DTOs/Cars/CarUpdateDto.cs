@@ -11,7 +11,7 @@ public class CarUpdateDto
 
     public decimal Price {get; set; }
 
-
+    public int Mileage {get; set; }
     public string FuelType {get; set; } = string.Empty;
     public string Transmission {get; set; } = string.Empty;
     public string Color {get; set; } = string.Empty;
