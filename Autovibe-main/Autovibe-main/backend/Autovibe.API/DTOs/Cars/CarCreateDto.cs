@@ -1,24 +1,16 @@
-using System.ComponentModel.DataAnnotations;
 
 namespace Autovibe.API.DTOs.Cars;
 
 public class CarCreateDto
 {
-    [Required]
     public string Make {get; set; } = string.Empty;
 
-    [Required]
     public string Model {get; set; } = string.Empty;
 
-    [Required(ErrorMessage = "Year is required")]
-    [PastOrPresentDate(ErrorMessage = "Year cannot be in the future")]
     public int Year {get; set; } 
 
-    [Required]
-    [Range(0, double.MaxValue, ErrorMessage = "Price must be a positive number" )]
     public decimal Price {get; set; }
 
-    [Range(0, int.MaxValue, ErrorMessage = "Mileage must be a positive number")]
     public int Mileage {get; set; }
 
     public string FuelType {get; set; } = string.Empty;

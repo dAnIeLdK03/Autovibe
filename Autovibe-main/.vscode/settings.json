@@ -1,0 +1,10 @@
+{
+    "launch": {
+        "configurations": [],
+        "compounds": []
+    },
+    "editor.fontSize": 15,
+    "github.copilot.enable": {
+        "*": false
+    }
+}

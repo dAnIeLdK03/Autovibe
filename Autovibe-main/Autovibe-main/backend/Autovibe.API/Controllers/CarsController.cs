@@ -18,7 +18,7 @@ namespace Autovibe.API.Controllers
     {
         private readonly ICarService _carService;
 
-        public CarsController(ICarService carService)
+        public CarsController( ICarService carService)
         {
             _carService = carService;
         }

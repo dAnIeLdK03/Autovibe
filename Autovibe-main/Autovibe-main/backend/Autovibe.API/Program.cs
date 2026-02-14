@@ -7,12 +7,22 @@ using Pomelo.EntityFrameworkCore.MySql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using FluentValidation;
+using FluentValidation.AspNetCore;
+using Autovibe.API.Validations;
 
 var builder = WebApplication.CreateBuilder(args);
 
 
 
 //services
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+
+builder.Services.AddValidatorsFromAssemblyContaining<CarCreateDtoValidations>();
+
+
+
 builder.Services.AddControllers();
 
 builder.Services.AddCors(options =>
@@ -56,6 +66,7 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
 
 var app = builder.Build();
 app.UseStaticFiles();
+
 
 
 //middleware
