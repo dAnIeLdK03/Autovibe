@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 public class PastOrPresentDateAttribute : ValidationAttribute
 {
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         if (value is DateTime dateValue)
         {

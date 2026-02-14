@@ -7,8 +7,9 @@ export interface CarFormValues {
     fuelType: string;
     transmission: string;
     color: string;
-    shortDescription: string;
-   
+    shortDescription?: string;
+    /** Used in CarCreate; validation checks this when shortDescription is missing */
+    description?: string;
 }
 
 const CarCreateValidaions = (form : CarFormValues) : string | null => {
@@ -25,7 +26,8 @@ const CarCreateValidaions = (form : CarFormValues) : string | null => {
           return "Price must be greater than 0.";
         }
        
-        if(form.shortDescription.length <= 10 || form.shortDescription.trim() === ""){
+        const desc = (form.shortDescription ?? form.description) ?? "";
+        if (desc.length < 10 || desc.trim() === "") {
             return "Short description must be at least 10 characters long.";
         }
         if(form.mileage <= 0){

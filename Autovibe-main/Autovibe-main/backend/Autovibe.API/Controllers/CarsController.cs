@@ -1,5 +1,6 @@
 using Autovibe.API.Data;
 using Autovibe.API.DTOs.Cars;
+using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +16,11 @@ namespace Autovibe.API.Controllers
     [Authorize]
     public class CarsController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly ICarService _carService;
 
-        //contructor
-        public CarsController(AppDbContext context)
+        public CarsController(AppDbContext context, ICarService carService)
         {
-            _context = context;
+            _carService = carService;
         }
 
         //GET: api/cars
@@ -28,38 +28,16 @@ namespace Autovibe.API.Controllers
         [HttpGet]
         public async Task<ActionResult<PageResponse<CarListDto>>> GetCars(int pageNumber = 1, int pageSize = 10)
         {
-            if(pageNumber < 1) pageNumber = 1;
-            var query = _context.Cars.AsQueryable();
-            var totalItems = await query.CountAsync();
-
-            var cars = await query
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(c => new CarListDto
+            var result = await _carService.GetAllAsync(pageNumber, pageSize);
+            if(result == null)
             {
-                Id = c.Id,
-                Make = c.Make,
-                Model = c.Model,
-                Year = c.Year,
-                Price = c.Price,
-                Mileage = c.Mileage,
-                FuelType = c.FuelType,
-                Transmission = c.Transmission,
-                Color = c.Color,
-                ShortDescription = c.Description != null && c.Description.Length > 100
-                ? c.Description.Substring(0, 100) + "..."
-                : c.Description,
-                UserId = c.UserId,
-                ImageUrls = c.ImageUrls ?? new List<string>()
-            }).ToListAsync();
-
-            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
+                return NotFound(new { message = "No cars found." });
+            }
 
             return Ok(new PageResponse<CarListDto>
             {
-                Items = cars,
-                TotalPages = totalPages,
+                Items = result.Items,
+                TotalPages = result.TotalPages,
                 PageNumber = pageNumber,
                 PageSize = pageSize
             });
@@ -69,127 +47,39 @@ namespace Autovibe.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CarDetailsDto>> GetCar(int id)
         {
-            var car = await _context.Cars
-                 .Include(c => c.User)
-                 .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (car == null)
+           
+            var result = await _carService.GetCarDetailsAsync(id);
+            if(result == null)
             {
-                return NotFound();
+                return NotFound(new { message = "Car not found." });
             }
 
-            var carDetails = new CarDetailsDto
-            {
-                Id = car.Id,
-                Make = car.Make,
-                Model = car.Model,
-                Year = car.Year,
-                Price = car.Price,
-                Mileage = car.Mileage,
-                FuelType = car.FuelType,
-                Transmission = car.Transmission,
-                Color = car.Color,
-                Description = car.Description,
-                CreatedAt = car.CreatedAt,
-                UpdatedAt = car.UpdatedAt,
-
-                SellerId = car.UserId,
-                SellerFirstName = car.User.FirstName,
-                SellerLastName = car.User.LastName,
-                SellerPhoneNumber = car.User.PhoneNumber,
-                
-                ImageUrls = car.ImageUrls ?? new List<string>()
-            };
-
             
-            return Ok(carDetails);
+            return Ok(result);
         }
 
         //POST: api/cars
         [HttpPost]
-        public async Task<ActionResult<CarDetailsDto>> CreateCar([FromBody] CarCreateDto createDto)
+        public async Task<ActionResult<CarCreateDto>> CreateCar([FromBody] CarCreateDto createDto)
         {
-            if (!ModelState.IsValid)
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
+
+            var result = await _carService.CreateAsync(createDto, userId);
+            if(result == null)
             {
-                return BadRequest(ModelState);
-            }
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            
-            if (userId == null)
-            {
-                return BadRequest("User is missing.");
+                return BadRequest(new { message = "Failed to create car." });
             }
 
-            if (!await _context.Users.AnyAsync(u => u.Id == int.Parse(userId)))
-            {
-                return BadRequest("User does not exist.");
-            }
-           
-
-            var car = new Car
-            {
-                Make = createDto.Make,
-                Model = createDto.Model,
-                Year = createDto.Year,
-                Price = createDto.Price,
-                Mileage = createDto.Mileage,
-                FuelType = createDto.FuelType,
-                Transmission = createDto.Transmission,
-                Color = createDto.Color,
-                Description = createDto.Description,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = null,
-                ImageUrls = createDto.ImageUrls,
-                UserId = int.Parse(userId)
-            };
-
-            _context.Cars.Add(car);
-            await _context.SaveChangesAsync();
-
-            var createdCar = await _context.Cars
-                .Include(c => c.User)
-                .FirstOrDefaultAsync(c => c.Id == car.Id);
-
-            if (createdCar == null)
-            {
-                return BadRequest("Car could not be created.");
-            }
-
-            var result = new CarDetailsDto
-            {
-                Id = createdCar.Id,
-                Make = createdCar.Make,
-                Model = createdCar.Model,
-                Year = createdCar.Year,
-                Price = createdCar.Price,
-                Mileage = createdCar.Mileage,
-                FuelType = createdCar.FuelType,
-                Transmission = createdCar.Transmission,
-                Color = createdCar.Color,
-                Description = createdCar.Description,
-                CreatedAt = createdCar.CreatedAt,
-                UpdatedAt = createdCar.UpdatedAt,
-
-                SellerId = createdCar.UserId,   
-                SellerFirstName = createdCar.User.FirstName,
-                SellerLastName = createdCar.User.LastName,
-                SellerPhoneNumber = createdCar.User.PhoneNumber,
-
-                ImageUrls = createdCar.ImageUrls ?? new List<string>()
-            };
-
-            return CreatedAtAction(nameof(GetCar), new { id = result.Id }, result);
-
+            return Ok(result);
         }
 
         //PUT: api/cars/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult<CarDetailsDto>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
+        public async Task<ActionResult<CarUpdateDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
         {
-            //take the id of the current user of the token
-            var userId = int.Parse(UserStringHandle.FindFirstValue(ClaimTypes.NameIdentifier)?.Value);
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
 
-            var result = await _carService.UpdateAsync(id, request, userId);
+            var result = await _carService.UpdateAsync(id, updateDto, userId);
 
             if (result == null)
             {
@@ -204,21 +94,8 @@ namespace Autovibe.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCar(int id)
         {
-            var car = await _context.Cars
-                .FirstOrDefaultAsync(c => c.Id == id);
-
-                if(car == null)
-            {
-                return NotFound();
-            }
-            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            if(car.UserId != userId){
-                return BadRequest("You are not the owner of this car.");
-            }
-            
-            _context.Cars.Remove(car);
-            await _context.SaveChangesAsync();
-
+            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
+            await _carService.DeleteAsync(id, userId);
             return NoContent();
         }
 
@@ -227,45 +104,17 @@ namespace Autovibe.API.Controllers
         [Authorize]
         public async Task<ActionResult> UploadImage(IFormFile file)
         {
-            if(file == null || file.Length == 0)
+            try
             {
-                return BadRequest("No file uploaded.");
-            }
-
-            // Валидация на файл тип
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
-            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            if (!allowedExtensions.Contains(fileExtension))
+                var imageUrl = await _carService.UploadImageAsync(file);
+                return Ok(new { url = imageUrl });
+            }catch(ArgumentException ex)
             {
-                return BadRequest("Invalid file type. Only images are allowed.");
-            }
-
-            // Валидация на размер (например максимум 5MB)
-            const long maxFileSize = 5 * 1024 * 1024; // 5MB
-            if (file.Length > maxFileSize)
+                return BadRequest(new { message = ex.Message });
+            }catch(Exception ex)
             {
-                return BadRequest("File size exceeds the maximum allowed size of 5MB.");
+                return StatusCode(500, new { message = "An error occurred while uploading the image.", details = ex.Message });
             }
-
-            string folderPath = Path.Combine("images", "cars");
-            string serverPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folderPath);
-            
-            if (!Directory.Exists(serverPath))
-            {
-                Directory.CreateDirectory(serverPath);
-            }
-
-            string fileName = Guid.NewGuid().ToString() + fileExtension;
-            string fullPath = Path.Combine(serverPath, fileName);
-
-            using (var stream = new FileStream(fullPath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-
-            string imageUrl = $"/{folderPath.Replace("\\", "/")}/{fileName}";
-
-            return Ok(new { url = imageUrl });
         }
     }
 }

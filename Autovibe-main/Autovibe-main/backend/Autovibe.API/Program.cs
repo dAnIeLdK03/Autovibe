@@ -1,5 +1,7 @@
 using Autovibe.API.Data;
+using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
+using Autovibe.API.Services;
 using Microsoft.EntityFrameworkCore;
 using Pomelo.EntityFrameworkCore.MySql;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
