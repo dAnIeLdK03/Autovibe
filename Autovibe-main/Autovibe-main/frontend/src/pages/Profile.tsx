@@ -6,6 +6,7 @@ import EditUserModal from '../components/EditUserModal';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { deleteUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../stores/authSlice';
 
 function Profile() {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -35,6 +36,8 @@ function Profile() {
         try {
           setShowDeleteConfirm(true);
           await deleteUser(user.id);
+          dispatch(logout());
+          localStorage.removeItem("token");
           navigate("/cars");
         } catch (error) {
           setError("Unable to delete account.");
