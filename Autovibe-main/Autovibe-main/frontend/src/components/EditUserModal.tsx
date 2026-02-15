@@ -2,23 +2,20 @@ import React from 'react';
 
 import type { EditUserModalProps } from '../services/userService';
 import { updateUser} from '../services/userService'; 
+import {useForm} from 'react-hook-form';
 
 const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, onSave }) => {
   if (!isOpen || !user) return null;
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    
-    const formData = new FormData(e.currentTarget);
-    const firstName = formData.get('firstName') as string;
-    const lastName = formData.get('lastName') as string;
-    const phoneNumber = formData.get('phoneNumber') as string;
+  const {register, handleSubmit, formState:{errors}} = useForm();
 
+
+  const onSubmit = async (formData: any) => {
     try {
-      await updateUser(user.id!, { firstName, lastName, phoneNumber });
+      await updateUser(user.id!, formData);
       
       if (onSave) {
-        onSave({ firstName, lastName, phoneNumber });
+        onSave(formData);
       }
       onClose();
     } catch (error) {
@@ -41,36 +38,42 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
           </button>
         </div>
 
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
           <div>
             <label className="block text-sm font-medium text-slate-400 mb-1 ml-1">First Name</label>
             <input 
-              name="firstName" 
-              defaultValue={user.firstName}
               type="text" 
               className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+              {...register("firstName", {
+                required: "First name is required"
+              })}
             />
           </div>
+          {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName.message as string}</span>}
 
           <div>
             <label className="block text-sm font-medium text-slate-400 mb-1 ml-1">Last Name</label>
             <input 
-              name="lastName" 
-              defaultValue={user.lastName}
               type="text" 
               className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+               {...register("lastName", {
+                required: "Last name is required"
+              })}
             />
           </div>
+          {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName.message as string}</span>}
 
           <div>
             <label className="block text-sm font-medium text-slate-400 mb-1 ml-1">Phone Number</label>
             <input 
-              name="phoneNumber" 
-              defaultValue={user.phoneNumber}
               type="tel" 
               className="w-full bg-slate-900 border border-slate-700 text-white rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-blue-500/50 outline-none transition-all"
+               {...register("phoneNumber", {
+                required: "Phone number is required"
+              })}
             />
           </div>
+          {errors.phoneNumber && <span className="text-red-500 text-sm">{errors.phoneNumber.message as string}</span>}
 
           <div className="flex gap-3 mt-8">
             <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-700 font-medium">
