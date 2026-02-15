@@ -1,31 +1,23 @@
-import React from 'react'
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { register } from '../services/AuthService';
+import { register as registerUser } from '../services/AuthService';
+import {useForm} from 'react-hook-form';
 
 function Register() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const {register, handleSubmit, watch, formState: {errors}} = useForm();
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if(password !== confirmPassword){
-      setError("Passwords do not match.");
-      return;
-    }
+  const onSubmit = async (formData: any) => {
     setLoading(true);
     setError(null);
     try{
-      await register({ email, password, confirmPassword, firstName, lastName, phoneNumber});
+      const { ...dataToApi} = formData;
+      await registerUser(dataToApi);
       navigate("/login");
     }catch(error : any){
       const errorMessage = error.response?.data || error.message || "Something went wrong.";
@@ -50,7 +42,7 @@ function Register() {
               <p className="text-slate-400">Welcome!</p>
             </div>
     
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               {error && (
                 <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-sm animate-pulse">
                   {error}
@@ -63,13 +55,19 @@ function Register() {
                   Email
                 </label>
                 <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder='example@mail.com'
                   className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-                  placeholder="example@mail.com"
-                  required
+                  type="email"
+                  {...register("email", {
+                  required: "Email is required",
+                
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                }
+              })}
                 />
+                {errors.email && <span className="text-red-500 text-sm">{errors.email.message as string}</span>}
               </div>
     
               {/* Password field */}
@@ -78,13 +76,18 @@ function Register() {
                   Password
                 </label>
                 <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder='******'
                   className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-                  placeholder="••••••••"
-                  required
+                  type="password"
+                  {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
                 />
+              {errors.password && <span className="text-red-500 text-sm">{errors.password.message as string}</span>}
               </div>
 
               {/* 2 Password field */}
@@ -93,13 +96,16 @@ function Register() {
                   confirm Password
                 </label>
                 <input
-                  type="password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder='******'
                   className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-                  placeholder="••••••••"
-                  required
+                  type="password"
+                  {...register("confirmPassword", {
+                required: "Password is required",
+                validate: (value) => 
+                  value === watch(`password`) || "Password do not match"
+              })}
                 />
+              {errors.confirmPassword && <span className="text-red-500 text-sm">{errors.confirmPassword.message as string}</span>}
               </div>
 
               {/* First Name field */}
@@ -109,12 +115,13 @@ function Register() {
                 </label>
                 <input
                   type="text"
-                  value={firstName}
-                  onChange={(e) => setFirstName(e.target.value)}
                   className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                   placeholder="John"
-                  required
+                  {...register("firstName", {
+                  required: "First name is required",
+                })}
                 />
+              {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName.message as string}</span>}
               </div>
 
               {/* Last Name field */}
@@ -124,12 +131,13 @@ function Register() {
                 </label>
                 <input
                   type="text"
-                  value={lastName}
-                  onChange={(e) => setLastName(e.target.value)}
                   className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                   placeholder="Doe"
-                  required
+                  {...register("lastName", {
+                  required: "Last name is required",
+                })}
                 />
+              {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName.message as string}</span>}
               </div>
 
               {/* Phone Number field */}
@@ -139,12 +147,21 @@ function Register() {
                 </label>
                 <input
                   type="tel"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
                   className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-                  placeholder="345642342"
-                  required
+                  placeholder="0897362517"
+                  {...register("phoneNumber", {
+                  required: "Phone name is required",
+                  validate: (value) =>{
+                    value.length === 10 || "Phone number must be 10 digits"
+                  },
+                  pattern: {
+                    value : /^[0-9]+$/,
+                    message: "Phone number must be digits"
+                  }
+                
+                })}
                 />
+              {errors.phoneNumber && <span className="text-red-500 text-sm">{errors.phoneNumber.message as string}</span>}
               </div>
     
               {/* Button */}

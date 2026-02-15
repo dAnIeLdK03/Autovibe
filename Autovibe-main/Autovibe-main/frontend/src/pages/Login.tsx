@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../services/AuthService';
 import { setCredentials } from '../stores/authSlice';
+import {useForm} from 'react-hook-form';
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const {register, handleSubmit, formState: {errors}} = useForm();
+
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   
@@ -14,12 +15,11 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (formData: any) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await login({ email, password });
+      const data = await login( formData );
       dispatch(setCredentials({ user: data.user, token: data.token }));
       navigate("/cars");
     } catch (err: any) {
@@ -42,7 +42,7 @@ function Login() {
           <p className="text-slate-400">Welcome!</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
           {error && (
             <div className="p-4 rounded-xl bg-red-500/10 border border-red-500/50 text-red-400 text-sm animate-pulse">
               {error}
@@ -55,13 +55,21 @@ function Login() {
               Email
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              placeholder='example@mail.com'
               className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-              placeholder="example@mail.com"
-              required
+              type="email"
+              {...register("email", {
+                required: "Email is required",
+                
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                }
+
+              })}
             />
+            {errors.email && <span className="text-red-500 text-sm">{errors.email.message as string}</span>}
+
           </div>
 
           {/* Password field */}
@@ -70,14 +78,18 @@ function Login() {
               Password
             </label>
             <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              placeholder='******'
               className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-              placeholder="••••••••"
-
-              required
+              type="password"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Password must be at least 6 characters",
+                },
+              })}
             />
+            {errors.password && <span className="text-red-500 text-sm">{errors.password.message as string}</span>}
           </div>
 
           {/* Button */}
