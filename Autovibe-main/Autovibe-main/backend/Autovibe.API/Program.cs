@@ -10,6 +10,8 @@ using System.Text;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Autovibe.API.Validations;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,6 +52,10 @@ var tokenValidationParameters = new TokenValidationParameters
     ClockSkew = TimeSpan.Zero
 };
 
+builder.Services.AddOpenApi();
+
+
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -68,6 +74,17 @@ string connectionString = builder.Configuration.GetConnectionString("DefaultConn
     ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+
+    app.UseSwaggerUI(options => {
+       options.SwaggerEndpoint("/openapi/v1.json", "Autovibe Api V1");
+       options.RoutePrefix = "swagger";
+    });
+}
+
 app.UseStaticFiles();
 
 
