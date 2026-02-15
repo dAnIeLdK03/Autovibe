@@ -9,7 +9,7 @@ export interface CarFormValues {
     color: string;
     shortDescription?: string;
     /** Used in CarCreate; validation checks this when shortDescription is missing */
-    description?: string;
+    description: string;
 }
 
 const CarCreateValidaions = (form : CarFormValues) : string | null => {

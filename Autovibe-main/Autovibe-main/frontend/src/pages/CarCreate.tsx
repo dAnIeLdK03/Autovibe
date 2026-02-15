@@ -6,6 +6,8 @@ import { createCar } from '../services/carsService';
 import CarCreateValidaions from "../Validations/CarValidations/CarCreateValidaions";
 import { extractApiErrorMessage, uploadCarImageIfPresent } from "../Validations/CarValidations/CarSubmitHelpers";
 import type { CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
+import { useForm } from 'react-hook-form';
+
 
 export function CarCreate() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -15,18 +17,7 @@ export function CarCreate() {
     return null;
   }
 
-  const [car, setCar] = useState({
-    make: "",
-    model: "",
-    year: 0,
-    price: 0,
-    mileage: 0,
-    fuelType: "",
-    transmission: "",
-    color: "",
-    description: "",
-
-  });
+  const { register, handleSubmit, formState: { errors } } = useForm<CarFormValues>();
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -34,12 +25,11 @@ export function CarCreate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (formData: CarFormValues) => {
     setError(null);
 
     // Client-side validation
-    const errorMessage = CarCreateValidaions(car as CarFormValues);
+    const errorMessage = CarCreateValidaions(formData as CarFormValues);
     if (errorMessage) {
       setError(errorMessage);
       return;
@@ -52,7 +42,8 @@ export function CarCreate() {
     }
     setLoading(true);
     try {
-      await createCar({ ...car, imageUrls: errorImage.imageUrls });
+      const { ...dataToApi } = formData;
+      await createCar({ ...dataToApi, imageUrls: errorImage.imageUrls });
       navigate("/cars");
     } catch (error: any) {
       setError(extractApiErrorMessage(error, "Unable to create car."));
@@ -61,7 +52,7 @@ export function CarCreate() {
     }
   }
 
-  
+
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
@@ -101,94 +92,105 @@ export function CarCreate() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
 
           <input
             type="text"
-            name="make"
-            placeholder="Make"
-            value={car.make}
-            onChange={(e) => setCar({ ...car, make: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            placeholder='Make'
+            {...register("make", {
+              required: "Make is required"
+            })}
           />
+          {errors.make && <span className="text-red-500 text-sm">{errors.make.message as string}</span>}
 
           <input
             type="text"
-            name="model"
             placeholder="Model"
-            value={car.model}
-            onChange={(e) => setCar({ ...car, model: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("model", {
+              required: "Model is required"
+            })}
           />
+          {errors.model && <span className="text-red-500 text-sm">{errors.model.message as string}</span>}
 
           <input
             type="number"
-            name="year"
             placeholder="Year"
-            value={car.year}
-            onChange={(e) => setCar({ ...car, year: Number(e.target.value) })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("year", {
+              required: "Year is required"
+            })}
           />
+          {errors.year && <span className="text-red-500 text-sm">{errors.year.message as string}</span>}
 
           <input
             type="number"
-            name="price"
             placeholder="Price"
-            value={car.price}
-            onChange={(e) => setCar({ ...car, price: Number(e.target.value) })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("price", {
+              required: "Price is required"
+            })}
           />
+          {errors.price && <span className="text-red-500 text-sm">{errors.price.message as string}</span>}
 
           <input
             type="number"
-            name="mileage"
             placeholder="Mileage"
-            value={car.mileage}
-            onChange={(e) => setCar({ ...car, mileage: Number(e.target.value) })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("mileage", {
+              required: "Mileage is required"
+            })}
           />
+          {errors.mileage && <span className="text-red-500 text-sm">{errors.mileage.message as string}</span>}
 
           <select
             title='fuelType'
-            name="fuelType"
-            value={car.fuelType}
-            onChange={(e) => setCar({ ...car, fuelType: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("fuelType", {
+              required: "Fuel type is required"
+            })}
           >
             <option value="">Fuel Type</option>
             <option value="Petrol">Petrol</option>
             <option value="Diesel">Diesel</option>
             <option value="Hybrid">Hybrid</option>
           </select>
+          {errors.fuelType && <span className="text-red-500 text-sm">{errors.fuelType.message as string}</span>}
 
           <select
             title='transmission'
-            name="transmission"
-            value={car.transmission}
-            onChange={(e) => setCar({ ...car, transmission: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("transmission", {
+              required: "Transmission is required"
+            })}
           >
             <option value="">Transmission</option>
             <option value="Manual">Manual</option>
             <option value="Automatic">Automatic</option>
           </select>
+          {errors.transmission && <span className="text-red-500 text-sm">{errors.transmission.message as string}</span>}
 
           <input
             type="text"
-            name="color"
             placeholder="Color"
-            value={car.color}
-            onChange={(e) => setCar({ ...car, color: e.target.value })}
             className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("color", {
+              required: "Color is required"
+            })}
           />
+          {errors.color && <span className="text-red-500 text-sm">{errors.color.message as string}</span>}
+
 
           <textarea
-            name="description"
             placeholder="Description"
-            value={car.description}
-            onChange={(e) => setCar({ ...car, description: e.target.value })}
             className="w-full px-5 py-10 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+            {...register("description", {
+              required: "Description is required"
+            })}
           />
+          {errors.description && <span className="text-red-500 text-sm">{errors.description.message as string}</span>}
+
           <label className="block text-sm font-medium text-slate-400">
             Image
             <input
