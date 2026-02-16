@@ -13,7 +13,7 @@ export interface CarFormValues {
 }
 
 const CarCreateValidaions = (form : CarFormValues) : string | null => {
-    if (!form.make.trim()) {
+    if (!form.make.trim() || !form?.make) {
         return "Make is Required.";
     }
         if (!form.model.trim()) {
