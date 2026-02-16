@@ -8,7 +8,6 @@ export interface CarFormValues {
     transmission: string;
     color: string;
     shortDescription?: string;
-    /** Used in CarCreate; validation checks this when shortDescription is missing */
     description: string;
 }
 

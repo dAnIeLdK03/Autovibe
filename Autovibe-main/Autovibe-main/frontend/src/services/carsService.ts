@@ -65,7 +65,7 @@ export interface UpdateCarRequest {
     fuelType?: string;
     transmission?: string;
     color?: string;
-    shortDescription?: string;
+    description?: string;
 
     imageUrls?: string[];
 
