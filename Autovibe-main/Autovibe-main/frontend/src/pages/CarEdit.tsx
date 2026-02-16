@@ -120,7 +120,7 @@ const [imageFile, setImageFile] = useState<File | null>(null);
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-4">
-        <CarForm handleImageChange={handleImageChange} imagePreview={imagePreview} />
+        <CarForm handleImageChange={handleImageChange} imagePreview={imagePreview} submitLabel="Edit" title="Edit Ad" />
         {error && <p className="text-red-500">{error}</p>}
       </form>
     </FormProvider>

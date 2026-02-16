@@ -7,9 +7,11 @@ import type { CarFormValues } from '../../Validations/CarValidations/CarCreateVa
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     imagePreview: string | null;
+    submitLabel?: string;
+    title: string;
 }
 
-function CarForm({handleImageChange, imagePreview}: CarFormProps) {
+function CarForm({handleImageChange, imagePreview, submitLabel = "Create", title = "Create Ad"}: CarFormProps) {
     const { register, formState: { errors } } = useFormContext<CarFormValues>();
     const {error} = useSelector((state: any) => state.cars)
     const { loading } = useSelector((state: any) => state.cars)
@@ -17,11 +19,11 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
     
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
-            <div className="w-full max-w-md p-8 bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 m-3 shadow-2xl">
+            <div className="w-full max-w-md p-8 bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 m-4 shadow-2xl">
 
                 {/* Header */}
                 <div className="mb-10 text-center">
-                    <h2 className="text-4xl font-black text-white tracking-tight mb-2">Create Ad</h2>
+                    <h2 className="text-4xl font-black text-white tracking-tight mb-2">{title}</h2>
                 </div>
 
                 {error && (
@@ -33,7 +35,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
 
                     <input
                         type="text"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600 mb-2"
                         placeholder='Make'
                         {...register("make", {
                             required: "Make is required"
@@ -44,7 +46,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
                     <input
                         type="text"
                         placeholder="Model"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className="mb-2 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("model", {
                             required: "Model is required"
                         })}
@@ -54,7 +56,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
                     <input
                         type="number"
                         placeholder="Year"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className="mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("year", {
                             required: "Year is required",
                               valueAsNumber: true
@@ -66,7 +68,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
                     <input
                         type="number"
                         placeholder="Price"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className="mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("price", {
                             required: "Price is required",
   valueAsNumber: true
@@ -79,7 +81,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
                     <input
                         type="number"
                         placeholder="Mileage"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className=" mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("mileage", {
                             required: "Mileage is required",
                               valueAsNumber: true
@@ -90,7 +92,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
 
                     <select
                         title='fuelType'
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className="mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("fuelType", {
                             required: "Fuel type is required"
                         })}
@@ -104,7 +106,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
 
                     <select
                         title='transmission'
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className=" mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("transmission", {
                             required: "Transmission is required"
                         })}
@@ -118,7 +120,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
                     <input
                         type="text"
                         placeholder="Color"
-                        className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className="mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("color", {
                             required: "Color is required"
                         })}
@@ -128,7 +130,7 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
 
                     <textarea
                         placeholder="Description"
-                        className="w-full px-5 py-10 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                        className="mb-3 w-full px-5 py-10 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         {...register("description", {
                             required: "Description is required"
                         })}
@@ -142,32 +144,31 @@ function CarForm({handleImageChange, imagePreview}: CarFormProps) {
                             name="image"
                             accept='image/*'
                             onChange={handleImageChange}
-                            className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                            className="mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
                         />
                     </label>
-                    {imagePreview && <img src={imagePreview} alt="Image preview" className="w-full h-auto" />}
+                    {imagePreview && <img src={imagePreview} className="w-full h-auto" />}
 
                     <button
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-blue-300"
+                        className="mb-3 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-blue-300 text-l  rounded-lg transition-all"
                     >
                         {loading ? (
                             <div className="flex justify-center">
                                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                             </div>
                         ) : (
-                            "Create Ad"
+                            submitLabel
                         )}
                     </button>
                     <button
                         type="button"
                         onClick={() => navigate("/cars")}
-                        className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700"
+                        className="mb-3 w-full bg-red-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-blue-300 text-l  rounded-lg transition-all"
                     >
                         Cancel
                     </button>
-
             </div>
         </div>
     );
