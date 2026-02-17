@@ -18,7 +18,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     )
     {
         //Logging the error
-        _logger.LogError(exception, "An unhandled exception occurred, {Message}");
+        _logger.LogError(exception, "An unhandled exception occurred, {Message}", exception.Message);
 
         var response = new ErrorResponse
         {

@@ -83,7 +83,7 @@ namespace Autovibe.API.Controllers
                 return NotFound();
             }
 
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             if (userId != user.Id)
             {
@@ -131,7 +131,7 @@ namespace Autovibe.API.Controllers
             {
                 return NotFound();
             }
-            int UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            int UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             if (UserId != user.Id)
             {
                 return Unauthorized("You are not allowed to delete this user.");
