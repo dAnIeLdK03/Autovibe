@@ -14,7 +14,7 @@ export default function CarEdit() {
   const { user } = useSelector((state: RootState) => state.auth);
 
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [, setLoading] = useState(false);
   const navigate = useNavigate();
 
 const [imageFile, setImageFile] = useState<File | null>(null);
