@@ -36,6 +36,8 @@ function CarList() {
     }
   });
   useEffect(() => {
+    if(page === undefined || page === null) return;
+    
     const fetchCars = async () => {
       dispatch(setLoading(true));
       dispatch(clearError());

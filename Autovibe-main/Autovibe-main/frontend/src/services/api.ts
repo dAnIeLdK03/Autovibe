@@ -1,10 +1,14 @@
 import axios from 'axios'
 
+const BASE_URL = import.meta.env.VITE_API_URL;
+console.log("URL is: ", BASE_URL )
+
 export const api = axios.create({
-    baseURL: 'http://localhost:5258/api',
+    baseURL: BASE_URL,
     headers: {
         'Content-Type': "application/json"
-    }
+    },
+    timeout: 10000
 });
 
 api.interceptors.request.use(config => {
