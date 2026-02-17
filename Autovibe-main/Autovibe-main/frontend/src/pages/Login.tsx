@@ -3,26 +3,27 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../services/AuthService';
 import { setCredentials } from '../stores/authSlice';
-import {useForm} from 'react-hook-form';
+import { useForm } from 'react-hook-form';
+import  type { LoginRequest } from '../services/AuthService';
 
 function Login() {
-  const {register, handleSubmit, formState: {errors}} = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<LoginRequest>();
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  
+
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const onSubmit = async (formData: any) => {
+  const onSubmit = async (formData: LoginRequest) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await login( formData );
+      const data = await login(formData);
       dispatch(setCredentials({ user: data.user, token: data.token }));
       navigate("/cars");
-    } catch (err: any) {
+    } catch (err) {
       setError("Incorrect email or password.");
     } finally {
       setLoading(false);
@@ -33,7 +34,7 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
       {/* Main card */}
       <div className="w-full max-w-md p-8 bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 shadow-2xl">
-        
+
         {/* Header */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-black text-white tracking-tight mb-2">
@@ -60,7 +61,7 @@ function Login() {
               type="email"
               {...register("email", {
                 required: "Email is required",
-                
+
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                   message: "Invalid email address",
@@ -109,8 +110,8 @@ function Login() {
           {/* Link to register */}
           <p className="text-center text-slate-400 text-sm mt-6">
             Don't have an account?{" "}
-            <Link 
-              to="/register" 
+            <Link
+              to="/register"
               className="text-[#70FFE2] font-bold hover:text-white transition-colors duration-200"
             >
               Register

@@ -1,17 +1,17 @@
 import { api } from './api';
 
-interface LoginRequest{
+export interface LoginRequest{
     email: string;
     password: string;
 };
 
-interface RegisterRequest{
+export interface RegisterRequest{
     email: string;
     password: string;
     confirmPassword: string;
     firstName?: string;
     lastName?: string;
-    phoneNumber?: string;
+    phoneNumber: string;
 };
 
 interface AuthResponse{

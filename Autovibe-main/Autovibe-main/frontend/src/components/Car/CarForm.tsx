@@ -3,6 +3,8 @@ import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import type { CarFormValues } from '../../Validations/CarValidations/CarCreateValidaions';
+import type { RootState } from '../../stores/store';
+
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -13,8 +15,8 @@ interface CarFormProps {
 
 function CarForm({handleImageChange, imagePreview, submitLabel = "Create", title = "Create Ad"}: CarFormProps) {
     const { register, formState: { errors } } = useFormContext<CarFormValues>();
-    const {error} = useSelector((state: any) => state.cars)
-    const { loading } = useSelector((state: any) => state.cars)
+    const {error} = useSelector((state: RootState) => state.cars)
+    const { loading } = useSelector((state: RootState) => state.cars)
     const navigate = useNavigate();
     
     return (
