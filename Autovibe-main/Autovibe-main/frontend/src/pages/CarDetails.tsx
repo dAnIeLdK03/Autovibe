@@ -18,7 +18,7 @@ export default function CarDetails() {
     fuelType: "",
     transmission: "",
     color: "",
-    shortDescription: "",
+    description: "",
     createdAt: new Date(),
     updatedAt: new Date(),
 
@@ -173,7 +173,7 @@ export default function CarDetails() {
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
               Description
             </h2>
-            <p className="break-words leading-relaxed text-slate-300 ">{car.shortDescription}</p>
+            <p className="break-words leading-relaxed text-slate-300 ">{car.description}</p>
           </div>
 
           {/* Dates */}

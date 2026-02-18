@@ -1,21 +1,7 @@
 import { api } from './api';
+import type { Car } from '../stores/carsSlice';
 
-export interface Car {
-    id: number;
-    make: string;
-    model: string;
-    year: number;
-    price: number;
-    mileage: number;
-    fuelType: string;
-    transmission: string;
-    color: string;
-    shortDescription: string;
 
-    userId: number;
-
-    imageUrls?: string[];
-};
 
 export interface CarDetails {
     id: number;
