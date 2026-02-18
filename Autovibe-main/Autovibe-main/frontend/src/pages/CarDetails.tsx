@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
 import ConfirmDialog from "../components/ConfirmDialog";
 import { getImageUrl } from "../utils/getImageUrl";
+import LoadingSpinner from "../components/UX/LoadingSpinner";
 
 export default function CarDetails() {
   const [car, setCar] = useState<CarDetails | null>({
@@ -65,16 +66,21 @@ export default function CarDetails() {
     }
   }, [id]);
 
-  if (loading) {
-    return (<div className="flex justify-center">
-      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin">loading</div>
-    </div>
+   if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
+    <div className="flex justify-center m-5">
+        <LoadingSpinner />
+      </div>
+      </div>
     );
   }
   if (error) {
+    return(
     <div className="bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6">
             {error}
           </div>
+    );
   }
   if (car === null) {
     return <h2>Car not found.</h2>;
