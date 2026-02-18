@@ -11,6 +11,10 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Options;
+using System.Reflection.Metadata;
+using Autovibe.API.Services;
+using Autovibe.API.Interfaces;
+
 
 
 
@@ -21,17 +25,13 @@ namespace Autovibe.API.Controllers
 
     public class AuthController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IConfiguration _configuration;
-        private readonly JwtSettings _jwtSettings;
+        private readonly IAuthService _authService;
         private readonly ILogger<AuthController> _logger;
 
-        public AuthController(AppDbContext context, IConfiguration configuration, IOptions<JwtSettings> jwtOptions, ILogger<AuthController> logger)
+        public AuthController(IAuthService authService, ILogger<AuthController> logger)
         {
-            _context = context;
-            _configuration = configuration;
-            _jwtSettings = jwtOptions.Value;
             _logger = logger;
+            _authService = authService;
         }
 
         [AllowAnonymous]
@@ -40,48 +40,12 @@ namespace Autovibe.API.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
+                var result = await _authService.Enroll(registerDto);
+                if (result == null)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest("Failed to register user.");
                 }
 
-                var userExists = await _context.Users.AnyAsync(u => u.Email == registerDto.Email);
-                if (userExists)
-                {
-                    return BadRequest("User already exists.");
-                }
-
-                if (registerDto.Password != registerDto.ConfirmPassword)
-                {
-                    return BadRequest("Password do not match.");
-                }
-
-                string passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
-
-                var user = new User
-                {
-                    Email = registerDto.Email,
-                    PasswordHash = passwordHash,
-                    FirstName = registerDto.FirstName,
-                    LastName = registerDto.LastName,
-                    PhoneNumber = registerDto.PhoneNumber,
-                    CreatedAt = DateTime.Now,
-                    UpdatedAt = null
-                };
-
-                _context.Users.Add(user);
-                await _context.SaveChangesAsync();
-
-                var result = new UserDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber,
-                    CreatedAt = user.CreatedAt ?? DateTime.Now,
-                    UpdatedAt = user.UpdatedAt ?? DateTime.Now
-                };
 
                 return CreatedAtAction(nameof(Register), new { id = result.Id }, result);
 
@@ -99,63 +63,14 @@ namespace Autovibe.API.Controllers
         {
             try
             {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
-                if (user == null)
+                var response = await _authService.Sign(loginDto);
+                if (response == null)
                 {
-                    return Unauthorized("User does not exist.");
+                    return BadRequest("Invalid credentials");
                 }
 
-                if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
-                {
-                    return Unauthorized("Invalid password.");
-                }
-
-                var jwtKey = _jwtSettings.Key;
-                var expirationMinutes = _jwtSettings.ExpirationInMinutes;
-
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email)
-                };
-
-
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-                var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(
-                    issuer: "Autovibe.API",
-                    audience: "Autovibe.API",
-                    claims: claims,
-                    expires: DateTime.Now.AddMinutes(expirationMinutes),
-                    signingCredentials: credentials
-                );
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-                var result = new UserDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    PhoneNumber = user.PhoneNumber,
-                    CreatedAt = user.CreatedAt ?? DateTime.Now,
-                    UpdatedAt = user.UpdatedAt ?? DateTime.Now
-                };
-
-                var authResponse = new AuthResponseDto
-                {
-                    Token = tokenString,
-                    User = result
-                };
-
-                return Ok(authResponse);
+                return Ok(response);
             }
             catch (Exception ex)
             {
