@@ -17,10 +17,12 @@ namespace Autovibe.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ILogger<UserController> _logger;
 
-        public UserController(AppDbContext context)
+        public UserController(AppDbContext context, ILogger<UserController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -42,7 +44,6 @@ namespace Autovibe.API.Controllers
 
                 if (user == null)
                 {
-                    Console.WriteLine("User not found.");
                     return NotFound();
                 }
 
@@ -61,7 +62,7 @@ namespace Autovibe.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, "An error occurred while retrieving the user.");
                 return StatusCode(500, "An error occurred while retrieving the user.");
             }
         }

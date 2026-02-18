@@ -24,12 +24,14 @@ namespace Autovibe.API.Controllers
         private readonly AppDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly JwtSettings _jwtSettings;
+        private readonly ILogger<AuthController> _logger;
 
-        public AuthController(AppDbContext context, IConfiguration configuration, IOptions<JwtSettings> jwtOptions)
+        public AuthController(AppDbContext context, IConfiguration configuration, IOptions<JwtSettings> jwtOptions, ILogger<AuthController> logger)
         {
             _context = context;
             _configuration = configuration;
             _jwtSettings = jwtOptions.Value;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -86,7 +88,7 @@ namespace Autovibe.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, "An error occurred while registering the user.");
                 return StatusCode(500, "An error occurred while registering the user.");
             }
         }
@@ -157,7 +159,7 @@ namespace Autovibe.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogError(ex, "An error occurred while logging in the user.");
                 return StatusCode(500, "An error occurred while logging in the user.");
             }
         }
