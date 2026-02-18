@@ -17,6 +17,7 @@ using Microsoft.Extensions.Options;
 using Autovibe.API.Services;
 using Autovibe.API.Interfaces;
 using Microsoft.Extensions.Logging;
+using System.Text;
 
 namespace Autovibe.API.Services
 {
