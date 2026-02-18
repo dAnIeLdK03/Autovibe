@@ -11,7 +11,6 @@ using Autovibe.API.Models;
 using BCrypt.Net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Options;
