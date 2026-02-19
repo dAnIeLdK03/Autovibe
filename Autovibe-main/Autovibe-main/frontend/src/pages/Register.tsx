@@ -186,11 +186,7 @@ function Register() {
             className="w-full mt-4 py-4 px-6 bg-[#70FFE2] hover:bg-[#5ce6cc] disabled:bg-slate-700 disabled:text-slate-500 text-slate-900 font-bold rounded-2xl shadow-[0_0_20px_rgba(112,255,226,0.3)] hover:shadow-[0_0_25px_rgba(112,255,226,0.5)] transition-all duration-300 transform active:scale-[0.98] flex justify-center items-center"
           >
             {loading ? (
-              <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
-                <div className="flex justify-center m-5">
                   <LoadingSpinner />
-                </div>
-              </div>
             ) : "Register"}
           </button>
 
