@@ -189,19 +189,19 @@ namespace Autovibe.API.Services
         {
             if (file == null || file.Length == 0)
             {
-                throw new ArgumentException("File is null or empty.");
+                throw new BadRequestException("File is null or empty.");
             }
             const long maxFileSize = 5 * 1024 * 1024; // 5MB
             if (file.Length > maxFileSize)
             {
-                throw new ArgumentException("File size exceeds the maximum allowed size of 5MB.");
+                throw new BadRequestException("File size exceeds the maximum allowed size of 5MB.");
             }
 
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
             var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!allowedExtensions.Contains(fileExtension))
             {
-                throw new ArgumentException("Invalid file type. Only images are allowed.");
+                throw new BadRequestException("Invalid file type. Only images are allowed.");
             }
 
                 string folderPath = Path.Combine("images", "cars");

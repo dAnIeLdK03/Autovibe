@@ -8,7 +8,7 @@ using System.Security.Claims;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Options;
 using Autovibe.API.Interfaces;
-
+using Autovibe.API.Exceptions;
 
 
 namespace Autovibe.API.Controllers
@@ -36,11 +36,11 @@ namespace Autovibe.API.Controllers
                 var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 if (userId == null)
                 {
-                    throw new Exception("User can't be found.");
+                    throw new NotFoundException("User can't be found.");
                 }
                 if (!int.TryParse(userId, out int userIdInt))
                 {
-                    throw new Exception("User id is not a number.");
+                    throw new BadRequestException("User id is not a number.");
                 }
                 var result = await _userService.GetUserAsync(userIdInt);
                 if (result == null)
@@ -65,13 +65,13 @@ namespace Autovibe.API.Controllers
 
             if (userId != id)
             {
-                throw new Exception("You are not allowed to update this user.");
+                throw new UnauthorizedException("You are not allowed to update this user.");
             }
 
             var result = await _userService.UpdateUserAsync(id, updateDto);
             if (result == null)
             {
-                return NotFound();
+                throw new NotFoundException("User not found.");
             }
 
 

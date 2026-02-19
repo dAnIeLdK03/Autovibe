@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
 using Autovibe.API.Services;
 using Autovibe.API.Interfaces;
+using Autovibe.API.Exceptions;
 
 
 
@@ -43,7 +44,7 @@ namespace Autovibe.API.Controllers
                 var result = await _authService.Enroll(registerDto);
                 if (result == null)
                 {
-                    return BadRequest("Failed to register user.");
+                   throw new ConflictException("User already exists");
                 }
 
 
@@ -52,8 +53,7 @@ namespace Autovibe.API.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while registering the user.");
-                return StatusCode(500, "An error occurred while registering the user.");
+                throw new BadRequestException(ex.Message);
             }
         }
 
@@ -67,15 +67,14 @@ namespace Autovibe.API.Controllers
                 var response = await _authService.Sign(loginDto);
                 if (response == null)
                 {
-                    return BadRequest("Invalid credentials");
+                    throw new NotFoundException("User not found");
                 }
 
                 return Ok(response);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while logging in the user.");
-                return StatusCode(500, "An error occurred while logging in the user.");
+                throw new BadRequestException(ex.Message);
             }
         }
 

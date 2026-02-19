@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
+using Autovibe.API.Exceptions;
 
 namespace Autovibe.API.Controllers
 {
@@ -31,7 +32,7 @@ namespace Autovibe.API.Controllers
             var result = await _carService.GetAllAsync(pageNumber, pageSize);
             if(result == null)
             {
-                return NotFound(new { message = "No cars found." });
+             throw new NotFoundException("No cars found.");   
             }
 
             return Ok(new PageResponse<CarListDto>
@@ -62,7 +63,7 @@ namespace Autovibe.API.Controllers
             var result = await _carService.GetCarDetailsAsync(id);
             if(result == null)
             {
-                return NotFound(new { message = "Car not found." });
+               throw new NotFoundException("Car not found.");  
             }
 
             
@@ -78,7 +79,7 @@ namespace Autovibe.API.Controllers
             var result = await _carService.CreateAsync(createDto, userId);
             if(result == null)
             {
-                return BadRequest(new { message = "Failed to create car." });
+                throw new BadRequestException("Failed to create car.");
             }
 
             return Ok(result);
@@ -94,7 +95,7 @@ namespace Autovibe.API.Controllers
 
             if (result == null)
             {
-                return NotFound(new { message = "Car not found or you do not have permission to update this car." });
+                throw new NotFoundException("Car not found or you do not have permission to update this car." );
             }
 
             return Ok(result);
@@ -119,12 +120,12 @@ namespace Autovibe.API.Controllers
             {
                 var imageUrl = await _carService.UploadImageAsync(file);
                 return Ok(new { url = imageUrl });
-            }catch(ArgumentException ex)
+            }catch(ArgumentException)
             {
-                return BadRequest(new { message = ex.Message });
-            }catch(Exception ex)
+               throw new BadRequestException("Invalid file type. Only images are allowed.");
+            }catch(Exception)
             {
-                return StatusCode(500, new { message = "An error occurred while uploading the image.", details = ex.Message });
+                throw new InternalException("Failed to upload image.");
             }
         }
     }

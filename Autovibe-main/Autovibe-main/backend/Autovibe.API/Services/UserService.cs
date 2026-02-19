@@ -76,7 +76,7 @@ namespace Autovibe.API.Services
 
             if (updatedUser == null)
             {
-                throw new Exception("User not found after update.");
+                throw new NotFoundException("User not found after update.");
             }
             return new UserDto
             {

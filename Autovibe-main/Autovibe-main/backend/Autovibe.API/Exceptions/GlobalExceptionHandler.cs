@@ -19,22 +19,29 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         //Logging the error
         _logger.LogError(exception, "An unhandled exception occurred, {Message}", exception.Message);
+        
+        var (statusCode, message) = exception switch
+    {
+        NotFoundException => (StatusCodes.Status404NotFound, exception.Message),
+        UnauthorizedException => (StatusCodes.Status401Unauthorized, exception.Message),
+        ConflictException => (StatusCodes.Status409Conflict, exception.Message),
+        BadRequestException => (StatusCodes.Status400BadRequest, exception.Message),
+        InternalException => (StatusCodes.Status500InternalServerError, exception.Message),
 
+        _ => (StatusCodes.Status500InternalServerError, "Unexpected error occurred.")
+    };
+    
+    
         var response = new ErrorResponse
         {
-            StatusCode = StatusCodes.Status500InternalServerError,
-            Message = "Unexpected error occurred. Please try again later."
+            StatusCode = statusCode,
+            Message = message
         };
 
         // Specially for development, send more info
         if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
         {
             response.Details = exception.StackTrace;
-        }
-        if(exception is NotFoundException)
-        {
-            response.StatusCode = StatusCodes.Status404NotFound;
-            response.Message = exception.Message;
         }
 
         httpContext.Response.StatusCode = response.StatusCode;
