@@ -42,14 +42,12 @@ namespace Autovibe.API.Services
             var userExists = await _context.Users.AnyAsync(u => u.Email == registerDto.Email);
             if (userExists)
             {
-                _logger.LogError("User already exists.");
-                throw new Exception("User with this email already exists.");
+                throw new ConflictException("User with this email already exists.");
             }
 
             if (registerDto.Password != registerDto.ConfirmPassword)
             {
-                _logger.LogError("Passwords do not match.");
-                throw new Exception("Passwords do not match.");
+                throw new BadRequestException("Passwords do not match.");
             }
 
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
@@ -86,14 +84,12 @@ namespace Autovibe.API.Services
 
             if (user == null)
             {
-                _logger.LogError("User not found.");
-                throw new Exception("User not found.");
+                throw new UnauthorizedException("User not found.");
             }
 
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
-                _logger.LogWarning("Invalid password.");
-                throw new Exception("Invalid password.");
+                throw new UnauthorizedException("Invalid password.");
             }
             
             var token = GenerateJwtToken(user);
