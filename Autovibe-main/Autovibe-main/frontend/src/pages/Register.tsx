@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import type { RegisterRequest } from '../services/AuthService';
 import axios from 'axios';
 import LoadingSpinner from '../components/UX/LoadingSpinner';
+import { extractApiErrorMessage } from '../Validations/extractApiErrorMessage';
 
 function Register() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterRequest>();
@@ -24,18 +25,18 @@ function Register() {
       navigate("/login");
     } catch (error: unknown) {
 
-      let errorMessage = "Something went wrong.";
+      const errMsg = extractApiErrorMessage(error);
 
       if (axios.isAxiosError(error)) {
-        errorMessage = error.response?.data || error.message;
+        setError(errMsg);
       }
       else if (error instanceof Error) {
-        errorMessage = error.message;
+        setError(errMsg);
       }
       else if (typeof error === "string") {
-        errorMessage = error;
+        setError(errMsg);
       }
-      setError(typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage));
+      setError(typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg));
     }
     finally {
       setLoading(false);

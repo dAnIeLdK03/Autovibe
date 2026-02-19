@@ -13,6 +13,12 @@ export const api = axios.create({
     timeout: 10000
 });
 
+export interface ApiErrorResponse{
+    statusCode: number;
+    message: string;
+    details?: string;
+}
+
 api.interceptors.request.use(config => {
     const token = localStorage.getItem("token");
     if(token){

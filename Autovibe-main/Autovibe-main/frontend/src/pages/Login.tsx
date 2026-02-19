@@ -6,6 +6,7 @@ import { setCredentials } from '../stores/authSlice';
 import { useForm } from 'react-hook-form';
 import type { LoginRequest } from '../services/AuthService';
 import LoadingSpinner from '../components/UX/LoadingSpinner';
+import { extractApiErrorMessage } from '../Validations/extractApiErrorMessage';
 
 function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginRequest>();
@@ -24,8 +25,9 @@ function Login() {
       const data = await login(formData);
       dispatch(setCredentials({ user: data.user, token: data.token }));
       navigate("/cars");
-    } catch (err) {
-      setError("Incorrect email or password.");
+    } catch (error : unknown) {
+      const errMsg = extractApiErrorMessage(error);
+      setError(errMsg);
     } finally {
       setLoading(false);
     }
