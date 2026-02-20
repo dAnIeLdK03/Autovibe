@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Options;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Exceptions;
+using Autovibe.API.Extensions;
 
 
 namespace Autovibe.API.Controllers
@@ -33,16 +33,13 @@ namespace Autovibe.API.Controllers
         {
             try
             {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                if (userId == null)
+                var userId = User.GetUserId();
+                 if (userId == null)
                 {
                     throw new NotFoundException("User can't be found.");
                 }
-                if (!int.TryParse(userId, out int userIdInt))
-                {
-                    throw new BadRequestException("User id is not a number.");
-                }
-                var result = await _userService.GetUserAsync(userIdInt);
+               
+                var result = await _userService.GetUserAsync(userId.Value);
                 if (result == null)
                 {
                     return NotFound();
@@ -61,7 +58,7 @@ namespace Autovibe.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] UserUpdateDto updateDto)
         {
-            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var userId = User.GetUserId();
 
             if (userId != id)
             {
@@ -82,8 +79,11 @@ namespace Autovibe.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {
-            int UserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-
+            var userId = User.GetUserId();
+            if(userId != id)
+            {
+                throw new UnauthorizedException("You are not allowed to delete this user.");
+            }
             await _userService.DeleteUserAsync(id);
             return NoContent();
         }

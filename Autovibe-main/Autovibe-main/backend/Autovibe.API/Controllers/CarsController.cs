@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
 using Autovibe.API.Exceptions;
+using Autovibe.API.Extensions;
+
 
 namespace Autovibe.API.Controllers
 {
@@ -48,9 +50,12 @@ namespace Autovibe.API.Controllers
         [Authorize]
         public async Task<ActionResult<PageResponse<CarListDto>>> GetMyCars(int pageNumber = 1, int pageSize = 10)
         {
-            var userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
-
-            var result = await _carService.GetUserCarsAsync(userId, pageNumber, pageSize);
+            var userId = User.GetUserId();
+            if(userId == null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+            var result = await _carService.GetUserCarsAsync(userId.Value, pageNumber, pageSize);
 
             return Ok(result);        
         }
@@ -74,9 +79,12 @@ namespace Autovibe.API.Controllers
         [HttpPost]
         public async Task<ActionResult<CarCreateDto>> CreateCar([FromBody] CarCreateDto createDto)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
-
-            var result = await _carService.CreateAsync(createDto, userId);
+            var userId = User.GetUserId();
+            if(userId == null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+            var result = await _carService.CreateAsync(createDto, userId.Value);
             if(result == null)
             {
                 throw new BadRequestException("Failed to create car.");
@@ -89,9 +97,12 @@ namespace Autovibe.API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<CarUpdateDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
-
-            var result = await _carService.UpdateAsync(id, updateDto, userId);
+            var userId = User.GetUserId();
+            if(userId == null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+            var result = await _carService.UpdateAsync(id, updateDto, userId.Value);
 
             if (result == null)
             {
@@ -106,8 +117,12 @@ namespace Autovibe.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCar(int id)
         {
-            var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "0");
-            await _carService.DeleteAsync(id, userId);
+            var userId = User?.GetUserId();
+            if(userId == null)
+            {
+                throw new UnauthorizedException("Unauthorized");
+            }
+            await _carService.DeleteAsync(id, userId.Value);
             return NoContent();
         }
 
