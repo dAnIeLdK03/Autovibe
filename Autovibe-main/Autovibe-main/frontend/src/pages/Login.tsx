@@ -8,12 +8,12 @@ import type { LoginRequest } from '../services/AuthService';
 import LoadingSpinner from '../components/UX/LoadingSpinner';
 import { extractApiErrorMessage } from '../Validations/extractApiErrorMessage';
 
+
 function Login() {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginRequest>();
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
 
   const navigate = useNavigate();
   const dispatch = useDispatch();

@@ -46,9 +46,20 @@ api.interceptors.response.use(response => response, error => {
         });
     } else {
         toast.error(message, {
-            duration: 4000,
-            position: "top-right",
-        });
+            id:message,
+    duration: 5000,
+    position: "top-right",
+    style: {
+        background: '#1e293b',
+        color: '#fff',
+        borderRadius: '12px',
+        border: '1px solid #ef4444',
+    },
+    iconTheme: {
+        primary: '#ef4444',
+        secondary: '#fff',
+    },
+});
     }
 
     return Promise.reject(error);
