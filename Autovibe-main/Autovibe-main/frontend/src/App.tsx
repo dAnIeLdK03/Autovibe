@@ -15,6 +15,7 @@ import Navbar from "./components/Navbar";
 import AuthRestore from "./components/AuthRestore";
 import Profile from "./pages/Profile";
 import { Toaster } from "react-hot-toast";
+import NotFound from "./components/NotFound";
 
 
 
@@ -36,7 +37,7 @@ function App() {
         <Route path="/cars/:id/edit" element={<CarEdit />} />
         <Route path="/cars/my" element={<MyCars />} />
         <Route path="/profile" element={<Profile />}/>
-
+        <Route path = "*" element = {<NotFound/>} />
       </Routes>
     </BrowserRouter>
   );
