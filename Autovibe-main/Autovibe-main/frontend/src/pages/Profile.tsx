@@ -69,8 +69,9 @@ function Profile() {
       }
 
     return (
-        <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
-            <div className="max-w-7xl mx-auto mb-8">
+
+        <div className="relative min-h-[600px] bg-slate-900 font-sans p-6 md:p-12 pt-20 overflow-hidden h-[calc(100vh-64px)]">
+            <div className="max-w-7xl mx-auto mb-8 ">
                 <h1 className="text-4xl font-black text-white tracking-tight mb-2">
                     Profile
                 </h1>
