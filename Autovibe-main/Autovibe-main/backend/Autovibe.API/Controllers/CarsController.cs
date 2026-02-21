@@ -8,8 +8,8 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
-using Autovibe.API.Exceptions;
 using Autovibe.API.Extensions;
+using Autovibe.API.Exceptions;
 
 
 namespace Autovibe.API.Controllers
@@ -31,6 +31,7 @@ namespace Autovibe.API.Controllers
         [HttpGet]
         public async Task<ActionResult<PageResponse<CarListDto>>> GetCars(int pageNumber = 1, int pageSize = 10)
         {
+            
             var result = await _carService.GetAllAsync(pageNumber, pageSize);
             if(result == null)
             {
@@ -48,8 +49,9 @@ namespace Autovibe.API.Controllers
 
         [HttpGet("my-cars")]
         [Authorize]
-        public async Task<ActionResult<PageResponse<CarListDto>>> GetMyCars(int pageNumber = 1, int pageSize = 10)
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetMyCars(int pageNumber = 1, int pageSize = 9)
         {
+            
             var userId = User.GetUserId();
             if(userId == null)
             {

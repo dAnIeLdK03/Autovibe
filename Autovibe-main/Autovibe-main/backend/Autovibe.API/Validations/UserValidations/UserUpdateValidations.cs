@@ -16,7 +16,7 @@ namespace Autovibe.API.Validations
             .MaximumLength(50).WithMessage("First name can't contain more thna 50 characters");
             
             RuleFor(x => x.PhoneNumber)
-            .Matches(@"^\+?[0-9]{7,15}$").WithMessage("Invalid format. Use digits (7-15) and optional '+' in front .")
+            .Matches(@"^\+?[0-9]$").WithMessage("Invalid format. Use digits and optional '+' in front .")
             .Must(phone => !phone.Contains(" ")).WithMessage("The phone number must not contain spaces..")
             .Length(10).WithMessage("Phone number must be 10 digits long");
         }
