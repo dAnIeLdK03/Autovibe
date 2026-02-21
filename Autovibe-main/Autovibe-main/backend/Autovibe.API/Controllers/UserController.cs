@@ -80,10 +80,11 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult> DeleteUser(int id)
         {
             var userId = User.GetUserId();
-            if(userId != id)
+            if(userId != id || userId == null)
             {
                 throw new UnauthorizedException("You are not allowed to delete this user.");
             }
+            
             await _userService.DeleteUserAsync(id);
             return NoContent();
         }
