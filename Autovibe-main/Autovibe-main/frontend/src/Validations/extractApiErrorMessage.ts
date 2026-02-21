@@ -1,8 +1,17 @@
 import axios from 'axios';
 import type { ApiErrorResponse } from '../services/api';
 
-export const extractApiErrorMessage = (error: unknown): string => {
-  // 1. Проверка дали е Axios грешка
+export const extractApiErrorMessage = (error: any): string => {
+  const data = error.response?.data;
+
+  if(data?.errors){
+    const allErrors = Object.values(data.errors).flat();
+    return allErrors.join(" ");
+  }
+
+  if(typeof data === 'string') return data;
+  if(data?.message) return data.message;
+
   if (axios.isAxiosError(error)) {
     const apiError = error.response?.data as ApiErrorResponse;
     
@@ -17,5 +26,5 @@ export const extractApiErrorMessage = (error: unknown): string => {
     return error.message;
   }
 
-  return "Error occured.";
+  return error.message || "Error occured.";
 };

@@ -14,6 +14,7 @@ import MyCars from "./pages/MyCars";
 import Navbar from "./components/Navbar";
 import AuthRestore from "./components/AuthRestore";
 import Profile from "./pages/Profile";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -22,8 +23,9 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AuthRestore/> {/* This component is used to restore the auth state on page refresh */}
+      <AuthRestore/>
       <Navbar />
+      <Toaster />
       <Routes>
         <Route path="/" element={<Home /> } />
         <Route path="/login" element={<Login />} />

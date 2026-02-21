@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { extractApiErrorMessage } from '../Validations/extractApiErrorMessage';
+import toast from 'react-hot-toast';
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 if(!BASE_URL?.trim()) {
@@ -27,11 +29,28 @@ api.interceptors.request.use(config => {
     return config;
 });
 
-api.interceptors.response.use( response => response, error => {    
-    if(error.response?.status === 401){
+api.interceptors.response.use(response => response, error => {
+    const message = extractApiErrorMessage(error);
+    const status = error.response?.status;
+
+    if (status === 401) {
         localStorage.removeItem("token");
         window.location.href = "/login";
+        return Promise.reject(error);
     }
+
+    if (status === 403) {
+        toast.error("You are not allowed to perform this action.", {
+            duration: 4000,
+            position: "top-right",
+        });
+    } else {
+        toast.error(message, {
+            duration: 4000,
+            position: "top-right",
+        });
+    }
+
     return Promise.reject(error);
 });
 
