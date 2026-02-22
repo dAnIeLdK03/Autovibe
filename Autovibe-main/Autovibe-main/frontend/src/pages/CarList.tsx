@@ -7,6 +7,7 @@ import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
 import LoadingSpinner from '../components/UX/LoadingSpinner';
 import EmptyState from '../components/UX/EmptyState';
+import SortedCars from '../components/Car/SortedCars';
 
 function CarList() {
   const dispatch = useDispatch();
@@ -112,17 +113,10 @@ function CarList() {
           <label className="block text-slate-400 text-sm font-medium mb-1.5 text-white mt-2 ml-2">
             Sort by
           </label>
-          <select
-            value={sortType}
-            onChange={(e) => setSortType(e.target.value)}
-            className="block w-full text-left px-4 py-3 text-sm text-slate-900 hover:bg-slate-700 hover:text-[#70FFE2] transition-colors border-b border-slate-700/50 last:border-0 mb-6"
-            >
-            <option value="None">None</option>
-            <option value='Newest'>Newest</option>
-            <option value="PriceAsc">PriceAsc</option>
-            <option value="PriceDesc">PriceDesc</option>
-            <option value="YearDesc">YearDesc</option>
-          </select>
+          <SortedCars
+          value={sortType}
+          onChange={(val) => setSortType(val)}
+          />
         </div>
 
         {/* Cars Cards */}
