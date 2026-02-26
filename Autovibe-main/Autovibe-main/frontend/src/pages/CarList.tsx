@@ -110,13 +110,14 @@ function CarList() {
             <option value="Hybrid">Hybrid</option>
           </select>
 
-          <label className="block text-slate-400 text-sm font-medium mb-1.5 text-white mt-2 ml-2">
+          <label className="block text-slate-400 text-sm font-medium mb-1.5 text-white m-2">
             Sort by
-          </label>
           <SortedCars
           value={sortType}
           onChange={(val) => setSortType(val)}
           />
+          </label>
+
         </div>
 
         {/* Cars Cards */}
