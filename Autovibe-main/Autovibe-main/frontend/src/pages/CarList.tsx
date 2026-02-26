@@ -39,8 +39,8 @@ function CarList() {
     }
   });
   useEffect(() => {
-    if(page === undefined || page === null) return;
-    
+    if (page === undefined || page === null) return;
+
     const fetchCars = async () => {
       dispatch(setLoading(true));
       dispatch(clearError());
@@ -61,9 +61,9 @@ function CarList() {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
-    <div className="flex justify-center m-5">
-        <LoadingSpinner />
-      </div>
+        <div className="flex justify-center m-5">
+          <LoadingSpinner />
+        </div>
       </div>
     );
   }
@@ -79,7 +79,7 @@ function CarList() {
 
   if (!loading && !error && cars.length === 0) {
     return (
-     <EmptyState />
+      <EmptyState />
     );
   }
 
@@ -92,7 +92,7 @@ function CarList() {
             Explore Our <span className="text-[#70FFE2]">Fleet</span>
           </h1>
           <p className="text-slate-400">Discover the perfect ride for your next journey.</p>
-         
+
         </div>
 
         <div className="relative group max-w-xs">
@@ -110,23 +110,24 @@ function CarList() {
             <option value="Hybrid">Hybrid</option>
           </select>
 
-          <label className="block text-slate-400 text-sm font-medium mb-1.5 text-white m-2">
-            Sort by
-          <SortedCars
-          value={sortType}
-          onChange={(val) => setSortType(val)}
-          />
-          </label>
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
+              Sort by:
+            </span>
+
+            <SortedCars
+              value={sortType}
+              onChange={(val) => setSortType(val)}
+            />
+          </div>
 
         </div>
 
-        {/* Cars Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedCars.map((car) => (
             <CarCard key={car.id} car={car} showDeletebutton={false} />
           ))}
         </div>
-        {/* Pagination */}
         <Pagination
           currentPage={page}
           totalPages={totalPages}

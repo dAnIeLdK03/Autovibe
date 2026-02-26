@@ -1,59 +1,68 @@
 import { Check, ChevronDown, ListOrdered } from "lucide-react";
 import { useState } from "react";
 
-interface CarFilterProps{
-    value: string,
-    onChange: (value: string) => void
+interface CarFilterProps {
+  value: string;
+  onChange: (value: string) => void;
 }
+
 const sortOptions = [
-    { id: 'None', label: 'None'},
-    { id: 'Newest', label: 'Newest'},
-    { id: 'PriceAsc', label: 'PriceAsc'},
-    { id: 'PriceDesc', label: 'PriceDesc'},
-    { id: 'YearDesc', label: 'YearDesc'},
+  { id: 'None', label: 'None' },
+  { id: 'Newest', label: 'Newest' },
+  { id: 'PriceAsc', label: 'PriceAsc' },
+  { id: 'PriceDesc', label: 'PriceDesc' },
+  { id: 'YearDesc', label: 'YearDesc' },
 ];
 
-export default function SortedCars({value, onChange} : CarFilterProps){
-    const [isOpen, setIsOpen] = useState(false);
+export default function SortedCars({ value, onChange }: CarFilterProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const currentLabel = sortOptions.find((opt) => opt.id === value)?.label || "Sort";
 
-    const currentLabel = sortOptions.find(opt => opt.id === value)?.label || 'Sort';
- 
-    return (
+  return (
     <div className="relative inline-block text-left w-64 mb-3">
+      {/* ГЛАВЕН БУТОН */}
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="ml-2 flex items-center justify-between w-full px-4 py-2.5 bg-slate-800 text-white border border-slate-700 rounded-xl hover:border-slate-500 transition-all focus:ring-2 focus:ring-blue-500/50"
+        className="ml-2 flex items-center justify-between w-full px-4 py-2.5 bg-slate-800 text-white border border-slate-700 rounded-xl hover:border-slate-500 transition-all focus:ring-2 focus:ring-blue-500/50 relative z-30"
       >
         <div className="flex items-center gap-2">
           <ListOrdered size={18} className="text-blue-400" />
           <span className="text-sm font-medium">{currentLabel}</span>
         </div>
-        <ChevronDown 
-          size={16} 
-          className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} 
+        <ChevronDown
+          size={16}
+          className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
         />
       </button>
 
       {isOpen && (
         <>
-          <div className="fixed inset-0 z-10" onClick={() => setIsOpen(false)}></div>
+          <div 
+            className="fixed inset-0 z-[100] bg-transparent cursor-default" 
+            onClick={() => setIsOpen(false)}
+          />
           
-          <div className="absolute right-0 z-20 mt-2 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-150">
+          <div 
+            className="absolute right-0 z-[110] mt-2 w-full bg-slate-800 border border-slate-700 rounded-xl shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="py-1">
               {sortOptions.map((option) => (
                 <button
                   key={option.id}
+                  type="button"
                   onClick={() => {
-                    onChange(option.id);
-                    setIsOpen(false);
+                    onChange(option.id); // Пращаме стойността
+                    setIsOpen(false);    // ЗАТВАРЯМЕ ВЕДНАГА
                   }}
                   className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-colors
                     ${value === option.id 
-                      ? 'bg-blue-600/10 text-blue-400' 
+                      ? 'bg-blue-600/20 text-blue-400' 
                       : 'text-slate-300 hover:bg-slate-700 hover:text-white'
                     }`}
                 >
-                  {option.label}
+                  <span>{option.label}</span>
                   {value === option.id && <Check size={14} />}
                 </button>
               ))}
