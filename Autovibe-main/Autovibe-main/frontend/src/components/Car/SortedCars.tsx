@@ -19,8 +19,7 @@ export default function SortedCars({ value, onChange }: CarFilterProps) {
   const currentLabel = sortOptions.find((opt) => opt.id === value)?.label || "Sort";
 
   return (
-    <div className="relative inline-block text-left w-64 mb-3">
-      {/* ГЛАВЕН БУТОН */}
+    <div className="relative inline-block text-left w-64">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -53,8 +52,8 @@ export default function SortedCars({ value, onChange }: CarFilterProps) {
                   key={option.id}
                   type="button"
                   onClick={() => {
-                    onChange(option.id); // Пращаме стойността
-                    setIsOpen(false);    // ЗАТВАРЯМЕ ВЕДНАГА
+                    onChange(option.id); 
+                    setIsOpen(false); 
                   }}
                   className={`flex items-center justify-between w-full px-4 py-3 text-sm transition-colors
                     ${value === option.id 

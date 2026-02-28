@@ -8,6 +8,7 @@ import CarCard from '../components/Car/CarCard';
 import LoadingSpinner from '../components/UX/LoadingSpinner';
 import EmptyState from '../components/UX/EmptyState';
 import SortedCars from '../components/Car/SortedCars';
+import FuelType from '../components/Filters/FuelType';
 
 function CarList() {
   const dispatch = useDispatch();
@@ -95,26 +96,18 @@ function CarList() {
 
         </div>
 
-        <div className="relative group max-w-xs">
-          <label className="block text-slate-400 text-sm font-medium mb-1.5 text-white ml-2">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
             Fuel type
-          </label>
-          <select
+          </span>
+            <FuelType
             value={fuelType}
-            onChange={(e) => setFuelType(e.target.value)}
-            className="block w-full text-left px-4 py-3 text-sm text-slate-900 hover:bg-slate-700 hover:text-[#70FFE2] transition-colors border-b border-slate-700/50 last:border-0"
-          >
-            <option value="All" >All Types</option>
-            <option value="Petrol">Petrol</option>
-            <option value="Diesel">Diesel</option>
-            <option value="Hybrid">Hybrid</option>
-          </select>
-
+            onChange={(val) => setFuelType(val)}
+            />
           <div className="flex items-center gap-3 mb-4">
             <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
               Sort by:
             </span>
-
             <SortedCars
               value={sortType}
               onChange={(val) => setSortType(val)}
