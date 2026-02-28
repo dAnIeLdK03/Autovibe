@@ -8,6 +8,7 @@ import CarCreateValidaions, { type CarFormValues } from "../Validations/CarValid
 import { uploadCarImageIfPresent } from "../Validations/CarValidations/CarSubmitHelpers";
 import { FormProvider, useForm } from "react-hook-form";
 import CarForm from "../components/Car/CarForm";
+import toast from "react-hot-toast";
 
 export default function CarEdit() {
   const { id } = useParams();
@@ -91,7 +92,8 @@ const [imageFile, setImageFile] = useState<File | null>(null);
           description: formData.description ?? '',
         },uploadResult.imageUrls
       );
-      navigate("/cars");
+      navigate(`/cars/${id}`);
+      toast.success("Car updated successfully!");
     } catch (error: any) {
       setError(error.response.data?.message ?? "Failed to update car.");
     } finally {

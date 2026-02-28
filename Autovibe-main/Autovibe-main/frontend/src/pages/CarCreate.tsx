@@ -8,6 +8,7 @@ import { uploadCarImageIfPresent } from "../Validations/CarValidations/CarSubmit
 import { FormProvider, useForm } from 'react-hook-form';
 import type { CarFormValues } from "../Validations/CarValidations/CarCreateValidaions";
 import CarForm from '../components/Car/CarForm';
+import toast from 'react-hot-toast';
 
 export function CarCreate() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -45,6 +46,8 @@ export function CarCreate() {
       });
 
       navigate("/cars");
+      toast.success("Car created successfully!");
+
     } catch (err: any) {
       setError(err.response?.data?.message ?? "Failed to create car.");
     }
