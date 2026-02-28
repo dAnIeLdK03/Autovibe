@@ -11,6 +11,19 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
 
   return (
     <div className="flex justify-center items-center space-x-4 mt-12 pb-10">
+       <button
+       disabled={currentPage <= 1}
+        onClick={() => onPageChange(1)}
+        className="p-2 bg-slate-800 rounded-lg border border-slate-700 
+             hover:border-[#70FFE2] transition-all duration-300 flex items-center justify-center
+             disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+        <img
+        src="/back-arrow.png"
+        alt="first"
+        className="w-5 h-5 object-contain brightness-0 invert"
+        />
+      </button>
       <button
         disabled={currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
@@ -33,6 +46,19 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
                    transition-all duration-300 font-bold"
       >
         Next →
+      </button>
+       <button
+       disabled={currentPage >= pages}
+        onClick={() => onPageChange(pages)}
+        className="p-2 bg-slate-800 rounded-lg border border-slate-700 
+             hover:border-[#70FFE2] transition-all duration-300 flex items-center justify-center
+             disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+        <img
+        src="/forward.png"
+        alt="last"
+        className="w-5 h-5 object-contain brightness-0 invert"
+        />
       </button>
     </div>
   );
