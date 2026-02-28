@@ -23,7 +23,6 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
         <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
             <div className="w-full max-w-md p-8 bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 m-4 shadow-2xl">
 
-                {/* Header */}
                 <div className="mb-10 text-center">
                     <h2 className="text-4xl font-black text-white tracking-tight mb-2">{title}</h2>
                 </div>
@@ -142,6 +141,7 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
                 <label className="block text-sm font-medium text-slate-400">
                     Image
                     <input
+                        key={imagePreview}
                         type='file'
                         name="image"
                         accept='image/*'
