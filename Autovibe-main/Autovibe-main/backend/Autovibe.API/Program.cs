@@ -32,10 +32,12 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://localhost:5173")
+            policy.WithOrigins(builder.Configuration["Cors:AllowedOrigins"]
+            ?? throw new InvalidOperationException("AllowedOrigins not found in configuration."))
             .AllowAnyHeader()
             .AllowAnyMethod();
         });
+        
 });
 
 var jwtKey = builder.Configuration["Jwt:Key"]
