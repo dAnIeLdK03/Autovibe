@@ -156,6 +156,10 @@ namespace Autovibe.API.Services
             {
                 throw new BadRequestException("Max year must be between 1900 and current year.");
             }
+            if(minYear.HasValue && maxYear.HasValue && minYear.Value > maxYear.Value)
+            {
+                throw new BadRequestException("Min year cannot be greater than max year.");
+            }
             if (minYear.HasValue)
             {
                 query = query.Where(c => c.Year >= minYear);
@@ -164,6 +168,7 @@ namespace Autovibe.API.Services
             {
                 query = query.Where(c => c.Year <= maxYear);
             }
+            
             var totalItems = await query.CountAsync();
 
             var cars = await query
