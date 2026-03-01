@@ -19,6 +19,7 @@
     "lucide-react": "^0.563.0",
     "node": "^25.6.1",
     "nuget": "^2.0.2",
+    "rc-slider": "^11.1.9",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-hook-form": "^7.71.1",

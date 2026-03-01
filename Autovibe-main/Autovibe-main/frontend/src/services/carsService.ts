@@ -90,13 +90,27 @@ export interface ConfirmDialogProps {
     onClose?: () => void;
 }
 
-export const getCars = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
-    const response = await api.get<CarsPageResponse>(`/cars?pageNumber=${page}&pageSize=${pageSize}`);
+export const getCars = async (page: number, pageSize: number, minYear?: number, maxYear?: number): Promise<CarsPageResponse> => {
+    const params = new URLSearchParams();
+    params.append('pageNumber', page.toString());
+    params.append('pageSize', pageSize.toString());
+
+    if (minYear !== undefined && minYear !== null) params.append('minYear', minYear.toString());
+    if (maxYear !== undefined && maxYear !== null) params.append('maxYear', maxYear.toString());
+
+    const response = await api.get<CarsPageResponse>(`/cars?${params.toString()}`);
     const data = response.data;
+
     if (!data || !Array.isArray(data.items)) {
         throw new Error("Unable to load cars.");
     }
-    return { items: data.items, totalPages: data.totalPages ?? 0, pageNumber: data.pageNumber ?? page, pageSize: data.pageSize ?? pageSize };
+
+    return { 
+        items: data.items, 
+        totalPages: data.totalPages ?? 0, 
+        pageNumber: data.pageNumber ?? page, 
+        pageSize: data.pageSize ?? pageSize
+    };
 };
 
 export const getCarsByUserId = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
