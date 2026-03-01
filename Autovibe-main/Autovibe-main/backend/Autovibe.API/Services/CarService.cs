@@ -136,7 +136,7 @@ namespace Autovibe.API.Services
             };
         }
 
-        public async Task<PageResponse<CarListDto>> GetAllAsync(int pageNumber, int pageSize)
+        public async Task<PageResponse<CarListDto>> GetAllAsync(int pageNumber, int pageSize, int? minYear, int? maxYear)
         {
             if (pageNumber < 1 || pageNumber > 100)
             {
@@ -146,10 +146,28 @@ namespace Autovibe.API.Services
             {
                 throw new BadRequestException("Page size cannot be less than 1 or greater than 9.");
             }
+            
             var query = _context.Cars.AsQueryable();
+            if(minYear.HasValue && (minYear < 1900 || minYear > DateTime.Now.Year))
+            {
+                throw new BadRequestException("Min year must be between 1900 and current year.");
+            }
+             if(maxYear.HasValue && (maxYear < 1900 || maxYear > DateTime.Now.Year))
+            {
+                throw new BadRequestException("Max year must be between 1900 and current year.");
+            }
+            if (minYear.HasValue)
+            {
+                query = query.Where(c => c.Year >= minYear);
+            }
+            if (maxYear.HasValue)
+            {
+                query = query.Where(c => c.Year <= maxYear);
+            }
             var totalItems = await query.CountAsync();
 
             var cars = await query
+                .OrderByDescending(c => c.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(c => new CarListDto
