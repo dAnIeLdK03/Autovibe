@@ -6,6 +6,7 @@ import { deleteCar, getCarsByUserId } from "../services/carsService";
 import { setCars, setLoading, setError, clearError } from "../stores/carsSlice";
 import CarCard from "../components/Car/CarCard";
 import ConfirmDialog from "../components/ConfirmDialog";
+import EmptyState from "../components/UX/EmptyState";
 
 function MyCars() {
   const navigate = useNavigate();
@@ -77,18 +78,7 @@ function MyCars() {
 
   if (!loading && !error && cars.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
-        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center py-20 text-center">
-          <h2 className="text-2xl font-semibold text-white mb-2">No cars yet</h2>
-          <p className="text-slate-400 mb-6">Add one by clicking the button below.</p>
-          <button
-            className="px-6 py-3 bg-[#70FFE2] hover:bg-[#5ee6cb] text-slate-900 font-bold rounded-xl transition-all"
-            onClick={() => navigate("/cars/new")}
-          >
-            Create new ad
-          </button>
-        </div>
-      </div>
+      <EmptyState />
     );
   }
 

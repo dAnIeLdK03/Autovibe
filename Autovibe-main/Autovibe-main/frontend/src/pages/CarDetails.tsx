@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { deleteCar, getCarById } from "../services/carsService";
 import type { CarDetails } from "../services/carsService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
 import ConfirmDialog from "../components/ConfirmDialog";
 import { getImageUrl } from "../utils/getImageUrl";
 import LoadingSpinner from "../components/UX/LoadingSpinner";
+import { setLoading, setError, clearError } from '../stores/carsSlice';
 
 export default function CarDetails() {
   const [car, setCar] = useState<CarDetails | null>({
@@ -30,8 +31,8 @@ export default function CarDetails() {
 
     imageUrls: [],
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const {loading, error } = useSelector((state: RootState) => state.cars);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { id } = useParams<{ id: string }>();
@@ -48,17 +49,21 @@ export default function CarDetails() {
 
   useEffect(() => {
     
-    setLoading(true);
-    setError(null);
+    dispatch(setLoading(true));
+    dispatch(clearError());
+
     
     const fetchCar = async () => {
       try {
         const data = await getCarById(carId);
         setCar(data);
       } catch (error) {
-        setError("Unable to load car.");
+        dispatch(setError("Unable to load car."));
+        setTimeout(() => {
+          navigate("/cars");
+        }, 3000)
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     };
     if(id && !isNaN(Number(id))){
@@ -86,21 +91,22 @@ export default function CarDetails() {
     return <h2>Car not found.</h2>;
   }
   
+  
 
 
   const handleDelete = async () => {
     if(car.sellerId !== user?.id){  
-      setError("You are not the owner of this car.");
+      dispatch(setError("You are not the owner of this car."));
       return;
     }
-    setLoading(true);
-    setError(null);
+    dispatch(setLoading(true));
+    dispatch(clearError());
     try {
       setShowDeleteConfirm(true);
       await deleteCar(carId);
       navigate("/cars");
     } catch (error) {
-      setError("Unable to delete car.");
+      dispatch(setError("Unable to delete car."));
     }
   };
 
