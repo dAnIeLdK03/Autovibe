@@ -27,6 +27,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
     }
   };
 
+
   useEffect(() => {
     const fetchUserEdit = async () => {
       if (!user?.id) return;
