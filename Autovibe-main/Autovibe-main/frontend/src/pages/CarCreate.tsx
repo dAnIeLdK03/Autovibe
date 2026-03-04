@@ -19,10 +19,11 @@ export function CarCreate() {
 
   const methods = useForm<CarFormValues>();
 
-  if (user === null) {
-    navigate("/login");
-    return null;
-  }
+  useEffect(() => {
+    if (user === null) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const onSubmit = async (formData: CarFormValues) => {
     setError(null);

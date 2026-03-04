@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
+using Autovibe.API.Services.Helpers;
 
 namespace Autovibe.API.Services
 {
@@ -24,83 +25,23 @@ namespace Autovibe.API.Services
             {
                 throw new NotFoundException("Car not found or you do not have permission to update this car.");
             }
-            car.Model = request.Model;
-            car.Make = request.Make;
-            car.Year = request.Year;
-            car.Price = request.Price;
-            car.Mileage = request.Mileage;
-            car.FuelType = request.FuelType;
-            car.Transmission = request.Transmission;
-            car.Color = request.Color;
-            car.Description = request.Description;
-            car.UpdatedAt = DateTime.UtcNow;
-
-            car.ImageUrls = request.ImageUrls;
-
+            request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
+            await _context.Entry(car).Reference(c => c.User).LoadAsync();
 
 
-            return new CarDetailsDto
-            {
-                Id = car.Id,
-                Model = car.Model,
-                Make = car.Make,
-                Year = car.Year,
-                Price = car.Price,
-                Mileage = car.Mileage,
-                FuelType = car.FuelType,
-                Transmission = car.Transmission,
-                Color = car.Color,
-                Description = car.Description,
-                ImageUrls = car.ImageUrls
-            };
+            return car.DetailsDto();
         }
 
         public async Task<CarDetailsDto?> CreateAsync(CarCreateDto request, int userId)
         {
-            var car = new Car
-            {
-                Make = request.Make,
-                Model = request.Model,
-                Year = request.Year,
-                Price = request.Price,
-                Mileage = request.Mileage,
-                FuelType = request.FuelType,
-                Transmission = request.Transmission,
-                Color = request.Color,
-                Description = request.Description,
-                CreatedAt = DateTime.Now,
-                UpdatedAt = null,
-                ImageUrls = request.ImageUrls,
-                UserId = userId
-            };
-
+            Car car = request.ToEntity(userId);
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
+
             await _context.Entry(car).Reference(c => c.User).LoadAsync();
 
-            return new CarDetailsDto
-            {
-                Id = car.Id,
-                Make = car.Make,
-                Model = car.Model,
-                Year = car.Year,
-                Price = car.Price,
-                Mileage = car.Mileage,
-                FuelType = car.FuelType,
-                Transmission = car.Transmission,
-                Color = car.Color,
-                Description = car.Description,
-                CreatedAt = car.CreatedAt,
-                UpdatedAt = car.UpdatedAt,
-
-                SellerId = car.UserId,
-                SellerFirstName = car.User.FirstName,
-                SellerLastName = car.User.LastName,
-                SellerPhoneNumber = car.User.PhoneNumber,
-
-                ImageUrls = car.ImageUrls
-            };
+            return car.DetailsDto();
         }
 
         public async Task<CarDetailsDto?> GetCarDetailsAsync(int id)
@@ -112,28 +53,7 @@ namespace Autovibe.API.Services
             {
                 throw new NotFoundException("Car not found");
             }
-            return new CarDetailsDto
-            {
-                Id = car.Id,
-                Make = car.Make,
-                Model = car.Model,
-                Year = car.Year,
-                Price = car.Price,
-                Mileage = car.Mileage,
-                FuelType = car.FuelType,
-                Transmission = car.Transmission,
-                Color = car.Color,
-                Description = car.Description,
-                CreatedAt = car.CreatedAt,
-                UpdatedAt = car.UpdatedAt,
-
-                SellerId = car.UserId,
-                SellerFirstName = car.User.FirstName,
-                SellerLastName = car.User.LastName,
-                SellerPhoneNumber = car.User.PhoneNumber,
-
-                ImageUrls = car.ImageUrls ?? new List<string>()
-            };
+            return car.DetailsDto();
         }
 
         public async Task<PageResponse<CarListDto>> GetAllAsync(int pageNumber, int pageSize, int? minYear, int? maxYear)
@@ -142,21 +62,21 @@ namespace Autovibe.API.Services
             {
                 throw new BadRequestException("Page number cannot be less than 1.");
             }
-            if(pageSize < 1 || pageSize > 9)
+            if (pageSize < 1 || pageSize > 9)
             {
                 throw new BadRequestException("Page size cannot be less than 1 or greater than 9.");
             }
-            
+
             var query = _context.Cars.AsQueryable();
-            if(minYear.HasValue && (minYear < 1900 || minYear > DateTime.Now.Year))
+            if (minYear.HasValue && (minYear < 1900 || minYear > DateTime.Now.Year))
             {
                 throw new BadRequestException("Min year must be between 1900 and current year.");
             }
-             if(maxYear.HasValue && (maxYear < 1900 || maxYear > DateTime.Now.Year))
+            if (maxYear.HasValue && (maxYear < 1900 || maxYear > DateTime.Now.Year))
             {
                 throw new BadRequestException("Max year must be between 1900 and current year.");
             }
-            if(minYear.HasValue && maxYear.HasValue && minYear.Value > maxYear.Value)
+            if (minYear.HasValue && maxYear.HasValue && minYear.Value > maxYear.Value)
             {
                 throw new BadRequestException("Min year cannot be greater than max year.");
             }
@@ -168,30 +88,14 @@ namespace Autovibe.API.Services
             {
                 query = query.Where(c => c.Year <= maxYear);
             }
-            
+
             var totalItems = await query.CountAsync();
 
             var cars = await query
                 .OrderByDescending(c => c.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(c => new CarListDto
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Year = c.Year,
-                    Price = c.Price,
-                    Mileage = c.Mileage,
-                    FuelType = c.FuelType,
-                    Transmission = c.Transmission,
-                    Color = c.Color,
-                    ShortDescription = c.Description != null && c.Description.Length > 100
-                    ? c.Description.Substring(0, 100) + "..."
-                    : c.Description,
-                    UserId = c.UserId,
-                    ImageUrls = c.ImageUrls ?? new List<string>()
-                }).ToListAsync();
+                .Select(c => c.ListDto()).ToListAsync();
 
             var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
 
@@ -235,8 +139,8 @@ namespace Autovibe.API.Services
                 throw new BadRequestException("Invalid file type. Only images are allowed.");
             }
 
-                string folderPath = Path.Combine("images", "cars");
-                string serverPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folderPath);
+            string folderPath = Path.Combine("images", "cars");
+            string serverPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folderPath);
             if (!Directory.Exists(serverPath))
             {
                 Directory.CreateDirectory(serverPath);
@@ -254,7 +158,7 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<CarListDto>> GetUserCarsAsync(int userId, int pageNumber, int pageSize)
         {
-            
+
             var query = _context.Cars
             .AsNoTracking()
             .Where(c => c.UserId == userId);
@@ -264,34 +168,16 @@ namespace Autovibe.API.Services
             var items = await query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(c => new CarListDto
-                {
-                    Id = c.Id,
-                    Make = c.Make,
-                    Model = c.Model,
-                    Year = c.Year,
-                    Price = c.Price,
-                    Mileage = c.Mileage,
-                    FuelType = c.FuelType,
-                    Transmission = c.Transmission,
-                    Color = c.Color,
-                    ShortDescription = c.Description != null && c.Description.Length > 100
-                    ? c.Description.Substring(0, 100) + "..."
-                    : c.Description,
-
-                    UserId = c.UserId,
-
-                    ImageUrls = c.ImageUrls ?? new List<string>()
-                })
+                .Select(c => c.ListDto())
                 .ToListAsync();
 
-                return new PageResponse<CarListDto>
-                {
-                    Items = items,
-                    TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
-                    PageNumber = pageNumber,
-                    PageSize = pageSize
-                };
+            return new PageResponse<CarListDto>
+            {
+                Items = items,
+                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
+                PageNumber = pageNumber,
+                PageSize = pageSize
+            };
         }
     }
 }

@@ -20,7 +20,7 @@ public class CarDetailsDto
     public DateTime? CreatedAt {get; set; }
     public DateTime? UpdatedAt {get; set; }
 
-    public int SellerId {get; set; }
+    public int? SellerId {get; set; }
     public string? SellerFirstName {get; set; }
     public string? SellerLastName {get; set; }
     public string? SellerPhoneNumber {get; set; }
