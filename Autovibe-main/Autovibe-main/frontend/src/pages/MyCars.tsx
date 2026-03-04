@@ -22,6 +22,7 @@ function MyCars() {
       navigate("/login");
       return;
     }
+    
     dispatch(setLoading(true));
     dispatch(clearError());
     const fetchCars = async () => {

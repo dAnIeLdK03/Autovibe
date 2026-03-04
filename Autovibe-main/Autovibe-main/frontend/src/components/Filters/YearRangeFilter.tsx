@@ -2,20 +2,22 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 
 interface YearRangeProps {
-  value: {min: string, max: string};
+  value: { min: string, max: string };
   onFilterChange: (range: { min: string; max: string }) => void;
 }
 
-const YearRangeFilter = ({value,  onFilterChange }: YearRangeProps) => {
+const YearRangeFilter = ({ value, onFilterChange }: YearRangeProps) => {
   const minLimit = 1900;
   const maxLimit = 2026
+  const isFiltered = value.min !== "" || value.max !== "";
+  const showReset = isFiltered;
 
-const currentRange : [number, number] = [
+  const currentRange: [number, number] = [
     value.min ? parseInt(value.min) : minLimit,
     value.max ? parseInt(value.max) : maxLimit,
-];
+  ];
 
-const handleUpdate = (val: number | number[]) => {
+  const handleUpdate = (val: number | number[]) => {
     if (Array.isArray(val)) {
       onFilterChange({
         min: val[0].toString(),
@@ -23,8 +25,9 @@ const handleUpdate = (val: number | number[]) => {
       });
     }
   };
+
   return (
-    <div className="flex flex-col gap-3 min-w-[240px] bg-slate-800/80 p-5 rounded-2xl border border-slate-700">
+    <div className="flex flex-col gap-3 min-w-[240px] bg-slate-800/80 p-5 rounded-2xl border border-slate-700 ">
       <div className="flex justify-between items-center">
         <span className="text-[11px] uppercase font-bold text-slate-500">Year Range</span>
         <span className="text-xs font-mono text-[#70FFE2] bg-slate-900 px-2 py-0.5 rounded">
@@ -32,12 +35,12 @@ const handleUpdate = (val: number | number[]) => {
         </span>
       </div>
 
-      <div className="py-4">
+      <div className="flex flex-col items-center gap-4">
         <Slider
           range
           min={minLimit}
           max={maxLimit}
-          value={currentRange} 
+          value={currentRange}
           onChange={handleUpdate}
           styles={{
             track: { backgroundColor: "#70FFE2" },
@@ -45,6 +48,14 @@ const handleUpdate = (val: number | number[]) => {
             handle: { borderColor: "#70FFE2", backgroundColor: "#0f172a" }
           }}
         />
+        {showReset && (
+          <button
+            className="px-6 py-2 bg-slate-800 hover:bg-slate-600 text-[#70FFE2] text-xs font-bold rounded-lg transition-all border border-slate-700"
+            onClick={() => onFilterChange({ min: "", max: "" })}
+          >
+            Reset
+          </button>
+        )}
       </div>
     </div>
   );
