@@ -7,6 +7,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import { deleteUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../stores/authSlice';
+import ChangePassword from '../components/ChangePassword';
 
 function Profile() {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -15,9 +16,14 @@ function Profile() {
     const dispatch = useDispatch();
     const [isEditOpen, setIsEditOpen] = useState(false);
     const navigate = useNavigate();
+    const [isPassChangeOpen, setIsPassChangeOpen] = useState(false);
 
     const handleEdit = () => {
         setIsEditOpen(true);
+    };
+
+    const handlePassChange =() => {
+        setIsPassChangeOpen(true);
     };
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);  
 
@@ -107,7 +113,13 @@ function Profile() {
                   onConfirmClick={handleDelete}
                   onClose={() => setShowDeleteConfirm(false)}
                 />
+                <button
+                  className="mr-2 flex-1 px-3 py-2 bg-green-800 hover:bg-slate-700 text-white text-sm font-bold rounded-lg transition-all ml-3"
+                    onClick={handlePassChange}>
+                    Change Password
+                </button>
             </div>
+            {isPassChangeOpen && <ChangePassword isOpen={isPassChangeOpen} onClose={() => setIsPassChangeOpen(false)}/>}
             {isEditOpen && <EditUserModal isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} user={user} onSave={handleSave} />}
         </div>
     )

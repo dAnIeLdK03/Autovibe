@@ -114,9 +114,10 @@ namespace Autovibe.API.Services
             {
                 throw new NotFoundException("User not found.");
             }
+            
             if (!BCrypt.Net.BCrypt.Verify(changePasswordDto.CurrentPassword, user.PasswordHash))
             {
-                throw new UnauthorizedException("Invalid password.");
+                throw new BadRequestException("Invalid password.");
             }
             if (changePasswordDto.NewPassword == changePasswordDto.CurrentPassword || changePasswordDto.NewPassword.Length < 6)
             {

@@ -6,6 +6,11 @@ export interface EditUserModalProps{
    user: UserData | null;
    onSave?: (data: UserData) => void;
 }
+export interface EditPasswordModalProps{
+    isOpen: boolean;
+    onClose: () => void;
+    onSave?: (data: PasswordChange) => void;
+}
 
 export interface UserData{
     id?: number;
@@ -13,6 +18,12 @@ export interface UserData{
     firstName?: string;
     lastName?: string;
     phoneNumber?: string;
+}
+
+export interface PasswordChange{
+    CurrentPassword: string;
+    NewPassword: string;
+    ConfirmPassword: string;
 }
 
 export const deleteUser = async(id: number): Promise<void> => {
@@ -26,5 +37,10 @@ export const getUser = async(): Promise<UserData> => {
 
 export const updateUser = async(id: number, data: UserData): Promise<UserData> => {
     const response = await api.put(`/user/${id}`, data);
+    return response.data;
+}
+
+export const UpdatePassword = async(data: PasswordChange) : Promise<PasswordChange> => {
+    const response = await api.put(`/user/change-password`, data);
     return response.data;
 }
