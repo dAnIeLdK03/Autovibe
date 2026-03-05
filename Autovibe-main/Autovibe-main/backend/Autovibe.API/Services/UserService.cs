@@ -11,6 +11,8 @@ using System.Reflection.Metadata;
 using Microsoft.AspNetCore.Mvc;
 using System.Runtime.CompilerServices;
 using System.Security.Claims;
+using BCrypt.Net;
+
 
 
 namespace Autovibe.API.Services
@@ -120,7 +122,7 @@ namespace Autovibe.API.Services
             {
                 throw new BadRequestException("New password must be different from current password and at least 6 characters long.");
             }
-            user.PasswordHash = BCrypt.HashPassword(changePasswordDto.NewPassword);
+            user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(changePasswordDto.NewPassword);
             user.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
