@@ -24,7 +24,6 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
             setTimeout(() => {
                 onClose();
             }, 2000);
-            onClose();
         } catch (err: unknown) {
             const apiMessage = extractApiErrorMessage(err);
             setError(apiMessage);
@@ -54,7 +53,7 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
                         <div>
                             <label className="block text-sm font-medium text-slate-400 mb-1">Current Password</label>
                             <input
-                                type='text'
+                                type='password'
                                 className={`w-full bg-slate-900 border ${errors.CurrentPassword ? 'border-red-500' : 'border-slate-700'} text-white rounded-xl px-4 py-2.5 outline-none`}
                                 {...register("CurrentPassword", { required: "Current Password is required",
                                  })}
@@ -64,10 +63,10 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
                         <div>
                             <label className="block text-sm font-medium text-slate-400 mb-1">New Password</label>
                             <input
-                                type='text'
+                                type='password'
                                 className={`w-full bg-slate-900 border ${errors.NewPassword ? 'border-red-500' : 'border-slate-700'} text-white rounded-xl px-4 py-2.5 outline-none`}
                                 {...register("NewPassword", {
-                                    required: "Current Password is required",
+                                    required: "New password is required",
                                     minLength: {
                                         value: 6,
                                         message: "The new password must be at least 6 characters",
@@ -79,10 +78,10 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
                         <div>
                             <label className="block text-sm font-medium text-slate-400 mb-1">Confirm Password</label>
                             <input
-                                type='text'
+                                type='password'
                                 className={`w-full bg-slate-900 border ${errors.ConfirmPassword ? 'border-red-500' : 'border-slate-700'} text-white rounded-xl px-4 py-2.5 outline-none`}
                                 {...register("ConfirmPassword", {
-                                    required: "Current Password is required",
+                                    required: "Confirm password is required",
                                     validate: (value) =>
                                         value === watch(`NewPassword`) || "Password do not match"
                                 })}

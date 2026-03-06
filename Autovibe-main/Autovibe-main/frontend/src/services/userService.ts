@@ -41,6 +41,5 @@ export const updateUser = async(id: number, data: UserData): Promise<UserData> =
 }
 
 export const UpdatePassword = async(data: PasswordChange) : Promise<void> => {
-    const response = await api.put(`/user/change-password`, data);
-    return response.data;
+    await api.put(`/user/change-password`, data);
 }
