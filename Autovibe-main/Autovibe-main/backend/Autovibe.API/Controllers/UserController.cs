@@ -38,7 +38,7 @@ namespace Autovibe.API.Controllers
                 {
                     throw new NotFoundException("User can't be found.");
                 }
-
+            
                 var result = await _userService.GetUserAsync(userId.Value);
                 if (result == null)
                 {
@@ -64,7 +64,10 @@ namespace Autovibe.API.Controllers
             {
                 throw new UnauthorizedException("You are not allowed to update this user.");
             }
-
+            if (id <= 0)
+            {
+                throw new BadRequestException("Invalid user id.");
+            }
             var result = await _userService.UpdateUserAsync(id, updateDto);
             if (result == null)
             {
@@ -84,7 +87,10 @@ namespace Autovibe.API.Controllers
             {
                 throw new UnauthorizedException("You are not allowed to delete this user.");
             }
-
+            if (id <= 0)
+            {
+                throw new BadRequestException("Invalid user id.");
+            }
             await _userService.DeleteUserAsync(id);
             return NoContent();
         }
@@ -93,9 +99,10 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {
             var userId = User.GetUserId();
-            if (userId is null)
+            if (userId == null)
+            {
                 throw new UnauthorizedException("Unauthorized.");
-
+            }
             await _userService.ChangePasswordAsync(userId.Value, dto);
             return NoContent();
         }

@@ -21,7 +21,7 @@ namespace Autovibe.API.Controllers
     {
         private readonly ICarService _carService;
 
-        public CarsController( ICarService carService)
+        public CarsController(ICarService carService)
         {
             _carService = carService;
         }
@@ -31,11 +31,11 @@ namespace Autovibe.API.Controllers
         [HttpGet]
         public async Task<ActionResult<PageResponse<CarListDto>>> GetCars(int pageNumber = 1, int pageSize = 10, int? minYear = null, int? maxYear = null)
         {
-            
+
             var result = await _carService.GetAllAsync(pageNumber, pageSize, minYear, maxYear);
-            if(result == null)
+            if (result == null)
             {
-             throw new NotFoundException("No cars found.");   
+                throw new NotFoundException("No cars found.");
             }
 
             return Ok(new PageResponse<CarListDto>
@@ -51,29 +51,33 @@ namespace Autovibe.API.Controllers
         [Authorize]
         public async Task<ActionResult<PageResponse<CarListDto>>> GetMyCars(int pageNumber = 1, int pageSize = 9)
         {
-            
+
             var userId = User.GetUserId();
-            if(userId == null)
+            if (userId == null)
             {
                 throw new UnauthorizedException("Unauthorized");
             }
             var result = await _carService.GetUserCarsAsync(userId.Value, pageNumber, pageSize);
 
-            return Ok(result);        
+            return Ok(result);
         }
 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<CarDetailsDto>> GetCar(int id)
         {
-           
-            var result = await _carService.GetCarDetailsAsync(id);
-            if(result == null)
+            if (id <= 0)
             {
-               throw new NotFoundException("Car not found.");  
+                throw new BadRequestException("Invalid car id.");
+            }
+            var result = await _carService.GetCarDetailsAsync(id);
+
+            if (result == null)
+            {
+                throw new NotFoundException("Car not found.");
             }
 
-            
+
             return Ok(result);
         }
 
@@ -82,12 +86,12 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult<CarCreateDto>> CreateCar([FromBody] CarCreateDto createDto)
         {
             var userId = User.GetUserId();
-            if(userId == null)
+            if (userId == null)
             {
                 throw new UnauthorizedException("Unauthorized");
             }
             var result = await _carService.CreateAsync(createDto, userId.Value);
-            if(result == null)
+            if (result == null)
             {
                 throw new BadRequestException("Failed to create car.");
             }
@@ -100,19 +104,22 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult<CarUpdateDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
         {
             var userId = User.GetUserId();
-            if(userId == null)
+            if (userId == null)
             {
                 throw new UnauthorizedException("Unauthorized");
             }
+            if (id <= 0)
+            {
+                throw new BadRequestException("Invalid car id.");
+            }
             var result = await _carService.UpdateAsync(id, updateDto, userId.Value);
-
             if (result == null)
             {
-                throw new NotFoundException("Car not found or you do not have permission to update this car." );
+                throw new NotFoundException("Car not found or you do not have permission to update this car.");
             }
 
             return Ok(result);
-            
+
         }
 
         //DELETE: api/cars/{id}
@@ -120,9 +127,13 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult> DeleteCar(int id)
         {
             var userId = User?.GetUserId();
-            if(userId == null)
+            if (userId == null)
             {
                 throw new UnauthorizedException("Unauthorized");
+            }
+            if (id <= 0)
+            {
+                throw new BadRequestException("Invalid car id.");
             }
             await _carService.DeleteAsync(id, userId.Value);
             return NoContent();
@@ -137,10 +148,12 @@ namespace Autovibe.API.Controllers
             {
                 var imageUrl = await _carService.UploadImageAsync(file);
                 return Ok(new { url = imageUrl });
-            }catch(ArgumentException)
+            }
+            catch (ArgumentException)
             {
-               throw new BadRequestException("Invalid file type. Only images are allowed.");
-            }catch(Exception)
+                throw new BadRequestException("Invalid file type. Only images are allowed.");
+            }
+            catch (Exception)
             {
                 throw new InternalException("Failed to upload image.");
             }
