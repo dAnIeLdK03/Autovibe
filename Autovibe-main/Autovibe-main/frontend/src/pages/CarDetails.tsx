@@ -196,12 +196,12 @@ export default function CarDetails() {
 
             <p>
               <span className="font-semibold">Created on:</span>{" "}
-              {new Date(car.createdAt).toLocaleString()}
+              {car.createdAt ? new Date(car.createdAt).toLocaleString() : "Unknown"}
             </p>
 
             <p>
               <span className="font-semibold">Updated on :</span>{" "}
-              {new Date(car.updatedAt).toLocaleString()}
+              {car.updatedAt ? new Date(car.updatedAt).toLocaleString() : "Unknown"}
             </p>
           </div>
 

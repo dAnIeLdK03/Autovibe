@@ -63,6 +63,7 @@ namespace Autovibe.API.Services.Helpers
                 Transmission = request.Transmission,
                 Color = request.Color,
                 Description = request.Description,
+                CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
 
                 ImageUrls = request.ImageUrls ?? new List<string>(),

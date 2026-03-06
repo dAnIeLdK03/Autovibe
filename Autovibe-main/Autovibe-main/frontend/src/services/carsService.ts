@@ -14,8 +14,8 @@ export interface CarDetails {
     transmission: string;
     color: string;
     description: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 
     sellerId: number;
     sellerFirstName: string;
