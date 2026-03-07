@@ -27,7 +27,7 @@ namespace Autovibe.API.Services
             }
              if(car.UserId != userId)
             {
-                throw new ForbbidenException("You do not have permission do delete this car");
+                throw new ForbiddenException("You do not have permission do delete this car");
             }
             request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
@@ -121,7 +121,7 @@ namespace Autovibe.API.Services
             }
             if(car.UserId != userId)
             {
-                throw new ForbbidenException("You do not have permission do delete this car");
+                throw new ForbiddenException("You do not have permission do delete this car");
             }
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();

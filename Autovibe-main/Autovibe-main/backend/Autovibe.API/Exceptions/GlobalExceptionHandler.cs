@@ -27,6 +27,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         ConflictException => (StatusCodes.Status409Conflict, exception.Message),
         BadRequestException => (StatusCodes.Status400BadRequest, exception.Message),
         InternalException => (StatusCodes.Status500InternalServerError, exception.Message),
+        ForbiddenException => (StatusCodes.Status403Forbidden, exception.Message),
 
         _ => (StatusCodes.Status500InternalServerError, "Unexpected error occurred.")
     };
