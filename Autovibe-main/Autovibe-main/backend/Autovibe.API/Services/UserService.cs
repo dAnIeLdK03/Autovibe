@@ -114,18 +114,11 @@ namespace Autovibe.API.Services
             {
                 throw new NotFoundException("User not found.");
             }
-             if(changePasswordDto.NewPassword != changePasswordDto.ConfirmPassword)
-            {
-                throw new BadRequestException("New password and confirm password do not match.");
-            }
             if (!BCrypt.Net.BCrypt.Verify(changePasswordDto.CurrentPassword, user.PasswordHash))
             {
                 throw new BadRequestException("Invalid password.");
             }
-            if (changePasswordDto.NewPassword == changePasswordDto.CurrentPassword || changePasswordDto.NewPassword.Length < 6)
-            {
-                throw new BadRequestException("New password must be different from current password and at least 6 characters long.");
-            }
+          
            
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(changePasswordDto.NewPassword);
             user.UpdatedAt = DateTime.UtcNow;
