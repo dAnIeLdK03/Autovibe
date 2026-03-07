@@ -10,13 +10,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
 using Autovibe.API.Services.Helpers;
+using Microsoft.EntityFrameworkCore;
+using System.Runtime.CompilerServices;
+
+
 
 namespace Autovibe.API.Services
 {
 
-    public class CarService(AppDbContext context) : ICarService
+    public class CarService(AppDbContext context, ILogger logger) : ICarService
     {
         private readonly AppDbContext _context = context;
+        private readonly ILogger<CarService> _logger = logger;
 
         public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId)
         {
@@ -31,6 +36,7 @@ namespace Autovibe.API.Services
             }
             request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Car updated. CarId: {CarId}, UserId: {UserId}", car.Id, userId);
             await _context.Entry(car).Reference(c => c.User).LoadAsync();
 
 
@@ -42,6 +48,7 @@ namespace Autovibe.API.Services
             Car car = request.ToEntity(userId);
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Car created. CarId: {CarId}, UserId: {UserId}", car.Id, userId);
 
             await _context.Entry(car).Reference(c => c.User).LoadAsync();
 
@@ -125,6 +132,8 @@ namespace Autovibe.API.Services
             }
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Car deleted. CarId: {CarId}, UserId: {UserId}", car.Id, userId);
+
         }
 
         public async Task<string> UploadImageAsync(IFormFile file)
