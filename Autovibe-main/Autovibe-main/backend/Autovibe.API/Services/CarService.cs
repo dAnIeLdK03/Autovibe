@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
 using Autovibe.API.Services.Helpers;
-using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
 
 
@@ -18,11 +17,19 @@ using System.Runtime.CompilerServices;
 namespace Autovibe.API.Services
 {
 
-    public class CarService(AppDbContext context, ILogger logger) : ICarService
+    public class CarService : ICarService
     {
-        private readonly AppDbContext _context = context;
-        private readonly ILogger<CarService> _logger = logger;
+        private readonly AppDbContext _context;
+        private readonly ILogger<CarService> _logger;
 
+public CarService(
+    AppDbContext context,
+    ILogger<CarService> logger
+)
+        {
+            _context = context;
+            _logger = logger;
+        }
         public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);

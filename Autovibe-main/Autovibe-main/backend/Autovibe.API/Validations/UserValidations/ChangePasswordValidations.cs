@@ -1,3 +1,6 @@
+using FluentValidation;
+using Autovibe.API.DTOs.Users;
+
 namespace Autovibe.API.Validations
 {
     public class ChangePasswordValidations : AbstractValidator<ChangePasswordDto>
