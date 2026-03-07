@@ -47,6 +47,8 @@ function Profile() {
           navigate("/cars");
         } catch (error) {
           setError("Unable to delete account.");
+        }finally{
+          setLoading(false);
         }
       };
       if(loading){
