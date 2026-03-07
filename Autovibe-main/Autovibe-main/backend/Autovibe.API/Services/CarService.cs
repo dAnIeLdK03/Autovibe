@@ -25,7 +25,7 @@ namespace Autovibe.API.Services
             {
                 throw new NotFoundException("Car not found");
             }
-             if(car.UserId != userId)
+            if (car.UserId != userId)
             {
                 throw new ForbiddenException("You do not have permission do delete this car");
             }
@@ -119,7 +119,7 @@ namespace Autovibe.API.Services
             {
                 throw new NotFoundException("Car not found");
             }
-            if(car.UserId != userId)
+            if (car.UserId != userId)
             {
                 throw new ForbiddenException("You do not have permission do delete this car");
             }
@@ -165,6 +165,14 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<CarListDto>> GetUserCarsAsync(int userId, int pageNumber, int pageSize)
         {
+            if (pageNumber < 1 || pageNumber > 100)
+            {
+                throw new BadRequestException("Page number cannot be less than 1.");
+            }
+            if (pageSize < 1 || pageSize > 9)
+            {
+                throw new BadRequestException("Page size cannot be less than 1 or greater than 9.");
+            }
 
             var query = _context.Cars
             .AsNoTracking()
