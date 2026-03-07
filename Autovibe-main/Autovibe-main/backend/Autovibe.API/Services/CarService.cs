@@ -21,9 +21,13 @@ namespace Autovibe.API.Services
         public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
-            if (car == null || car.UserId != userId)
+            if (car == null)
             {
-                throw new NotFoundException("Car not found or you do not have permission to update this car.");
+                throw new NotFoundException("Car not found");
+            }
+             if(car.UserId != userId)
+            {
+                throw new ForbbidenException("You do not have permission do delete this car");
             }
             request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
@@ -111,11 +115,14 @@ namespace Autovibe.API.Services
         public async Task DeleteAsync(int id, int userId)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
-            if (car == null || car.UserId != userId)
+            if (car == null)
             {
-                throw new NotFoundException("Car not found or you do not have permission to delete this car.");
+                throw new NotFoundException("Car not found");
             }
-
+            if(car.UserId != userId)
+            {
+                throw new ForbbidenException("You do not have permission do delete this car");
+            }
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
         }
