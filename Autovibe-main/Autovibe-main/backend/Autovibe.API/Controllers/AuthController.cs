@@ -39,8 +39,6 @@ namespace Autovibe.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register([FromBody] UserRegisterDto registerDto)
         {
-            try
-            {
                 var result = await _authService.Enroll(registerDto);
                 if (result == null)
                 {
@@ -50,19 +48,13 @@ namespace Autovibe.API.Controllers
 
                 return CreatedAtAction(nameof(Register), new { id = result.Id }, result);
 
-            }
-            catch (Exception ex)
-            {
-                throw new BadRequestException(ex.Message);
-            }
+            
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponseDto>> Login([FromBody] UserLoginDto loginDto)
         {
-            try
-            {
 
                 var response = await _authService.Sign(loginDto);
                 if (response == null)
@@ -71,11 +63,6 @@ namespace Autovibe.API.Controllers
                 }
 
                 return Ok(response);
-            }
-            catch (Exception ex)
-            {
-                throw new BadRequestException(ex.Message);
-            }
         }
 
     }
