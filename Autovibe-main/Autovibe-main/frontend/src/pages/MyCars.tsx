@@ -7,6 +7,7 @@ import { setCars, setLoading, setError, clearError } from "../stores/carsSlice";
 import CarCard from "../components/Car/CarCard";
 import ConfirmDialog from "../components/ConfirmDialog";
 import EmptyState from "../components/UX/EmptyState";
+import Pagination from "../components/pagePagination";
 
 function MyCars() {
   const navigate = useNavigate();
@@ -16,21 +17,27 @@ function MyCars() {
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [carIdToDelete, setCarIdToDelete] = useState<number | null>(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     if (!isAuthenticated || !user?.id) {
       navigate("/login");
       return;
     }
+    if(page === undefined || page === null) return;
     
     dispatch(setLoading(true));
     dispatch(clearError());
     const fetchCars = async () => {
+      dispatch(setLoading(true));
+      dispatch(clearError());
       try {
-        const response = await getCarsByUserId(1, 10);
+        const response = await getCarsByUserId(page, 9);
         const allCars = response.items ?? [];
         const myCars = allCars.filter((c) => c.userId === user.id);
         dispatch(setCars(myCars));
+        setTotalPages(response.totalPages ?? 0);
       } catch (err: unknown) {
         const msg = err && typeof err === "object" && "message" in err ? String((err as { message: string }).message) : "Unable to load your cars.";
         dispatch(setError(msg));
@@ -39,7 +46,7 @@ function MyCars() {
       }
     };
     fetchCars();
-  }, [user?.id, isAuthenticated, navigate, dispatch]);
+  }, [page, user?.id, isAuthenticated, navigate, dispatch]);
 
   const handleDeleteClick = (id: number) => {
     setCarIdToDelete(id);
@@ -114,6 +121,14 @@ function MyCars() {
             />
           ))}
         </div>
+        <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage: number) => {
+              setPage(newPage);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
+          />
       </div>
 
       <ConfirmDialog

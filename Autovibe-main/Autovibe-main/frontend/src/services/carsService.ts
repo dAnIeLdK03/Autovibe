@@ -114,11 +114,20 @@ export const getCars = async (page: number, pageSize: number, minYear?: number, 
 };
 
 export const getCarsByUserId = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
-    const response = await api.get<CarsPageResponse>(`/cars/my-cars?pageNumber=${page}&pageSize=${pageSize}`);const data = response.data;
+     const params = new URLSearchParams();
+    params.append('pageNumber', page.toString());
+    params.append('pageSize', pageSize.toString());
+
+    const response = await api.get<CarsPageResponse>(`/cars/my-cars?${params.toString()}`);
+    const data = response.data;
     if (!data || !Array.isArray(data.items)) {
         throw new Error("Unable to load cars.");
     }
-    return { items: data.items, totalPages: data.totalPages ?? 0, pageNumber: data.pageNumber ?? page, pageSize: data.pageSize ?? pageSize };
+    return { 
+        items: data.items, 
+        totalPages: data.totalPages ?? 0, 
+        pageNumber: data.pageNumber ?? page, 
+        pageSize: data.pageSize ?? pageSize };
 };
 
 export const getCarById = async (id: number): Promise<CarDetails> => {
