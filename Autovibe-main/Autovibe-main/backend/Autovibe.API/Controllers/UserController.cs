@@ -19,12 +19,10 @@ namespace Autovibe.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly ILogger<UserController> _logger;
 
         public UserController(IUserService userService, ILogger<UserController> logger)
         {
             _userService = userService;
-            _logger = logger;
         }
 
         [HttpGet]
@@ -47,10 +45,9 @@ namespace Autovibe.API.Controllers
 
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                _logger.LogError(ex, "An error occurred while retrieving the user.");
-                return StatusCode(500, "An error occurred while retrieving the user.");
+                throw new BadRequestException("Something went wrong with loading user");
             }
         }
 
@@ -73,7 +70,6 @@ namespace Autovibe.API.Controllers
             {
                 throw new NotFoundException("User not found.");
             }
-
 
             return Ok(result);
 

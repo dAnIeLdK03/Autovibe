@@ -24,7 +24,6 @@ namespace Autovibe.API.Services
     public class AuthService : IAuthService
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<AuthService> _logger;
         private readonly JwtSettings _jwtSettings;
         
         public AuthService(
@@ -33,7 +32,6 @@ namespace Autovibe.API.Services
             IOptions<JwtSettings> jwtOptions)
         {
             _context = context;
-            _logger = logger;
             _jwtSettings = jwtOptions.Value;
         }
 

@@ -20,15 +20,12 @@ namespace Autovibe.API.Services
     public class CarService : ICarService
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<CarService> _logger;
 
-public CarService(
-    AppDbContext context,
-    ILogger<CarService> logger
-)
+        public CarService(
+            AppDbContext context
+        )
         {
             _context = context;
-            _logger = logger;
         }
         public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId)
         {
@@ -43,7 +40,6 @@ public CarService(
             }
             request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Car updated. CarId: {CarId}, UserId: {UserId}", car.Id, userId);
             await _context.Entry(car).Reference(c => c.User).LoadAsync();
 
 
@@ -55,7 +51,6 @@ public CarService(
             Car car = request.ToEntity(userId);
             _context.Cars.Add(car);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Car created. CarId: {CarId}, UserId: {UserId}", car.Id, userId);
 
             await _context.Entry(car).Reference(c => c.User).LoadAsync();
 
@@ -139,7 +134,6 @@ public CarService(
             }
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
-            _logger.LogInformation("Car deleted. CarId: {CarId}, UserId: {UserId}", car.Id, userId);
 
         }
 

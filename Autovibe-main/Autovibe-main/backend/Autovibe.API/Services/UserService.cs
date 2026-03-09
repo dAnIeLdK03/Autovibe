@@ -20,7 +20,6 @@ namespace Autovibe.API.Services
     public class UserService : IUserService
     {
         private readonly AppDbContext _context;
-        private readonly ILogger<UserService> _logger;
 
         public UserService(
             AppDbContext context,
@@ -28,7 +27,6 @@ namespace Autovibe.API.Services
         )
         {
             _context = context;
-            _logger = logger;
         }
 
         public async Task<UserDto> GetUserAsync(int id)
