@@ -12,10 +12,10 @@ export interface CarFormValues {
 }
 
 const CarCreateValidaions = (form : CarFormValues) : string | null => {
-    if (!form.make.trim() || !form?.make) {
+    if (!form?.make || !form.make.trim()) {
         return "Make is Required.";
     }
-        if (!form.model.trim()) {
+        if (!form?.model || !form.model.trim()) {
           return "Model is Required.";
         }
         if (form.year < 1900 || form.year > new Date().getFullYear()) {
@@ -32,13 +32,13 @@ const CarCreateValidaions = (form : CarFormValues) : string | null => {
         if(form.mileage <= 0){
             return "Mileage must be greater than 0.";
         }
-        if(form.fuelType.trim() === ""){
+        if(!form?.fuelType || form.fuelType.trim() === ""){
             return "Fuel type is required.";
         }
-        if(form.transmission.trim() === ""){
+        if(!form?.transmission || form.transmission.trim() === ""){
             return "Transmission is required.";
         }
-        if(form.color.trim() === ""){
+        if(!form?.color || form.color.trim() === ""){
             return "Color is required.";
         }
         return null;

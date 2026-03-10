@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import type { CarFormValues } from '../../Validations/CarValidations/CarCreateValidaions';
 import type { RootState } from '../../stores/store';
-
+import FuelSelector from '../FuelSelector';
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -14,10 +14,12 @@ interface CarFormProps {
 }
 
 function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", title = "Create Ad" }: CarFormProps) {
-    const { register, formState: { errors } } = useFormContext<CarFormValues>();
+    const { register, formState: { errors }, setValue } = useFormContext<CarFormValues>();
     const { error } = useSelector((state: RootState) => state.cars)
     const { loading } = useSelector((state: RootState) => state.cars)
     const navigate = useNavigate();
+    const [fuelType, setFuelType] = useState("Fuel");
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
@@ -91,18 +93,13 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
                 />
                 {errors.mileage && <span className="text-red-500 text-sm">{errors.mileage.message as string}</span>}
 
-                <select
-                    title='fuelType'
-                    className="mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-                    {...register("fuelType", {
-                        required: "Fuel type is required"
-                    })}
-                >
-                    <option value="">Fuel Type</option>
-                    <option value="Petrol">Petrol</option>
-                    <option value="Diesel">Diesel</option>
-                    <option value="Hybrid">Hybrid</option>
-                </select>
+                <FuelSelector
+                    value={fuelType}
+                    onChange={(val) => {
+                        setFuelType(val);
+                        setValue("fuelType", val);
+                    }}
+                />
                 {errors.fuelType && <span className="text-red-500 text-sm">{errors.fuelType.message as string}</span>}
 
                 <select

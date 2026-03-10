@@ -1,13 +1,13 @@
 import { Check, ChevronDown, ListOrdered } from 'lucide-react';
 import { useState } from 'react'
 
-interface FuelTypeProps {
+export interface FuelTypeProps {
   value: string,
   onChange: (value: string) => void
 }
 
-const fuelTypeOptions = [
-  {id: 'All', label: 'All'},
+export const fuelTypeOptions = [
+  {id: 'Fuel', label: 'Fuel'},
   {id: 'Petrol', label:'Petrol'},
   {id: 'Diesel', label:'Diesel'},
   {id: 'Hybrid', label:'Hybrid'},

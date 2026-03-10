@@ -14,10 +14,10 @@ import YearRangeFilter from '../components/Filters/YearRangeFilter';
 function CarList() {
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
-  const [fuelType, setFuelType] = useState("All");
+  const [fuelType, setFuelType] = useState("Fuel");
   const [sortType, setSortType] = useState("None");
   const filteredCars = cars.filter((car) =>
-    fuelType === "All" || car.fuelType === fuelType
+    fuelType === "Fuel" || car.fuelType === fuelType
   );
 
   const [page, setPage] = useState(1);
