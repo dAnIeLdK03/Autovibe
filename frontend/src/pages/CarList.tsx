@@ -22,8 +22,8 @@ function CarList() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [filters, setFilters] = useState({ min: "", max: "" });
-  const [debouncedFilters, setDebouncedFilters] = useState(filters);
+  const [yearFilters, setYearFilters] = useState({ min: "", max: "" });
+  const [debouncedFilters, setDebouncedFilters] = useState(yearFilters);
 
   const sortedCars = [...filteredCars].sort((a, b) => {
     switch (sortType) {
@@ -43,16 +43,16 @@ function CarList() {
     }
   });
   const handleFilterChange = (newRange: { min: string; max: string }) => {
-    setFilters(newRange);
+    setYearFilters(newRange);
     setPage(1);
   }
 
     useEffect(() => {
       const handler = setTimeout(() => {
-        setDebouncedFilters(filters)
+        setDebouncedFilters(yearFilters)
       }, 1000)
       return () => clearTimeout(handler)
-    }, [filters])
+    }, [yearFilters])
 
     useEffect(() => {
       if (page === undefined || page === null) return;
@@ -113,7 +113,8 @@ function CarList() {
 
           </div>
 
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-4"> 
+
             <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
               Fuel type
             </span>
@@ -121,6 +122,7 @@ function CarList() {
               value={fuelType}
               onChange={(val) => setFuelType(val)}
             />
+
             <div className="flex items-center gap-3 mb-4">
               <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
                 Sort by:
@@ -130,12 +132,14 @@ function CarList() {
                 onChange={(val) => setSortType(val)}
               />
             </div>
+
+
             <div className="flex items-center gap-3 mb-4">
               <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
                 Year:
               </span>
               <YearRangeFilter
-                value={filters}
+                value={yearFilters}
                 onFilterChange={handleFilterChange}
               />
             </div>

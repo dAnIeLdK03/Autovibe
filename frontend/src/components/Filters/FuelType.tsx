@@ -1,10 +1,7 @@
 import { Check, ChevronDown, ListOrdered } from 'lucide-react';
 import { useState } from 'react'
+import type { FilterSelectProps } from './common';
 
-export interface FuelTypeProps {
-  value: string,
-  onChange: (value: string) => void
-}
 
 export const fuelTypeOptions = [
   {id: 'Fuel', label: 'Fuel'},
@@ -13,7 +10,7 @@ export const fuelTypeOptions = [
   {id: 'Hybrid', label:'Hybrid'},
 ];
 
-export default function FuelType({value, onChange}: FuelTypeProps) {
+export default function FuelType({value, onChange}: FilterSelectProps) {
 
   const [isOpen, setIsOpen] = useState(false);
   const currentOption = fuelTypeOptions.find((opt) => opt.id === value)?.label || "All";
