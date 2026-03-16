@@ -21,7 +21,7 @@ function Navbar() {
 
 
   const handleLogout = async () => {
-    setShowConfirm(true);
+    setShowConfirm(false);
     dispatch(logout());
     localStorage.removeItem("token");
     navigate("/login");
