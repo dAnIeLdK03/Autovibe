@@ -3,8 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
 import { logout } from "../stores/authSlice";
 import Menu from "./Menu";
+import { useState } from "react";
+import ConfirmDialog from "./ConfirmDialog";
 
 function Navbar() {
+  const [showConfirm, setShowConfirm] = useState(false);  
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector(
@@ -18,6 +21,7 @@ function Navbar() {
 
 
   const handleLogout = async () => {
+    setShowConfirm(true);
     dispatch(logout());
     localStorage.removeItem("token");
     navigate("/login");
@@ -51,11 +55,18 @@ function Navbar() {
                   Hello, {user.firstName}
                 </span>
                 <button
-                  onClick={handleLogout}
+                  onClick={() => setShowConfirm(true)}
                   className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md text-sm font-semibold transition-all shadow-md active:scale-95"
                 >
                   Logout
                 </button>
+                <ConfirmDialog
+                  isOpen={showConfirm}
+                  title="Logout"
+                  message="Are you sure you want to leave?"
+                  onConfirmClick={handleLogout}
+                  onClose={() => setShowConfirm(false)}
+                />
                 <Menu  />
               </>
             ) : (
