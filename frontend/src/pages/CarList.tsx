@@ -5,7 +5,6 @@ import { getCars } from '../services/carsService';
 import { setCars, setLoading, setError, clearError} from '../stores/carsSlice';
 import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
-import LoadingSpinner from '../components/UX/LoadingSpinner';
 import EmptyState from '../components/UX/EmptyState';
 import SortedCars from '../components/Car/SortedCars';
 import FuelType from '../components/Filters/FuelType';
@@ -13,6 +12,7 @@ import YearRangeFilter from '../components/Filters/YearRangeFilter';
 import Transmission from '../components/Filters/Transmission';
 import Mileage from '../components/Filters/Mileage';
 import matchesFilters from './Helpers/matchFilters';
+import { SkeletonLoader } from '../components/UX/SkeletonLoader';
 
 
 
@@ -90,7 +90,8 @@ function CarList() {
       return (
         <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
           <div className="flex justify-center m-5">
-            <LoadingSpinner />
+            <SkeletonLoader type="details" count={6}/>
+
           </div>
         </div>
       );

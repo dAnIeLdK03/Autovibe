@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 import type { RootState } from "../stores/store";
 import ConfirmDialog from "../components/ConfirmDialog";
 import { getImageUrl } from "../utils/getImageUrl";
-import LoadingSpinner from "../components/UX/LoadingSpinner";
 import { setLoading, setError, clearError } from '../stores/carsSlice';
+import { SkeletonLoader } from "../components/UX/SkeletonLoader";
 
 export default function CarDetails() {
   const [car, setCar] = useState<CarDetails | null>({
@@ -75,7 +75,7 @@ export default function CarDetails() {
     return (
       <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
     <div className="flex justify-center m-5">
-        <LoadingSpinner />
+        <SkeletonLoader type="card"/>
       </div>
       </div>
     );
@@ -118,12 +118,10 @@ export default function CarDetails() {
           🡰 Back
         </button>
       <div className="max-w-3xl mx-auto">
-        {/* Heading */}
         <h1 className="text-4xl font-bold text-white mb-6 text-center">
           {car.make} {car.model} {car.year}
         </h1>
         
-        {/* Main image */}
         <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl">
           {car.imageUrls && car.imageUrls.length > 0 ? (
             <div className="relative">

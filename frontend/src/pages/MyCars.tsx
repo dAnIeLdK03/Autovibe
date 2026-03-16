@@ -8,6 +8,7 @@ import CarCard from "../components/Car/CarCard";
 import ConfirmDialog from "../components/ConfirmDialog";
 import EmptyState from "../components/UX/EmptyState";
 import Pagination from "../components/pagePagination";
+import { SkeletonLoader } from "../components/UX/SkeletonLoader";
 
 function MyCars() {
   const navigate = useNavigate();
@@ -76,12 +77,15 @@ function MyCars() {
 
   if (!isAuthenticated) return null;
 
-  if (loading && cars.length === 0) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="w-8 h-8 border-2 border-[#70FFE2] border-t-transparent rounded-full animate-spin" />
+       <SkeletonLoader type="details" count={3} />
       </div>
     );
+  }
+  if(cars.length === 0){
+    <EmptyState />
   }
 
   if (!loading && !error && cars.length === 0) {

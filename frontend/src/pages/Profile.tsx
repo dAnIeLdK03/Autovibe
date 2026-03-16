@@ -8,6 +8,7 @@ import { deleteUser } from '../services/userService';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../stores/authSlice';
 import ChangePassword from '../components/ChangePassword';
+import { SkeletonLoader } from '../components/UX/SkeletonLoader';
 
 function Profile() {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -54,12 +55,7 @@ function Profile() {
       if(loading){
         return (
           <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
-            <div className="max-w-7xl mx-auto mb-8">
-              <h1 className="text-4xl font-black text-white tracking-tight mb-2">
-                Profile
-              </h1>
-              <p className="text-slate-400 text-2xl">Loading...</p>
-            </div>
+            <SkeletonLoader type='profile' />
           </div>
         );
       }
