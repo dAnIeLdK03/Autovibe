@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { fuelTypeOptions } from "./Filters/FuelType"
-import type { FuelTypeProps } from "./Filters/FuelType";
+import type { FilterSelectProps } from "./Filters/common";
 
-const FuelSelector = ({ value, onChange }: FuelTypeProps) => {
+const FuelSelector = ({ value, onChange }: FilterSelectProps) => {
     const [isOpen, setIsOpen] = useState(false);
 
 

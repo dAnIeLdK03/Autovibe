@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import type { CarFormValues } from '../../Validations/CarValidations/CarCreateValidaions';
 import type { RootState } from '../../stores/store';
 import FuelSelector from '../FuelSelector';
+import TransmissionSelector from '../TransmissionSelector';
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -19,6 +20,7 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
     const { loading } = useSelector((state: RootState) => state.cars)
     const navigate = useNavigate();
     const [fuelType, setFuelType] = useState("Fuel");
+    const [transmissionType, setTransmissionType] = useState("Transmission");
 
 
     return (
@@ -95,24 +97,20 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
 
                 <FuelSelector
                     value={fuelType}
-                    onChange={(val) => {
+                    onChange={(val : any) => {
                         setFuelType(val);
                         setValue("fuelType", val);
                     }}
                 />
                 {errors.fuelType && <span className="text-red-500 text-sm">{errors.fuelType.message as string}</span>}
 
-                <select
-                    title='transmission'
-                    className=" mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-                    {...register("transmission", {
-                        required: "Transmission is required"
-                    })}
-                >
-                    <option value="">Transmission</option>
-                    <option value="Manual">Manual</option>
-                    <option value="Automatic">Automatic</option>
-                </select>
+                <TransmissionSelector
+                    value={transmissionType}
+                    onChange={(val : any) => {
+                        setTransmissionType(val);
+                        setValue("transmission", val);
+                    }}
+                />
                 {errors.transmission && <span className="text-red-500 text-sm">{errors.transmission.message as string}</span>}
 
                 <input
