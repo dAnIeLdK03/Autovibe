@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../stores/store';
 import { getCars } from '../services/carsService';
-import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
+import { setCars, setLoading, setError, clearError} from '../stores/carsSlice';
 import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
 import LoadingSpinner from '../components/UX/LoadingSpinner';
@@ -11,6 +11,11 @@ import SortedCars from '../components/Car/SortedCars';
 import FuelType from '../components/Filters/FuelType';
 import YearRangeFilter from '../components/Filters/YearRangeFilter';
 import Transmission from '../components/Filters/Transmission';
+import Mileage from '../components/Filters/Mileage';
+import matchesFilters from './Helpers/matchFilters';
+
+
+
 
 function CarList() {
   const dispatch = useDispatch();
@@ -18,12 +23,12 @@ function CarList() {
   const [fuelType, setFuelType] = useState("Fuel");
   const [transmission, setTransmission] = useState("Transmission");
   const [sortType, setSortType] = useState("None");
-  const filteredCars = cars.filter((car) =>{
-    const matchesFuels = fuelType === "Fuel" || car.fuelType === fuelType;
-    const matchesTransmission = transmission === "Transmission" || car.transmission == transmission;
+  const [mileageFilter, setMileageFilter] = useState("Mileage");
 
-    return matchesFuels && matchesTransmission;
-  });
+
+ const filteredCars = cars.filter((car) => 
+    matchesFilters(car, {fuelType, transmission, mileageFilter})
+  );
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -134,6 +139,14 @@ function CarList() {
             <Transmission
               value={transmission}
               onChange={(val) => setTransmission(val)}
+            />
+
+             <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
+              Mileage
+            </span>
+            <Mileage
+              value={mileageFilter}
+              onChange={(val) => setMileageFilter(val)}
             />
 
             <div className="flex items-center gap-3 mb-4">
