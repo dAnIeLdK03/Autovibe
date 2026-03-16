@@ -10,15 +10,20 @@ import EmptyState from '../components/UX/EmptyState';
 import SortedCars from '../components/Car/SortedCars';
 import FuelType from '../components/Filters/FuelType';
 import YearRangeFilter from '../components/Filters/YearRangeFilter';
+import Transmission from '../components/Filters/Transmission';
 
 function CarList() {
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
   const [fuelType, setFuelType] = useState("Fuel");
+  const [transmission, setTransmission] = useState("Transmission");
   const [sortType, setSortType] = useState("None");
-  const filteredCars = cars.filter((car) =>
-    fuelType === "Fuel" || car.fuelType === fuelType
-  );
+  const filteredCars = cars.filter((car) =>{
+    const matchesFuels = fuelType === "Fuel" || car.fuelType === fuelType;
+    const matchesTransmission = transmission === "Transmission" || car.transmission == transmission;
+
+    return matchesFuels && matchesTransmission;
+  });
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -123,6 +128,14 @@ function CarList() {
               onChange={(val) => setFuelType(val)}
             />
 
+             <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
+              Transmission
+            </span>
+            <Transmission
+              value={transmission}
+              onChange={(val) => setTransmission(val)}
+            />
+
             <div className="flex items-center gap-3 mb-4">
               <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
                 Sort by:
@@ -144,6 +157,8 @@ function CarList() {
               />
             </div>
           </div>
+
+
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {sortedCars.map((car) => (
