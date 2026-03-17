@@ -8,6 +8,7 @@ export interface Car{
     year: number;
     price: number;
     mileage: number;
+    power: number;
     fuelType: string;
     transmission: string;
     color: string;

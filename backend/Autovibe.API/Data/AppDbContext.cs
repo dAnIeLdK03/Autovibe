@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Models;
+using System.Text.Json;
 
 namespace Autovibe.API.Data;
 
@@ -30,10 +31,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Car>()
             .Property(c => c.ImageUrls)
             .HasConversion(
-                v => v == null || v.Count == 0 ? "[]" : System.Text.Json.JsonSerializer.Serialize(v),
+                v => v == null || v.Count == 0 ? "[]" : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
                 v => string.IsNullOrEmpty(v) || v == "[]" 
                     ? new List<string>() 
-                    : System.Text.Json.JsonSerializer.Deserialize<List<string>>(v) ?? new List<string>()
+                    : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>()
             );
     }
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)

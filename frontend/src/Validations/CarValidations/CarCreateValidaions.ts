@@ -4,6 +4,7 @@ export interface CarFormValues {
     year: number;
     price: number;
     mileage: number;
+    power: number;
     fuelType: string;
     transmission: string;
     color: string;
@@ -31,6 +32,9 @@ const CarCreateValidaions = (form : CarFormValues) : string | null => {
         }
         if(form.mileage <= 0){
             return "Mileage must be greater than 0.";
+        }
+        if(form.power <= 0){
+            return "Power must be greater than 0.";
         }
         if(!form?.fuelType || form.fuelType.trim() === ""){
             return "Fuel type is required.";

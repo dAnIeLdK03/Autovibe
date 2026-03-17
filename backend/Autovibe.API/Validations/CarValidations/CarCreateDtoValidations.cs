@@ -27,7 +27,11 @@ namespace Autovibe.API.Validations
             RuleFor(x => x.Mileage)
             .NotNull().WithMessage("Mileage is required.")
             .GreaterThanOrEqualTo(0).WithMessage("Mileage can't be a negative number.");
-
+            
+            RuleFor(x => x.Power)
+            .NotNull().WithMessage("Power is required.")
+            .GreaterThanOrEqualTo(0).WithMessage("Power can't be a negative number.");
+            
             RuleFor(x => x.FuelType)
             .NotEmpty().WithMessage("Fuel type is required.");
 

@@ -48,6 +48,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton 
                     </p>
                     <p className="text-[10px] text-slate-500 uppercase tracking-widest">Price</p>
                   </div>
+                 
                 </div>
 
                 <p className="text-slate-400 text-sm leading-relaxed mb-6 line-clamp-2">

@@ -14,6 +14,7 @@ namespace Autovibe.API.Services.Helpers
                 Year = c.Year,
                 Price = c.Price,
                 Mileage = c.Mileage,
+                Power = c.Power,
                 FuelType = c.FuelType,
                 Transmission = c.Transmission,
                 Color = c.Color,
@@ -35,6 +36,7 @@ namespace Autovibe.API.Services.Helpers
                 Year = c.Year,
                 Price = c.Price,
                 Mileage = c.Mileage,
+                Power = c.Power,
                 FuelType = c.FuelType,
                 Transmission = c.Transmission,
                 Color = c.Color,
@@ -59,6 +61,7 @@ namespace Autovibe.API.Services.Helpers
                 Year = request.Year,
                 Price = request.Price,
                 Mileage = request.Mileage,
+                Power = request.Power,
                 FuelType = request.FuelType,
                 Transmission = request.Transmission,
                 Color = request.Color,
@@ -79,6 +82,7 @@ namespace Autovibe.API.Services.Helpers
             car.Year = request.Year;
             car.Price = request.Price;
             car.Mileage = request.Mileage;
+            car.Power = request.Power;
             car.FuelType = request.FuelType;
             car.Transmission = request.Transmission;
             car.Color = request.Color;

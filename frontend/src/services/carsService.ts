@@ -10,6 +10,7 @@ export interface CarDetails {
     year: number;
     price: number;
     mileage: number;
+    power: number;
     fuelType: string;
     transmission: string;
     color: string;
@@ -32,6 +33,7 @@ interface CreateCarRequest {
     year: number;
     price: number;
     mileage: number;
+    power: number;
     fuelType: string;
     transmission: string;
     color: string;
@@ -48,6 +50,7 @@ export interface UpdateCarRequest {
     year?: number;
     price?: number;
     mileage?: number;
+    power?: number;
     fuelType?: string;
     transmission?: string;
     color?: string;
@@ -64,6 +67,7 @@ export interface CarCardProps {
         year: number,
         price: number,
         mileage: number,
+        power: number,
         fuelType: string,
         transmission: string,
         color: string,

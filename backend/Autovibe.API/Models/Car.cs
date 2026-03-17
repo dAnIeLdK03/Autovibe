@@ -18,6 +18,7 @@ public class Car
 
 
     public int Mileage {get; set; }
+    public int Power {get; set; }
     public string FuelType {get; set; } = string.Empty;
     public string Transmission {get; set; } = string.Empty;
     public string Color {get; set; } = string.Empty;

@@ -55,7 +55,8 @@ var tokenValidationParameters = new TokenValidationParameters
     ClockSkew = TimeSpan.Zero
 };
 
-builder.Services.AddOpenApi();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 
 
@@ -87,7 +88,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
 
     app.UseSwaggerUI(options => {
        options.SwaggerEndpoint("/openapi/v1.json", "Autovibe Api V1");

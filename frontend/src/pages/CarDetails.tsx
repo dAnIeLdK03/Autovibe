@@ -17,6 +17,7 @@ export default function CarDetails() {
     year: 0,
     price: 0,
     mileage: 0,
+    power: 0,
     fuelType: "",
     transmission: "",
     color: "",
@@ -164,6 +165,9 @@ export default function CarDetails() {
               </p>
               <p>
                 <span className="font-semibold">Mileage:</span> {car.mileage} км
+              </p>
+               <p>
+                <span className="font-semibold">Power:</span> {car.power}
               </p>
               <p>
                 <span className="font-semibold">Fuel:</span> {car.fuelType}

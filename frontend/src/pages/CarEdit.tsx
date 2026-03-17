@@ -43,6 +43,7 @@ const [imageFile, setImageFile] = useState<File | null>(null);
           year: data.year,
           price: data.price,
           mileage: data.mileage,
+          power: data.power,
           fuelType: data.fuelType,
           transmission: data.transmission,
           color: data.color,

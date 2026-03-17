@@ -95,6 +95,18 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
                 />
                 {errors.mileage && <span className="text-red-500 text-sm">{errors.mileage.message as string}</span>}
 
+                <input
+                    type="number"
+                    placeholder="Power"
+                    className=" mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
+                    {...register("power", {
+                        required: "Power is required",
+                        valueAsNumber: true
+
+                    })}
+                />
+                {errors.power && <span className="text-red-500 text-sm">{errors.power.message as string}</span>}
+
                 <FuelSelector
                     value={fuelType}
                     onChange={(val : any) => {
