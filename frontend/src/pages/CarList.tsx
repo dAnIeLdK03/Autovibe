@@ -1,41 +1,40 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../stores/store';
-import { getCars } from '../services/carsService';
+import { getCars, type CarFilters } from '../services/carsService';
 import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
 import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
 import EmptyState from '../components/UX/EmptyState';
-import SortedCars from '../components/Filters/SortedCars';
-import FuelType from '../components/Filters/FuelType';
-import YearRangeFilter from '../components/Filters/YearRangeFilter';
-import Transmission from '../components/Filters/Transmission';
-import Mileage from '../components/Filters/Mileage';
-import matchesFilters from './Helpers/matchFilters';
 import { SkeletonLoader } from '../components/UX/SkeletonLoader';
-import { FaFilter } from 'react-icons/fa';
-import {LuArrowUpDown} from 'react-icons/lu';
+import SortedCars from '../components/Filters/SortedCars';
+import { matchesFilters } from './Helpers/matchFilters';
+import {LuFilter} from 'react-icons/lu';
+import { FilterModal } from '../components/Filters/FilterModal';
 
-
+const initialFilters: CarFilters = {
+  fuelType: "Fuel",
+  transmission: "Transmission",
+  mileage: "Mileage",
+  yearRange: { min: "1900", max: "2026" }
+}
 
 
 function CarList() {
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
-  const [fuelType, setFuelType] = useState("Fuel");
-  const [transmission, setTransmission] = useState("Transmission");
   const [sortType, setSortType] = useState("None");
-  const [mileageFilter, setMileageFilter] = useState("Mileage");
+  const [filters, setFilters] = useState<CarFilters>(initialFilters);
 
 
   const filteredCars = cars.filter((car) =>
-    matchesFilters(car, { fuelType, transmission, mileageFilter })
+    matchesFilters(car, filters)
   );
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [yearFilters, setYearFilters] = useState({ min: "", max: "" });
-  const [debouncedFilters, setDebouncedFilters] = useState(yearFilters);
+  const [debouncedFilters, setDebouncedFilters] = useState(filters.yearRange);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const sortedCars = [...filteredCars].sort((a, b) => {
     switch (sortType) {
@@ -54,45 +53,62 @@ function CarList() {
 
     }
   });
-  const handleFilterChange = (newRange: { min: string; max: string }) => {
-    setYearFilters(newRange);
-    setPage(1);
+
+  const toggleFilters = (isOpen: boolean) => {
+    if(isOpen){
+      document.body.style.overflow = 'hidden';
+    }else{
+      document.body.style.overflow = 'unset';
+    }
+  }
+
+  const updateFilter = (key: any, value: any) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }));
+    setPage(1)
+  };
+
+  const handleApply = () => {
+    setIsModalOpen(false);
   }
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedFilters(yearFilters)
+      setDebouncedFilters(filters.yearRange)
     }, 1000)
     return () => clearTimeout(handler)
-  }, [yearFilters])
-
-  const fetchCars = async () => {
-    dispatch(setLoading(true));
-    dispatch(clearError());
-
-    try {
-      const min = debouncedFilters.min ? parseInt(debouncedFilters.min) : undefined;
-      const max = debouncedFilters.max ? parseInt(debouncedFilters.max) : undefined;
-      const response = await getCars(page, 9, min, max);
-      dispatch(setCars(response.items ?? []));
-      setTotalPages(response.totalPages ?? 0);
-    } catch {
-      dispatch(setError("Unable to load cars."));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+  }, [filters.yearRange])
 
   useEffect(() => {
-    if (page != null)
-      fetchCars();
+    if (page === undefined || page === null) return;
+
+    const fetchCars = async () => {
+      dispatch(setLoading(true));
+      dispatch(clearError());
+
+      try {
+        const min = debouncedFilters.min ? parseInt(debouncedFilters.min) : undefined;
+        const max = debouncedFilters.max ? parseInt(debouncedFilters.max) : undefined;
+        const response = await getCars(page, 9, min, max);
+        dispatch(setCars(response.items ?? []));
+        setTotalPages(response.totalPages ?? 0);
+      } catch {
+        dispatch(setError("Unable to load cars."));
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+    fetchCars();
   }, [page, dispatch, debouncedFilters])
 
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
         <div className="flex justify-center m-5">
-          <SkeletonLoader type="details" count={3} />
+          <SkeletonLoader type="details" count={6} />
+
         </div>
       </div>
     );
@@ -114,50 +130,17 @@ function CarList() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-6 pt-20">
+    <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
       <div className="max-w-7xl mx-auto">
 
-        <div className="mb-5 text-center">
+        <div className="mb-12 text-center">
           <h1 className="text-4xl font-black text-white tracking-tight mb-2">
             Explore Our <span className="text-[#70FFE2]">Fleet</span>
           </h1>
-          
           <p className="text-slate-400">Discover the perfect ride for your next journey.</p>
 
         </div>
-
         <div className="flex items-center gap-3 mb-4">
-          <button className="flex items-center gap-2 p-2 bg-slate-800 rounded-lg text-white">
-            <FaFilter size={16} />
-            <span></span>
-          </button>
-          <button className="flex items-center gap-2 p-2 bg-slate-800 rounded-lg text-white">
-            <LuArrowUpDown size={16} />
-            <span></span>
-          </button>
-          <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
-            Fuel type
-          </span>
-          <FuelType
-            value={fuelType}
-            onChange={(val) => setFuelType(val)}
-          />
-
-          <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
-            Transmission
-          </span>
-          <Transmission
-            value={transmission}
-            onChange={(val) => setTransmission(val)}
-          />
-
-          <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
-            Mileage
-          </span>
-          <Mileage
-            value={mileageFilter}
-            onChange={(val) => setMileageFilter(val)}
-          />
 
           <div className="flex items-center gap-3 mb-4">
             <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
@@ -168,17 +151,31 @@ function CarList() {
               onChange={(val) => setSortType(val)}
             />
           </div>
-
-
-          <div className="flex items-center gap-3 mb-4">
-            <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
-              Year:
-            </span>
-            <YearRangeFilter
-              value={yearFilters}
-              onFilterChange={handleFilterChange}
+          <button
+            onClick={() => {
+              setIsModalOpen(true);
+              toggleFilters(true);
+            }}
+            className="group flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 rounded-2xl text-white transition-all duration-300 shadow-lg shadow-black/20"
+          >
+            <LuFilter
+              className="text-slate-400 group-hover:text-white transition-colors"
+              size={18}
             />
-          </div>
+          </button>
+
+          <FilterModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            filters={filters}
+            updateFilter={updateFilter}
+            onApply={ () => {
+              handleApply();
+              toggleFilters(false);
+            }}
+          />
+
+
         </div>
 
 

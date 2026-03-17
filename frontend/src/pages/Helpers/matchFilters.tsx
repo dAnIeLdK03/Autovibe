@@ -1,10 +1,7 @@
+import type { CarFilters } from "../../services/carsService";
 import type { Car } from "../../stores/carsSlice";
 
-export default function matchesFilters(car: Car, filters: {
-  fuelType: string;
-  transmission: string;
-  mileageFilter: string;
-}) {
+export const matchesFilters = (car: Car, filters: CarFilters) => {
   const matchesFuel =
     filters.fuelType === "Fuel" ||
     car.fuelType === filters.fuelType;
@@ -14,7 +11,7 @@ export default function matchesFilters(car: Car, filters: {
     car.transmission === filters.transmission;
 
   const matchesMileage = (() => {
-  switch (filters.mileageFilter) {
+  switch (filters.mileage) {
      case "Mileage":
     default:
       return true;

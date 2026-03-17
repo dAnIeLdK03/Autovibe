@@ -76,7 +76,14 @@ export interface CarCardProps {
     }
     onDeleteClick?: (id: number) => void;
     showDeletebutton?: boolean;
-}
+};
+
+export interface CarFilters{
+    fuelType: string;
+    transmission: string;
+    mileage: string;
+    yearRange:{min: string, max: string};
+};
 
 
 export interface CarsPageResponse {
