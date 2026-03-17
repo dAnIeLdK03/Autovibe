@@ -6,7 +6,7 @@ import { setCars, setLoading, setError, clearError} from '../stores/carsSlice';
 import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
 import EmptyState from '../components/UX/EmptyState';
-import SortedCars from '../components/Car/SortedCars';
+import SortedCars from '../components/Filters/SortedCars';
 import FuelType from '../components/Filters/FuelType';
 import YearRangeFilter from '../components/Filters/YearRangeFilter';
 import Transmission from '../components/Filters/Transmission';
@@ -64,10 +64,7 @@ function CarList() {
       return () => clearTimeout(handler)
     }, [yearFilters])
 
-    useEffect(() => {
-      if (page === undefined || page === null) return;
-
-      const fetchCars = async () => {
+    const fetchCars = async () => {
         dispatch(setLoading(true));
         dispatch(clearError());
 
@@ -83,15 +80,17 @@ function CarList() {
           dispatch(setLoading(false));
         }
       };
-      fetchCars();
+
+    useEffect(() => {
+      if (page != null)
+        fetchCars();
     }, [page, dispatch, debouncedFilters])
 
     if (loading) {
       return (
         <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
           <div className="flex justify-center m-5">
-            <SkeletonLoader type="details" count={6}/>
-
+            <SkeletonLoader type="details" count={3}/>
           </div>
         </div>
       );
@@ -113,10 +112,10 @@ function CarList() {
     }
 
     return (
-      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
+      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-6 pt-20">
         <div className="max-w-7xl mx-auto">
 
-          <div className="mb-12 text-center">
+          <div className="mb-5 text-center">
             <h1 className="text-4xl font-black text-white tracking-tight mb-2">
               Explore Our <span className="text-[#70FFE2]">Fleet</span>
             </h1>
