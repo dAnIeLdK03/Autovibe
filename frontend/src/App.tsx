@@ -7,7 +7,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CarList from "./pages/CarList";
-import CarDetails from "./pages/CarDetails";
+import CarDetails from "./pages/CarDetails/CarDetails";
 import CarCreate from "./pages/CarCreate";
 import CarEdit from "./pages/CarEdit";
 import MyCars from "./pages/MyCars";

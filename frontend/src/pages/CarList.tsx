@@ -107,7 +107,7 @@ function CarList() {
     return (
       <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
         <div className="flex justify-center m-5">
-          <SkeletonLoader type="details" count={6} />
+          <SkeletonLoader type="details" count={3} />
 
         </div>
       </div>

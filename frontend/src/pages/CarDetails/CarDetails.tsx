@@ -1,76 +1,20 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { deleteCar, getCarById } from "../services/carsService";
-import type { CarDetails } from "../services/carsService";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../stores/store";
-import ConfirmDialog from "../components/ConfirmDialog";
-import { getImageUrl } from "../utils/getImageUrl";
-import { setLoading, setError, clearError } from '../stores/carsSlice';
-import { SkeletonLoader } from "../components/UX/SkeletonLoader";
+import { useState } from "react";
+import type { CarDetails } from "../../services/carsService";
+import { useSelector } from "react-redux";
+import type { RootState } from "../../stores/store";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import { getImageUrl } from "../../utils/getImageUrl";
+import { SkeletonLoader } from "../../components/UX/SkeletonLoader";
+import { useCarDetails } from "./useCarDetails";
+import { useNavigate } from "react-router";
 
 export default function CarDetails() {
-  const [car, setCar] = useState<CarDetails | null>({
-    id: 0,
-    make: "",
-    model: "",
-    year: 0,
-    price: 0,
-    mileage: 0,
-    power: 0,
-    fuelType: "",
-    transmission: "",
-    color: "",
-    description: "",
-    createdAt: new Date(),
-    updatedAt: new Date(),
-
-    sellerId: 0,
-    sellerFirstName: "",
-    sellerLastName: "",
-    sellerPhoneNumber: "",
-
-    imageUrls: [],
-  });
+  const {car, isOwner, handleDelete} = useCarDetails();
   const {loading, error } = useSelector((state: RootState) => state.cars);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { id } = useParams<{ id: string }>();
-  if (!id) {
-    return <h2>No car selected.</h2>;
-  }
-
-  const carId = Number(id);
-
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const isOwner = user && user.id === car?.sellerId;
-
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);  
-
-  useEffect(() => {
-    
-    dispatch(setLoading(true));
-    dispatch(clearError());
-
-    
-    const fetchCar = async () => {
-      try {
-        const data = await getCarById(carId);
-        setCar(data);
-      } catch (error) {
-        dispatch(setError("Unable to load car."));
-        setTimeout(() => {
-          navigate("/cars");
-        }, 3000)
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-    if(id && !isNaN(Number(id))){
-      fetchCar();
-    }
-  }, [id]);
+    const { user, isAuthenticated} = useSelector((state: RootState) => state.auth);
+  if(!car) return <SkeletonLoader type="details"/>
 
    if (loading) {
     return (
@@ -91,25 +35,7 @@ export default function CarDetails() {
   if (car === null) {
     return <h2>Car not found.</h2>;
   }
-  
-  
 
-
-  const handleDelete = async () => {
-    if(car.sellerId !== user?.id){  
-      dispatch(setError("You are not the owner of this car."));
-      return;
-    }
-    dispatch(setLoading(true));
-    dispatch(clearError());
-    try {
-      setShowDeleteConfirm(true);
-      await deleteCar(carId);
-      navigate("/cars");
-    } catch (error) {
-      dispatch(setError("Unable to delete car."));
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
@@ -151,9 +77,7 @@ export default function CarDetails() {
         </div>
 
         
-        {/* Card */}
         <div className="bg-slate-800 shadow-xl rounded-xl p-8 text-slate-200 space-y-8">
-          {/* Main info */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
               Main information
@@ -182,7 +106,6 @@ export default function CarDetails() {
             </div>
           </div>
 
-          {/* Description */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
               Description
@@ -190,7 +113,6 @@ export default function CarDetails() {
             <p className="break-words leading-relaxed text-slate-300 ">{car.description}</p>
           </div>
 
-          {/* Dates */}
           <div>
             <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
               Dates
@@ -208,7 +130,6 @@ export default function CarDetails() {
           </div>
 
 
-          {/* Seller */}
           {!isAuthenticated && (
             <div>
               <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
