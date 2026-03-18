@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import type { RootState } from "../../stores/store";
 import { getCarById, updateCar } from "../../services/carsService";
@@ -8,15 +8,14 @@ import type { CarFormValues } from "../../Validations/CarValidations/CarCreateVa
 import { uploadCarImageIfPresent } from "../../Validations/CarValidations/CarSubmitHelpers";
 import CarCreateValidaions from "../../Validations/CarValidations/CarCreateValidaions";
 import toast from "react-hot-toast";
+import { setLoading, setError, clearError } from '../../stores/carsSlice';
 
 
 export const useCarEdit = () => {
   const { id } = useParams();
   const { user } = useSelector((state: RootState) => state.auth);
-  
-  const [, setError] = useState<string | null>(null);
-  const [, setLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [imageFile, setImageFile] = useState<File | null>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -27,12 +26,12 @@ export const useCarEdit = () => {
     useEffect(() => {
         const fetchCar = async () => {
           if (!id || !user?.id) return;
-          setLoading(true);
-          setError(null);
+          dispatch(setLoading(true));
+          dispatch(clearError());
           try {
             const data = await getCarById(Number(id));
             if (data.sellerId !== user.id) {
-              setError("You are not allowed to edit this car.");
+              dispatch(setError("You are not allowed to edit this car."));
               return;
             }
     
@@ -55,9 +54,9 @@ export const useCarEdit = () => {
             }
     
           } catch {
-            setError("Unable to load car.");
+            dispatch(setError("Unable to load car."));
           } finally {
-            setLoading(false);
+            dispatch(setLoading(false));
           }
         };
         fetchCar();
@@ -66,22 +65,22 @@ export const useCarEdit = () => {
 
       const onSubmit = async (formData: CarFormValues) => {
     if (!id) return;
-    setError(null);
+    dispatch(clearError());
 
     const uploadResult = await uploadCarImageIfPresent(imageFile);
     if (uploadResult.error) {
-      setError(uploadResult.error);
+     dispatch( setError(uploadResult.error));
       return;
     }
     const errorMessage = CarCreateValidaions(formData);
 
     if (errorMessage) {
-      setError(errorMessage);
+      dispatch(setError(errorMessage));
       return;
     }
 
 
-    setLoading(true);
+    dispatch(setLoading(true));
     try {
       await updateCar(
         Number(id),
@@ -93,9 +92,9 @@ export const useCarEdit = () => {
       navigate(`/cars/${id}`);
       toast.success("Car updated successfully!");
     } catch (error: any) {
-      setError(error.response.data?.message ?? "Failed to update car.");
+      dispatch(setError(error.response.data?.message ?? "Failed to update car."));
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 
