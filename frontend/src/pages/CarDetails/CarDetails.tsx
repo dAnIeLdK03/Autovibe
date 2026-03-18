@@ -3,10 +3,10 @@ import type { CarDetails } from "../../services/carsService";
 import { useSelector } from "react-redux";
 import type { RootState } from "../../stores/store";
 import ConfirmDialog from "../../components/ConfirmDialog";
-import { getImageUrl } from "../../utils/getImageUrl";
 import { SkeletonLoader } from "../../components/UX/SkeletonLoader";
 import { useCarDetails } from "./useCarDetails";
 import { useNavigate } from "react-router";
+import CarGallery from "./CarGallery";
 
 export default function CarDetails() {
   const {car, isOwner, handleDelete} = useCarDetails();
@@ -14,7 +14,6 @@ export default function CarDetails() {
   const navigate = useNavigate();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);  
     const { user, isAuthenticated} = useSelector((state: RootState) => state.auth);
-  if(!car) return <SkeletonLoader type="details"/>
 
    if (loading) {
     return (
@@ -49,32 +48,12 @@ export default function CarDetails() {
           {car.make} {car.model} {car.year}
         </h1>
         
-        <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl">
-          {car.imageUrls && car.imageUrls.length > 0 ? (
-            <div className="relative">
-              <img 
-                src={getImageUrl(car.imageUrls[0])} 
-                alt={`${car.make} ${car.model}`} 
-                className="w-full h-[500px] md:h-[600px] object-cover"
-              />
-              <div className="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md text-[#70FFE2] text-sm font-bold px-4 py-2 rounded-full border border-slate-700">
-                {car.year}
-              </div>
-              {car.imageUrls.length > 1 && (
-                <div className="absolute bottom-4 right-4 bg-slate-900/80 backdrop-blur-md text-white text-sm font-bold px-4 py-2 rounded-full border border-slate-700">
-                  {car.imageUrls.length} images
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="w-full h-[500px] md:h-[600px] bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
-              <div className="text-center">
-                <span className="text-slate-500 text-lg block mb-2">No image yet</span>
-                <span className="text-slate-600 text-sm">The image will be added soon.</span>
-              </div>
-            </div>
-          )}
-        </div>
+        <CarGallery 
+        imageUrls={car.imageUrls}
+        make = {car.make}
+        model = {car.model}
+        year = {car.year}
+        />
 
         
         <div className="bg-slate-800 shadow-xl rounded-xl p-8 text-slate-200 space-y-8">

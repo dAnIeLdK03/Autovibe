@@ -67,8 +67,12 @@ export const useCarDetails = () => {
             setShowDeleteConfirm(true);
             await deleteCar(carId);
             navigate("/cars");
+        dispatch(setLoading(false));
+
         } catch (error) {
             dispatch(setError("Unable to delete car."));
+        dispatch(setLoading(false));
+
         }
     };
 
