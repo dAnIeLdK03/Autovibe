@@ -9,7 +9,7 @@ import EmptyState from '../components/UX/EmptyState';
 import { SkeletonLoader } from '../components/UX/SkeletonLoader';
 import SortedCars from '../components/Filters/SortedCars';
 import { matchesFilters } from './Helpers/matchFilters';
-import {LuFilter} from 'react-icons/lu';
+import { LuFilter } from 'react-icons/lu';
 import { FilterModal } from '../components/Filters/FilterModal';
 
 const initialFilters: CarFilters = {
@@ -55,9 +55,9 @@ function CarList() {
   });
 
   const toggleFilters = (isOpen: boolean) => {
-    if(isOpen){
+    if (isOpen) {
       document.body.style.overflow = 'hidden';
-    }else{
+    } else {
       document.body.style.overflow = 'unset';
     }
   }
@@ -143,25 +143,31 @@ function CarList() {
         <div className="flex items-center gap-3 mb-4">
 
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-slate-400 text-sm font-medium whitespace-nowrap ml-2">
-              Sort by:
-            </span>
             <SortedCars
               value={sortType}
               onChange={(val) => setSortType(val)}
             />
           </div>
+
+
           <button
             onClick={() => {
               setIsModalOpen(true);
               toggleFilters(true);
             }}
-            className="group flex items-center gap-2 px-5 py-2.5 bg-slate-800 hover:bg-blue-600 border border-slate-700 hover:border-blue-500 rounded-2xl text-white transition-all duration-300 shadow-lg shadow-black/20"
+            className={`
+    flex items-center gap-2 px-4 py-2.5 rounded-2xl border transition-all duration-200 mb-4 gap-3
+    bg-slate-800/50 border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white
+    ${isModalOpen ? 'bg-slate-800 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.2)] text-white' : ''}
+  `}
           >
             <LuFilter
-              className="text-slate-400 group-hover:text-white transition-colors"
               size={18}
+              className={`${isModalOpen ? 'text-blue-400' : 'text-slate-400'}`}
             />
+
+            <span className="text-sm font-medium whitespace-nowrap">Filters</span>
+
           </button>
 
           <FilterModal
@@ -169,7 +175,7 @@ function CarList() {
             onClose={() => setIsModalOpen(false)}
             filters={filters}
             updateFilter={updateFilter}
-            onApply={ () => {
+            onApply={() => {
               handleApply();
               toggleFilters(false);
             }}

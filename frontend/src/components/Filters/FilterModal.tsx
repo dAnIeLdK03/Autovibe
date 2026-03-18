@@ -26,7 +26,7 @@ export const FilterModal = ({ isOpen, onClose, filters, updateFilter, onApply }:
                 <div className="relative z-10 bg-slate-950 border border-slate-800 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
 
                     <div className="p-6 border-b border-slate-900 flex justify-between items-center bg-slate-900/50">
-                        <h2 className="text-xl font-bold text-white tracking-tight">Филтри</h2>
+                        <h2 className="text-xl font-bold text-white tracking-tight">Filters</h2>
                         <button
                             onClick={onClose}
                             className="p-2 hover:bg-slate-800 rounded-full text-slate-400 transition-colors"
@@ -73,7 +73,7 @@ export const FilterModal = ({ isOpen, onClose, filters, updateFilter, onApply }:
                             onClick={onApply}
                             className="w-full bg-blue-600 hover:bg-blue-500 text-white font-extrabold py-4 rounded-2xl transition-all active:scale-[0.98] shadow-lg shadow-blue-500/20 text-lg"
                         >
-                            Виж резултатите
+                            Show results
                         </button>
                     </div>
                 </div>
