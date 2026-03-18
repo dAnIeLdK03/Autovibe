@@ -172,7 +172,10 @@ function CarList() {
 
           <FilterModal
             isOpen={isModalOpen}
-            onClose={() => setIsModalOpen(false)}
+            onClose={() => {
+              setIsModalOpen(false);
+              toggleFilters(false);
+            }}
             filters={filters}
             updateFilter={updateFilter}
             onApply={() => {
