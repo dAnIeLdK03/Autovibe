@@ -2,6 +2,8 @@ namespace Autovibe.API.DTOs.Cars;
 
 public class CarFiltersDto
 {
+    public int PageNumber { get; set; } = 1;
+    public int PageSize { get; set; } = 9;
     public int? MinYear {get; set;}
     public int? MaxYear {get; set;}
 

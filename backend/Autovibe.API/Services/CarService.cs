@@ -69,49 +69,41 @@ namespace Autovibe.API.Services
             return car.DetailsDto();
         }
 
-        public async Task<PageResponse<CarListDto>> GetAllAsync(
-    int pageNumber,
-    int pageSize,
-    CarFiltersDto filters)
-{
-    if (pageNumber < 1 || pageNumber > 100)
-        throw new BadRequestException("Page number cannot be less than 1.");
+        public async Task<PageResponse<CarListDto>> GetAllAsync(CarFiltersDto request)
+        {
 
-    if (pageSize < 1 || pageSize > 9)
-        throw new BadRequestException("Page size cannot be less than 1 or greater than 9.");
+            if (request.MinYear.HasValue && (request.MinYear < 1900 || request.MinYear > DateTime.Now.Year))
+                throw new BadRequestException("Min year must be between 1900 and current year.");
 
-    if (filters.MinYear.HasValue && (filters.MinYear < 1900 || filters.MinYear > DateTime.Now.Year))
-        throw new BadRequestException("Min year must be between 1900 and current year.");
+            if (request.MaxYear.HasValue && (request.MaxYear < 1900 || request.MaxYear > DateTime.Now.Year))
+                throw new BadRequestException("Max year must be between 1900 and current year.");
 
-    if (filters.MaxYear.HasValue && (filters.MaxYear < 1900 || filters.MaxYear > DateTime.Now.Year))
-        throw new BadRequestException("Max year must be between 1900 and current year.");
+            if (request.MinYear.HasValue && request.MaxYear.HasValue && request.MinYear > request.MaxYear)
+                throw new BadRequestException("Min year cannot be greater than max year.");
 
-    if (filters.MinYear.HasValue && filters.MaxYear.HasValue && filters.MinYear > filters.MaxYear)
-        throw new BadRequestException("Min year cannot be greater than max year.");
+            var query = _context.Cars.AsQueryable();
 
-    var query = _context.Cars.AsQueryable();
+            query = query.ApplyFilters(request)
+                         .ApplySorting(request.SortType);
 
-    query = query.ApplyFilters(filters)
-                 .ApplySorting(filters.SortType);
+            var totalItems = await query.CountAsync();
 
-    var totalItems = await query.CountAsync();
+            var cars = await query
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(c => c.ListDto())
+                .ToListAsync();
 
-    var cars = await query
-        .Skip((pageNumber - 1) * pageSize)
-        .Take(pageSize)
-        .Select(c => c.ListDto())
-        .ToListAsync();
+            var totalPages = (int)Math.Ceiling((double)totalItems / request.PageSize);
 
-    var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
-
-    return new PageResponse<CarListDto>
-    {
-        Items = cars,
-        TotalPages = totalPages,
-        PageNumber = pageNumber,
-        PageSize = pageSize
-    };
-}
+            return new PageResponse<CarListDto>
+            {
+                Items = cars,
+                TotalPages = totalPages,
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize
+            };
+        }
 
         public async Task DeleteAsync(int id, int userId)
         {
