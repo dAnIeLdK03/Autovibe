@@ -85,7 +85,7 @@ function CarList() {
       }
     };
     fetchCars();
-  }, [page, dispatch, debouncedFilters, filters])
+  }, [page, dispatch, debouncedFilters, filters, sortType])
 
   if (loading) {
     return (
@@ -129,7 +129,10 @@ function CarList() {
           <div className="flex items-center gap-3 mb-4">
             <SortedCars
               value={sortType}
-              onChange={(val) => setSortType(val)}
+              onChange={(val) => {
+                setSortType(val);
+                setPage(1);
+              }}
             />
           </div>
 
