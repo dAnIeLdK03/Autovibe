@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { RootState } from '../stores/store';
 import { getCars, type CarFilters } from '../services/carsService';
-import { setCars, setLoading, setError, clearError } from '../stores/carsSlice';
+import { setCars, setLoading, clearError } from '../stores/carsSlice';
 import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
 import EmptyState from '../components/UX/EmptyState';
@@ -31,7 +31,6 @@ function CarList() {
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [debouncedFilters, setDebouncedFilters] = useState(filters.yearRange);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
 
@@ -56,12 +55,7 @@ function CarList() {
     setIsModalOpen(false);
   }
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedFilters(filters.yearRange)
-    }, 1000)
-    return () => clearTimeout(handler)
-  }, [filters.yearRange])
+ 
 
   useEffect(() => {
     if (page === undefined || page === null) return;
@@ -79,13 +73,16 @@ function CarList() {
         dispatch(setCars(response.items ?? []));
         setTotalPages(response.totalPages ?? 0);
       } catch {
-        dispatch(setError("Unable to load cars."));
+        dispatch(setCars([]));
+        setTotalPages(0);
       } finally {
         dispatch(setLoading(false));
       }
     };
     fetchCars();
-  }, [page, dispatch, debouncedFilters, filters, sortType])
+  }, [page, dispatch, filters, sortType])
+
+
 
   if (loading) {
     return (
