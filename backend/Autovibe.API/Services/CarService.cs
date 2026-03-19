@@ -69,57 +69,49 @@ namespace Autovibe.API.Services
             return car.DetailsDto();
         }
 
-        public async Task<PageResponse<CarListDto>> GetAllAsync(int pageNumber, int pageSize, int? minYear, int? maxYear)
-        {
-            if (pageNumber < 1 || pageNumber > 100)
-            {
-                throw new BadRequestException("Page number cannot be less than 1.");
-            }
-            if (pageSize < 1 || pageSize > 9)
-            {
-                throw new BadRequestException("Page size cannot be less than 1 or greater than 9.");
-            }
+        public async Task<PageResponse<CarListDto>> GetAllAsync(
+    int pageNumber,
+    int pageSize,
+    CarFiltersDto filters)
+{
+    if (pageNumber < 1 || pageNumber > 100)
+        throw new BadRequestException("Page number cannot be less than 1.");
 
-            var query = _context.Cars.AsQueryable();
-            if (minYear.HasValue && (minYear < 1900 || minYear > DateTime.Now.Year))
-            {
-                throw new BadRequestException("Min year must be between 1900 and current year.");
-            }
-            if (maxYear.HasValue && (maxYear < 1900 || maxYear > DateTime.Now.Year))
-            {
-                throw new BadRequestException("Max year must be between 1900 and current year.");
-            }
-            if (minYear.HasValue && maxYear.HasValue && minYear.Value > maxYear.Value)
-            {
-                throw new BadRequestException("Min year cannot be greater than max year.");
-            }
-            if (minYear.HasValue)
-            {
-                query = query.Where(c => c.Year >= minYear);
-            }
-            if (maxYear.HasValue)
-            {
-                query = query.Where(c => c.Year <= maxYear);
-            }
+    if (pageSize < 1 || pageSize > 9)
+        throw new BadRequestException("Page size cannot be less than 1 or greater than 9.");
 
-            var totalItems = await query.CountAsync();
+    if (filters.MinYear.HasValue && (filters.MinYear < 1900 || filters.MinYear > DateTime.Now.Year))
+        throw new BadRequestException("Min year must be between 1900 and current year.");
 
-            var cars = await query
-                .OrderByDescending(c => c.Id)
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)
-                .Select(c => c.ListDto()).ToListAsync();
+    if (filters.MaxYear.HasValue && (filters.MaxYear < 1900 || filters.MaxYear > DateTime.Now.Year))
+        throw new BadRequestException("Max year must be between 1900 and current year.");
 
-            var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+    if (filters.MinYear.HasValue && filters.MaxYear.HasValue && filters.MinYear > filters.MaxYear)
+        throw new BadRequestException("Min year cannot be greater than max year.");
 
-            return new PageResponse<CarListDto>
-            {
-                Items = cars,
-                TotalPages = totalPages,
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
-        }
+    var query = _context.Cars.AsQueryable();
+
+    query = query.ApplyFilters(filters)
+                 .ApplySorting(filters.SortType);
+
+    var totalItems = await query.CountAsync();
+
+    var cars = await query
+        .Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .Select(c => c.ListDto())
+        .ToListAsync();
+
+    var totalPages = (int)Math.Ceiling((double)totalItems / pageSize);
+
+    return new PageResponse<CarListDto>
+    {
+        Items = cars,
+        TotalPages = totalPages,
+        PageNumber = pageNumber,
+        PageSize = pageSize
+    };
+}
 
         public async Task DeleteAsync(int id, int userId)
         {

@@ -29,10 +29,29 @@ namespace Autovibe.API.Controllers
         //GET: api/cars
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<PageResponse<CarListDto>>> GetCars(int pageNumber = 1, int pageSize = 10, int? minYear = null, int? maxYear = null)
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetCars(
+            int pageNumber = 1,
+            int pageSize = 10,
+            int? minYear = null,
+            int? maxYear = null,
+            string? fuelType = null,
+            string? transmission = null,
+            int? mileage = null,
+            string? Power = null,
+            string? sortType = null)
         {
 
-            var result = await _carService.GetAllAsync(pageNumber, pageSize, minYear, maxYear);
+            var filters = new CarFiltersDto
+            {
+                MinYear = minYear,
+                MaxYear = maxYear,
+                FuelType = fuelType,
+                Transmission = transmission,
+                Mileage = mileage,
+                SortType = sortType
+            };
+            
+            var result = await _carService.GetAllAsync(pageNumber, pageSize, filters);
             if (result == null)
             {
                 throw new NotFoundException("No cars found.");
