@@ -10,6 +10,7 @@ import { SkeletonLoader } from '../components/UX/SkeletonLoader';
 import SortedCars from '../components/Filters/SortedCars';
 import { LuFilter } from 'react-icons/lu';
 import { FilterModal } from '../components/Filters/FilterModal';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const initialFilters: CarFilters = {
   fuelType: "Fuel",
@@ -57,6 +58,7 @@ function CarList() {
 
  
 
+
   useEffect(() => {
     if (page === undefined || page === null) return;
 
@@ -65,7 +67,7 @@ function CarList() {
       dispatch(clearError());
 
       try {
-        
+
         const response = await getCars(page, 9, {
           ...filters,
           sortType
@@ -79,7 +81,7 @@ function CarList() {
         dispatch(setLoading(false));
       }
     };
-    fetchCars();
+      fetchCars();
   }, [page, dispatch, filters, sortType])
 
 
@@ -89,7 +91,6 @@ function CarList() {
       <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
         <div className="flex justify-center m-5">
           <SkeletonLoader type="details" count={3} />
-
         </div>
       </div>
     );
@@ -104,7 +105,7 @@ function CarList() {
     );
   }
 
-  if (!loading && !error && cars.length === 0) {
+  if (!loading && !error && cars.length === null) {
     return (
       <EmptyState />
     );
@@ -121,7 +122,7 @@ function CarList() {
           <p className="text-slate-400">Discover the perfect ride for your next journey.</p>
 
         </div>
-        <div className="flex items-center gap-3 mb-4">
+        <div className={`flex items-center gap-3 mb-4 transition-opacity duration-600 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
 
           <div className="flex items-center gap-3 mb-4">
             <SortedCars
@@ -174,9 +175,23 @@ function CarList() {
 
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cars.map((car) => (
-            <CarCard key={car.id} car={car} showDeletebutton={false} />
-          ))}
+          <AnimatePresence mode="wait">
+            {cars.map((car) => (
+              <motion.div
+                key={car.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+              >
+                <CarCard
+                  key={car.id}
+                  car={car}
+                  showDeletebutton={false} />
+              </motion.div>
+
+            ))}
+          </AnimatePresence>
         </div>
         <Pagination
           currentPage={page}
