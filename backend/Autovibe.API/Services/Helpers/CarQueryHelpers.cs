@@ -1,4 +1,5 @@
 
+using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Models;
 
 namespace Autovibe.API.Services.Helpers;
@@ -23,9 +24,9 @@ public static class CarQueryHelpers
         {
             query = query.Where(c => c.Transmission == filters.Transmission);
         }
-        if(filters.Mileage.HasValue && filters.Mileage > 0)
+        if (!string.IsNullOrEmpty(filters.Mileage) && filters.Mileage != "Mileage")
         {
-            query = query.Where(c => c.Mileage == filters.Mileage);
+            query = query.Where(c => MileagePredicate(c, filters.Mileage ?? ""));
         }
         if(filters.Power.HasValue && filters.Power > 0)
         {

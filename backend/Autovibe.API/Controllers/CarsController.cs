@@ -31,13 +31,13 @@ namespace Autovibe.API.Controllers
         [HttpGet]
         public async Task<ActionResult<PageResponse<CarListDto>>> GetCars(
             int pageNumber = 1,
-            int pageSize = 10,
+            int pageSize = 9,
             int? minYear = null,
             int? maxYear = null,
             string? fuelType = null,
             string? transmission = null,
-            int? mileage = null,
-            string? Power = null,
+            string? mileage = null,
+            int? Power = null,
             string? sortType = null)
         {
 
@@ -48,9 +48,10 @@ namespace Autovibe.API.Controllers
                 FuelType = fuelType,
                 Transmission = transmission,
                 Mileage = mileage,
+                Power = Power,
                 SortType = sortType
             };
-            
+
             var result = await _carService.GetAllAsync(pageNumber, pageSize, filters);
             if (result == null)
             {

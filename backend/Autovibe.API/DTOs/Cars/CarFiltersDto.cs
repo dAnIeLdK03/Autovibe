@@ -1,3 +1,5 @@
+namespace Autovibe.API.DTOs.Cars;
+
 public class CarFiltersDto
 {
     public int? MinYear {get; set;}
@@ -5,7 +7,7 @@ public class CarFiltersDto
 
     public string? FuelType {get; set; }
     public string? Transmission {get; set; }
-    public int? Mileage {get; set; }
+    public string? Mileage {get; set; }
     public int? Power {get; set; }
 
     public string? SortType {get; set;}
