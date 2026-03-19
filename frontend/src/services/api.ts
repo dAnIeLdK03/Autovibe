@@ -2,10 +2,12 @@ import axios from 'axios'
 import { extractApiErrorMessage } from '../Validations/extractApiErrorMessage';
 import toast from 'react-hot-toast';
 
-const BASE_URL = import.meta.env.VITE_API_URL;
-if(!BASE_URL?.trim()) {
+const API_ORIGIN = import.meta.env.VITE_API_URL;
+if(!API_ORIGIN?.trim()) {
     throw new Error("VITE_API_URL is not set");
 }
+
+const BASE_URL = `${API_ORIGIN.replace(/\/+$/, "")}/api`;
 
 export const api = axios.create({
     baseURL: BASE_URL,

@@ -1,18 +1,23 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 
-const API_URL = process.env.VITE_API_URL || "Error: VITE_API_URL not set";
-
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 5173,
-    proxy: {
-      '/api': {
-        target: API_URL,
-        changeOrigin: true,
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  const rawApiUrl = env.VITE_API_URL || 'http://localhost:5258';
+  // Keep proxy target as host root; '/api' prefix is handled by Vite proxy key.
+  const apiUrl = rawApiUrl.replace(/\/api\/?$/, '');
+
+  return {
+    plugins: [react()],
+    server: {
+      port: 5173,
+      proxy: {
+        '/api': {
+          target: apiUrl,
+          changeOrigin: true,
+        },
       },
     },
-  },
-})
+  };
+});

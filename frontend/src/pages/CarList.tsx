@@ -8,7 +8,6 @@ import CarCard from '../components/Car/CarCard';
 import EmptyState from '../components/UX/EmptyState';
 import { SkeletonLoader } from '../components/UX/SkeletonLoader';
 import SortedCars from '../components/Filters/SortedCars';
-import { matchesFilters } from './Helpers/matchFilters';
 import { LuFilter } from 'react-icons/lu';
 import { FilterModal } from '../components/Filters/FilterModal';
 
@@ -16,7 +15,9 @@ const initialFilters: CarFilters = {
   fuelType: "Fuel",
   transmission: "Transmission",
   mileage: "Mileage",
-  yearRange: { min: "1900", max: "2026" }
+  yearRange: { min: "1900", max: "2026" },
+  power: 0,
+  sortType: "None"
 }
 
 
@@ -27,32 +28,13 @@ function CarList() {
   const [filters, setFilters] = useState<CarFilters>(initialFilters);
 
 
-  const filteredCars = cars.filter((car) =>
-    matchesFilters(car, filters)
-  );
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [debouncedFilters, setDebouncedFilters] = useState(filters.yearRange);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const sortedCars = [...filteredCars].sort((a, b) => {
-    switch (sortType) {
-      case 'Newest':
-        return b.id - a.id;
-      case 'None':
-        return 0;
-      case 'PriceAsc':
-        return a.price - b.price;
-      case 'PriceDesc':
-        return b.price - a.price;
-      case 'YearDesc':
-        return b.year - a.year;
-      default:
-        return 0;
 
-    }
-  });
 
   const toggleFilters = (isOpen: boolean) => {
     if (isOpen) {
@@ -89,9 +71,11 @@ function CarList() {
       dispatch(clearError());
 
       try {
-        const min = debouncedFilters.min ? parseInt(debouncedFilters.min) : undefined;
-        const max = debouncedFilters.max ? parseInt(debouncedFilters.max) : undefined;
-        const response = await getCars(page, 9, min, max);
+        
+        const response = await getCars(page, 9, {
+          ...filters,
+          sortType
+        });
         dispatch(setCars(response.items ?? []));
         setTotalPages(response.totalPages ?? 0);
       } catch {
@@ -101,7 +85,7 @@ function CarList() {
       }
     };
     fetchCars();
-  }, [page, dispatch, debouncedFilters])
+  }, [page, dispatch, debouncedFilters, filters])
 
   if (loading) {
     return (
@@ -190,7 +174,7 @@ function CarList() {
 
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {sortedCars.map((car) => (
+          {cars.map((car) => (
             <CarCard key={car.id} car={car} showDeletebutton={false} />
           ))}
         </div>

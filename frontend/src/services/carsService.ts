@@ -83,6 +83,8 @@ export interface CarFilters{
     transmission: string;
     mileage: string;
     yearRange:{min: string, max: string};
+    power: number;
+    sortType: string;
 };
 
 
@@ -101,27 +103,29 @@ export interface ConfirmDialogProps {
     onClose?: () => void;
 }
 
-export const getCars = async (page: number, pageSize: number, minYear?: number, maxYear?: number): Promise<CarsPageResponse> => {
+export const getCars = async (page: number, pageSize: number, filters: CarFilters): Promise<CarsPageResponse> => {
     const params = new URLSearchParams();
     params.append('pageNumber', page.toString());
     params.append('pageSize', pageSize.toString());
 
-    if (minYear !== undefined && minYear !== null) params.append('minYear', minYear.toString());
-    if (maxYear !== undefined && maxYear !== null) params.append('maxYear', maxYear.toString());
-
-    const response = await api.get<CarsPageResponse>(`/cars?${params.toString()}`);
-    const data = response.data;
-
-    if (!data || !Array.isArray(data.items)) {
-        throw new Error("Unable to load cars.");
+    if(filters.yearRange.min) params.set("minYear", filters.yearRange.min);
+    if(filters.yearRange.max) params.set("maxYear", filters.yearRange.max);
+    if(filters.fuelType && filters.fuelType !== "Fuel"){
+        params.set("fuelType", filters.fuelType);
     }
-
-    return { 
-        items: data.items, 
-        totalPages: data.totalPages ?? 0, 
-        pageNumber: data.pageNumber ?? page, 
-        pageSize: data.pageSize ?? pageSize
-    };
+    if(filters.transmission && filters.transmission !== "Transmission"){
+        params.set("transmission", filters.transmission);
+    }
+    if(filters.mileage && filters.mileage !== "Mileage"){
+        params.set("mileage", filters.mileage);
+    }
+    if(filters.sortType && filters.sortType !== "SortType"){
+        params.set("sortType", filters.sortType);
+    }
+    
+    const res = await fetch(`/api/cars?${params.toString()}`);
+    if(!res.ok) throw new Error("Failed to load cars");
+    return res.json();
 };
 
 export const getCarsByUserId = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
