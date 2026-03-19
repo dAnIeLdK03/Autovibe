@@ -9,12 +9,13 @@ import TransmissionSelector from '../TransmissionSelector';
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    imagePreview: string | null;
+    imagePreview: string[];
     submitLabel?: string;
     title: string;
+    onRemoveImage?: (index: number) => void;
 }
 
-function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", title = "Create Ad" }: CarFormProps) {
+function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel = "Create", title = "Create Ad" }: CarFormProps) {
     const { register, formState: { errors }, setValue } = useFormContext<CarFormValues>();
     const { error } = useSelector((state: RootState) => state.cars)
     const { loading } = useSelector((state: RootState) => state.cars)
@@ -109,7 +110,7 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
 
                 <FuelSelector
                     value={fuelType}
-                    onChange={(val : any) => {
+                    onChange={(val: any) => {
                         setFuelType(val);
                         setValue("fuelType", val);
                     }}
@@ -118,7 +119,7 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
 
                 <TransmissionSelector
                     value={transmissionType}
-                    onChange={(val : any) => {
+                    onChange={(val: any) => {
                         setTransmissionType(val);
                         setValue("transmission", val);
                     }}
@@ -145,42 +146,67 @@ function CarForm({ handleImageChange, imagePreview, submitLabel = "Create", titl
                 />
                 {errors.description && <span className="text-red-500 text-sm">{errors.description.message as string}</span>}
 
-                <label className="block text-sm font-medium text-slate-400">
-                    Image
-                    <input
-                        key={imagePreview}
-                        type='file'
-                        name="image"
-                        accept='image/*'
-                        onChange={handleImageChange}
-                        className="mb-3 w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
-                    />
-                </label>
-                {imagePreview && <img src={imagePreview} className="w-full h-auto" />}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+                    <label className="flex flex-col items-center justify-center h-28 bg-slate-900/50 border-2 border-dashed border-slate-700 rounded-2xl cursor-pointer hover:border-[#70FFE2]/50 hover:bg-slate-800/50 transition-all group">
+                        <span className="text-2xl text-slate-500 group-hover:text-[#70FFE2]">+</span>
+                        <span className="text-xs text-slate-600 mt-1 group-hover:text-slate-400">Add Photos</span>
+                        <input
+                            type="file"
+                            name="images"
+                            accept="image/*"
+                            multiple
+                            onChange={handleImageChange}
+                            className="hidden"
+                        />
+                    </label>
 
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="mb-3 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-blue-300 text-l  rounded-lg transition-all"
-                >
-                    {loading ? (
-                        <div className="flex justify-center">
-                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    {imagePreview.map((url, index) => (
+                        <div
+                            key={url}
+                            className="relative h-28 group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900"
+                        >
+                            <img
+                                src={url}
+                                alt={`preview-${index}`}
+                                className="h-full w-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <button
+                                    type="button"
+                                    onClick={() => onRemoveImage?.(index)}
+                                    className="p-2 bg-red-500/80 rounded-full text-white hover:bg-red-600 transition-colors"
+                                >✕</button>
+                            </div>
                         </div>
-                    ) : (
-                        submitLabel
-                    )}
-                </button>
-                <button
-                    type="button"
-                    onClick={() => navigate("/cars")}
-                    className="mb-3 w-full bg-red-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-blue-300 text-l  rounded-lg transition-all"
-                >
-                    Cancel
-                </button>
+                    ))}
+                </div>
+
+                <div className="space-y-3">
+                    <button
+                        type="submit"
+                        disabled={loading}
+                        className="w-full bg-[#70FFE2] text-slate-900 py-4 rounded-2xl hover:brightness-110 disabled:opacity-50 font-bold text-lg transition-all shadow-[0_0_20px_rgba(112,255,226,0.2)]"
+                    >
+                        {loading ? (
+                            <div className="flex justify-center">
+                                <div className="w-6 h-6 border-2 border-slate-900 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
+                        ) : (
+                            submitLabel
+                        )}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => navigate("/cars")}
+                        className="w-full bg-slate-700/50 text-white py-4 rounded-2xl hover:bg-slate-700 transition-all font-medium"
+                    >
+                        Cancel
+                    </button>
+                </div>
             </div>
         </div>
     );
 }
 
-export default CarForm
+export default CarForm;

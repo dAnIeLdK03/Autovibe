@@ -17,105 +17,127 @@ export const useCarEdit = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string | null>(null);
-  
-    const methods = useForm<CarFormValues>();
-    const { reset } = methods;
-
-    useEffect(() => {
-        const fetchCar = async () => {
-          if (!id || !user?.id) return;
-          dispatch(setLoading(true));
-          dispatch(clearError());
-          try {
-            const data = await getCarById(Number(id));
-            if (data.sellerId !== user.id) {
-              dispatch(setError("You are not allowed to edit this car."));
-              return;
-            }
-    
-            reset({
-              make: data.make,
-              model: data.model,
-              year: data.year,
-              price: data.price,
-              mileage: data.mileage,
-              power: data.power,
-              fuelType: data.fuelType,
-              transmission: data.transmission,
-              color: data.color,
-              description: data.description,
-    
-            });
-    
-            if(data.imageUrls && data.imageUrls.length > 0) {
-              setImagePreview(data.imageUrls[0]);
-            }
-    
-          } catch {
-            dispatch(setError("Unable to load car."));
-          } finally {
-            dispatch(setLoading(false));
-          }
-        };
-        fetchCar();
-      }, [id, user?.id, reset, navigate, setImagePreview]);
+  const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
 
-      const onSubmit = async (formData: CarFormValues) => {
+  const methods = useForm<CarFormValues>();
+  const { reset } = methods;
+
+  useEffect(() => {
+    const fetchCar = async () => {
+      if (!id || !user?.id) return;
+      dispatch(setLoading(true));
+      dispatch(clearError());
+      try {
+        const data = await getCarById(Number(id));
+        if (data.sellerId !== user.id) {
+          dispatch(setError("You are not allowed to edit this car."));
+          return;
+        }
+
+        reset({ ...data });
+
+        if (data.imageUrls && data.imageUrls.length > 0) {
+          setImagePreview(data.imageUrls);
+        }
+
+      } catch {
+        dispatch(setError("Unable to load car."));
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
+    fetchCar();
+  }, [id, user?.id, reset, navigate, setImagePreview]);
+
+
+  const onSubmit = async (formData: CarFormValues) => {
     if (!id) return;
     dispatch(clearError());
 
-    const uploadResult = await uploadCarImageIfPresent(imageFile);
-    if (uploadResult.error) {
-     dispatch( setError(uploadResult.error));
-      return;
-    }
     const errorMessage = CarCreateValidaions(formData);
+  if (errorMessage) {
+    dispatch(setError(errorMessage));
+    return;
+  }
 
-    if (errorMessage) {
-      dispatch(setError(errorMessage));
-      return;
+  dispatch(setLoading(true));
+
+  try {
+    let newImageUrls: string[] = [];
+    if (selectedFiles.length > 0) {
+      const uploadResult = await uploadCarImageIfPresent(selectedFiles); 
+      
+      if (uploadResult.error) {
+        dispatch(setError(uploadResult.error));
+        dispatch(setLoading(false));
+        return;
+      }
+      newImageUrls = uploadResult.imageUrls;
     }
 
+    const remainingOldImageUrls = imagePreview.filter(url => !url.startsWith('blob'));
 
-    dispatch(setLoading(true));
-    try {
-      await updateCar(
-        Number(id),
-        {
-          ...formData,
-          description: formData.description ?? '',
-        },uploadResult.imageUrls
-      );
-      navigate(`/cars/${id}`);
-      toast.success("Car updated successfully!");
-    } catch (error: any) {
-      dispatch(setError(error.response.data?.message ?? "Failed to update car."));
-    } finally {
-      dispatch(setLoading(false));
+    const finalImageUrls = [...remainingOldImageUrls, ...newImageUrls];
+
+    await updateCar(
+      Number(id),
+      {
+        ...formData,
+        description: formData.description ?? '',
+      }, 
+      finalImageUrls
+    );
+
+    navigate(`/cars/${id}`);
+    toast.success("Car updated successfully!");
+  }
+  catch (error: any) {
+    const msg = error.response?.data?.message ?? "Failed to update car.";
+    dispatch(setError(msg));
+    toast.error(msg);
+  } finally {
+    dispatch(setLoading(false));
+  }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+
+      const newPreviews = files.map(file => URL.createObjectURL(file));
+
+      setImagePreview(prev => [...prev, ...newPreviews]);
+      setSelectedFiles(prev => [...prev, ...files]);
     }
   };
 
-const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0] ?? null;
-      if (imagePreview) URL.revokeObjectURL(imagePreview);
-      setImageFile(file);
-      setImagePreview(file ? URL.createObjectURL(file) : null);
+  const removeImage = (index: number) => {
+    setImagePreview(prev => {
+      const urlToRemove = prev[index];
+      if (urlToRemove.startsWith('blob')) {
+        URL.revokeObjectURL(urlToRemove);
+      }
+      return prev.filter((_, i) => i !== index);
+    });
+    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+  };
+
+  useEffect(() => {
+    return () => {
+      imagePreview.forEach(url => {
+        if (url.startsWith('blob:')) URL.revokeObjectURL(url);
+      });
     };
-  
-    useEffect(() => {
-      return () => {
-        if (imagePreview) URL.revokeObjectURL(imagePreview);
-      };
-    }, [imagePreview]);
-  
-    return { 
-        methods,
-        imagePreview,
-        handleImageChange, 
-        onSubmit,
-        loading: !id
-    }
+  }, [imagePreview]);
+
+  return {
+    methods,
+    imagePreview,
+    handleImageChange,
+    removeImage,
+    onSubmit,
+    loading: !id
+  }
 }

@@ -1,16 +1,34 @@
-import { uploadImage } from '../../services/imageService';
 
-export const uploadCarImageIfPresent = async (
-  imageFile: File | null
-): Promise<{ imageUrls: string[] | undefined; error: string | null }> => {
-  if (!imageFile) {
-    return { imageUrls: undefined, error: null };
-  }
+export const uploadCarImageIfPresent = async (files: File[]) => {
+  const token = localStorage.getItem('token'); 
+
   try {
-    const imageUrl = await uploadImage(imageFile);
-    return { imageUrls: [imageUrl], error: null };
-  } catch {
-    return { imageUrls: undefined, error: 'Unable to upload image.' };
+    const uploadPromises = files.map(async (file) => {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch("http://localhost:5258/api/cars/upload-image", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      });
+
+      if (response.status === 401) {
+        throw new Error("Session expired. Please, try again.");
+      }
+
+      if (!response.ok) throw new Error("Unsuccessfuly upload image.");
+
+      const data = await response.json();
+      return data.imageUrl; 
+    });
+
+    const imageUrls = await Promise.all(uploadPromises);
+    return { imageUrls, error: null };
+  } catch (err: any) {
+    return { imageUrls: [], error: err.message };
   }
 };
 
