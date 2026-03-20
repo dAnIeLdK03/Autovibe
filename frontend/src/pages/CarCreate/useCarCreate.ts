@@ -1,18 +1,16 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import type { RootState } from "../../stores/store";
-import { getCarById, updateCar } from "../../services/carsService";
 import { useForm } from "react-hook-form";
 import type { CarFormValues } from "../../Validations/CarValidations/CarCreateValidaions";
+import { setError, clearError, setLoading } from '../../stores/carsSlice'; // Добавих setLoading
 import { uploadCarImageIfPresent } from "../../Validations/CarValidations/CarSubmitHelpers";
 import CarCreateValidaions from "../../Validations/CarValidations/CarCreateValidaions";
+import { createCar } from "../../services/carsService";
 import toast from "react-hot-toast";
-import { setLoading, setError, clearError } from '../../stores/carsSlice';
 
-
-export const useCarEdit = () => {
-  const { id } = useParams();
+export const useCarCreate = () => {
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,92 +18,54 @@ export const useCarEdit = () => {
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-
   const methods = useForm<CarFormValues>();
-  const { reset } = methods;
 
   useEffect(() => {
-    const fetchCar = async () => {
-      if (!id || !user?.id) return;
-      dispatch(setLoading(true));
-      dispatch(clearError());
-      try {
-        const data = await getCarById(Number(id));
-        if (data.sellerId !== user.id) {
-          dispatch(setError("You are not allowed to edit this car."));
-          return;
-        }
-
-        reset({ ...data });
-
-        if (data.imageUrls && data.imageUrls.length > 0) {
-          setImagePreview(data.imageUrls ?? []);
-        }
-
-      } catch {
-        dispatch(setError("Unable to load car."));
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-    fetchCar();
-  }, [id, user?.id, reset]);
-
+    if (user === null) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
   const onSubmit = async (formData: CarFormValues) => {
-    if (!id) return;
     dispatch(clearError());
-
+    
     const errorMessage = CarCreateValidaions(formData);
-  if (errorMessage) {
-    dispatch(setError(errorMessage));
-    return;
-  }
+    if (errorMessage) {
+      dispatch(setError(errorMessage));
+      return;
+    }
 
-  dispatch(setLoading(true));
+    dispatch(setLoading(true));
 
-  try {
-    let newImageUrls: string[] = [];
-    if (selectedFiles.length > 0) {
-      const uploadResult = await uploadCarImageIfPresent(selectedFiles); 
+    try {
+      const uploadResult = await uploadCarImageIfPresent(selectedFiles);
       
       if (uploadResult.error) {
         dispatch(setError(uploadResult.error));
         dispatch(setLoading(false));
         return;
       }
-      newImageUrls = uploadResult.imageUrls;
-    }
 
-    const remainingOldImageUrls = imagePreview.filter(url => !url.startsWith('blob'));
-
-    const finalImageUrls = [...remainingOldImageUrls, ...newImageUrls];
-
-    await updateCar(
-      Number(id),
-      {
+      await createCar({
         ...formData,
         description: formData.description ?? '',
-      }, 
-      finalImageUrls
-    );
+        imageUrls: uploadResult.imageUrls 
+      });
 
-    navigate(`/cars/${id}`);
-    toast.success("Car updated successfully!");
-  }
-  catch (error: any) {
-    const msg = error.response?.data?.message ?? "Failed to update car.";
-    dispatch(setError(msg));
-    toast.error(msg);
-  } finally {
-    dispatch(setLoading(false));
-  }
+      navigate("/cars");
+      toast.success("Car created successfully!");
+    } catch (err: any) {
+      const msg = err.response?.data?.message ?? "Failed to create car.";
+      dispatch(setError(msg));
+      toast.error(msg);
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
-
       const newPreviews = files.map(file => URL.createObjectURL(file));
 
       setImagePreview(prev => [...prev, ...newPreviews]);
@@ -139,7 +99,6 @@ export const useCarEdit = () => {
     imagePreview,
     handleImageChange,
     removeImage,
-    onSubmit,
-    loading: !id
-  }
-}
+    onSubmit
+  };
+};

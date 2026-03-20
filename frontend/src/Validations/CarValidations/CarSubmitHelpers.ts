@@ -22,10 +22,12 @@ export const uploadCarImageIfPresent = async (files: File[]) => {
       if (!response.ok) throw new Error("Unsuccessfuly upload image.");
 
       const data = await response.json();
-      return data.imageUrl; 
+      return data.url ?? data.imageUrl;
     });
 
-    const imageUrls = await Promise.all(uploadPromises);
+    const imageUrls = (await Promise.all(uploadPromises)).filter(
+      (u): u is string => typeof u === "string" && u.length > 0
+    );
     return { imageUrls, error: null };
   } catch (err: any) {
     return { imageUrls: [], error: err.message };

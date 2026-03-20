@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
@@ -16,12 +16,12 @@ interface CarFormProps {
 }
 
 function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel = "Create", title = "Create Ad" }: CarFormProps) {
-    const { register, formState: { errors }, setValue } = useFormContext<CarFormValues>();
+    const { register, formState: { errors }, setValue, watch } = useFormContext<CarFormValues>();
     const { error } = useSelector((state: RootState) => state.cars)
     const { loading } = useSelector((state: RootState) => state.cars)
     const navigate = useNavigate();
-    const [fuelType, setFuelType] = useState("Fuel");
-    const [transmissionType, setTransmissionType] = useState("Transmission");
+    const fuelType = watch("fuelType");
+    const transmissionType = watch("transmission");
 
 
     return (
@@ -108,20 +108,21 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                 />
                 {errors.power && <span className="text-red-500 text-sm">{errors.power.message as string}</span>}
 
+                <input type="hidden" {...register("fuelType", { required: "Fuel type is required" })} />
+                <input type="hidden" {...register("transmission", { required: "Transmission is required" })} />
+
                 <FuelSelector
-                    value={fuelType}
+                    value={fuelType ?? "Fuel"}
                     onChange={(val: any) => {
-                        setFuelType(val);
-                        setValue("fuelType", val);
+                        setValue("fuelType", val, { shouldValidate: true, shouldDirty: true });
                     }}
                 />
                 {errors.fuelType && <span className="text-red-500 text-sm">{errors.fuelType.message as string}</span>}
 
                 <TransmissionSelector
-                    value={transmissionType}
+                    value={transmissionType ?? "Transmission"}
                     onChange={(val: any) => {
-                        setTransmissionType(val);
-                        setValue("transmission", val);
+                        setValue("transmission", val, { shouldValidate: true, shouldDirty: true });
                     }}
                 />
                 {errors.transmission && <span className="text-red-500 text-sm">{errors.transmission.message as string}</span>}
@@ -160,7 +161,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                         />
                     </label>
 
-                    {imagePreview.map((url, index) => (
+                    {imagePreview ?? [].map((url, index) => (
                         <div
                             key={url}
                             className="relative h-28 group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900"
