@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import type { CarFormValues } from "../../Validations/CarValidations/CarCreateValidaions";
 import { uploadCarImageIfPresent } from "../../Validations/CarValidations/CarSubmitHelpers";
 import CarCreateValidaions from "../../Validations/CarValidations/CarCreateValidaions";
+import { extractApiErrorMessage } from "../../Validations/extractApiErrorMessage";
 import toast from "react-hot-toast";
 import { setLoading, setError, clearError } from '../../stores/carsSlice';
 
@@ -19,6 +20,7 @@ export const useCarEdit = () => {
 
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const [sellerId, setSellerId] = useState<number | null>(null);
 
 
   const methods = useForm<CarFormValues>();
@@ -31,17 +33,22 @@ export const useCarEdit = () => {
       dispatch(clearError());
       try {
         const data = await getCarById(Number(id));
-        if (data.sellerId !== user.id) {
-          dispatch(setError("You are not allowed to edit this car."));
-          return;
-        }
+        const fetchedSellerId = data.sellerId;
+        setSellerId(fetchedSellerId == null ? null : Number(fetchedSellerId));
 
         reset({ ...data });
 
         if (data.imageUrls && data.imageUrls.length > 0) {
-          setImagePreview(data.imageUrls ?? []);
+          setImagePreview(
+            (data.imageUrls ?? []).filter(
+              (u): u is string => typeof u === "string" && u.length > 0
+            )
+          );
         }
 
+        if (fetchedSellerId == null || Number(fetchedSellerId) !== Number(user.id)) {
+          dispatch(setError("You are not allowed to edit this car."));
+        }
       } catch {
         dispatch(setError("Unable to load car."));
       } finally {
@@ -55,6 +62,11 @@ export const useCarEdit = () => {
   const onSubmit = async (formData: CarFormValues) => {
     if (!id) return;
     dispatch(clearError());
+
+    if (sellerId == null || Number(sellerId) !== Number(user?.id)) {
+      dispatch(setError("You are not allowed to edit this car."));
+      return;
+    }
 
     const errorMessage = CarCreateValidaions(formData);
   if (errorMessage) {
@@ -77,9 +89,13 @@ export const useCarEdit = () => {
       newImageUrls = uploadResult.imageUrls;
     }
 
-    const remainingOldImageUrls = imagePreview.filter(url => !url.startsWith('blob'));
+    const remainingOldImageUrls = imagePreview.filter(
+      (url): url is string => typeof url === "string" && !url.startsWith("blob")
+    );
 
-    const finalImageUrls = [...remainingOldImageUrls, ...newImageUrls];
+    const finalImageUrls = [...remainingOldImageUrls, ...newImageUrls].filter(
+      (u): u is string => typeof u === "string" && u.length > 0
+    );
 
     await updateCar(
       Number(id),
@@ -94,7 +110,8 @@ export const useCarEdit = () => {
     toast.success("Car updated successfully!");
   }
   catch (error: any) {
-    const msg = error.response?.data?.message ?? "Failed to update car.";
+    const msg = extractApiErrorMessage(error) ?? "Failed to update car.";
+    console.error("Update car failed:", error);
     dispatch(setError(msg));
     toast.error(msg);
   } finally {
