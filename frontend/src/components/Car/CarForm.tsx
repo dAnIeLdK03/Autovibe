@@ -6,6 +6,7 @@ import type { CarFormValues } from '../../Validations/CarValidations/CarCreateVa
 import type { RootState } from '../../stores/store';
 import FuelSelector from '../FuelSelector';
 import TransmissionSelector from '../TransmissionSelector';
+import { getImageUrl } from '../../utils/getImageUrl';
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -161,13 +162,13 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                         />
                     </label>
 
-                    {imagePreview ?? [].map((url, index) => (
+                    {(imagePreview ?? []).map((url, index) => (
                         <div
                             key={url}
                             className="relative h-28 group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900"
                         >
                             <img
-                                src={url}
+                                src={getImageUrl(url)}
                                 alt={`preview-${index}`}
                                 className="h-full w-full object-cover"
                             />
