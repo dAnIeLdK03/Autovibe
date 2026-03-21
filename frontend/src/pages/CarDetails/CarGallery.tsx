@@ -68,7 +68,7 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
                   }`}
               >                
               <img
-                  src="/back-arrow.png"
+                  src="/back_arrow.png"
                   alt="first"
                   className="w-5 h-5 object-contain brightness-0 invert"
 
@@ -85,7 +85,7 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
                     : "opacity-0 group-hover:opacity-100  hover:text-slate-900"
                   }`} >
                 <img
-                  src="/forward.png"
+                  src="/front_arrow.png"
                   alt="first"
                   className="w-5 h-5 object-contain brightness-0 invert"
 
