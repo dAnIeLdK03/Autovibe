@@ -2,7 +2,7 @@ import axios from 'axios'
 import { extractApiErrorMessage } from '../Validations/extractApiErrorMessage';
 import toast from 'react-hot-toast';
 
-const API_ORIGIN = import.meta.env.VITE_API_URL;
+export const API_ORIGIN = import.meta.env.VITE_API_URL;
 if(!API_ORIGIN?.trim()) {
     throw new Error("VITE_API_URL is not set");
 }

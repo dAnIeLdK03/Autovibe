@@ -1,3 +1,4 @@
+import { API_ORIGIN } from "../services/api";
 
 
 export const getImageUrl = (path: string | null | undefined) => {
@@ -7,7 +8,7 @@ export const getImageUrl = (path: string | null | undefined) => {
         return path;
     }
 
-    const baseUrl = (import.meta.env.VITE_API_URL ?? "http://localhost:5258").replace("/api", "");
+    const baseUrl = `${API_ORIGIN}`.replace("/api", "");
 
     if(path.startsWith("http")){
         return path;

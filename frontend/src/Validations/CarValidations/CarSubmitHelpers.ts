@@ -1,3 +1,4 @@
+import { API_ORIGIN } from "../../services/api";
 
 export const uploadCarImageIfPresent = async (files: File[]) => {
   const token = localStorage.getItem('token'); 
@@ -7,7 +8,7 @@ export const uploadCarImageIfPresent = async (files: File[]) => {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("http://localhost:5258/api/cars/upload-image", {
+      const response = await fetch(`${API_ORIGIN}/api/cars/upload-image`, {
         method: "POST",
         body: formData,
         headers: {
@@ -33,7 +34,7 @@ export const uploadCarImageIfPresent = async (files: File[]) => {
     return { imageUrls: [], error: err.message };
   }
 };
-
+//"http://localhost:5258/api/cars/upload-image"
 
 
 export const extractApiErrorMessage = (error: any, fallback: string) : string => {
