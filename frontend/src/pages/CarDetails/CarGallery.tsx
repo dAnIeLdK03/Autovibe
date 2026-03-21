@@ -14,9 +14,7 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
     .filter(url => url && typeof url === 'string' && url.trim() !== "")
     .slice(0, 10);
 
-  if (!imageUrls || imageUrls.length === 0) {
-    return <div className="bg-slate-800 h-64 rounded-3xl flex items-center justify-center text-slate-500">No images</div>;
-  }
+  
 
   
 
@@ -42,6 +40,10 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
     }
   }, [currentIndex, validImages]);
 
+  if (!imageUrls || imageUrls.length === 0) {
+    return <div className="bg-slate-800 h-64 rounded-3xl flex items-center justify-center text-slate-500">No images</div>;
+  }
+  
   return (
     <div className="mb-8 rounded-2xl overflow-hidden shadow-2xl relative group">
       {imageUrls && imageUrls.length > 0 ? (

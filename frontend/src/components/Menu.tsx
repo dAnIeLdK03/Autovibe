@@ -33,7 +33,7 @@ const Menu: React.FC = () => {
     }, []);
     const openConfirm = () => {
         setShowConfirm(true);
-        setIsOpen(false); // Затваряме малкото меню, за да се вижда само диалога
+        setIsOpen(false);
     };
     const handleLogout = () => {
         dispatch(logout());
