@@ -18,12 +18,15 @@ interface CarFormProps {
 
 function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel = "Create", title = "Create Ad" }: CarFormProps) {
     const { register, formState: { errors }, setValue, watch } = useFormContext<CarFormValues>();
-    const { error } = useSelector((state: RootState) => state.cars)
-    const { loading } = useSelector((state: RootState) => state.cars)
+    const { error, loading } = useSelector((state: RootState) => state.cars)
     const navigate = useNavigate();
     const fuelType = watch("fuelType");
     const transmissionType = watch("transmission");
 
+
+    const galleryImages = (imagePreview ?? []).slice(0, 10);
+
+   
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
@@ -148,7 +151,9 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                 />
                 {errors.description && <span className="text-red-500 text-sm">{errors.description.message as string}</span>}
 
+                    
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-8">
+                    {galleryImages.length < 10 && (
                     <label className="flex flex-col items-center justify-center h-28 bg-slate-900/50 border-2 border-dashed border-slate-700 rounded-2xl cursor-pointer hover:border-[#70FFE2]/50 hover:bg-slate-800/50 transition-all group">
                         <span className="text-2xl text-slate-500 group-hover:text-[#70FFE2]">+</span>
                         <span className="text-xs text-slate-600 mt-1 group-hover:text-slate-400">Add Photos</span>
@@ -161,8 +166,9 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                             className="hidden"
                         />
                     </label>
+                    )}
 
-                    {(imagePreview ?? []).map((url, index) => (
+                    {galleryImages.map((url, index) => (
                         <div
                             key={url}
                             className="relative h-28 group overflow-hidden rounded-2xl border border-slate-800 bg-slate-900"

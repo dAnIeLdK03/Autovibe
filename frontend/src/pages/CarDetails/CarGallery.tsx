@@ -10,14 +10,15 @@ interface CarGalleryProps {
 
 function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const validImages = (imageUrls ?? []).filter(
-    url => url && typeof url === 'string' && url.trim() !== ""
-  );
-
+  const validImages = (imageUrls ?? [])
+    .filter(url => url && typeof url === 'string' && url.trim() !== "")
+    .slice(0, 10);
 
   if (!imageUrls || imageUrls.length === 0) {
     return <div className="bg-slate-800 h-64 rounded-3xl flex items-center justify-center text-slate-500">No images</div>;
   }
+
+  
 
   useEffect(() => {
     if (validImages.length > 1) {

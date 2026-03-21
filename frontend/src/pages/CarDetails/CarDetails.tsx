@@ -12,6 +12,8 @@ export default function CarDetails() {
   const { loading, error } = useSelector((state: RootState) => state.cars);
   const navigate = useNavigate();
 
+
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
