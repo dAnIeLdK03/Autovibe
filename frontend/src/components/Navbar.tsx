@@ -34,7 +34,7 @@ function Navbar() {
           <div className="flex-shrink-0 flex items-center w-48">
             <button 
             type="button"
-            onClick={() => window.location.reload()}
+            onClick={() => {window.location.href = "/"}}
             className="text-2xl font-bold tracking-tight hover:text-blue-400 transition-colors"
             >
               Auto<span className="text-blue-500">vibe</span>
