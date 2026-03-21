@@ -32,9 +32,13 @@ function Navbar() {
         <div className="flex justify-between items-center h-16">
           
           <div className="flex-shrink-0 flex items-center w-48">
-            <Link to="/cars" className="text-2xl font-bold tracking-tight hover:text-blue-400 transition-colors">
+            <button 
+            type="button"
+            onClick={() => window.location.reload()}
+            className="text-2xl font-bold tracking-tight hover:text-blue-400 transition-colors"
+            >
               Auto<span className="text-blue-500">vibe</span>
-            </Link>
+            </button>
           </div>
 
           <div className="hidden md:flex flex-1 justify-center space-x-8 items-center font-medium">
