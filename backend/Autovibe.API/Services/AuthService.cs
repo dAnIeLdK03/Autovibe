@@ -38,10 +38,8 @@ namespace Autovibe.API.Services
         public async Task<UserDto> Enroll(UserRegisterDto registerDto)
         {
             var userExists = await _context.Users.AnyAsync(u => u.Email == registerDto.Email);
-            if (userExists)
-            {
-                throw new ConflictException("User with this email already exists.");
-            }
+            
+            userExists.ThrowIfTrue("User with this email already exists.");
 
             if (registerDto.Password != registerDto.ConfirmPassword)
             {
@@ -80,10 +78,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                     .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
-            if (user == null)
-            {
-                throw new UnauthorizedException("User not found.");
-            }
+            user.ThrowIfNull("User was not found");
 
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {

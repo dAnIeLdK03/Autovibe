@@ -35,10 +35,8 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
+            user.ThrowIfNull("User not found");
+
             return new UserDto
             {
                 Id = user.Id,
@@ -56,12 +54,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
-
-
+            user.ThrowIfNull("User not found");
 
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
@@ -74,10 +67,8 @@ namespace Autovibe.API.Services
             var updatedUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == user.Id);
 
-            if (updatedUser == null)
-            {
-                throw new NotFoundException("User not found after update.");
-            }
+            updatedUser.ThrowIfNull("User not found after update.");
+
             return new UserDto
             {
                 Id = updatedUser.Id,
@@ -95,10 +86,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            if (user == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
+            user.ThrowIfNull("User not found");
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
@@ -108,16 +96,15 @@ namespace Autovibe.API.Services
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
+
+            user.ThrowIfNull("User not found");
+
             if (!BCrypt.Net.BCrypt.Verify(changePasswordDto.CurrentPassword, user.PasswordHash))
             {
                 throw new BadRequestException("Invalid password.");
             }
-          
-           
+
+
             user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(changePasswordDto.NewPassword);
             user.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
