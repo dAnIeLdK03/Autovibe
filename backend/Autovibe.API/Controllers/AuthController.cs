@@ -37,12 +37,8 @@ namespace Autovibe.API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register([FromBody] UserRegisterDto registerDto)
         {
-                var result = await _authService.Enroll(registerDto);
-                if (result == null)
-                {
-                   throw new ConflictException("User already exists");
-                }
-
+            var result = await _authService.Enroll(registerDto);
+               result.ThrowIfNull("Registration failure.");
 
                 return CreatedAtAction(nameof(Register), new { id = result.Id }, result);
 
@@ -56,9 +52,8 @@ namespace Autovibe.API.Controllers
 
                 var result = await _authService.Sign(loginDto);
                 if (result == null)
-                {
-                    throw new NotFoundException("User not found");
-                }
+                    
+                    result.ThrowIfNull("Login failure.");
 
                 return Ok(result);
         }

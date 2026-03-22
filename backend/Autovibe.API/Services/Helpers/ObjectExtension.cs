@@ -7,7 +7,7 @@ public static class ObjectExtension
     {
         if(obj == null)
         {
-            throw new NotFoundException("Car not found");
+            throw new NotFoundException(message);
         }
 
         return obj;
@@ -56,6 +56,16 @@ public static class ObjectExtension
         {
             throw new ConflictException(message);
         }
+    }
+
+    
+    public static void ThrowIfDoesNotMatchAndIsNull(this int? currentUserId, int index, string message)
+    {
+        if (currentUserId == null || currentUserId != index)
+        {
+            throw new UnauthorizedException(message);
+        }
+
     }
 
 }

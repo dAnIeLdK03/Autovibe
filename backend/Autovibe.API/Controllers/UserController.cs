@@ -32,16 +32,12 @@ namespace Autovibe.API.Controllers
             try
             {
                 var userId = User.GetUserId();
-                if (userId == null)
-                {
-                    throw new NotFoundException("User can't be found.");
-                }
+
+                userId.ThrowIfNull("User can't be found.");
             
                 var result = await _userService.GetUserAsync(userId.Value);
-                if (result == null)
-                {
-                    return NotFound();
-                }
+
+                result.ThrowIfNull("User cannot be found");
 
                 return Ok(result);
             }
@@ -57,19 +53,13 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-            if (userId != id)
-            {
-                throw new UnauthorizedException("You are not allowed to update this user.");
-            }
-            if (id <= 0)
-            {
-                throw new BadRequestException("Invalid user id.");
-            }
+                userId.ThrowIfNull("User can't be found.");
+
+                id.ThrowIfNull("Invalid user id.");
+
             var result = await _userService.UpdateUserAsync(id, updateDto);
-            if (result == null)
-            {
-                throw new NotFoundException("User not found.");
-            }
+
+                result.ThrowIfNull("User cannot be found");
 
             return Ok(result);
 
@@ -79,14 +69,11 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult> DeleteUser(int id)
         {
             var userId = User.GetUserId();
-            if (userId != id || userId == null)
-            {
-                throw new UnauthorizedException("You are not allowed to delete this user.");
-            }
-            if (id <= 0)
-            {
-                throw new BadRequestException("Invalid user id.");
-            }
+
+                userId.ThrowIfDoesNotMatchAndIsNull(id, "You are not allowed to delete this user.");
+                
+                id.ThrowIfNull("Invalid user id.");
+
             await _userService.DeleteUserAsync(id);
             return NoContent();
         }
@@ -95,10 +82,9 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {
             var userId = User.GetUserId();
-            if (userId == null)
-            {
-                throw new UnauthorizedException("Unauthorized.");
-            }
+            
+                userId.ThrowIfNull("User can't be found.");
+
             await _userService.ChangePasswordAsync(userId.Value, dto);
             return NoContent();
         }
