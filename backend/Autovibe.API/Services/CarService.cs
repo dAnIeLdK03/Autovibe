@@ -36,7 +36,7 @@ namespace Autovibe.API.Services
             }
             if (car.UserId != userId)
             {
-                throw new ForbiddenException("You do not have permission do delete this car");
+                throw new ForbiddenException("You do not have permission do update this car");
             }
             request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
@@ -71,15 +71,6 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<CarListDto>> GetAllAsync(CarFiltersDto request)
         {
-
-            if (request.MinYear.HasValue && (request.MinYear < 1900 || request.MinYear > DateTime.Now.Year))
-                throw new BadRequestException("Min year must be between 1900 and current year.");
-
-            if (request.MaxYear.HasValue && (request.MaxYear < 1900 || request.MaxYear > DateTime.Now.Year))
-                throw new BadRequestException("Max year must be between 1900 and current year.");
-
-            if (request.MinYear.HasValue && request.MaxYear.HasValue && request.MinYear > request.MaxYear)
-                throw new BadRequestException("Min year cannot be greater than max year.");
 
             var query = _context.Cars.AsQueryable();
 

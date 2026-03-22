@@ -54,13 +54,13 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult<AuthResponseDto>> Login([FromBody] UserLoginDto loginDto)
         {
 
-                var response = await _authService.Sign(loginDto);
-                if (response == null)
+                var result = await _authService.Sign(loginDto);
+                if (result == null)
                 {
                     throw new NotFoundException("User not found");
                 }
 
-                return Ok(response);
+                return Ok(result);
         }
 
     }
