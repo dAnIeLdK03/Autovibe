@@ -122,7 +122,7 @@ namespace Autovibe.API.Controllers
                 var imageUrl = await _carService.UploadImageAsync(file);
                 return Ok(new { url = imageUrl });
             }
-            catch (ArgumentException)
+            catch (BadRequestException)
             {
                 throw new BadRequestException("Invalid file type. Only images are allowed.");
             }
