@@ -119,7 +119,7 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
     if(filters.mileage && filters.mileage !== "Mileage"){
         params.set("mileage", filters.mileage);
     }
-    if(filters.power && filters.power !+ "Power"){
+    if(filters.power && filters.power !== "" && filters.power !== "0"){
         params.set("power", filters.power);
     }
     if(filters.sortType && filters.sortType !== "SortType"){

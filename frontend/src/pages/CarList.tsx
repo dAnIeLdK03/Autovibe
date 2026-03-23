@@ -75,7 +75,7 @@ function CarList() {
           sortType
         };
 
-        if(!queryParams.power || queryParams.power === "0" || queryParams.toString().trim() === ""){
+        if(!queryParams.power || queryParams.power === "0" || queryParams.trim() === ""){
           delete queryParams.power
         }
 
