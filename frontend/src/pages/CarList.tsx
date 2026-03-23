@@ -11,13 +11,14 @@ import SortedCars from '../components/Filters/SortedCars';
 import { LuFilter } from 'react-icons/lu';
 import { FilterModal } from '../components/Filters/FilterModal';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useDebounce } from '../Hooks/useDebounce';
 
 const initialFilters: CarFilters = {
   fuelType: "Fuel",
   transmission: "Transmission",
   mileage: "Mileage",
   yearRange: { min: "1900", max: "2026" },
-  power: 0,
+  power: "",
   sortType: "None"
 }
 
@@ -27,6 +28,7 @@ function CarList() {
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
   const [sortType, setSortType] = useState("None");
   const [filters, setFilters] = useState<CarFilters>(initialFilters);
+  const debounceFilter = useDebounce(filters, 500);
 
 
 
@@ -68,10 +70,17 @@ function CarList() {
 
       try {
 
-        const response = await getCars(page, 9, {
-          ...filters,
+        const queryParams : any = {
+          ...debounceFilter,
           sortType
-        });
+        };
+
+        if(!queryParams.power || queryParams.power === "0" || queryParams.toString().trim() === ""){
+          delete queryParams.power
+        }
+
+        const response = await getCars(page, 9, queryParams);
+
         dispatch(setCars(response.items ?? []));
         setTotalPages(response.totalPages ?? 0);
       } catch {
@@ -82,7 +91,7 @@ function CarList() {
       }
     };
       fetchCars();
-  }, [page, dispatch, filters, sortType])
+  }, [page, dispatch, sortType, debounceFilter])
 
 
 

@@ -3,7 +3,7 @@ using Autovibe.API.Exceptions;
 
 public static class ObjectExtension
 {
-    public static T ThrowIfNull<T>([NotNull]this T obj, string message = "Resource not found")
+    public static T ThrowIfNull<T>([NotNull]this T obj, string message)
     {
         if(obj == null)
         {
@@ -13,7 +13,7 @@ public static class ObjectExtension
         return obj;
     }
 
-    public static T ThrowIfForbidden<T>(this T obj, bool isForbidden, string message = "Access denied") where T : class
+    public static T ThrowIfForbidden<T>(this T obj, bool isForbidden, string message) where T : class
     {
         if (isForbidden)
         {
@@ -23,7 +23,7 @@ public static class ObjectExtension
 
     }
 
-    public static IFormFile ThrowIfTooLarge(this IFormFile file, long maxFileSize, string message = "File is too large")
+    public static IFormFile ThrowIfTooLarge(this IFormFile file, long maxFileSize, string message)
     {
         if(file.Length > maxFileSize)
         {

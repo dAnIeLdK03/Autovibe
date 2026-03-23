@@ -1,8 +1,9 @@
-import type { CarFilters } from '../../services/carsService';
+import { type CarFilters } from '../../services/carsService';
 import Transmission from './Transmission'
 import FuelType from './FuelType';
 import Mileage from './Mileage';
 import YearRangeFilter from './YearRangeFilter';
+import { Power } from './Power';
 
 interface FilterProps {
     isOpen: boolean;
@@ -14,7 +15,6 @@ interface FilterProps {
 
 export const FilterModal = ({ isOpen, onClose, filters, updateFilter, onApply }: FilterProps) => {
     if (!isOpen) return null; 
-    
 
     return (
             <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
@@ -55,6 +55,12 @@ export const FilterModal = ({ isOpen, onClose, filters, updateFilter, onApply }:
                             <Mileage
                                 value={filters.mileage}
                                 onChange={(val) => updateFilter('mileage', val)}
+                            />
+                        </div>
+                        <div className="space-y-3">
+                            <Power
+                                value={filters.power}
+                                onChange={(val) => updateFilter('power', val)}
                             />
                         </div>
 
