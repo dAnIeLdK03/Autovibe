@@ -123,9 +123,8 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
         params.set("sortType", filters.sortType);
     }
     
-    const res = await fetch(`/api/cars?${params.toString()}`);
-    if(!res.ok) throw new Error("Failed to load cars");
-    return res.json();
+    const response = await api.get(`/cars?${params}`);
+    return response.data;
 };
 
 export const getCarsByUserId = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
