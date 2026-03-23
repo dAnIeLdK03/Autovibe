@@ -35,7 +35,7 @@ export const FilterModal = ({ isOpen, onClose, filters, updateFilter, onApply }:
                         </button>
                     </div>
 
-                    <div className="p-8 space-y-7 overflow-y-auto max-h-[70vh] custom-scrollbar">
+                    <div className="p-6 space-y-4 overflow-y-auto max-h-[70vh] custom-scrollbar">
 
                         <div className="space-y-3">
                             <FuelType
