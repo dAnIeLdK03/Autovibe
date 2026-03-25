@@ -20,12 +20,15 @@ namespace Autovibe.API.Services
     public class CarService : ICarService
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
         public CarService(
-            AppDbContext context
+            AppDbContext context,
+            IWebHostEnvironment env
         )
         {
             _context = context;
+            _env = env;
         }
         public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId)
         {
@@ -115,6 +118,8 @@ namespace Autovibe.API.Services
             
             file.ThrowIfTooLarge(maxFileSize, "File size exceeds the maximum allowed size of 5MB.");
 
+
+
             var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
             var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!allowedExtensions.Contains(fileExtension))
@@ -122,8 +127,7 @@ namespace Autovibe.API.Services
                 throw new BadRequestException("Invalid file type. Only images are allowed.");
             }
 
-            string folderPath = Path.Combine("images", "cars");
-            string serverPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", folderPath);
+            string serverPath = Path.Combine(_env.WebRootPath, "images", "cars");
             if (!Directory.Exists(serverPath))
             {
                 Directory.CreateDirectory(serverPath);
