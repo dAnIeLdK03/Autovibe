@@ -63,8 +63,13 @@ namespace Autovibe.API.Services
             return car.ThrowIfNull($"Car with id {id} was not found")!.DetailsDto();
         }
 
-        public async Task<PageResponse<CarListDto>> GetAllAsync(CarFiltersDto request)
+        public async Task<PageResponse<CarListDto>> GetAllAsync(CarFiltersDto request, int pageNumber, int pageSize)
         {
+
+            pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
+
+            pageSize.THrowIfLessThanAndMoreThan(1,9, "Page size cannot be less than 1 or greater than 9.");
+
 
             var query = _context.Cars.AsQueryable();
 
