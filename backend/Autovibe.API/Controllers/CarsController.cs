@@ -126,10 +126,6 @@ namespace Autovibe.API.Controllers
             {
                 throw new BadRequestException("Invalid file type. Only images are allowed.");
             }
-            catch (Exception)
-            {
-                throw new InternalException("Failed to upload image.");
-            }
         }
     }
 }
