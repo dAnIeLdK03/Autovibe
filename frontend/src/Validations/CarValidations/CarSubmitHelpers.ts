@@ -1,37 +1,25 @@
-import { API_ORIGIN } from "../../services/api";
+import { uploadImage } from "../../services/imageService";
 
 export const uploadCarImageIfPresent = async (files: File[]) => {
-  const token = localStorage.getItem('token'); 
-
   try {
-    const uploadPromises = files.map(async (file) => {
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const response = await fetch(`${API_ORIGIN}/api/cars/upload-image`, {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      });
-
-      if (response.status === 401) {
-        throw new Error("Session expired. Please, try again.");
-      }
-
-      if (!response.ok) throw new Error("Unsuccessfuly upload image.");
-
-      const data = await response.json();
-      return data.url ?? data.imageUrl;
+    const uplodaPromises = files.map(async (file) => {
+      return await uploadImage(file)
     });
 
-    const imageUrls = (await Promise.all(uploadPromises)).filter(
+    const results = await Promise.all(uplodaPromises);
+
+    const imageUrls = results.filter(
       (u): u is string => typeof u === "string" && u.length > 0
     );
-    return { imageUrls, error: null };
+
+    return {imageUrls, error: null};
+
   } catch (err: any) {
-    return { imageUrls: [], error: err.message };
+    const errorMessage = err.response?.status === 401 
+        ? "Session expired. Please, try again." 
+        : "Unsuccessfully uploaded image.";
+
+        return {imageUrls: [], error: errorMessage};
   }
 };
 //"http://localhost:5258/api/cars/upload-image"
