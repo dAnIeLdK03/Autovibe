@@ -60,6 +60,7 @@ namespace Autovibe.API.Services
         public async Task<CarDetailsDto?> GetCarDetailsAsync(int id)
         {
             var car = await _context.Cars
+                        .AsNoTracking()
                         .Include(c => c.User)
                         .FirstOrDefaultAsync(c => c.Id == id);
            
@@ -74,7 +75,9 @@ namespace Autovibe.API.Services
             pageSize.THrowIfLessThanAndMoreThan(1,9, "Page size cannot be less than 1 or greater than 9.");
 
 
-            var query = _context.Cars.AsQueryable();
+            var query = _context.Cars
+            .AsQueryable()
+            .AsNoTracking();
 
             query = query.ApplyFilters(request)
                          .ApplySorting(request.SortType);
