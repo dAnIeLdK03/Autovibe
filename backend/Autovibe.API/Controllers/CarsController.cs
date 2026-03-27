@@ -29,9 +29,9 @@ namespace Autovibe.API.Controllers
         //GET: api/cars
         [AllowAnonymous]
         [HttpGet]
-        public async Task<ActionResult<PageResponse<CarListDto>>> GetCars([FromQuery] CarFiltersDto request, int pageNumber = 1, int pageSize = 9)
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetCars([FromQuery] CarFiltersDto request)
         {
-            var result = await _carService.GetAllAsync(request, pageNumber, pageSize);
+            var result = await _carService.GetAllAsync(request, request.PageNumber, request.PageSize);
 
                 result.ThrowIfNull("Unable to load cars.");
 
