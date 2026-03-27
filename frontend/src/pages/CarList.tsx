@@ -114,7 +114,7 @@ function CarList() {
     );
   }
 
-  if (!loading && !error && cars.length === 0 || totalPages === 0) {
+  if (!loading && !error && (cars.length === 0 || totalPages === 0)) {
     return (
       <EmptyState />
     );

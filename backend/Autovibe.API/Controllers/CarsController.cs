@@ -45,7 +45,7 @@ namespace Autovibe.API.Controllers
 
             var userId = User.GetUserId();
             
-            userId.ThrowIfNull("Unathorized");
+            userId.ThrowIfNull("Log in first");
 
             var result = await _carService.GetUserCarsAsync(userId.Value, pageNumber, pageSize);
 
@@ -71,7 +71,7 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-                userId.ThrowIfNull("Unathorized");
+                userId.ThrowIfNull("Log in first");
 
             var result = await _carService.CreateAsync(createDto, userId.Value);
 
@@ -86,7 +86,7 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-                userId.ThrowIfNull("Unathorized");
+                userId.ThrowIfNull("Log in first");
 
                 id.ThrowIfLessThan(0, "Invalid car id.");
 
