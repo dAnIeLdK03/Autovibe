@@ -117,24 +117,16 @@ namespace Autovibe.API.Services
         {
             file.ThrowIfNull("File is null or empty.");
 
-            const long maxFileSize = 5 * 1024 * 1024; // 5MB
-            
+            const long maxFileSize = 5 * 1024 * 1024; // 5MB            
             file.ThrowIfTooLarge(maxFileSize, "File size exceeds the maximum allowed size of 5MB.");
 
 
-
-            var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
-            var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
-            if (!allowedExtensions.Contains(fileExtension))
-            {
-                throw new BadRequestException("Invalid file type. Only images are allowed.");
-            }
+            var allowed = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+            file.ThrowIfFileIsWrongFormat(allowed);
 
             string serverPath = Path.Combine(_env.WebRootPath, "images", "cars");
-            if (!Directory.Exists(serverPath))
-            {
-                Directory.CreateDirectory(serverPath);
-            }
+            serverPath.EnsureDirectoryExists();
+            
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var fullPath = Path.Combine(serverPath, fileName);
 

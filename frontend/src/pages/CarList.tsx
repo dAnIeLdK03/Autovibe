@@ -30,8 +30,6 @@ function CarList() {
   const [filters, setFilters] = useState<CarFilters>(initialFilters);
   const debounceFilter = useDebounce(filters, 500);
 
-
-
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +73,7 @@ function CarList() {
           sortType
         };
 
-        if(!queryParams.power || queryParams.power === "0" || queryParams.trim() === ""){
+        if(!queryParams.power || queryParams.power === "0"){
           delete queryParams.power
         }
 

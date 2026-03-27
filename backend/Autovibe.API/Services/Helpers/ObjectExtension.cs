@@ -68,4 +68,22 @@ public static class ObjectExtension
 
     }
 
+    public static void ThrowIfFileIsWrongFormat(this IFormFile file, string[] allowExtensions)
+    {
+        var fileExtension = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (!allowExtensions.Contains(fileExtension))
+        {
+            throw new BadRequestException("Wrong file format.");
+        }
+    }
+
+    public static void EnsureDirectoryExists(this string serverPath)
+    {
+        if (!Directory.Exists(serverPath))
+        {
+            Directory.CreateDirectory(serverPath);
+        }
+    }
+
+
 }

@@ -117,15 +117,8 @@ namespace Autovibe.API.Controllers
         [Authorize]
         public async Task<ActionResult> UploadImage(IFormFile file)
         {
-            try
-            {
                 var imageUrl = await _carService.UploadImageAsync(file);
                 return Ok(new { url = imageUrl });
-            }
-            catch (BadRequestException)
-            {
-                throw new BadRequestException("Invalid file type. Only images are allowed.");
-            }
         }
     }
 }
