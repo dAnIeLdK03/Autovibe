@@ -48,7 +48,9 @@ const carsSlice = createSlice({
         },
         updateCar: (state, action: PayloadAction<Car>) => {
             const index = state.cars.findIndex(car => car.id === action.payload.id);
+            if(index !== -1){
             state.cars[index] = action.payload;
+            }
         },
         removeCar: (state, action: PayloadAction<number>) => {
             state.cars = state.cars.filter(car => car.id !== action.payload);
