@@ -13,11 +13,13 @@ import { FilterModal } from '../components/Filters/FilterModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDebounce } from '../Hooks/useDebounce';
 
+const currentYear = new Date().getFullYear().toString();
+
 const initialFilters: CarFilters = {
   fuelType: "Fuel",
   transmission: "Transmission",
   mileage: "Mileage",
-  yearRange: { min: "1900", max: "2026" },
+  yearRange: { min: "1900", max: currentYear},
   power: "",
   sortType: "None"
 }

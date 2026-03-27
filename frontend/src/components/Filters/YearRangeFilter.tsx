@@ -8,7 +8,8 @@ interface YearRangeProps {
 
 const YearRangeFilter = ({ value, onFilterChange }: YearRangeProps) => {
   const minLimit = 1900;
-  const maxLimit = 2026
+  const maxLimit = new Date().getFullYear();
+  
   const isFiltered = value.min !== "" || value.max !== "";
   const showReset = isFiltered;
 
