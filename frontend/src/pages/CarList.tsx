@@ -7,11 +7,11 @@ import Pagination from '../components/pagePagination';
 import CarCard from '../components/Car/CarCard';
 import EmptyState from '../components/UX/EmptyState';
 import { SkeletonLoader } from '../components/UX/SkeletonLoader';
-import SortedCars from '../components/Filters/SortedCars';
-import { LuFilter } from 'react-icons/lu';
+import { LuFilter, LuScrollText } from 'react-icons/lu';
 import { FilterModal } from '../components/Filters/FilterModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDebounce } from '../Hooks/useDebounce';
+import { SortModal } from '../components/Filters/SortModal';
 
 const currentYear = new Date().getFullYear().toString();
 
@@ -19,7 +19,7 @@ const initialFilters: CarFilters = {
   fuelType: "Fuel",
   transmission: "Transmission",
   mileage: "Mileage",
-  yearRange: { min: "1900", max: currentYear},
+  yearRange: { min: "1900", max: currentYear },
   power: "",
   sortType: "None"
 }
@@ -28,13 +28,13 @@ const initialFilters: CarFilters = {
 function CarList() {
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
-  const [sortType, setSortType] = useState("None");
   const [filters, setFilters] = useState<CarFilters>(initialFilters);
   const debounceFilter = useDebounce(filters, 500);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [isSortOpen, setIsSortOpen] = useState(false);
 
 
 
@@ -55,10 +55,10 @@ function CarList() {
   };
 
   const handleApply = () => {
-    setIsModalOpen(false);
+    setIsFilterOpen(false);
   }
 
- 
+
 
 
   useEffect(() => {
@@ -70,12 +70,12 @@ function CarList() {
 
       try {
 
-        const queryParams : any = {
+        const queryParams: any = {
           ...debounceFilter,
-          sortType
+          sortType : filters.sortType
         };
 
-        if(!queryParams.power || queryParams.power === "0"){
+        if (!queryParams.power || queryParams.power === "0") {
           delete queryParams.power
         }
 
@@ -90,8 +90,8 @@ function CarList() {
         dispatch(setLoading(false));
       }
     };
-      fetchCars();
-  }, [page, dispatch, sortType, debounceFilter])
+    fetchCars();
+  }, [page, dispatch, debounceFilter])
 
 
 
@@ -134,11 +134,32 @@ function CarList() {
         <div className={`flex items-center gap-3 mb-4 transition-opacity duration-600 ${loading ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
 
           <div className="flex items-center gap-3 mb-4">
-            <SortedCars
-              value={sortType}
-              onChange={(val) => {
-                setSortType(val);
-                setPage(1);
+            <button
+              onClick={() => {
+                setIsSortOpen(true);
+                toggleFilters(true);
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl border bg-slate-800/50 border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white transition-all"
+            >
+               <LuScrollText
+              size={18}
+              className={`${isFilterOpen ? 'text-blue-400' : 'text-slate-400'}`}
+            />
+
+              <span className="text-sm font-medium">Sort By</span>
+            </button>
+
+            <SortModal
+              isOpen={isSortOpen}
+              onClose={() => {
+                setIsSortOpen(false);
+                toggleFilters(false);
+              }}
+              sortOptionId={filters.sortType}
+              updateSort={updateFilter}
+              onApply={() => {
+                setIsSortOpen(false);
+                toggleFilters(false);
               }}
             />
           </div>
@@ -146,18 +167,18 @@ function CarList() {
 
           <button
             onClick={() => {
-              setIsModalOpen(true);
+              setIsFilterOpen(true);
               toggleFilters(true);
             }}
             className={`
     flex items-center gap-2 px-4 py-2.5 rounded-2xl border transition-all duration-200 mb-4 gap-3
     bg-slate-800/50 border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white
-    ${isModalOpen ? 'bg-slate-800 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.2)] text-white' : ''}
+    ${isFilterOpen ? 'bg-slate-800 border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.2)] text-white' : ''}
   `}
           >
             <LuFilter
               size={18}
-              className={`${isModalOpen ? 'text-blue-400' : 'text-slate-400'}`}
+              className={`${isFilterOpen ? 'text-blue-400' : 'text-slate-400'}`}
             />
 
             <span className="text-sm font-medium whitespace-nowrap">Filters</span>
@@ -165,9 +186,9 @@ function CarList() {
           </button>
 
           <FilterModal
-            isOpen={isModalOpen}
+            isOpen={isFilterOpen}
             onClose={() => {
-              setIsModalOpen(false);
+              setIsFilterOpen(false);
               toggleFilters(false);
             }}
             filters={filters}

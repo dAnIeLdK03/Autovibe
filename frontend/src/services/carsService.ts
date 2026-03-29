@@ -87,6 +87,10 @@ export interface CarFilters{
     sortType: string;
 };
 
+export interface SortOption {
+  id: string;
+  label: string;
+}
 
 export interface CarsPageResponse {
     items: Car[];
