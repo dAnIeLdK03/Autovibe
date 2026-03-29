@@ -34,7 +34,7 @@ public static class ObjectExtension
 
     public static int ThrowIfLessThan(this int value, int min, string message)
     {
-        if(value <= min)
+        if(value < min)
         {
             throw new BadRequestException(message);
         }
