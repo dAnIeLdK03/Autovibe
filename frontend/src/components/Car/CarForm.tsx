@@ -117,7 +117,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
 
                 <FuelSelector
                     value={fuelType ?? "Fuel"}
-                    onChange={(val: any) => {
+                    onChange={(val: string) => {
                         setValue("fuelType", val, { shouldValidate: true, shouldDirty: true });
                     }}
                 />
@@ -125,7 +125,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
 
                 <TransmissionSelector
                     value={transmissionType ?? "Transmission"}
-                    onChange={(val: any) => {
+                    onChange={(val: string) => {
                         setValue("transmission", val, { shouldValidate: true, shouldDirty: true });
                     }}
                 />

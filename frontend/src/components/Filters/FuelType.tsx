@@ -1,14 +1,10 @@
 import { Check, ChevronDown, ListOrdered } from 'lucide-react';
 import { useState } from 'react'
 import type { FilterSelectProps } from './common';
+import { fuelTypeOptions } from '../../services/carOptions';
 
 
-export const fuelTypeOptions = [
-  {id: 'Fuel', label: 'Fuel'},
-  {id: 'Petrol', label:'Petrol'},
-  {id: 'Diesel', label:'Diesel'},
-  {id: 'Hybrid', label:'Hybrid'},
-];
+
 
 export default function FuelType({value, onChange}: FilterSelectProps) {
 

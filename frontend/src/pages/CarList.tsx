@@ -46,18 +46,20 @@ function CarList() {
     }
   }
 
-  const updateFilter = (key: any, value: any) => {
-    setFilters(prev => ({
-      ...prev,
-      [key]: value
-    }));
-    setPage(1)
-  };
+ const updateFilter = (
+  key: string, 
+  value: string | CarFilters['yearRange']
+) => {
+  setFilters((prev) => ({
+    ...prev,
+    [key]: value,
+  }));
+  setPage(1);
+};
 
   const handleApply = () => {
     setIsFilterOpen(false);
   }
-
 
 
 
@@ -70,7 +72,7 @@ function CarList() {
 
       try {
 
-        const queryParams: any = {
+        const queryParams = {
           ...debounceFilter,
           sortType : filters.sortType
         };
@@ -155,8 +157,10 @@ function CarList() {
                 setIsSortOpen(false);
                 toggleFilters(false);
               }}
-              sortOptionId={filters.sortType}
-              updateSort={updateFilter}
+              sortOptionId={filters.sortType ?? ""}
+              updateSort={(key: string, value: string) => {
+                updateFilter(key as keyof CarFilters, value);
+              }}
               onApply={() => {
                 setIsSortOpen(false);
                 toggleFilters(false);

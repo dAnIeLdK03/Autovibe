@@ -1,12 +1,9 @@
 import { useState } from "react";
 import type { FilterSelectProps } from "./common"
 import { Check, ChevronDown, ListOrdered } from 'lucide-react';
+import { transmissionTypes } from "../../services/carOptions";
 
-export const transmissionTypes = [
-    { id: 'Transmission', label: 'Transmission' },
-    { id: 'Manual', label: 'Manual' },
-    { id: 'Automatic', label: 'Automatic' },
-];
+
 
 export default function Transmission({ value, onChange }: FilterSelectProps) {
     const [isOpen, setIsOpen] = useState(false);

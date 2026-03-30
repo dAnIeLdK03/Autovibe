@@ -1,20 +1,10 @@
 import { useState } from "react";
 import type { FilterSelectProps } from "./common"
 import { Check, ChevronDown, ListOrdered } from 'lucide-react';
+import { MileagеTypes } from "../../services/carOptions";
 
 
-export const MileagеTypes = [
-    {id: 'Mileage', label:'Mileage'},
-    {id: 'to 10000', label: 'to 10000'},
-    {id: 'to 20000', label: 'to 20000'},
-    {id: 'to 50000', label: 'to 50000'},
-    {id: 'to 100000', label: 'to 100000'},
-    {id: 'to 150000', label: 'to 150000'},
-    {id: 'to 200000', label: 'to 200000'},
-    {id: 'to 250000', label: 'to 250000'},
-    {id: 'to 300000', label: 'to 300000'},
-    {id: 'over 300000', label: 'over 300000'},
-];
+
 
 function Mileage({value, onChange} : FilterSelectProps) {
     const [isOpen, setIsOpen] = useState(false);

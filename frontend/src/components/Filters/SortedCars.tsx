@@ -1,14 +1,8 @@
 import { Check } from 'lucide-react';
 import type { SortSelectProps } from './common';
+import { sortOptions } from '../../services/carOptions';
 
 
-export const sortOptions = [
-  { id: 'None', label: 'Sort by' },
-  { id: 'Newest', label: 'Newest' },
-  { id: 'PriceAsc', label: 'Price: Asc' },
-  { id: 'PriceDesc', label: 'Price: Dsc' },
-  { id: 'YearDesc', label: 'Year' },
-];
 
 
 

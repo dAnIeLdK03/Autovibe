@@ -4,6 +4,7 @@ import { clearError, setError, setLoading } from "../../stores/carsSlice";
 import { deleteCar, getCarById, type CarDetails } from "../../services/carsService";
 import { useNavigate, useParams } from "react-router";
 import type { RootState } from "../../stores/store";
+import { useError } from "../../Hooks/useError";
 
 
 export const useCarDetails = () => {
@@ -15,6 +16,7 @@ export const useCarDetails = () => {
 
     const [car, setCar] = useState<CarDetails | null>(null);
     const { user } = useSelector((state: RootState) => state.auth);
+    const {handleError} = useError();
     const isOwner = car !== null && user !== null && car.sellerId === user.id;
     
     const [, setShowDeleteConfirm] = useState(false);
@@ -33,7 +35,7 @@ export const useCarDetails = () => {
                 const data = await getCarById(carId);
                 setCar(data);
             } catch (error) {
-                dispatch(setError("Unable to load car."));
+                handleError(error);
                 setTimeout(() => {
                     navigate("/cars");
                 }, 3000)
@@ -70,7 +72,7 @@ export const useCarDetails = () => {
         dispatch(setLoading(false));
 
         } catch (error) {
-            dispatch(setError("Unable to delete car."));
+            handleError(error)
         dispatch(setLoading(false));
 
         }

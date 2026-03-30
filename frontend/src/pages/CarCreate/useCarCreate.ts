@@ -9,6 +9,7 @@ import { uploadCarImageIfPresent } from "../../Validations/CarValidations/CarSub
 import CarCreateValidaions from "../../Validations/CarValidations/CarCreateValidaions";
 import { createCar } from "../../services/carsService";
 import toast from "react-hot-toast";
+import { useError } from "../../Hooks/useError";
 
 export const useCarCreate = () => {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -18,6 +19,8 @@ export const useCarCreate = () => {
   const [imagePreview, setImagePreview] = useState<string[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
+
+  const { handleError } = useError();
   const methods = useForm<CarFormValues>();
 
   useEffect(() => {
@@ -54,10 +57,8 @@ export const useCarCreate = () => {
 
       navigate("/cars");
       toast.success("Car created successfully!");
-    } catch (err: any) {
-      const msg = err.response?.data?.message ?? "Failed to create car.";
-      dispatch(setError(msg));
-      toast.error(msg);
+    } catch (error) {
+      handleError(error);
     } finally {
       dispatch(setLoading(false));
     }

@@ -7,9 +7,9 @@ import { useForm } from "react-hook-form";
 import type { CarFormValues } from "../../Validations/CarValidations/CarCreateValidaions";
 import { uploadCarImageIfPresent } from "../../Validations/CarValidations/CarSubmitHelpers";
 import CarCreateValidaions from "../../Validations/CarValidations/CarCreateValidaions";
-import { extractApiErrorMessage } from "../../Validations/extractApiErrorMessage";
 import toast from "react-hot-toast";
 import { setLoading, setError, clearError } from '../../stores/carsSlice';
+import { useError } from "../../Hooks/useError";
 
 
 export const useCarEdit = () => {
@@ -25,6 +25,7 @@ export const useCarEdit = () => {
 
   const methods = useForm<CarFormValues>();
   const { reset } = methods;
+  const {handleError} = useError();
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -109,11 +110,8 @@ export const useCarEdit = () => {
     navigate(`/cars/${id}`);
     toast.success("Car updated successfully!");
   }
-  catch (error: any) {
-    const msg = extractApiErrorMessage(error) ?? "Failed to update car.";
-    console.error("Update car failed:", error);
-    dispatch(setError(msg));
-    toast.error(msg);
+  catch (error) {
+    handleError(error);
   } finally {
     dispatch(setLoading(false));
   }

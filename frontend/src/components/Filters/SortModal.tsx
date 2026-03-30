@@ -1,13 +1,8 @@
+import type { SortedCarsProps } from "../../services/carOptions";
 import SortedCars from "./SortedCars";
 
 
-export interface SortedCarsProps {
-    isOpen: boolean;
-    onClose: () => void;
-    sortOptionId: string;
-    updateSort: (key: string, value: any) => void;
-    onApply: () => void;
-};
+
 
 export const SortModal = ({ isOpen, onClose, sortOptionId, updateSort, onApply }: SortedCarsProps) => {
     if (!isOpen) return null;

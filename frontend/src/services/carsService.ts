@@ -79,11 +79,11 @@ export interface CarCardProps {
 };
 
 export interface CarFilters{
-    fuelType: string;
-    transmission: string;
-    mileage: string;
+    fuelType?: string;
+    transmission?: string;
+    mileage?: string;
     yearRange:{min: string, max: string};
-    power: string;
+    power?: string;
     sortType: string;
 };
 
@@ -98,6 +98,8 @@ export interface CarsPageResponse {
     pageNumber: number;
     pageSize: number;
 }
+
+
 
 export interface ConfirmDialogProps {
     isOpen: boolean;
@@ -127,7 +129,7 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
         params.set("power", filters.power);
     }
     if(filters.sortType && filters.sortType !== "SortType"){
-        params.set("sortType", filters.sortType);
+        params.set("sortType", filters.sortType ?? "");
     }
     
     const response = await api.get(`/cars?${params}`);

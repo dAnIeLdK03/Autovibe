@@ -1,6 +1,6 @@
 import { useState } from "react"
 import type { FilterSelectProps } from "./Filters/common";
-import {transmissionTypes} from "./Filters/Transmission";
+import { transmissionTypes } from "../services/carOptions";
 
 
 function TransmissionSelector({value, onChange} : FilterSelectProps) {

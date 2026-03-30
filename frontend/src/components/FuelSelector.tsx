@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { fuelTypeOptions } from "./Filters/FuelType"
+import { fuelTypeOptions } from "../services/carOptions";
 import type { FilterSelectProps } from "./Filters/common";
 
 const FuelSelector = ({ value, onChange }: FilterSelectProps) => {
