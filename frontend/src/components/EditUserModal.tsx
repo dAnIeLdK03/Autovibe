@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { EditUserModalProps } from '../services/userService';
-import { getUser, updateUser, type UserData} from '../services/userService'; 
+import { getUser, updateUser, type UserData } from '../services/userService';
 import { FormProvider, useForm } from 'react-hook-form';
 import { extractApiErrorMessage } from '../Validations/extractApiErrorMessage';
 
@@ -10,22 +10,6 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
   const methods = useForm<UserData>();
   const { register, handleSubmit, reset, formState: { errors } } = methods;
 
-  if (!isOpen || !user) return null;
-
-  const onSubmit = async (formData: UserData) => {
-    try {
-      setError(null);
-      await updateUser(user.id!, formData);
-      
-      if (onSave) {
-        onSave(formData);
-      }
-      onClose();
-    } catch (err: unknown) {
-      const apiMessage = extractApiErrorMessage(err);
-      setError(apiMessage);
-    }
-  };
 
 
   useEffect(() => {
@@ -38,13 +22,31 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
           lastName: data.lastName,
           phoneNumber: data.phoneNumber
         });
-      } catch (err) {
-        setError('Unable to load user data');
+      } catch (error) {
+        const apiMessage = extractApiErrorMessage(error);
+        setError(apiMessage);
       }
     };
 
     if (isOpen) fetchUserEdit();
   }, [isOpen, user?.id, reset]);
+
+  if (!isOpen || !user) return null;
+
+  const onSubmit = async (formData: UserData) => {
+    try {
+      setError(null);
+      await updateUser(user.id!, formData);
+
+      if (onSave) {
+        onSave(formData);
+      }
+      onClose();
+    } catch (error) {
+      const apiMessage = extractApiErrorMessage(error);
+      setError(apiMessage);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
@@ -70,8 +72,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
           <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">First Name</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className={`w-full bg-slate-900 border ${errors.firstName ? 'border-red-500' : 'border-slate-700'} text-white rounded-xl px-4 py-2.5 outline-none`}
                 {...register("firstName", { required: "First name is required" })}
               />
@@ -80,8 +82,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
 
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">Last Name</label>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className={`w-full bg-slate-900 border ${errors.lastName ? 'border-red-500' : 'border-slate-700'} text-white rounded-xl px-4 py-2.5 outline-none`}
                 {...register("lastName", { required: "Last name is required" })}
               />
@@ -90,8 +92,8 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
 
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">Phone Number</label>
-              <input 
-                type="tel" 
+              <input
+                type="tel"
                 className={`w-full bg-slate-900 border ${errors.phoneNumber ? 'border-red-500' : 'border-slate-700'} text-white rounded-xl px-4 py-2.5 outline-none`}
                 {...register("phoneNumber", { required: "Phone number is required" })}
               />
