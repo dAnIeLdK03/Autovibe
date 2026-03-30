@@ -9,7 +9,7 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
 
     const [error, setError] = useState<string | null>(null);
     const methods = useForm<PasswordChange>()
-    const { register, watch, handleSubmit, formState: { errors } } = methods;
+    const { register, getValues, handleSubmit, formState: { errors } } = methods;
 
     if (!isOpen) return null;
 
@@ -83,7 +83,7 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
                                 {...register("ConfirmPassword", {
                                     required: "Confirm password is required",
                                     validate: (value) =>
-                                        value === watch(`NewPassword`) || "Password do not match"
+                                        value === getValues("NewPassword") || "Password do not match"
                                 })}
                             />
                             {errors.ConfirmPassword && <span className="text-red-500 text-xs mt-1">{errors.ConfirmPassword.message}</span>}

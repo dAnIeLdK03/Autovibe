@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from '../stores/authSlice';
 import ChangePassword from '../components/ChangePassword';
 import { SkeletonLoader } from '../components/UX/SkeletonLoader';
+import { useError } from '../Hooks/useError';
 
 function Profile() {
     const { user } = useSelector((state: RootState) => state.auth);
@@ -18,6 +19,7 @@ function Profile() {
     const [isEditOpen, setIsEditOpen] = useState(false);
     const navigate = useNavigate();
     const [isPassChangeOpen, setIsPassChangeOpen] = useState(false);
+    const {handleError} = useError();
 
     const handleEdit = () => {
         setIsEditOpen(true);
@@ -47,7 +49,7 @@ function Profile() {
           localStorage.removeItem("token");
           navigate("/cars");
         } catch (error) {
-          setError("Unable to delete account.");
+          handleError(error);
         }finally{
           setLoading(false);
         }

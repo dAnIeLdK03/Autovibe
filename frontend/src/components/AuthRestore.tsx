@@ -22,7 +22,7 @@ function AuthRestore() {
             }
         }
         fetchToken();
-    }, [])
+    }, [dispatch])
     return null;
 }
 

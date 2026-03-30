@@ -44,7 +44,7 @@ export const useCarDetails = () => {
             }
         };
         fetchCar();
-    }, [id, dispatch, carId, navigate]);
+    }, [id, dispatch, carId, navigate, handleError]);
 
    
 
