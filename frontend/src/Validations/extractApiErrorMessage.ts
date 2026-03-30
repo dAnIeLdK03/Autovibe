@@ -1,9 +1,11 @@
 import axios from 'axios';
 import type { ApiErrorResponse } from '../services/api';
 
-export const extractApiErrorMessage = (error: any): string => {
+export const extractApiErrorMessage = (error: unknown): string => {
+  
+  if(axios.isAxiosError(error)){
   const data = error.response?.data;
-
+  
   if(data?.errors){
     const allErrors = Object.values(data.errors).flat();
     return allErrors.join(" ");
@@ -21,10 +23,13 @@ export const extractApiErrorMessage = (error: any): string => {
 
     return error.message || "Network error occured.";
   }
+}
 
   if (error instanceof Error) {
     return error.message;
   }
 
-  return error.message || "Error occured.";
+  return "An unexpectted error occured";
+
+
 };
