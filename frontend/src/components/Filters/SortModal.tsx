@@ -8,13 +8,16 @@ export const SortModal = ({ isOpen, onClose, sortOptionId, updateSort, onApply }
     if (!isOpen) return null;
 
    return (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} />
+      <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
+            <div
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+                onClick={onClose}
+            />
 
-            <div className="relative bg-slate-900 w-full max-w-md rounded-[32px] shadow-2xl overflow-hidden flex flex-col border border-slate-800">
+            <div className="relative z-10 bg-slate-950 border border-slate-800 w-full max-w-md rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in duration-200">
                 
-                <div className="p-6 border-b border-slate-800 flex justify-between items-center">
-                    <h2 className="text-2xl font-black text-white">Sort Options</h2>
+                <div className="p-6 border-b border-slate-900 flex justify-between items-center bg-slate-900/50">
+                    <h2 className="text-xl font-bold text-white tracking-tight">Sort by</h2>
                     <button onClick={onClose} className="p-2 hover:bg-slate-800 rounded-full text-slate-400">
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
@@ -22,7 +25,7 @@ export const SortModal = ({ isOpen, onClose, sortOptionId, updateSort, onApply }
                     </button>
                 </div>
 
-                <div className="p-6 bg-slate-900">
+                <div className="p-6 space-y-4 overflow-y-auto max-h-[70vh] custom-scrollbar">
                     <div className="space-y-4">
                         <SortedCars
                             value={sortOptionId}
