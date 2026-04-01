@@ -93,7 +93,7 @@ function CarList() {
       }
     };
     fetchCars();
-  }, [page, dispatch, debounceFilter, filters.sortType])
+  }, [page, dispatch, debounceFilter])
 
 
 
