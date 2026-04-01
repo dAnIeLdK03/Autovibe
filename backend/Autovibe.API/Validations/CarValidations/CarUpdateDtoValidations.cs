@@ -40,7 +40,7 @@ namespace Autovibe.API.Validations
 
             RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Description is required.")
-            .Length(10, 500).WithMessage("Description must be between 10 and 500 characters.");
+            .Length(10, 5000).WithMessage("Description must be between 10 and 5000 characters.");
 
         }
     }
