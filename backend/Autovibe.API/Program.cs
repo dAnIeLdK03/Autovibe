@@ -91,13 +91,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
 
     app.UseSwaggerUI(options => {
-       options.SwaggerEndpoint("/openapi/v1.json", "Autovibe Api V1");
+       options.SwaggerEndpoint("/swagger/v1/swagger.json", "Autovibe Api V1");
        options.RoutePrefix = "swagger";
     });
 }
 
 app.UseStaticFiles();
-
 
 
 //middleware
