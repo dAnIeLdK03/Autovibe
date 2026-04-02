@@ -47,6 +47,13 @@ namespace Autovibe.API.Controllers
             }
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<UserDto>> GetUserById(int id)
+        {
+            var result = await _userService.GetUserAsync(id);
+            return Ok(result);
+        }
+
         //PUT: api/user/{id}
         [HttpPut("{id}")]
         public async Task<ActionResult<UserDto>> UpdateUser(int id, [FromBody] UserUpdateDto updateDto)

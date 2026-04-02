@@ -34,13 +34,13 @@ namespace Autovibe.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+    [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register([FromBody] UserRegisterDto registerDto)
         {
             var result = await _authService.Enroll(registerDto);
                result.ThrowIfNull("Registration failure.");
 
-                return CreatedAtAction(nameof(Register), new { id = result.Id }, result);
+                return CreatedAtAction("GetUserById", "User", new { id = result.Id }, result);
 
             
         }
