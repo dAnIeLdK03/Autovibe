@@ -1,4 +1,4 @@
-import { API_ORIGIN } from "../services/api";
+import { API_ORIGIN } from "../api/api";
 
 
 export const getImageUrl = (path: string | null | undefined) => {
