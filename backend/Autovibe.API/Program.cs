@@ -38,11 +38,14 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
             .AllowAnyMethod();
         });
-        
+
 });
 
-var jwtKey = builder.Configuration["Jwt:Key"]
-    ?? throw new InvalidOperationException("JWT key not found in configuration.");
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new InvalidOperationException("JWT key not found in configuration.");
+}
 
 var SymmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey ?? throw new InvalidOperationException("JWT key not found in configuration.")));
 
@@ -73,16 +76,19 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services.AddControllers()
-    .AddJsonOptions(opt => 
+    .AddJsonOptions(opt =>
         opt.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
-string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection'not found.");
-    builder.Services.AddDbContext<AppDbContext>(op => op.UseMySql(connectionString,
-    ServerVersion.AutoDetect(connectionString)));
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty;
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection'not found.");
+}
+builder.Services.AddDbContext<AppDbContext>(op => op.UseMySql(connectionString,
+ServerVersion.AutoDetect(connectionString)));
 
 var app = builder.Build();
 
@@ -90,9 +96,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
 
-    app.UseSwaggerUI(options => {
-       options.SwaggerEndpoint("/swagger/v1/swagger.json", "Autovibe Api V1");
-       options.RoutePrefix = "swagger";
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Autovibe Api V1");
+        options.RoutePrefix = "swagger";
     });
 }
 
