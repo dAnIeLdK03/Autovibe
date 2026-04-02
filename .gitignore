@@ -286,4 +286,11 @@ psd
 thumb
 sketch
 
+frontend/dist/
+
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
 # End of https://www.toptal.com/developers/gitignore/api/react,aspnetcore

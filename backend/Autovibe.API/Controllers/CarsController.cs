@@ -115,7 +115,7 @@ namespace Autovibe.API.Controllers
         //POST: api/cars/upload-image
         [HttpPost("upload-image")]
         [Authorize]
-        public async Task<ActionResult> UploadImage(IFormFile file)
+        public async Task<ActionResult> UploadImage([FromForm] IFormFile file)
         {
                 var imageUrl = await _carService.UploadImageAsync(file);
                 return Ok(new { url = imageUrl });

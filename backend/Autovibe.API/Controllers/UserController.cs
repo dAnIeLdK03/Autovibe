@@ -29,8 +29,7 @@ namespace Autovibe.API.Controllers
         [Authorize]
         public async Task<ActionResult<UserDto>> GetMe()
         {
-            try
-            {
+            
                 var userId = User.GetUserId();
 
                 userId.ThrowIfNull("User can't be found.");
@@ -40,11 +39,7 @@ namespace Autovibe.API.Controllers
                 result.ThrowIfNull("User cannot be found");
 
                 return Ok(result);
-            }
-            catch (Exception)
-            {
-                throw new BadRequestException("Something went wrong with loading user");
-            }
+           
         }
 
         [HttpGet("{id}")]
