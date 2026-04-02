@@ -53,9 +53,7 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-                userId.ThrowIfNull("User can't be found.");
-
-                id.ThrowIfNull("Invalid user id.");
+                userId.ThrowIfDoesNotMatchAndIsNull(id, "User can't be found");
 
             var result = await _userService.UpdateUserAsync(id, updateDto);
 
