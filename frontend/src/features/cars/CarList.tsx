@@ -5,17 +5,17 @@ import { getCars, type CarFilters } from '../../api/carsService';
 import { setCars, setLoading, clearError } from '../../stores/carsSlice';
 import Pagination from '../../shared/Pagination/pagePagination';
 import CarCard from './CarComponents/CarCard';
-import EmptyState from '../../shared/UX/EmptyState';
 import { SkeletonLoader } from '../../shared/UX/SkeletonLoader';
 import { LuFilter, LuScrollText } from 'react-icons/lu';
-import { FilterModal } from './CarComponents/Filters/FilterModal'; 
-import { motion, AnimatePresence } from 'framer-motion';
+import { FilterModal } from './CarComponents/Filters/FilterModal';
+import { motion } from 'framer-motion';
 import { useDebounce } from '../../shared/CustomHooks/useDebounce';
 import { SortModal } from './CarComponents/Filters/SortModal';
+import { NoCarsFound } from '../../shared/UX/NoCarsFound';
 
 const currentYear = new Date().getFullYear().toString();
 
-const initialFilters: CarFilters = {
+export const initialFilters: CarFilters = {
   fuelType: "Fuel",
   transmission: "Transmission",
   mileage: "Mileage",
@@ -46,22 +46,24 @@ function CarList() {
     }
   }
 
- const updateFilter = (
-  key: string, 
-  value: string | CarFilters['yearRange']
-) => {
-  setFilters((prev) => ({
-    ...prev,
-    [key]: value,
-  }));
-  setPage(1);
-};
+  const updateFilter = (
+    key: string,
+    value: string | CarFilters['yearRange']
+  ) => {
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+    setPage(1);
+  };
 
   const handleApply = () => {
     setIsFilterOpen(false);
   }
 
-
+  const handleReset = () => {
+    setFilters(initialFilters);
+  }
 
   useEffect(() => {
     if (page === undefined || page === null) return;
@@ -74,7 +76,7 @@ function CarList() {
 
         const queryParams = {
           ...debounceFilter,
-          sortType : filters.sortType
+          sortType: filters.sortType
         };
 
         if (!queryParams.power || queryParams.power === "0") {
@@ -106,6 +108,7 @@ function CarList() {
       </div>
     );
   }
+
   if (error) {
     return (
       <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
@@ -115,12 +118,16 @@ function CarList() {
       </div>
     );
   }
-
-  if (!loading && !error && (cars.length === 0 || totalPages === 0)) {
-    return (
-      <EmptyState />
-    );
-  }
+  /*
+    if (!loading && !error && (totalPages === 0)) {
+      return (
+        <NoCarsFound
+          onOpenFilters={() => setIsFilterOpen(true)}
+          onResetFilters={handleReset}
+        />
+      );
+    }
+      */
 
   return (
     <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
@@ -143,10 +150,10 @@ function CarList() {
               }}
               className="flex items-center gap-2 px-4 py-2.5 rounded-2xl border bg-slate-800/50 border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white transition-all"
             >
-               <LuScrollText
-              size={18}
-              className={`${isFilterOpen ? 'text-blue-400' : 'text-slate-400'}`}
-            />
+              <LuScrollText
+                size={18}
+                className={`${isFilterOpen ? 'text-blue-400' : 'text-slate-400'}`}
+              />
 
               <span className="text-sm font-medium">Sort By</span>
             </button>
@@ -207,9 +214,21 @@ function CarList() {
         </div>
 
 
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <AnimatePresence mode="wait">
+        {loading ? (
+          <SkeletonLoader type="details" count={3} />
+        ) : cars.length === 0 ? (
+          <NoCarsFound
+            onOpenFilters={() => setIsFilterOpen(true)}
+            onResetFilters={handleReset}
+          />
+        ) : error ? (
+          <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
+            <div className="max-w-7xl mx-auto bg-red-500/10 border border-red-500 text-red-500 p-4 rounded-xl mb-6">
+              {error}
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cars.map((car) => (
               <motion.div
                 key={car.id}
@@ -219,14 +238,13 @@ function CarList() {
                 transition={{ duration: 0.2 }}
               >
                 <CarCard
-                  key={car.id}
                   car={car}
-                  showDeletebutton={false} />
+                  showDeletebutton={false}
+                />
               </motion.div>
-
             ))}
-          </AnimatePresence>
-        </div>
+          </div>
+        )}
         <Pagination
           currentPage={page}
           totalPages={totalPages}
