@@ -3,6 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 export interface Car{
     id: number;
+    bodyType: string;
     make: string; 
     model: string;
     year: number;

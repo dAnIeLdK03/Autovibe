@@ -24,6 +24,9 @@ function CarDetailsInfo({car, isOwner, handleDelete}: CarDeatilsInfoProps) {
                 </h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                     <p>
+                        <span className="font-semibold">Body type:</span> {car.bodyType}
+                    </p>
                     <p>
                         <span className="font-semibold">Price:</span> {car.price.toLocaleString('bg-BG')}
                     </p>

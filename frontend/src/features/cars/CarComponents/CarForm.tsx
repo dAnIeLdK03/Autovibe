@@ -7,6 +7,7 @@ import type { RootState } from '../../../stores/store';
 import FuelSelector from './Filters/FuelSelector'; 
 import TransmissionSelector from './Filters/TransmissionSelector'; 
 import { getImageUrl } from '../../../utils/getImageUrl'; 
+import BodyTypeSelector from './Filters/BodyTypeSelector';
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -22,6 +23,8 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
     const navigate = useNavigate();
     const fuelType = watch("fuelType");
     const transmissionType = watch("transmission");
+    const bodyType = watch("bodyType");
+
     const MAX_CHARS = 5000;
     const descriptionValue = watch("description") || "";
     const charCount = descriptionValue.length;
@@ -48,6 +51,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
 
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                       
                         <div>
                             <label className={labelClasses}>Make</label>
                             <input type="text" className={inputClasses} placeholder="e.g. Audi" {...register("make", { required: "Required" })} />
@@ -83,6 +87,10 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                         <div className="md:col-span-1">
                             <label className={labelClasses}>Fuel</label>
                             <FuelSelector value={fuelType ?? "Fuel"} onChange={(val) => setValue("fuelType", val, { shouldValidate: true })} />
+                        </div>
+                         <div className="md:col-span-1">
+                            <label className={labelClasses}>Body type</label>
+                            <BodyTypeSelector value={bodyType ?? "BodyType"} onChange={(val) => setValue("bodyType", val, { shouldValidate: true })} />
                         </div>
                         <div className="md:col-span-1">
                             <label className={labelClasses}>Transmission</label>
@@ -131,7 +139,6 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                         </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="pt-4 space-y-3">
                         <button
                             type="submit"

@@ -41,3 +41,15 @@ export const transmissionTypes = [
     { id: 'Manual', label: 'Manual' },
     { id: 'Automatic', label: 'Automatic' },
 ];
+
+export const bodyTypes = [
+  { id: 'All', label: 'All'},
+  { id: 'Sedan', label: 'Sedan'},
+  { id: 'Coupe', label: 'Coupe'},
+  { id: 'hatchback', label: 'hatchback'},
+  { id: 'Cabrio', label: 'Cabrio'},
+  { id: 'SUV', label: 'SUV'},
+  { id: 'Pickup truck', label: 'Pickup truck'},
+  { id: 'Wagon', label: 'Wagon'},
+  { id: 'Van', label: 'Van'},
+];

@@ -5,6 +5,7 @@ import type { Car } from '../stores/carsSlice';
 
 export interface CarDetails {
     id: number;
+    bodyType: string;
     make: string;
     model: string;
     year: number;
@@ -28,6 +29,7 @@ export interface CarDetails {
 };
 
 interface CreateCarRequest {
+    bodyType: string;
     make: string;
     model: string;
     year: number;
@@ -45,6 +47,7 @@ interface CreateCarRequest {
 };
 
 export interface UpdateCarRequest {
+    bodyType: string;
     make: string;
     model: string;
     year: number;
@@ -62,6 +65,7 @@ export interface UpdateCarRequest {
 export interface CarCardProps {
     car: {
         id: number,
+        bodyType: string;
         make: string,
         model: string,
         year: number,
