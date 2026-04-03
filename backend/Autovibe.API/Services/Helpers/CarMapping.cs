@@ -9,6 +9,7 @@ namespace Autovibe.API.Services.Helpers
             return new CarListDto
             {
                 Id = c.Id,
+                Compartment = c.Compartment,
                 Make = c.Make,
                 Model = c.Model,
                 Year = c.Year,
@@ -31,6 +32,7 @@ namespace Autovibe.API.Services.Helpers
             return new CarDetailsDto
             {
                 Id = c.Id,
+                Compartment = c.Compartment,
                 Make = c.Make,
                 Model = c.Model,
                 Year = c.Year,
@@ -56,6 +58,7 @@ namespace Autovibe.API.Services.Helpers
         {
             return new Car
             {
+                Compartment = request.Compartment,
                 Model = request.Model,
                 Make = request.Make,
                 Year = request.Year,
@@ -77,6 +80,7 @@ namespace Autovibe.API.Services.Helpers
         }
         public static void ApplyTo(this CarUpdateDto request, Car car, int userId)
         {
+            car.Compartment = request.Compartment;
             car.Make = request.Make;
             car.Model = request.Model;
             car.Year = request.Year;

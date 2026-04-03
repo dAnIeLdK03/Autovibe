@@ -16,7 +16,7 @@ public class Car
     [Required]
     public decimal Price {get; set; }
 
-
+    public string Compartment {get; set; } = string.Empty;
     public int Mileage {get; set; }
     public int Power {get; set; }
     public string FuelType {get; set; } = string.Empty;
