@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Models;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Autovibe.API.Data;
 
@@ -27,15 +28,20 @@ public class AppDbContext : DbContext
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        // Конфигурирай ImageUrls да обработва празни стрингове като празен списък
         modelBuilder.Entity<Car>()
-            .Property(c => c.ImageUrls)
-            .HasConversion(
-                v => v == null || v.Count == 0 ? "[]" : JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
-                v => string.IsNullOrEmpty(v) || v == "[]" 
-                    ? new List<string>() 
-                    : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>()
-            );
+           .Property(c => c.ImageUrls)
+           .HasConversion(
+            v => v == null || v.Count == 0 ? "[]" : JsonSerializer.Serialize(v, (JsonSerializerOptions?) null),
+            v => string.IsNullOrEmpty(v) || v == "[]"
+                ? new List<string>()
+                : JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?) null) ?? new List<string>()
+           )
+           .Metadata.SetValueComparer(new ValueComparer<List<string>>(
+                (c1, c2) => c1!.SequenceEqual(c2!),
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c.ToList()
+
+           ));
     }
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     { }
