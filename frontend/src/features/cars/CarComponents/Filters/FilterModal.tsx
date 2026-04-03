@@ -1,9 +1,10 @@
-import { type CarFilters } from '../../../../api/carsService'; 
+import { type CarFilters } from '../../../../api/carsService';
 import Transmission from './Transmission'
 import FuelType from './FuelType';
 import Mileage from './Mileage';
 import YearRangeFilter from './YearRangeFilter';
 import { Power } from './Power';
+import BodyType from './BodyType';
 
 interface FilterProps {
     isOpen: boolean;
@@ -57,6 +58,14 @@ export const FilterModal = ({ isOpen, onClose, filters, updateFilter, onApply }:
                             onChange={(val) => updateFilter('mileage', val)}
                         />
                     </div>
+
+                    <div className="space-y-3">
+                        <BodyType
+                            value={filters.bodyType ?? ""}
+                            onChange={(val) => updateFilter('bodyType', val)}
+                        />
+                    </div>
+
                     <div className="space-y-3">
                         <Power
                             value={filters.power ?? ""}

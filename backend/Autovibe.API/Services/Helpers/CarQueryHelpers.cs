@@ -44,6 +44,10 @@ public static class CarQueryHelpers
         {
             query = query.Where(c => c.Power == filters.Power);
         }
+        if(!string.IsNullOrEmpty(filters.BodyType) && filters.BodyType != "BodyType")
+        {
+            query = query.Where(c => c.BodyType == filters.BodyType);
+        }
 
         return query;
     }

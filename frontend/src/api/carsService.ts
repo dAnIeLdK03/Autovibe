@@ -88,6 +88,7 @@ export interface CarFilters{
     mileage?: string;
     yearRange:{min: string, max: string};
     power?: string;
+    bodyType?: string;
     sortType: string;
 };
 
@@ -131,6 +132,9 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
     }
     if(filters.power && filters.power !== "" && filters.power !== "0"){
         params.set("power", filters.power);
+    }
+    if(filters.bodyType && filters.bodyType != "" && filters.bodyType !== "BodyType"){
+        params.set("bodyType", filters.bodyType);
     }
     if(filters.sortType && filters.sortType !== "SortType"){
         params.set("sortType", filters.sortType ?? "");

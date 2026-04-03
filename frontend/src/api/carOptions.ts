@@ -43,10 +43,10 @@ export const transmissionTypes = [
 ];
 
 export const bodyTypes = [
-  { id: 'All', label: 'All'},
+  { id: '', label: 'Body type'},
   { id: 'Sedan', label: 'Sedan'},
   { id: 'Coupe', label: 'Coupe'},
-  { id: 'hatchback', label: 'hatchback'},
+  { id: 'Hatchback', label: 'Hatchback'},
   { id: 'Cabrio', label: 'Cabrio'},
   { id: 'SUV', label: 'SUV'},
   { id: 'Pickup truck', label: 'Pickup truck'},
