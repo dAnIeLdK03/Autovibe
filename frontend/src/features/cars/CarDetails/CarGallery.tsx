@@ -14,29 +14,42 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
     .filter(url => url && typeof url === 'string' && url.trim() !== "")
     .slice(0, 10);
 
-  
 
-  
+  const handleNext = () => {
+    if(currentIndex < validImages.length - 1){
+      setCurrentIndex(prev => prev + 1);
+    }
+  }
+
+  const handlePrev = () => {
+    if(currentIndex > 0){
+      setCurrentIndex(prev => prev - 1);
+    }
+  }
 
   useEffect(() => {
     if (validImages.length > 1) {
-      const imagesToPreload: number[] = [];
 
-      if (currentIndex < validImages.length - 1) {
-        imagesToPreload.push(currentIndex + 1);
+      const handleKeyDown = (event: KeyboardEvent) => {
+
+        if (event.key === 'ArrowRight') handleNext();
+        if (event.key === 'ArrowLeft') handlePrev();
       }
 
-      if (currentIndex > 0) {
-        imagesToPreload.push(currentIndex - 1);
-      }
+      const nextIdx = currentIndex + 1;
+      const prevIdx = currentIndex - 1;
 
-      imagesToPreload.forEach(idx => {
-        const url = validImages[idx];
-        if (url) {
-          const img = new Image();
-          img.src = getImageUrl(url);
-        }
-      });
+     [nextIdx, prevIdx].forEach(idx => {
+      if(idx >= 0 && idx < validImages.length){
+        const img = new Image();
+        img.src = getImageUrl(validImages[idx])
+      }
+     });
+
+      window.addEventListener('keydown', handleKeyDown);
+       return () => {
+        window.removeEventListener('keydown', handleKeyDown);
+      };
     }
   }, [currentIndex, validImages]);
 
@@ -63,14 +76,14 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
               <button
                 title="Prev"
                 disabled={currentIndex === 0}
-                onClick={() => setCurrentIndex((prev) => (prev === 0 ? validImages.length - 1 : prev - 1))}
+                onClick={handlePrev}
                 className={`absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-900/70 text-white transition-all 
     ${currentIndex === 0
                     ? "opacity-20 cursor-not-allowed"
                     : "opacity-0 group-hover:opacity-100 hover:text-slate-900"
                   }`}
-              >                
-              <img
+              >
+                <img
                   src="/back_arrow.png"
                   alt="first"
                   className="w-5 h-5 object-contain brightness-0 invert"
@@ -81,7 +94,7 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
               <button
                 title="Next"
                 disabled={currentIndex === validImages.length - 1}
-                onClick={() => setCurrentIndex((prev) => (prev === validImages.length + 1 ? 0 : prev + 1))}
+                onClick={handleNext}
                 className={`absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-900/70 text-white transition-all 
     ${currentIndex === validImages.length - 1
                     ? "opacity-20 cursor-not-allowed"
