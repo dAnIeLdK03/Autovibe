@@ -15,7 +15,9 @@ const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton 
               className="group relative bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 overflow-hidden hover:border-[#70FFE2]/50 transition-all duration-500 shadow-2xl flex flex-col"
             >
 
-              <div className="relative h-56 bg-slate-700 overflow-hidden">
+              <div className="relative h-56 bg-slate-700 overflow-hidden cursor-pointer "
+                    onClick={() => navigate(`/cars/${car.id}`)}
+              >
                 {car.imageUrls && car.imageUrls.length > 0 ? (
                   <img
                     className="w-full h-full object-cover"
