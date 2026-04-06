@@ -11,6 +11,8 @@ export interface CarFormValues {
     color: string;
     shortDescription?: string;
     description: string;
+    location: string;
+    steeringWheel: string;
 }
 
 const CarCreateValidaions = (form: CarFormValues): string | null => {
@@ -48,6 +50,12 @@ const CarCreateValidaions = (form: CarFormValues): string | null => {
     }
     if (!form?.color || form.color.trim() === "") {
         return "Color is required.";
+    }
+    if(!form?.location || form.location.trim() === ""){
+        return "Location is required."
+    }
+    if(!form?.steeringWheel || form.steeringWheel.trim() === ""){
+        return "Steering Wheel is required";
     }
     return null;
 

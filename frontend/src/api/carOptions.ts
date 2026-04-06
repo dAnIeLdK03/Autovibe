@@ -53,3 +53,9 @@ export const bodyTypes = [
   { id: 'Wagon', label: 'Wagon'},
   { id: 'Van', label: 'Van'},
 ];
+
+export const wheelTypes = [
+  {id: '', label:'Steering Wheel'},
+  {id: 'Left', label:'Left'},
+  {id: 'Right', label:'Right'},
+];

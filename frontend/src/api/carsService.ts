@@ -16,6 +16,8 @@ export interface CarDetails {
     transmission: string;
     color: string;
     description: string;
+    location: string;
+    steeringWheel: string;
     createdAt?: Date;
     updatedAt?: Date;
 
@@ -40,6 +42,8 @@ interface CreateCarRequest {
     transmission: string;
     color: string;
     description: string;
+    location: string;
+    steeringWheel: string;
 
 
     imageUrls?: string[];
@@ -58,6 +62,9 @@ export interface UpdateCarRequest {
     transmission: string;
     color: string;
     description: string;
+    location: string;
+    steeringWheel: string;
+
 
     imageUrls?: string[];
 
@@ -76,6 +83,8 @@ export interface CarCardProps {
         transmission: string,
         color: string,
         shortDescription: string,
+        location: string,
+        steeringWheel: string,
         imageUrls?: string[];
     }
     onDeleteClick?: (id: number) => void;
@@ -89,7 +98,10 @@ export interface CarFilters{
     yearRange:{min: string, max: string};
     power?: string;
     bodyType?: string;
+    location?: string;
+    steeringWheel?: string;
     sortType: string;
+
 };
 
 export interface SortOption {
@@ -135,6 +147,12 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
     }
     if(filters.bodyType && filters.bodyType != "" && filters.bodyType !== "BodyType"){
         params.set("bodyType", filters.bodyType);
+    }
+    if(filters.location && filters.location != "" && filters.location != "Location"){
+        params.set("location", filters.location);
+    }
+    if(filters.steeringWheel && filters.steeringWheel != "" && filters.steeringWheel != "SteeringWheel"){
+        params.set("steeringWheel", filters.steeringWheel);
     }
     if(filters.sortType && filters.sortType !== "SortType"){
         params.set("sortType", filters.sortType ?? "");

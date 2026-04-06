@@ -8,6 +8,7 @@ import FuelSelector from './Filters/FuelSelector';
 import TransmissionSelector from './Filters/TransmissionSelector'; 
 import { getImageUrl } from '../../../utils/getImageUrl'; 
 import BodyTypeSelector from './Filters/BodyTypeSelector';
+import SteeringWheelSelector from './Filters/SteeringWheelSelector';
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -23,6 +24,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
     const navigate = useNavigate();
     const fuelType = watch("fuelType");
     const transmissionType = watch("transmission");
+    const wheelType = watch("steeringWheel");
     const bodyType = watch("bodyType");
 
     const MAX_CHARS = 5000;
@@ -70,7 +72,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                             <input type="number" className={inputClasses} placeholder="2024" {...register("year", { required: true, valueAsNumber: true })} />
                         </div>
                         <div>
-                            <label className={labelClasses}>Price ($)</label>
+                            <label className={labelClasses}>Price (€)</label>
                             <input type="number" className={inputClasses} placeholder="Price" {...register("price", { required: true, valueAsNumber: true })} />
                         </div>
                         <div>
@@ -97,8 +99,16 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                             <TransmissionSelector value={transmissionType ?? "Transmission"} onChange={(val) => setValue("transmission", val, { shouldValidate: true })} />
                         </div>
                         <div className="md:col-span-1">
+                            <label className={labelClasses}>Steering Wheel</label>
+                            <SteeringWheelSelector value={wheelType ?? "Steering Wheel"} onChange={(val) => setValue("steeringWheel", val, { shouldValidate: true })} />
+                        </div>
+                        <div className="md:col-span-1">
                             <label className={labelClasses}>Color</label>
                             <input type="text" className={inputClasses} placeholder="Color" {...register("color", { required: true })} />
+                        </div>
+                        <div className="md:col-span-1">
+                            <label className={labelClasses}>Location</label>
+                            <input type="text" className={inputClasses} placeholder="Location" {...register("location", { required: true })} />
                         </div>
                     </div>
 

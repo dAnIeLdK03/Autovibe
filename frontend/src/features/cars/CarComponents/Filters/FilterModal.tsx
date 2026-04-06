@@ -5,6 +5,8 @@ import Mileage from './Mileage';
 import YearRangeFilter from './YearRangeFilter';
 import { Power } from './Power';
 import BodyType from './BodyType';
+import SteeringWheel from './SteeringWheel';
+import { Location } from './Location';
 
 interface FilterProps {
     isOpen: boolean;
@@ -67,9 +69,22 @@ export const FilterModal = ({ isOpen, onClose, filters, updateFilter, onApply }:
                     </div>
 
                     <div className="space-y-3">
+                        <SteeringWheel
+                            value={filters.steeringWheel ?? ""}
+                            onChange={(val) => updateFilter('steeringWheel', val)}
+                        />
+                    </div>
+
+                    <div className="space-y-3">
                         <Power
                             value={filters.power ?? ""}
                             onChange={(val) => updateFilter('power', val)}
+                        />
+                    </div>
+                    <div className="space-y-3">
+                        <Location
+                            value={filters.location ?? ""}
+                            onChange={(val) => updateFilter('location', val)}
                         />
                     </div>
 

@@ -14,6 +14,8 @@ export interface Car{
     transmission: string;
     color: string;
     shortDescription: string;
+    location: string;
+    steeringWheel: string;
 
     userId: number;
 

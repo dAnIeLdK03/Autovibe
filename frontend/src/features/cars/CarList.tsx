@@ -21,6 +21,8 @@ export const initialFilters: CarFilters = {
   mileage: "Mileage",
   yearRange: { min: "1900", max: currentYear },
   power: "",
+  location: "",
+  steeringWheel: "",
   sortType: "None"
 }
 
@@ -29,7 +31,7 @@ function CarList() {
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
   const [filters, setFilters] = useState<CarFilters>(initialFilters);
-  const debounceFilter = useDebounce(filters, 500);
+  const debounceFilter = useDebounce(filters, 1500);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
