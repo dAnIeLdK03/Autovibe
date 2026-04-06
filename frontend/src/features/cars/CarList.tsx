@@ -120,16 +120,6 @@ function CarList() {
       </div>
     );
   }
-  /*
-    if (!loading && !error && (totalPages === 0)) {
-      return (
-        <NoCarsFound
-          onOpenFilters={() => setIsFilterOpen(true)}
-          onResetFilters={handleReset}
-        />
-      );
-    }
-      */
 
   return (
     <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20">
