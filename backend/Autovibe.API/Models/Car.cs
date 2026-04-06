@@ -23,10 +23,16 @@ public class Car
     public string Transmission {get; set; } = string.Empty;
     public string Color {get; set; } = string.Empty;
     public string Description {get; set; } = string.Empty;
+    public string Location {get; set; } = string.Empty;
+    public string Published {get; set; } = string.Empty;
+    public string SteeringWheel {get; set;} = string.Empty;
+    
     public int UserId {get; set; }
     public User User {get; set; } = null!; 
     public DateTime? CreatedAt {get; set; }
     public DateTime? UpdatedAt {get; set; }
+
+
 
     public List<string> ImageUrls {get; set; } = new List<string>();
  

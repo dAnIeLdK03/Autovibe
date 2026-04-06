@@ -19,7 +19,10 @@ public class CarDetailsDto
     public string Color {get; set; } = string.Empty;
     
     public string Description {get; set; } = string.Empty;
-
+     public string Location {get; set; } = string.Empty;
+    public string Published {get; set; } = string.Empty;
+    public string SteeringWheel {get; set;} = string.Empty;
+    
     public DateTime? CreatedAt {get; set; }
     public DateTime? UpdatedAt {get; set; }
 
