@@ -23,7 +23,6 @@ namespace Autovibe.API.Services.Helpers
                     ? c.Description.Substring(0, 100) + "..."
                     : c.Description,
                 Location = c.Location,
-                Published = c.Published,
                 SteeringWheel = c.SteeringWheel,
                 UserId = c.UserId,
                 ImageUrls = c.ImageUrls ?? new List<string>()
@@ -47,7 +46,6 @@ namespace Autovibe.API.Services.Helpers
                 Color = c.Color,
                 Description = c.Description,
                 Location = c.Location,
-                Published = c.Published,
                 SteeringWheel = c.SteeringWheel,
 
                 CreatedAt = c.CreatedAt,
@@ -77,7 +75,6 @@ namespace Autovibe.API.Services.Helpers
                 Color = request.Color,
                 Description = request.Description,
                 Location = request.Location,
-                Published = request.Published,
                 SteeringWheel = request.SteeringWheel,
 
                 CreatedAt = DateTime.UtcNow,
@@ -103,7 +100,6 @@ namespace Autovibe.API.Services.Helpers
             car.Color = request.Color;
             car.Description = request.Description;
             car.Location = request.Location;
-            car.Published = request.Published;
             car.SteeringWheel = request.SteeringWheel;
             car.ImageUrls = request.ImageUrls ?? new List<string>();
             car.UpdatedAt = DateTime.UtcNow;
