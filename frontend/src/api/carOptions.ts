@@ -1,22 +1,20 @@
 
 export const fuelTypeOptions = [
-  {id: 'Fuel', label: 'Fuel'},
-  {id: 'Petrol', label:'Petrol'},
-  {id: 'Diesel', label:'Diesel'},
-  {id: 'Hybrid', label:'Hybrid'},
+  {value: 'Petrol', label:'Petrol'},
+  {value: 'Diesel', label:'Diesel'},
+  {value: 'Hybrid', label:'Hybrid'},
 ];
 
 export const MileagеTypes = [
-    {id: 'Mileage', label:'Mileage'},
-    {id: 'to 10000', label: 'to 10000'},
-    {id: 'to 20000', label: 'to 20000'},
-    {id: 'to 50000', label: 'to 50000'},
-    {id: 'to 100000', label: 'to 100000'},
-    {id: 'to 150000', label: 'to 150000'},
-    {id: 'to 200000', label: 'to 200000'},
-    {id: 'to 250000', label: 'to 250000'},
-    {id: 'to 300000', label: 'to 300000'},
-    {id: 'over 300000', label: 'over 300000'},
+    {value: 'to 10000', label: 'to 10000'},
+    {value: 'to 20000', label: 'to 20000'},
+    {value: 'to 50000', label: 'to 50000'},
+    {value: 'to 100000', label: 'to 100000'},
+    {value: 'to 150000', label: 'to 150000'},
+    {value: 'to 200000', label: 'to 200000'},
+    {value: 'to 250000', label: 'to 250000'},
+    {value: 'to 300000', label: 'to 300000'},
+    {value: 'over 300000', label: 'over 300000'},
 ];
 
 
@@ -37,25 +35,22 @@ export interface SortedCarsProps {
 };
 
 export const transmissionTypes = [
-    { id: 'Transmission', label: 'Transmission' },
-    { id: 'Manual', label: 'Manual' },
-    { id: 'Automatic', label: 'Automatic' },
+    { value: 'Manual', label: 'Manual' },
+    { value: 'Automatic', label: 'Automatic' },
 ];
 
 export const bodyTypes = [
-  { id: '', label: 'Body type'},
-  { id: 'Sedan', label: 'Sedan'},
-  { id: 'Coupe', label: 'Coupe'},
-  { id: 'Hatchback', label: 'Hatchback'},
-  { id: 'Cabrio', label: 'Cabrio'},
-  { id: 'SUV', label: 'SUV'},
-  { id: 'Pickup truck', label: 'Pickup truck'},
-  { id: 'Wagon', label: 'Wagon'},
-  { id: 'Van', label: 'Van'},
+  { value: 'Sedan', label: 'Sedan'},
+  { value: 'Coupe', label: 'Coupe'},
+  { value: 'Hatchback', label: 'Hatchback'},
+  { value: 'Cabrio', label: 'Cabrio'},
+  { value: 'SUV', label: 'SUV'},
+  { value: 'Pickup truck', label: 'Pickup truck'},
+  { value: 'Wagon', label: 'Wagon'},
+  { value: 'Van', label: 'Van'},
 ];
 
 export const wheelTypes = [
-  {id: '', label:'Steering Wheel'},
-  {id: 'Left', label:'Left'},
-  {id: 'Right', label:'Right'},
+  {value: 'Left', label:'Left'},
+  {value: 'Right', label:'Right'},
 ];

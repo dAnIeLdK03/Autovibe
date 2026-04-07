@@ -4,11 +4,9 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 import type { CarFormValues } from './CarValidations/CarCreateValidaions'; 
 import type { RootState } from '../../../stores/store'; 
-import FuelSelector from './Filters/FuelSelector'; 
-import TransmissionSelector from './Filters/TransmissionSelector'; 
 import { getImageUrl } from '../../../utils/getImageUrl'; 
-import BodyTypeSelector from './Filters/BodyTypeSelector';
-import SteeringWheelSelector from './Filters/SteeringWheelSelector';
+import { BaseSelect } from './Filters/BaseSelect';
+import { bodyTypes, fuelTypeOptions, transmissionTypes, wheelTypes } from '../../../api/carOptions';
 
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -87,24 +85,44 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div className="md:col-span-1">
-                            <label className={labelClasses}>Fuel</label>
-                            <FuelSelector value={fuelType ?? "Fuel"} onChange={(val) => setValue("fuelType", val, { shouldValidate: true })} />
+                            <BaseSelect
+                                variant='dropdown'
+                                label='Fuel'
+                                options={fuelTypeOptions}
+                                value={fuelType ?? ""}
+                                onChange={(val) => setValue("fuelType", val, {shouldValidate: true})}
+                            />
                         </div>
                          <div className="md:col-span-1">
-                            <label className={labelClasses}>Body type</label>
-                            <BodyTypeSelector value={bodyType ?? "BodyType"} onChange={(val) => setValue("bodyType", val, { shouldValidate: true })} />
+                            <BaseSelect
+                                variant='dropdown'
+                                label='Body Type'
+                                options={bodyTypes}
+                                value={bodyType ?? ""}
+                                onChange={(val) => setValue("bodyType", val, {shouldValidate: true})}
+                            />
                         </div>
                         <div className="md:col-span-1">
-                            <label className={labelClasses}>Transmission</label>
-                            <TransmissionSelector value={transmissionType ?? "Transmission"} onChange={(val) => setValue("transmission", val, { shouldValidate: true })} />
+                            <BaseSelect
+                                variant='dropdown'
+                                label='Transmission'
+                                options={transmissionTypes}
+                                value={transmissionType ?? ""}
+                                onChange={(val) => setValue("transmission", val, {shouldValidate: true})}
+                            />
                         </div>
                         <div className="md:col-span-1">
-                            <label className={labelClasses}>Steering Wheel</label>
-                            <SteeringWheelSelector value={wheelType ?? "Steering Wheel"} onChange={(val) => setValue("steeringWheel", val, { shouldValidate: true })} />
+                            <BaseSelect
+                                variant='dropdown'
+                                label='Steering Wheel'
+                                options={wheelTypes}
+                                value={wheelType ?? ""}
+                                onChange={(val) => setValue("steeringWheel", val, {shouldValidate: true})}
+                            />
                         </div>
                         <div className="md:col-span-1">
                             <label className={labelClasses}>Color</label>
-                            <input type="text" className={inputClasses} placeholder="Color" {...register("color", { required: true })} />
+                            <input type="text" className={inputClasses} placeholder="Color" {...register("color", { required: true })}  />
                         </div>
                         <div className="md:col-span-1">
                             <label className={labelClasses}>Location</label>
