@@ -9,7 +9,6 @@ import { SkeletonLoader } from '../../shared/UX/SkeletonLoader';
 import { LuFilter, LuScrollText } from 'react-icons/lu';
 import { FilterModal } from './CarComponents/Filters/FilterModal';
 import { motion } from 'framer-motion';
-import { useDebounce } from '../../shared/CustomHooks/useDebounce';
 import { SortModal } from './CarComponents/Filters/SortModal';
 import { NoCarsFound } from '../../shared/UX/NoCarsFound';
 
@@ -31,7 +30,7 @@ function CarList() {
   const dispatch = useDispatch();
   const { cars, loading, error } = useSelector((state: RootState) => state.cars);
   const [filters, setFilters] = useState<CarFilters>(initialFilters);
-  const debounceFilter = useDebounce(filters, 1500);
+  const [appliedFilters, setAppliedFilters] = useState<CarFilters>(filters);
 
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -59,12 +58,9 @@ function CarList() {
     setPage(1);
   };
 
-  const handleApply = () => {
-    setIsFilterOpen(false);
-  }
 
   const handleReset = () => {
-    setFilters(initialFilters);
+    setAppliedFilters(initialFilters);
   }
 
   useEffect(() => {
@@ -77,7 +73,7 @@ function CarList() {
       try {
 
         const queryParams = {
-          ...debounceFilter,
+          ...appliedFilters,
           sortType: filters.sortType
         };
 
@@ -97,7 +93,7 @@ function CarList() {
       }
     };
     fetchCars();
-  }, [page, dispatch, debounceFilter])
+  }, [page, dispatch, appliedFilters, filters.sortType]);
 
 
 
@@ -195,9 +191,10 @@ function CarList() {
               toggleFilters(false);
             }}
             filters={filters}
-            updateFilter={updateFilter}
-            onApply={() => {
-              handleApply();
+            onApply={(finalFilters) => {
+              setFilters(finalFilters);
+              setAppliedFilters(finalFilters);
+              setIsFilterOpen(false);
               toggleFilters(false);
             }}
           />
