@@ -22,6 +22,7 @@ export const initialFilters: CarFilters = {
   power: "",
   location: "",
   steeringWheel: "",
+  published: "",
   sortType: "None"
 }
 
@@ -167,7 +168,6 @@ function CarList() {
           <button
             onClick={() => {
               setIsFilterOpen(true);
-              toggleFilters(true);
             }}
             className={`
     flex items-center gap-2 px-4 py-2.5 rounded-2xl border transition-all duration-200 mb-4 gap-3
@@ -188,14 +188,12 @@ function CarList() {
             isOpen={isFilterOpen}
             onClose={() => {
               setIsFilterOpen(false);
-              toggleFilters(false);
             }}
             filters={filters}
             onApply={(finalFilters) => {
               setFilters(finalFilters);
               setAppliedFilters(finalFilters);
               setIsFilterOpen(false);
-              toggleFilters(false);
             }}
           />
 

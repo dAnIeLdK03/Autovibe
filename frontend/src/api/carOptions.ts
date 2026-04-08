@@ -54,3 +54,11 @@ export const wheelTypes = [
   { value: 'Left', label: 'Left' },
   { value: 'Right', label: 'Right' },
 ];
+
+export const publishedOptions = [
+  {value: "0", label: "Today"},
+  {value: "3", label: "Last 3 days"},
+  {value: "7", label: "Last 7 days"},
+  {value: "14", label: "Last 14 days"},
+  {value: "30", label: "Last 30 days"}
+];

@@ -56,6 +56,14 @@ public static class CarQueryHelpers
         {
             query = query.Where(c => c.SteeringWheel == filters.SteeringWheel);
         }
+        if (filters.Published.HasValue)
+        {
+            if(filters.Published.HasValue)
+            {
+                DateTime startDate = DateTime.UtcNow.Date.AddDays(-filters.Published.Value);
+                query = query.Where(c => c.CreatedAt.HasValue && c.CreatedAt.Value >= startDate);   
+            }
+        }
         return query;
     }
 

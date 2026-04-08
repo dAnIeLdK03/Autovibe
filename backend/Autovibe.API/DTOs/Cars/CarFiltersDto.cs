@@ -13,6 +13,8 @@ public class CarFiltersDto
     public int? Power {get; set; }
      public string Location {get; set; } = string.Empty;
     public string SteeringWheel {get; set;} = string.Empty;
+
+    public int? Published {get; set; }
     
 
     public string? SortType {get; set;}

@@ -101,7 +101,7 @@ export interface CarFilters{
     location?: string;
     steeringWheel?: string;
     sortType: string;
-
+    published?: string;
 };
 
 export interface SortOption {
@@ -153,6 +153,9 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
     }
     if(filters.steeringWheel && filters.steeringWheel != "" && filters.steeringWheel != "SteeringWheel"){
         params.set("steeringWheel", filters.steeringWheel);
+    }
+    if(filters.published && filters.published != "" && filters.published != "Published"){
+        params.set("published", filters.published);
     }
     if(filters.sortType && filters.sortType !== "SortType"){
         params.set("sortType", filters.sortType ?? "");
