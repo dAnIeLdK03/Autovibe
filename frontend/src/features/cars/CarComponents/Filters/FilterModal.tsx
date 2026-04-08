@@ -5,6 +5,7 @@ import { Location } from './Location';
 import { BaseSelect } from './BaseSelect';
 import { bodyTypes, fuelTypeOptions, MileagеTypes, transmissionTypes, wheelTypes } from '../../../../api/carOptions';
 import { useEffect, useState } from 'react';
+import { initialFilters } from '../../CarList';
 
 interface FilterProps {
     isOpen: boolean;
@@ -16,6 +17,9 @@ interface FilterProps {
 export const FilterModal = ({ isOpen, onClose, filters, onApply }: FilterProps) => {
     const [tempFilters, setTempFilters] = useState<CarFilters>(filters);
 
+    const handleReset = () => {
+        setTempFilters(initialFilters);
+    }
     useEffect(() => {
         if (isOpen) {
             setTempFilters(filters);
@@ -109,13 +113,26 @@ export const FilterModal = ({ isOpen, onClose, filters, onApply }: FilterProps) 
                 </div>
 
                 <div className="p-6 bg-slate-900/90 border-t border-slate-800/50 shrink-0">
-                    <button
-                        onClick={() => onApply(tempFilters)}
-                        className="group relative w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition-all active:scale-[0.98] overflow-hidden shadow-lg shadow-blue-900/20"
+                    <div className="flex flex-row gap-3">
+
+                        <button
+                            onClick={handleReset}
+                            className="flex-1 group relative bg-red-600 hover:bg-red-700 text-white font-bold py-4 rounded-2xl transition-all active:scale-[0.98] overflow-hidden border border-slate-700"
                         >
-                        <span className="relative z-10 text-lg">Show results</span>
-                    </button>
+                            <span className="relative z-10 text-lg">Clear</span>
+                        </button>
+
+                        <button
+                            onClick={() => onApply(tempFilters)}
+                            className="flex-[2] group relative bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-2xl transition-all active:scale-[0.98] overflow-hidden shadow-lg shadow-blue-900/20"
+                        >
+                            <span className="relative z-10 text-lg">Show results</span>
+                            <div className="absolute inset-0 w-1/2 h-full bg-white/10 skew-x-[-25deg] -translate-x-full group-hover:translate-x-[250%] transition-transform duration-700" />
+                        </button>
+
+                    </div>
                 </div>
+
             </div>
         </div>
     );
