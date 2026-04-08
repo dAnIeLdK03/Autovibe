@@ -139,11 +139,13 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                         </div>
                         <textarea
                             placeholder="Describe your vehicle..."
-                            className={`${inputClasses} min-h-[300px] py-4 resize-none leading-relaxed`}
+                            className={`${inputClasses} min-h-[300px] py-4 resize-none leading-relaxed mb-5`}
                             {...register("description", { required: "Description is required", maxLength: MAX_CHARS })}
                         />
                         {errors.description && <p className="text-red-500 text-xs mt-1 ml-1">{errors.description.message as string}</p>}
                     </div>
+
+                    <span className="text-base text-slate-400 group-hover:text-[#70FFE2]">Info: To upload multiple photos at once, hold down the "Ctrl" key while selecting the desired photos.</span>
 
                     <div>
                         <label className={labelClasses}>Photos ({galleryImages.length}/10)</label>
