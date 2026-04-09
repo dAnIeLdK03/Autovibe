@@ -9,7 +9,7 @@ import Register from "../features/auth/Register";
 import CarList from "../features/cars/CarList/CarList";
 import CarDetails from "../features/cars/CarDetails/CarDetails";
 import CarEdit from "../features/cars/CarEdit/CarEdit";
-import MyCars from "../features/cars/MyCars";
+import MyCars from "../features/cars/MyCars/MyCars";
 import Navbar from "../shared/Navbar/Navbar";
 import AuthRestore from "../features/auth/authComponents/AuthRestore"; 
 import Profile from "../features/user/Profile";
