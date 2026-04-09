@@ -1,3 +1,4 @@
+import type { CarFilters } from "./carsService";
 
 export const fuelTypeOptions = [
   { value: 'Petrol', label: 'Petrol' },
@@ -30,7 +31,7 @@ export interface SortedCarsProps {
   isOpen: boolean;
   onClose: () => void;
   sortOptionId: string;
-  updateSort: (key: string, value: string) => void;
+  updateSort: (key: keyof CarFilters, value: CarFilters[keyof CarFilters]) => void;
   onApply: () => void;
 };
 

@@ -8,6 +8,8 @@ import { getImageUrl } from '../../../utils/getImageUrl';
 import { BaseSelect } from './Filters/BaseSelect';
 import { bodyTypes, fuelTypeOptions, transmissionTypes, wheelTypes } from '../../../api/carOptions';
 
+
+
 interface CarFormProps {
     handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     imagePreview: string[];

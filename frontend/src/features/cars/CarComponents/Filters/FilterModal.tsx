@@ -5,7 +5,7 @@ import { Location } from './Location';
 import { BaseSelect } from './BaseSelect';
 import { bodyTypes, fuelTypeOptions, MileagеTypes, publishedOptions, transmissionTypes, wheelTypes } from '../../../../api/carOptions';
 import { useEffect, useState } from 'react';
-import { initialFilters } from '../../CarList';
+import { initialFilters } from '../../CarList/CarList';
 
 interface FilterProps {
     isOpen: boolean;

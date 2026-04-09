@@ -1,16 +1,14 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import type { RootState } from '../../stores/store';
-import { getCars, type CarFilters } from '../../api/carsService';
-import { setCars, setLoading, clearError } from '../../stores/carsSlice';
-import Pagination from '../../shared/Pagination/pagePagination';
-import CarCard from './CarComponents/CarCard';
-import { SkeletonLoader } from '../../shared/UX/SkeletonLoader';
+import { SkeletonLoader } from '../../../shared/UX/SkeletonLoader';
 import { LuFilter, LuScrollText } from 'react-icons/lu';
-import { FilterModal } from './CarComponents/Filters/FilterModal';
-import { motion } from 'framer-motion';
-import { SortModal } from './CarComponents/Filters/SortModal';
-import { NoCarsFound } from '../../shared/UX/NoCarsFound';
+import { SortModal } from '../CarComponents/Filters/SortModal';
+import { FilterModal } from '../CarComponents/Filters/FilterModal';
+import { NoCarsFound } from '../../../shared/UX/NoCarsFound';
+import CarCard from '../CarComponents/CarCard';
+import Pagination from '../../../shared/Pagination/pagePagination';
+import { useCarList } from './useCarList';
+import type { CarFilters } from '../../../api/carsService';
+import { useState } from 'react';
+
 
 const currentYear = new Date().getFullYear().toString();
 
@@ -28,17 +26,13 @@ export const initialFilters: CarFilters = {
 
 
 function CarList() {
-  const dispatch = useDispatch();
-  const { cars, loading, error } = useSelector((state: RootState) => state.cars);
-  const [filters, setFilters] = useState<CarFilters>(initialFilters);
-  const [appliedFilters, setAppliedFilters] = useState<CarFilters>(filters);
-
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
 
-
+  const {
+    cars, loading, error, filters, page, totalPages, handleApplyFilters,
+    handleUpdateSort, handleReset, handlePageChange
+  } = useCarList(initialFilters);
 
   const toggleFilters = (isOpen: boolean) => {
     if (isOpen) {
@@ -47,55 +41,6 @@ function CarList() {
       document.body.style.overflow = 'unset';
     }
   }
-
-  const updateFilter = (
-    key: string,
-    value: string | CarFilters['yearRange']
-  ) => {
-    setFilters((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-    setPage(1);
-  };
-
-
-  const handleReset = () => {
-    setAppliedFilters(initialFilters);
-  }
-
-  useEffect(() => {
-    if (page === undefined || page === null) return;
-
-    const fetchCars = async () => {
-      dispatch(setLoading(true));
-      dispatch(clearError());
-
-      try {
-
-        const queryParams = {
-          ...appliedFilters,
-          sortType: filters.sortType
-        };
-
-        if (!queryParams.power || queryParams.power === "0") {
-          delete queryParams.power
-        }
-
-        const response = await getCars(page, 9, queryParams);
-
-        dispatch(setCars(response.items ?? []));
-        setTotalPages(response.totalPages ?? 0);
-      } catch {
-        dispatch(setCars([]));
-        setTotalPages(0);
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-    fetchCars();
-  }, [page, dispatch, appliedFilters, filters.sortType]);
-
 
 
   if (loading) {
@@ -149,15 +94,14 @@ function CarList() {
 
             <SortModal
               isOpen={isSortOpen}
-              onClose={() => {
+
+              sortOptionId={filters.sortType ?? ""}
+              updateSort={handleUpdateSort}
+              onApply={() => {
                 setIsSortOpen(false);
                 toggleFilters(false);
               }}
-              sortOptionId={filters.sortType ?? ""}
-              updateSort={(key: string, value: string) => {
-                updateFilter(key as keyof CarFilters, value);
-              }}
-              onApply={() => {
+              onClose={() => {
                 setIsSortOpen(false);
                 toggleFilters(false);
               }}
@@ -191,8 +135,7 @@ function CarList() {
             }}
             filters={filters}
             onApply={(finalFilters) => {
-              setFilters(finalFilters);
-              setAppliedFilters(finalFilters);
+              handleApplyFilters(finalFilters);
               setIsFilterOpen(false);
             }}
           />
@@ -217,28 +160,18 @@ function CarList() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {cars.map((car) => (
-              <motion.div
-                key={car.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-              >
-                <CarCard
-                  car={car}
-                  showDeletebutton={false}
-                />
-              </motion.div>
+
+              <CarCard
+                car={car}
+                showDeletebutton={false}
+              />
             ))}
           </div>
         )}
         <Pagination
           currentPage={page}
           totalPages={totalPages}
-          onPageChange={(newPage: number) => {
-            setPage(newPage);
-            window.scrollTo({ top: 0, behavior: "smooth" });
-          }}
+          onPageChange={handlePageChange}
         />
       </div>
     </div>

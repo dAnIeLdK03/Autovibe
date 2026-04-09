@@ -6,7 +6,7 @@ import {
 import Home from "./Home";
 import Login from "../features/auth/Login";
 import Register from "../features/auth/Register";
-import CarList from "../features/cars/CarList";
+import CarList from "../features/cars/CarList/CarList";
 import CarDetails from "../features/cars/CarDetails/CarDetails";
 import CarEdit from "../features/cars/CarEdit/CarEdit";
 import MyCars from "../features/cars/MyCars";
