@@ -52,7 +52,7 @@ public static class CarQueryHelpers
         {
             query = query.Where(c => c.Location == filters.Location);
         }
-        if(!string.IsNullOrEmpty(filters.SteeringWheel) && filters.SteeringWheel != "SteeeringWheel")
+        if(!string.IsNullOrEmpty(filters.SteeringWheel) && filters.SteeringWheel != "SteeringWheel")
         {
             query = query.Where(c => c.SteeringWheel == filters.SteeringWheel);
         }

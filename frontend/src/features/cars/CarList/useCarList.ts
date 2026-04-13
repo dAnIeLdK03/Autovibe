@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCars, type CarFilters } from '../../../api/carsService';
 import { clearError, setCars, setLoading } from '../../../stores/carsSlice';
@@ -13,7 +13,7 @@ export const useCarList = (initialFilters: CarFilters) => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
 
-    const fetchCars = async () => {
+    const fetchCars = useCallback(async () => {
         dispatch(setLoading(true));
         dispatch(clearError());
 
@@ -36,11 +36,11 @@ export const useCarList = (initialFilters: CarFilters) => {
         } finally {
             dispatch(setLoading(false));
         }
-    };
+    }, [appliedFilters, filters.sortType, page, dispatch]);
 
     useEffect(() => {
         fetchCars();
-    }, [page, appliedFilters, filters.sortType]);
+    }, [fetchCars]);
 
     const handleApplyFilters = (finalFilters: CarFilters) => {
         setFilters(finalFilters);

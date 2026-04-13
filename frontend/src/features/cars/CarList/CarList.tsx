@@ -6,23 +6,12 @@ import { NoCarsFound } from '../../../shared/UX/NoCarsFound';
 import CarCard from '../CarComponents/CarCard';
 import Pagination from '../../../shared/Pagination/pagePagination';
 import { useCarList } from './useCarList';
-import type { CarFilters } from '../../../api/carsService';
 import { useState } from 'react';
+import { initialFilters } from './constants';
 
 
-const currentYear = new Date().getFullYear().toString();
 
-export const initialFilters: CarFilters = {
-  fuelType: "Fuel",
-  transmission: "Transmission",
-  mileage: "Mileage",
-  yearRange: { min: "1900", max: currentYear },
-  power: "",
-  location: "",
-  steeringWheel: "",
-  published: "",
-  sortType: "None"
-}
+
 
 
 function CarList() {
@@ -129,6 +118,7 @@ function CarList() {
           </button>
 
           <FilterModal
+            key={isFilterOpen ? "open" : "closed"}
             isOpen={isFilterOpen}
             onClose={() => {
               setIsFilterOpen(false);

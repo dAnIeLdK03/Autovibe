@@ -6,7 +6,7 @@ export const fuelTypeOptions = [
   { value: 'Hybrid', label: 'Hybrid' },
 ];
 
-export const MileagеTypes = [
+export const MileageTypes = [
   { value: 'to 10000', label: 'to 10000' },
   { value: 'to 20000', label: 'to 20000' },
   { value: 'to 50000', label: 'to 50000' },

@@ -4,7 +4,7 @@ import { Power } from './Power';
 import { Location } from './Location';
 import { BaseSelect } from './BaseSelect';
 import { bodyTypes, fuelTypeOptions, MileagеTypes, publishedOptions, transmissionTypes, wheelTypes } from '../../../../api/carOptions';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { initialFilters } from '../../CarList/CarList';
 
 interface FilterProps {
@@ -20,12 +20,6 @@ export const FilterModal = ({ isOpen, onClose, filters, onApply }: FilterProps) 
     const handleReset = () => {
         setTempFilters(initialFilters);
     }
-    useEffect(() => {
-        if (isOpen) {
-            setTempFilters(filters);
-        }
-    }, [isOpen, filters]);
-
     if (!isOpen) return null;
 
     const localUpdate = <K extends keyof CarFilters>(key: K, value: CarFilters[K]) => {
@@ -44,8 +38,6 @@ export const FilterModal = ({ isOpen, onClose, filters, onApply }: FilterProps) 
             <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-md" onClick={onClose} />
 
             <div className="relative z-10 bg-slate-950 border border-slate-800/60 w-full max-w-2xl rounded-[2.5rem] overflow-hidden flex flex-col max-h-[90vh]">
-
-                {/* Header... */}
 
                 <div className="p-8 overflow-y-auto custom-scrollbar flex-grow">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

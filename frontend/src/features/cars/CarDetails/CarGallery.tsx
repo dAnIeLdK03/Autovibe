@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { getImageUrl } from '../../../utils/getImageUrl';
 
 interface CarGalleryProps {
@@ -15,17 +15,13 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
     .slice(0, 10);
 
 
-  const handleNext = () => {
-    if(currentIndex < validImages.length - 1){
-      setCurrentIndex(prev => prev + 1);
-    }
-  }
+  const handlePrev = useCallback(() => {
+    setCurrentIndex((prev) => (prev === 0 ? validImages.length - 1 : prev - 1));
+}, [validImages.length]);
 
-  const handlePrev = () => {
-    if(currentIndex > 0){
-      setCurrentIndex(prev => prev - 1);
-    }
-  }
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));
+}, [validImages.length]);
 
   useEffect(() => {
     if (validImages.length > 1) {
@@ -51,7 +47,7 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
         window.removeEventListener('keydown', handleKeyDown);
       };
     }
-  }, [currentIndex, validImages]);
+  }, [currentIndex, validImages, handleNext, handlePrev]);
 
   if (!validImages || validImages.length === 0) {
     return <div className="bg-slate-800 h-64 rounded-3xl flex items-center justify-center text-slate-500">No images</div>;
