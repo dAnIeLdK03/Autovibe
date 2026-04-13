@@ -73,7 +73,7 @@ namespace Autovibe.API.Services
 
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(1,9, "Page size cannot be less than 1 or greater than 9.");
+            request.PageSize.THrowIfLessThanAndMoreThan(1,18, "Page size cannot be less than 1 or greater than 18.");
 
 
             var query = _context.Cars
@@ -143,7 +143,7 @@ namespace Autovibe.API.Services
         {
             pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            pageSize.THrowIfLessThanAndMoreThan(1,9, "Page size cannot be less than 1 or greater than 9.");
+            pageSize.THrowIfLessThanAndMoreThan(1,18, "Page size cannot be less than 1 or greater than 18.");
 
             var query = _context.Cars
             .AsNoTracking()

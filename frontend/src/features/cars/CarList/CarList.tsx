@@ -152,6 +152,7 @@ function CarList() {
             {cars.map((car) => (
 
               <CarCard
+                key={car.id}
                 car={car}
                 showDeletebutton={false}
               />

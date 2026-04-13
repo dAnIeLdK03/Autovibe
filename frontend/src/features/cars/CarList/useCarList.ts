@@ -27,7 +27,7 @@ export const useCarList = (initialFilters: CarFilters) => {
                 delete queryParams.power;
             }
 
-            const response = await getCars(page, 9, queryParams);
+            const response = await getCars(page, 18, queryParams);
             dispatch(setCars(response.items ?? []));
             setTotalPages(response.totalPages ?? 0);
         } catch {

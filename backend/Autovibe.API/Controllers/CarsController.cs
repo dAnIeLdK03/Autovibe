@@ -40,7 +40,7 @@ namespace Autovibe.API.Controllers
 
         [HttpGet("my-cars")]
         [Authorize]
-        public async Task<ActionResult<PageResponse<CarListDto>>> GetMyCars(int pageNumber = 1, int pageSize = 9)
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetMyCars(int pageNumber = 1, int pageSize = 18)
         {
 
             var userId = User.GetUserId();

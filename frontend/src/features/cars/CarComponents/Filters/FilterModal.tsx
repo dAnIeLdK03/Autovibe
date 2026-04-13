@@ -3,9 +3,9 @@ import YearRangeFilter from './YearRangeFilter';
 import { Power } from './Power';
 import { Location } from './Location';
 import { BaseSelect } from './BaseSelect';
-import { bodyTypes, fuelTypeOptions, MileagеTypes, publishedOptions, transmissionTypes, wheelTypes } from '../../../../api/carOptions';
+import { bodyTypes, fuelTypeOptions, MileageTypes, publishedOptions, transmissionTypes, wheelTypes } from '../../../../api/carOptions';
 import { useState } from 'react';
-import { initialFilters } from '../../CarList/CarList';
+import { initialFilters } from '../../CarList/constants';
 
 interface FilterProps {
     isOpen: boolean;
@@ -75,7 +75,7 @@ export const FilterModal = ({ isOpen, onClose, filters, onApply }: FilterProps) 
                             <BaseSelect
                                 label='Mileage'
                                 value={tempFilters.mileage ?? ""}
-                                options={MileagеTypes}
+                                options={MileageTypes}
                                 onChange={(val) => localUpdate('mileage', val)}
                             />
                             <BaseSelect
