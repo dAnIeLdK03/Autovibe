@@ -23,5 +23,7 @@ public class CarListDto
     
     public int UserId {get; set; }
 
+    public bool? IsFavorite {get; set; }    
+
     public List<string> ImageUrls {get; set; } = new List<string>();
  }

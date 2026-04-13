@@ -73,6 +73,7 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"))
 builder.Services.AddScoped<ICarService, CarService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
+//builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 
 
 builder.Services.AddControllers()

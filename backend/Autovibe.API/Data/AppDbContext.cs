@@ -42,6 +42,21 @@ public class AppDbContext : DbContext
                 c => c.ToList()
 
            ));
+
+          modelBuilder.Entity<Favorite>(entity =>
+          {
+              entity.HasKey(f => new { f.UserId, f.CarId});
+
+              entity.HasOne( f => f.User)
+                .WithMany()
+                .HasForeignKey( f => f.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne( f => f.Car)
+                .WithMany()
+                .HasForeignKey( f => f.CarId)
+                .OnDelete(DeleteBehavior.Cascade);
+          });
     }
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     { }
