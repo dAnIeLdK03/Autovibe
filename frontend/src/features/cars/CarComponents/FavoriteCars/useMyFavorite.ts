@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from "../../../../stores/store"
-import { useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { clearError, setCars, setError, setLoading } from "../../../../stores/carsSlice";
 import { deleteFavorite, getFavoritesByUserId } from "../../../../api/favoriteService";
@@ -8,7 +7,6 @@ import { deleteFavorite, getFavoritesByUserId } from "../../../../api/favoriteSe
 
 export const useMyFavorite = () => {
     const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -23,10 +21,6 @@ export const useMyFavorite = () => {
                 { message: string }).message) : "Unable to load your cars.";
 
     const fetchCars = useCallback(async () => {
-        if (!isAuthenticated || !user?.id) {
-            navigate("/login");
-            return;
-        }
 
         dispatch(setLoading(true));
         dispatch(clearError());
@@ -40,7 +34,7 @@ export const useMyFavorite = () => {
         } finally {
             dispatch(setLoading(false));
         }
-    }, [page, user?.id, isAuthenticated, navigate, dispatch])
+    }, [page, user?.id, isAuthenticated, dispatch])
 
     useEffect(() => {
         fetchCars();
