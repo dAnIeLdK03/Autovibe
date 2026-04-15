@@ -47,6 +47,7 @@ const Menu: React.FC = () => {
         { label: "Profile", onClick: () => navigate("/profile") },
         { label: "Create New Ad", onClick: () => isAuthenticated ? navigate("/cars/new") : navigate("/login") },
         { label: "My Cars", onClick: () => navigate("/cars/my") },
+        { label: "My Favorites", onClick: () => navigate("/favorites") },
         { label: "Logout", onClick: openConfirm },
     ];
 
