@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Autovibe.API.Controllers
 {
-    [Route("api/controller")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize]
 
@@ -29,7 +29,7 @@ namespace Autovibe.API.Controllers
 
             await _favoriteService.AddAsync(userId.Value, carId);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{carId:int}")]
