@@ -11,7 +11,7 @@ import CarDetails from "../features/cars/CarDetails/CarDetails";
 import CarEdit from "../features/cars/CarEdit/CarEdit";
 import MyCars from "../features/cars/MyCars/MyCars";
 import Navbar from "../shared/Navbar/Navbar";
-import AuthRestore from "../features/auth/authComponents/AuthRestore"; 
+import AuthRestore from "../features/auth/authComponents/AuthRestore";
 import Profile from "../features/user/Profile";
 import { Toaster } from "react-hot-toast";
 import NotFound from "../features/cars/CarComponents/NotFound";
@@ -20,6 +20,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../stores/store";
 import { loadFavoriteIds } from "../stores/favoritesSlice";
+import MyFavorite from "../features/cars/CarComponents/FavoriteCars/MyFavorite";
 
 
 
@@ -35,11 +36,11 @@ function App() {
 
   return (
     <BrowserRouter>
-      <AuthRestore/>
+      <AuthRestore />
       <Navbar />
       <Toaster />
       <Routes>
-        <Route path="/" element={<Home /> } />
+        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/cars" element={<CarList />} />
@@ -47,8 +48,9 @@ function App() {
         <Route path="/cars/new" element={<CarCreate />} />
         <Route path="/cars/:id/edit" element={<CarEdit />} />
         <Route path="/cars/my" element={<MyCars />} />
-        <Route path="/profile" element={<Profile />}/>
-        <Route path = "*" element = {<NotFound/>} />
+        <Route path="/favorites" element={<MyFavorite />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

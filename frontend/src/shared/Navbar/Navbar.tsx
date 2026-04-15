@@ -46,9 +46,14 @@ function Navbar() {
               Cars
             </Link>
             {user && (
+              <>
               <Link to="/cars/my" className="hover:text-blue-400 transition-colors border-b-2 border-transparent hover:border-blue-400 py-1">
                 My Cars
               </Link>
+               <Link to="/favorites" className="hover:text-blue-400 transition-colors border-b-2 border-transparent hover:border-blue-400 py-1">
+                Favorites
+              </Link>
+              </>
             )}
           </div>
 

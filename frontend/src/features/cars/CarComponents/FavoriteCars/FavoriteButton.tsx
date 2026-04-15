@@ -2,6 +2,8 @@ import { LuHeart } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../../../stores/store";
 import { toggleFavorite } from "../../../../stores/favoritesSlice";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 interface Props {
   carId: number;
@@ -9,6 +11,7 @@ interface Props {
 
 export const FavoriteButton = ({ carId }: Props) => {
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
   const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
   const isFavorite = useSelector((s: RootState) => s.favorites.ids.includes(carId));
 
@@ -16,6 +19,8 @@ export const FavoriteButton = ({ carId }: Props) => {
     e.stopPropagation();
 
     if (!isAuthenticated) {
+      toast.error("Please log in to save favorites.");
+      navigate("/login");
       return;
     }
 
