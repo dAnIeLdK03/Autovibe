@@ -1,12 +1,11 @@
 import { api } from "./api";
 import type { CarsPageResponse } from "./carsService";
 
-export const addFavorite = async (carId: Number): Promise<void> => {
-    const response = await api.post(`/favorites/${carId}`);
-    return response.data;
+export const addFavorite = async (carId: number): Promise<void> => {
+    await api.post(`/favorites/${carId}`);
 }
 
-export const deleteFavorite = async (carId: Number): Promise<void> => {
+export const deleteFavorite = async (carId: number): Promise<void> => {
     await api.delete(`/favorites/${carId}`);
 }
 
@@ -19,7 +18,7 @@ export const getFavoritesByUserId = async (page: number, pageSize: number): Prom
     return response.data;
 }
 
-export const isfavorite = async(carId: Number): Promise<void> => {
+export const isFavorite = async(carId: number): Promise<boolean> => {
     const response = await api.get(`/favorites/contains/${carId}`);
     return response.data;
 }

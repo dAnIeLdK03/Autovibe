@@ -16,11 +16,22 @@ import Profile from "../features/user/Profile";
 import { Toaster } from "react-hot-toast";
 import NotFound from "../features/cars/CarComponents/NotFound";
 import CarCreate from "../features/cars/CarCreate/CarCreate";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch, RootState } from "../stores/store";
+import { loadFavoriteIds } from "../stores/favoritesSlice";
 
 
 
 function App() {
-  
+  const dispatch = useDispatch<AppDispatch>();
+  const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      dispatch(loadFavoriteIds());
+    }
+  }, [isAuthenticated, dispatch]);
 
   return (
     <BrowserRouter>

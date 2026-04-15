@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { CarCardProps } from '../../../api/carsService';
 import { getImageUrl } from '../../../utils/getImageUrl';
-import { LuHeart } from 'react-icons/lu';
+import { FavoriteButton } from './FavoriteCars/FavoriteButton';
 
 
 const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton }) => {
   const navigate = useNavigate();
   const showDeleteBtn = showDeletebutton === true;
-  const [isFavorite, setIsFavorite] = useState(false);
-
   return (
 
     <div
@@ -27,7 +24,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton 
             alt={`${car.make} ${car.model}`}
             onError={(e) => e.currentTarget.src = "https://via.placeholder.com/150"}
           />
-          
+
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center">
             <span className="text-slate-500 text-sm">No image</span>
@@ -36,33 +33,23 @@ const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton 
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900/80 to-transparent z-10" />
         <span className="absolute top-4 left-4 z-20 bg-slate-900/80 backdrop-blur-md text-[#70FFE2] text-xs font-bold px-3 py-1.5 rounded-full border border-slate-700">
           {car.year}
-          
+
         </span>
-        <div 
-        className="absolute top-4 right-4 z-30" 
-        onClick={(e) => e.stopPropagation()} 
-    >
-        <button
-      onClick={() => setIsFavorite(!isFavorite)}
-      className="p-2 transition-transform active:scale-125"
-    >
-      <LuHeart
-        size={28}
-        className={`transition-colors duration-300 ${
-          isFavorite 
-            ? 'fill-red-500 text-red-500' 
-            : 'text-gray-400 hover:text-gray-200'
-        }`}
-      />
-    </button>
-    </div>
-        
+        <div
+          className="absolute top-4 right-4 z-30"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <FavoriteButton
+            carId={car.id}
+            />
+        </div>
+
       </div>
-            
+
       <div className="p-6 flex flex-col flex-grow">
         <div className="flex justify-between items-start mb-4">
           <div>
-           
+
             <h2 className="text-2xl font-bold text-white group-hover:text-[#70FFE2] transition-colors duration-300">
               {car.make}
             </h2>

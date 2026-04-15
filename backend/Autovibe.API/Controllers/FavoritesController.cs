@@ -12,11 +12,11 @@ namespace Autovibe.API.Controllers
     [ApiController]
     [Authorize]
 
-    public class FavoriteController : ControllerBase
+    public class FavoritesController : ControllerBase
     {
         private readonly IFavoriteService _favoriteService;
 
-        public FavoriteController(IFavoriteService favoriteService)
+        public FavoritesController(IFavoriteService favoriteService)
         {
             _favoriteService = favoriteService;
         }

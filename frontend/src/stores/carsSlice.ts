@@ -20,6 +20,8 @@ export interface Car{
     userId: number;
 
     imageUrls?: string[];
+
+    isFavorite?: boolean;
 }
 
 export interface CarState{
