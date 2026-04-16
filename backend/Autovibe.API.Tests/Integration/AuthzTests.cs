@@ -15,4 +15,11 @@ public class AuthzTests : IClassFixture<CustomWebApplicationFactory>
         var res = await _client.GetAsync("/api/cars/my-cars?pageNumber=1&pageSize=18");
         Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
     }
+
+    [Fact]
+    public async Task FavoriteGet_WithoutToken_Return401()
+    {
+        var res = await _client.GetAsync("/api/favorites?pageNumber=1&pageSize=18");
+        Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
+    }
 }
