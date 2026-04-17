@@ -31,4 +31,12 @@ public class AuthzTests : IClassFixture<CustomWebApplicationFactory>
         var res = await _client.PostAsync("/api/favorites/1", content);
         Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
     }
+
+    [Fact]
+    public async Task GetUser_WithoutToken_Return401()
+    {
+        var res = await _client.GetAsync("/api/user/{1}");
+        Assert.Equal(HttpStatusCode.Unauthorized, res.StatusCode);
+
+    }
 }
