@@ -58,7 +58,7 @@ function CarDetailsInfo({car, isOwner, handleDelete}: CarDeatilsInfoProps) {
                 <h2 className="text-2xl font-semibold mb-4 border-b border-slate-700 pb-2">
                     Description
                 </h2>
-                <p className="break-words leading-relaxed text-slate-300 ">{car.description}</p>
+                <p className="break-words leading-relaxed text-slate-300 whitespace-pre-line">{car.description}</p>
             </div>
 
             <div>
