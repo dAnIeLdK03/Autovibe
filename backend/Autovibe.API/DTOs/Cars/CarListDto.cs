@@ -20,6 +20,8 @@ public class CarListDto
     public string? ShortDescription {get; set; } = string.Empty;
     public string Location {get; set; } = string.Empty;
     public string SteeringWheel {get; set;} = string.Empty;
+    public string Condition {get; set;} = string.Empty;
+
     
     public int UserId {get; set; }
 

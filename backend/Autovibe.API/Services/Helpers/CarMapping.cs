@@ -24,6 +24,7 @@ namespace Autovibe.API.Services.Helpers
                     : c.Description,
                 Location = c.Location,
                 SteeringWheel = c.SteeringWheel,
+                Condition = c.Condition,
                 UserId = c.UserId,
                 ImageUrls = c.ImageUrls ?? new List<string>()
             };
@@ -47,6 +48,7 @@ namespace Autovibe.API.Services.Helpers
                 Description = c.Description,
                 Location = c.Location,
                 SteeringWheel = c.SteeringWheel,
+                Condition = c.Condition,
 
                 CreatedAt = c.CreatedAt,
                 UpdatedAt = c.UpdatedAt,
@@ -76,6 +78,8 @@ namespace Autovibe.API.Services.Helpers
                 Description = request.Description,
                 Location = request.Location,
                 SteeringWheel = request.SteeringWheel,
+                Condition = request.Condition,
+
 
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
@@ -101,6 +105,7 @@ namespace Autovibe.API.Services.Helpers
             car.Description = request.Description;
             car.Location = request.Location;
             car.SteeringWheel = request.SteeringWheel;
+            car.Condition = request.Condition;
             car.ImageUrls = request.ImageUrls ?? new List<string>();
             car.UpdatedAt = DateTime.UtcNow;
         }

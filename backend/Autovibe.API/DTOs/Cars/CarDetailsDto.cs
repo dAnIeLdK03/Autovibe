@@ -29,6 +29,8 @@ public class CarDetailsDto
     public string? SellerFirstName {get; set; }
     public string? SellerLastName {get; set; }
     public string? SellerPhoneNumber {get; set; }
+    public string Condition {get; set;} = string.Empty;
+
 
     public List<string> ImageUrls {get; set; } = new List<string>();
 }
