@@ -10,6 +10,7 @@ export const initialFilters: CarFilters = {
   power: "",
   location: "",
   steeringWheel: "",
+  condition: "All",
   published: "",
   sortType: "None"
 }

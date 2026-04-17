@@ -18,6 +18,8 @@ export interface CarDetails {
     description: string;
     location: string;
     steeringWheel: string;
+    condition: string;
+    
     createdAt?: Date;
     updatedAt?: Date;
 
@@ -44,7 +46,7 @@ interface CreateCarRequest {
     description: string;
     location: string;
     steeringWheel: string;
-
+    condition: string;
 
     imageUrls?: string[];
 
@@ -64,7 +66,7 @@ export interface UpdateCarRequest {
     description: string;
     location: string;
     steeringWheel: string;
-
+    condition: string;
 
     imageUrls?: string[];
 
@@ -85,6 +87,8 @@ export interface CarCardProps {
         shortDescription: string,
         location: string,
         steeringWheel: string,
+        condition: string,
+
         imageUrls?: string[];
     }
     onDeleteClick?: (id: number) => void;
@@ -100,6 +104,7 @@ export interface CarFilters{
     bodyType?: string;
     location?: string;
     steeringWheel?: string;
+    condition: string;
     sortType: string;
     published?: string;
 };
@@ -153,6 +158,14 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
     }
     if(filters.steeringWheel && filters.steeringWheel != "" && filters.steeringWheel != "SteeringWheel"){
         params.set("steeringWheel", filters.steeringWheel);
+    }
+    if (
+        filters.condition &&
+        filters.condition !== "" &&
+        filters.condition !== "All" &&
+        filters.condition !== "Condition"
+    ) {
+        params.set("condition", filters.condition);
     }
     if(filters.published && filters.published != "" && filters.published != "Published"){
         params.set("published", filters.published);

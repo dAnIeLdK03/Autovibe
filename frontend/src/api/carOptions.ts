@@ -63,3 +63,11 @@ export const publishedOptions = [
   {value: "14", label: "Last 14 days"},
   {value: "30", label: "Last 30 days"}
 ];
+
+export const Condition = [
+  {value:"All", label: "All"},
+  {value:"New", label:"New"},
+  {value:"Used", label:"Used"},
+  {value:"Broken", label:"Broken"},
+  {value:"Parts", label:"Parts"}
+]

@@ -16,6 +16,7 @@ export interface Car{
     shortDescription: string;
     location: string;
     steeringWheel: string;
+    condition: string;
 
     userId: number;
 

@@ -48,8 +48,12 @@ function CarDetailsInfo({car, isOwner, handleDelete}: CarDeatilsInfoProps) {
                     </p>
                     <p>
                         <span className="font-semibold">Location:</span> {car.location}
-                    </p><p>
+                    </p>
+                    <p>
                         <span className="font-semibold">Steering Wheel:</span> {car.steeringWheel}
+                    </p>
+                     <p>
+                        <span className="font-semibold">Condition:</span> {car.condition}
                     </p>
                 </div>
             </div>

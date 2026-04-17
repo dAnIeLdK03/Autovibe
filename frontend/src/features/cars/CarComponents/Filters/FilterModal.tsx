@@ -3,7 +3,7 @@ import YearRangeFilter from './YearRangeFilter';
 import { Power } from './Power';
 import { Location } from './Location';
 import { BaseSelect } from './BaseSelect';
-import { bodyTypes, fuelTypeOptions, MileageTypes, publishedOptions, transmissionTypes, wheelTypes } from '../../../../api/carOptions';
+import { bodyTypes, Condition, fuelTypeOptions, MileageTypes, publishedOptions, transmissionTypes, wheelTypes } from '../../../../api/carOptions';
 import { useState } from 'react';
 import { initialFilters } from '../../CarList/constants';
 
@@ -61,6 +61,12 @@ export const FilterModal = ({ isOpen, onClose, filters, onApply }: FilterProps) 
                                 value={tempFilters.steeringWheel ?? ""}
                                 options={wheelTypes}
                                 onChange={(val) => localUpdate('steeringWheel', val)}
+                            />
+                             <BaseSelect
+                                label='Condition'
+                                value={tempFilters.condition ?? ""}
+                                options={Condition}
+                                onChange={(val) => localUpdate('condition', val)}
                             />
                         </div>
 

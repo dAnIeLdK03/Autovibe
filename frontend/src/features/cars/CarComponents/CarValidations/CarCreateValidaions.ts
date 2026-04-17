@@ -13,6 +13,7 @@ export interface CarFormValues {
     description: string;
     location: string;
     steeringWheel: string;
+    condition: string;
 }
 
 const CarCreateValidaions = (form: CarFormValues): string | null => {
@@ -56,6 +57,9 @@ const CarCreateValidaions = (form: CarFormValues): string | null => {
     }
     if(!form?.steeringWheel || form.steeringWheel.trim() === ""){
         return "Steering Wheel is required";
+    }
+     if(!form?.condition || !form.condition.trim()){
+        return "Condition is required";
     }
     return null;
 

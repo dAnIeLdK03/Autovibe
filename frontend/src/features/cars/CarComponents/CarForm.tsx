@@ -6,7 +6,7 @@ import type { CarFormValues } from './CarValidations/CarCreateValidaions';
 import type { RootState } from '../../../stores/store'; 
 import { getImageUrl } from '../../../utils/getImageUrl'; 
 import { BaseSelect } from './Filters/BaseSelect';
-import { bodyTypes, fuelTypeOptions, transmissionTypes, wheelTypes } from '../../../api/carOptions';
+import { bodyTypes, Condition, fuelTypeOptions, transmissionTypes, wheelTypes } from '../../../api/carOptions';
 
 
 
@@ -24,6 +24,8 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
     const navigate = useNavigate();
     const fuelType = watch("fuelType");
     const transmissionType = watch("transmission");
+    const conditionType = watch("condition");
+
     const wheelType = watch("steeringWheel");
     const bodyType = watch("bodyType");
 
@@ -130,6 +132,15 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                             <label className={labelClasses}>Location</label>
                             <input type="text" className={inputClasses} placeholder="Location" {...register("location", { required: true })} />
                         </div>
+                        <div className="md:col-span-1">
+                            <BaseSelect
+                                variant='dropdown'
+                                label='Condition'
+                                options={Condition}
+                                value={conditionType ?? ""}
+                                onChange={(val) => setValue("condition", val, {shouldValidate: true})}
+                            />
+                            </div>
                     </div>
 
                     <div>
