@@ -1,9 +1,9 @@
 import axios from 'axios'
-import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApiErrorMessage'; 
+import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApiErrorMessage';
 import toast from 'react-hot-toast';
 
 export const API_ORIGIN = import.meta.env.VITE_API_URL;
-if(!API_ORIGIN?.trim()) {
+if (!API_ORIGIN?.trim()) {
     throw new Error("VITE_API_URL is not set");
 }
 
@@ -17,7 +17,7 @@ export const api = axios.create({
     timeout: 10000
 });
 
-export interface ApiErrorResponse{
+export interface ApiErrorResponse {
     statusCode: number;
     message: string;
     details?: string;
@@ -25,7 +25,7 @@ export interface ApiErrorResponse{
 
 api.interceptors.request.use(config => {
     const token = localStorage.getItem("token");
-    if(token){
+    if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
@@ -48,20 +48,20 @@ api.interceptors.response.use(response => response, error => {
         });
     } else {
         toast.error(message, {
-            id:message,
-    duration: 5000,
-    position: "top-right",
-    style: {
-        background: '#1e293b',
-        color: '#fff',
-        borderRadius: '12px',
-        border: '1px solid #ef4444',
-    },
-    iconTheme: {
-        primary: '#ef4444',
-        secondary: '#fff',
-    },
-});
+            id: message,
+            duration: 5000,
+            position: "top-right",
+            style: {
+                background: '#1e293b',
+                color: '#fff',
+                borderRadius: '12px',
+                border: '1px solid #ef4444',
+            },
+            iconTheme: {
+                primary: '#ef4444',
+                secondary: '#fff',
+            },
+        });
     }
 
     return Promise.reject(error);
