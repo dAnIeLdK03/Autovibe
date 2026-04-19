@@ -1,24 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
-import { navigateRef } from './src/navigation/navigateRef';
+import { StatusBar } from "expo-status-bar";
+import { Provider } from "react-redux";
+import { NavigationContainer } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from "react-native-toast-message";
+import RootNavigator from "./src/navigation/RootNavigator";
+import { navigateRef } from "./src/navigation/navigateRef";
+import { store } from "./src/stores/store";
 
 export default function App() {
   return (
-    <NavigationContainer ref={navigateRef}>
-      <View>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-    </NavigationContainer>
+    <Provider store={store}>
+      <SafeAreaProvider>
+        <NavigationContainer ref={navigateRef}>
+          <RootNavigator />
+        </NavigationContainer>
+        <Toast />
+        <StatusBar style="light" />
+      </SafeAreaProvider>
+    </Provider>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
-
