@@ -1,4 +1,6 @@
 import { api } from './api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export interface LoginRequest{
     email: string;
@@ -35,7 +37,7 @@ export interface User{
 
 export const login = async(data: LoginRequest): Promise<AuthResponse> => {
     const response = await api.post("auth/login", data);
-    localStorage.setItem("token", response.data.token);
+    await AsyncStorage.setItem("token", response.data.token);
     return response.data;
 }
 
@@ -45,12 +47,10 @@ export const register = async(data: RegisterRequest): Promise<User> => {
 }
 
 export const logout = async(): Promise<void> => {
-    localStorage.removeItem("token");
+    await AsyncStorage.removeItem("token");
 }
 
 export const getCurrentUser = async(): Promise<User | null> => {
     const token = await api.get("/user");
     return token.data;
 }
-
-
