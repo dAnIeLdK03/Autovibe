@@ -210,7 +210,10 @@ const RegisterScreen = () => {
               <Controller
                 control={control}
                 name="phoneNumber"
-                rules={{ required: "Phone Number is required" }}
+                rules={{ required: "Phone Number is required",
+                  validate: (value) =>
+                    value.length === 10 || "Phone number must be 10 digits"
+                 }}
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
                     style={[styles.input, errors.phoneNumber && styles.inputError]}
