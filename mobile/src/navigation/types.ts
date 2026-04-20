@@ -3,4 +3,5 @@ export type RootStackParamList = {
   CarList: undefined;
   Login: undefined;
   Register: undefined;
+  CarDetails: {id: number};
 };
