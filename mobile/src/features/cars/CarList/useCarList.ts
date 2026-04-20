@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCars, type CarFilters } from '../../../api/carsService';
 import { clearError, setCars, setLoading } from '../../../stores/carsSlice';
@@ -12,6 +12,7 @@ export const useCarList = (initialFilters: CarFilters) => {
     const [appliedFilters, setAppliedFilters] = useState<CarFilters>(initialFilters);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+
 
     const fetchCars = useCallback(async () => {
         dispatch(setLoading(true));
@@ -61,7 +62,6 @@ export const useCarList = (initialFilters: CarFilters) => {
 
     const handlePageChange = (newPage: number) => {
         setPage(newPage);
-        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     return {

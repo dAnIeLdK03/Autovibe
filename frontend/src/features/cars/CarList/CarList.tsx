@@ -10,10 +10,6 @@ import { useState } from 'react';
 import { initialFilters } from './constants';
 
 
-
-
-
-
 function CarList() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
