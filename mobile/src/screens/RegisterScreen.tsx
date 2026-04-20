@@ -1,14 +1,368 @@
-import { StyleSheet, Text, View } from "react-native";
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+  ScrollView
+} from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { login, LoginRequest, register, RegisterRequest } from '../api/AuthService';
+import { setCredentials } from '../stores/authSlice';
+import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApiErrorMessage';
+import { register as registerUser } from '../api/AuthService';
+import axios from 'axios';
 
-export default function RegisterScreen() {
+const RegisterScreen = () => {
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const navigation = useNavigation<any>();
+  const dispatch = useDispatch();
+
+  const { control, handleSubmit, watch, formState: { errors } } = useForm<RegisterRequest>({
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+      firstName: "",
+      lastName: '',
+      phoneNumber: ''
+    }
+  });
+
+  const onSubmit = async (formData: RegisterRequest) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { ...dataToApi } = formData;
+      await registerUser(dataToApi);
+      navigation.replace("CarList")
+    } catch (err: unknown) {
+      const errMsg = extractApiErrorMessage(err);
+
+      if (axios.isAxiosError(error)) {
+        setError(errMsg);
+      }
+      else if (err instanceof Error) {
+        setError(errMsg);
+      }
+      else if (typeof err === "string") {
+        setError(errMsg);
+      }
+      setError(typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg));
+    }
+    finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <View style={styles.box}>
-      <Text style={styles.title}>Register</Text>
-    </View>
-  );
+  <View style={styles.mainContainer}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flex: 1 }}
+    >
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent} 
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.card}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Register</Text>
+            <Text style={styles.subtitle}>Welcome!</Text>
+          </View>
+
+          {error && (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
+
+          <View style={styles.form}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Email</Text>
+              <Controller
+                control={control}
+                name="email"
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address"
+                  }
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[styles.input, errors.email && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="example@mail.com"
+                    placeholderTextColor="#475569"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                  />
+                )}
+              />
+              {errors.email && <Text style={styles.errorLabel}>{errors.email.message}</Text>}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Password</Text>
+              <Controller
+                control={control}
+                name="password"
+                rules={{
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Minimum 6 characters" }
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[styles.input, errors.password && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="******"
+                    placeholderTextColor="#475569"
+                    secureTextEntry={true}
+                    autoCorrect={false}
+                  />
+                )}
+              />
+              {errors.password && <Text style={styles.errorLabel}>{errors.password.message}</Text>}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Confirm Password</Text>
+              <Controller
+                control={control}
+                name="confirmPassword"
+                rules={{
+                  required: "Please confirm your password",
+                  validate: (value) => value === watch('password') || "Passwords do not match"
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[styles.input, errors.confirmPassword && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="******"
+                    placeholderTextColor="#475569"
+                    secureTextEntry={true}
+                    autoCorrect={false}
+                  />
+                )}
+              />
+              {errors.confirmPassword && <Text style={styles.errorLabel}>{errors.confirmPassword.message}</Text>}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>First Name</Text>
+              <Controller
+                control={control}
+                name="firstName"
+                rules={{ required: "First Name is required" }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[styles.input, errors.firstName && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="John"
+                    placeholderTextColor="#475569"
+                  />
+                )}
+              />
+              {errors.firstName && <Text style={styles.errorLabel}>{errors.firstName.message}</Text>}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Last Name</Text>
+              <Controller
+                control={control}
+                name="lastName"
+                rules={{ required: "Last Name is required" }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[styles.input, errors.lastName && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="Doe"
+                    placeholderTextColor="#475569"
+                  />
+                )}
+              />
+              {errors.lastName && <Text style={styles.errorLabel}>{errors.lastName.message}</Text>}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Phone Number</Text>
+              <Controller
+                control={control}
+                name="phoneNumber"
+                rules={{ required: "Phone Number is required" }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[styles.input, errors.phoneNumber && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="0897362517"
+                    placeholderTextColor="#475569"
+                    keyboardType="phone-pad"
+                  />
+                )}
+              />
+              {errors.phoneNumber && <Text style={styles.errorLabel}>{errors.phoneNumber.message}</Text>}
+            </View>
+
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleSubmit(onSubmit)}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#0f172a" />
+              ) : (
+                <Text style={styles.buttonText}>Register</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate("Login")}>
+              <Text style={styles.footerText}>
+                Already have account? <Text style={styles.linkText}>Login</Text>
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  </View>
+);
 }
 
+
 const styles = StyleSheet.create({
-  box: { flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: "#fff" },
-  title: { fontSize: 20, fontWeight: "600" },
+  mainContainer: {
+    flex: 1,
+    backgroundColor: '#0f172a',
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    paddingVertical: 50,
+    paddingHorizontal: 20,
+  },
+  card: {
+    backgroundColor: 'rgba(30, 41, 59, 0.5)',
+    padding: 24,
+    borderRadius: 24,
+    borderWidth: 1,
+    borderColor: '#334155',
+    width: '100%',
+    maxWidth: 450,
+    alignSelf: 'center',
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 25,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '900',
+    color: '#fff',
+    letterSpacing: -1,
+  },
+  subtitle: {
+    color: '#94a3b8',
+    marginTop: 5,
+    fontSize: 16,
+  },
+  errorBox: {
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(239, 68, 68, 0.5)',
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 20,
+  },
+  errorText: {
+    color: '#f87171',
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  form: {
+    width: '100%',
+  },
+  inputContainer: {
+    marginBottom: 16,
+  },
+  label: {
+    color: '#94a3b8',
+    fontSize: 12,
+    fontWeight: '600',
+    textTransform: 'uppercase',
+    marginBottom: 8,
+    marginLeft: 4,
+  },
+  input: {
+    backgroundColor: 'rgba(15, 23, 42, 0.5)',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 16,
+    padding: 16,
+    color: '#fff',
+    fontSize: 16,
+  },
+  inputError: {
+    borderColor: '#ef4444',
+  },
+  errorLabel: {
+    color: '#ef4444',
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 4,
+  },
+  button: {
+    backgroundColor: '#70FFE2',
+    padding: 18,
+    borderRadius: 16,
+    alignItems: 'center',
+    marginTop: 10,
+    shadowColor: '#70FFE2',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  buttonDisabled: {
+    backgroundColor: '#334155',
+  },
+  buttonText: {
+    color: '#0f172a',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  footerText: {
+    color: '#94a3b8',
+    textAlign: 'center',
+    marginTop: 25,
+    fontSize: 14,
+  },
+  linkText: {
+    color: '#70FFE2',
+    fontWeight: 'bold',
+  }
 });
+
+export default RegisterScreen;

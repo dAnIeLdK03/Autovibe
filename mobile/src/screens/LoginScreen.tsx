@@ -143,12 +143,12 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#0f172a', // slate-900
+    backgroundColor: '#0f172a',
     justifyContent: 'center',
     padding: 20,
   },
   card: {
-    backgroundColor: 'rgba(30, 41, 59, 0.5)', // slate-800/50
+    backgroundColor: 'rgba(30, 41, 59, 0.5)',
     padding: 30,
     borderRadius: 24,
     borderWidth: 1,

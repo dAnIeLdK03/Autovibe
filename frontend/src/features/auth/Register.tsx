@@ -46,10 +46,8 @@ function Register() {
   return (
 
     <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
-      {/* Main card */}
       <div className="w-full max-w-md p-8 bg-slate-800/50 backdrop-blur-xl rounded-3xl border border-slate-700 shadow-2xl m-3">
 
-        {/* Header */}
         <div className="mb-10 text-center">
           <h1 className="text-4xl font-black text-white tracking-tight mb-2">
             Register
@@ -64,7 +62,6 @@ function Register() {
             </div>
           )}
 
-          {/* Email field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
               Email
@@ -85,7 +82,6 @@ function Register() {
             {errors.email && <span className="text-red-500 text-sm">{errors.email.message as string}</span>}
           </div>
 
-          {/* Password field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
               Password
@@ -105,7 +101,6 @@ function Register() {
             {errors.password && <span className="text-red-500 text-sm">{errors.password.message as string}</span>}
           </div>
 
-          {/* 2 Password field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
               confirm Password
@@ -123,7 +118,6 @@ function Register() {
             {errors.confirmPassword && <span className="text-red-500 text-sm">{errors.confirmPassword.message as string}</span>}
           </div>
 
-          {/* First Name field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
               First Name
@@ -139,7 +133,6 @@ function Register() {
             {errors.firstName && <span className="text-red-500 text-sm">{errors.firstName.message as string}</span>}
           </div>
 
-          {/* Last Name field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
               Last Name
@@ -155,7 +148,6 @@ function Register() {
             {errors.lastName && <span className="text-red-500 text-sm">{errors.lastName.message as string}</span>}
           </div>
 
-          {/* Phone Number field */}
           <div className="space-y-2">
             <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider ml-1">
               Phone Number
@@ -179,7 +171,6 @@ function Register() {
             {errors.phoneNumber && <span className="text-red-500 text-sm">{errors.phoneNumber.message as string}</span>}
           </div>
 
-          {/* Button */}
           <button
             type="submit"
             disabled={loading}
@@ -190,7 +181,6 @@ function Register() {
             ) : "Register"}
           </button>
 
-          {/* Link to Login */}
           <p className="text-center text-slate-400 text-sm mt-6">
             Already have an account?{" "}
             <Link
