@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import type { RootStackParamList } from "../navigation/types";
 import type { RootState } from "../stores/store";
+import Navbar from "../shared/Navbar/Navbar";
 
 type HomeNav = NativeStackNavigationProp<RootStackParamList, "Home">;
 
@@ -17,12 +18,8 @@ export default function Home() {
   const ctaLabel = isAuthenticated ? "Browse Cars" : "Look around";
 
   return (
-    <LinearGradient
-      colors={["#0f172a", "#1e3a8a", "#0f172a"]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={styles.root}
-    >
+    <LinearGradient colors={["#0f172a", "#1e3a8a", "#0f172a"]} style={styles.root}>
+      <Navbar />
       <ScrollView
         contentContainerStyle={[
           styles.scroll,

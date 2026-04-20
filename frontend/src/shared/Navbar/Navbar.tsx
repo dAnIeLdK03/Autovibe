@@ -11,8 +11,7 @@ function Navbar() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector(
-    (state: RootState) => state.auth,
-  );
+    (state: RootState) => state.auth);
   const location = useLocation();
   
   if(location.pathname === "/login" || location.pathname === "/register"){
