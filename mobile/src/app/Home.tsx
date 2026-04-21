@@ -6,7 +6,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import type { RootStackParamList } from "../navigation/types";
 import type { RootState } from "../stores/store";
-import Navbar from "../shared/Navbar/Navbar";
 
 type HomeNav = NativeStackNavigationProp<RootStackParamList, "Home">;
 
@@ -19,7 +18,6 @@ export default function Home() {
 
   return (
     <LinearGradient colors={["#0f172a", "#1e3a8a", "#0f172a"]} style={styles.root}>
-      <Navbar />
       <ScrollView
         contentContainerStyle={[
           styles.scroll,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,8 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -19,6 +20,7 @@ import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApi
 const LoginScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const passwordRef = useRef<TextInput>(null);
 
   const navigation = useNavigation<any>();
   const dispatch = useDispatch();
@@ -39,7 +41,7 @@ const LoginScreen = () => {
       navigation.replace("CarList");
     } catch (err: unknown) {
       const errMsg = extractApiErrorMessage(err);
-      setError(errMsg);
+      setError(errMsg?.trim() ? errMsg : "Login failed. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -50,93 +52,104 @@ const LoginScreen = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={styles.container}
     >
-      <View style={styles.card}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Login</Text>
-          <Text style={styles.subtitle}>Welcome!</Text>
-        </View>
-
-        {error && (
-          <View style={styles.errorBox}>
-            <Text style={styles.errorText}>{error}</Text>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.card}>
+          <View style={styles.header}>
+            <Text style={styles.title}>Login</Text>
+            <Text style={styles.subtitle}>Welcome!</Text>
           </View>
-        )}
 
-        <View style={styles.form}>
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Email</Text>
-            <Controller
-              control={control}
-              name="email"
-              rules={{
-                required: "Email is required",
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: "Invalid email address"
-                }
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, errors.email && styles.inputError]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="example@mail.com"
-                  placeholderTextColor="#475569"
-                  keyboardType="email-address"
-                  autoCapitalize="none"
-                />
+          {error && (
+            <View style={styles.errorBox}>
+              <Text style={styles.errorText}>{error}</Text>
+            </View>
+          )}
+
+          <View style={styles.form}>
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Email</Text>
+              <Controller
+                control={control}
+                name="email"
+                rules={{
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "Invalid email address"
+                  }
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[styles.input, errors.email && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="example@mail.com"
+                    placeholderTextColor="#475569"
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    returnKeyType="next"
+                    onSubmitEditing={() => passwordRef.current?.focus()}
+                  />
+                )}
+              />
+              {errors.email && <Text style={styles.errorLabel}>{errors.email.message}</Text>}
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.label}>Password</Text>
+              <Controller
+                control={control}
+                name="password"
+                rules={{
+                  required: "Password is required",
+                  minLength: { value: 6, message: "Minimum 6 characters" }
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    ref={passwordRef}
+                    style={[styles.input, errors.password && styles.inputError]}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    placeholder="******"
+                    placeholderTextColor="#475569"
+                    secureTextEntry={true}
+                    autoCorrect={false}
+                    textContentType="password"
+                    returnKeyType="done"
+                    onSubmitEditing={handleSubmit(onSubmit)}
+                  />
+                )}
+              />
+              {errors.password && <Text style={styles.errorLabel}>{errors.password.message}</Text>}
+            </View>
+
+            <TouchableOpacity
+              style={[styles.button, loading && styles.buttonDisabled]}
+              onPress={handleSubmit(onSubmit)}
+              disabled={loading}
+            >
+              {loading ? (
+                <ActivityIndicator color="#0f172a" />
+              ) : (
+                <Text style={styles.buttonText}>Login</Text>
               )}
-            />
-            {errors.email && <Text style={styles.errorLabel}>{errors.email.message}</Text>}
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => navigation.navigate("Register")}>
+              <Text style={styles.footerText}>
+                Don't have an account? <Text style={styles.linkText}>Register</Text>
+              </Text>
+            </TouchableOpacity>
+
           </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Password</Text>
-            <Controller
-              control={control}
-              name="password"
-              rules={{
-                required: "Password is required",
-                minLength: { value: 6, message: "Minimum 6 characters" }
-              }}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[styles.input, errors.password && styles.inputError]}
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  placeholder="******"
-                  placeholderTextColor="#475569"
-                  secureTextEntry={true}
-                  autoCorrect={false}
-                  textContentType="oneTimeCode"
-                />
-              )}
-            />
-            {errors.password && <Text style={styles.errorLabel}>{errors.password.message}</Text>}
-          </View>
-
-          <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
-            onPress={handleSubmit(onSubmit)}
-            disabled={loading}
-          >
-            {loading ? (
-              <ActivityIndicator color="#0f172a" />
-            ) : (
-              <Text style={styles.buttonText}>Login</Text>
-            )}
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.navigate("Register")}>
-            <Text style={styles.footerText}>
-              Don't have an account? <Text style={styles.linkText}>Register</Text>
-            </Text>
-          </TouchableOpacity>
-
         </View>
-      </View>
+      </ScrollView>
     </KeyboardAvoidingView>
   )
 }
@@ -146,6 +159,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#0f172a',
     justifyContent: 'center',
     padding: 20,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
   },
   card: {
     backgroundColor: 'rgba(30, 41, 59, 0.5)',

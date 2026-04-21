@@ -53,6 +53,20 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    if (!error.response) {
+      const originHint = API_ORIGIN?.trim()
+        ? `API: ${API_ORIGIN}`
+        : "API URL is missing";
+      Toast.show({
+        type: "error",
+        text1: "Network error",
+        text2: `${message} (${originHint})`,
+        position: "top",
+        visibilityTime: 6000,
+      });
+      return Promise.reject(error);
+    }
+
     if (status === 403) {
       Toast.show({
         type: "error",

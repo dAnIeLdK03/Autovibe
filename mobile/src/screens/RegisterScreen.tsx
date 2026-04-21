@@ -11,20 +11,16 @@ import {
   ScrollView
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { login, LoginRequest, register, RegisterRequest } from '../api/AuthService';
-import { setCredentials } from '../stores/authSlice';
+import type { RegisterRequest } from '../api/AuthService';
 import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApiErrorMessage';
 import { register as registerUser } from '../api/AuthService';
-import axios from 'axios';
 
 const RegisterScreen = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation<any>();
-  const dispatch = useDispatch();
 
   const { control, handleSubmit, watch, formState: { errors } } = useForm<RegisterRequest>({
     defaultValues: {
@@ -46,17 +42,7 @@ const RegisterScreen = () => {
       navigation.replace("CarList")
     } catch (err: unknown) {
       const errMsg = extractApiErrorMessage(err);
-
-      if (axios.isAxiosError(error)) {
-        setError(errMsg);
-      }
-      else if (err instanceof Error) {
-        setError(errMsg);
-      }
-      else if (typeof err === "string") {
-        setError(errMsg);
-      }
-      setError(typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg));
+      setError(errMsg?.trim() ? errMsg : "Registration failed. Please try again.");
     }
     finally {
       setLoading(false);
