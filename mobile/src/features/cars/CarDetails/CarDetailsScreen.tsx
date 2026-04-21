@@ -1,124 +1,175 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { useNavigation } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React from 'react';
+import { 
+  View, 
+  Text, 
+  ScrollView, 
+  TouchableOpacity, 
+  StyleSheet, 
+  SafeAreaView,
+  Platform,
+} from 'react-native';
 import { useSelector } from "react-redux";
-import type { RootStackParamList } from "../../../navigation/types";
 import type { RootState } from "../../../stores/store";
-import Navbar from "../../../shared/Navbar/Navbar";
+import { useCarDetails } from "./useCarDetails";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../navigation/types";
 
-type HomeNav = NativeStackNavigationProp<RootStackParamList, "Home">;
+import CarGallery from "./CarGallery";
+import CarDetailsInfo from "./CarDetailsInfo";
+import { ActivityIndicator } from 'react-native'; 
 
 export default function CarDetails() {
-  const navigation = useNavigation<HomeNav>();
-  const insets = useSafeAreaInsets();
-  const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
+  const { car, isOwner, handleDelete } = useCarDetails();
+  const { loading, error } = useSelector((state: RootState) => state.cars);
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const ctaLabel = isAuthenticated ? "Browse Cars" : "Look around";
+  if (loading) {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <ActivityIndicator size="large" color="#70FFE2" />
+        <Text style={{ color: '#94a3b8', marginTop: 10 }}>Loading car details...</Text>
+      </View>
+    );
+  }
 
-  return (
-    <LinearGradient colors={["#0f172a", "#1e3a8a", "#0f172a"]} style={styles.root}>
-      <Navbar />
-      <ScrollView
-        contentContainerStyle={[
-          styles.scroll,
-          {
-            paddingTop: insets.top + 32,
-            paddingBottom: insets.bottom + 48,
-            paddingHorizontal: 20,
-          },
-        ]}
-        showsVerticalScrollIndicator={false}
-      >
-        <Text style={styles.title}>
-          Find the perfect{" "}
-          <Text style={styles.titleAccent}>CAR</Text> for you
+  if (error) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  if (car === null) {
+    return (
+      <View style={[styles.container, styles.center]}>
+        <Text style={styles.whiteText}>Car not found.</Text>
+      </View>
+    );
+  }
+return(
+  <SafeAreaView style={styles.container}>
+  <View style={styles.topBar}>
+    <TouchableOpacity
+      style={styles.floatingBackButton}
+      onPress={() => navigation.goBack()}
+    >
+      <Text style={styles.backButtonText}>← Back</Text>
+    </TouchableOpacity>
+    
+    <Text style={styles.headerPrice}>{car.price.toLocaleString()}€</Text>
+  </View>
+
+  <ScrollView
+    contentContainerStyle={styles.scrollContent}
+    showsVerticalScrollIndicator={false}
+  >
+    <View style={styles.mainWrapper}>
+      <View style={styles.headerArea}>
+        {/* Тук премахнахме BadgeRow-а с Used и London */}
+        <Text style={styles.title} numberOfLines={2}>
+          {car.make} {car.model} {car.year}
         </Text>
+      </View>
 
-        <Text style={styles.subtitle}>
-          Autovibe — your journey to the perfect car. Browse our collection of
-          high-quality vehicles at affordable prices.
-        </Text>
+      <View style={styles.galleryArea}>
+        <CarGallery
+          imageUrls={car.imageUrls}
+          make={car.make}
+          model={car.model}
+          year={car.year}
+        />
+      </View>
 
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => navigation.navigate("CarList")}
-          style={({ pressed }) => [pressed && styles.btnPressed]}
-        >
-          <LinearGradient
-            colors={["#2563eb", "#70FFE2"]}
-            start={{ x: 0, y: 0.5 }}
-            end={{ x: 1, y: 0.5 }}
-            style={styles.btnGradient}
-          >
-            <Text style={styles.btnLabel}>{ctaLabel}</Text>
-          </LinearGradient>
-        </Pressable>
-      </ScrollView>
-
-      <LinearGradient
-        colors={["transparent", "#0f172a"]}
-        style={[styles.bottomFade, { height: 56 + insets.bottom }]}
-        pointerEvents="none"
+      <CarDetailsInfo
+        car={car}
+        isOwner={isOwner}
+        handleDelete={handleDelete}
       />
-    </LinearGradient>
-  );
+    </View>
+  </ScrollView>
+</SafeAreaView>
+)
 }
-
 const styles = StyleSheet.create({
-  root: {
+  container: {
     flex: 1,
+    backgroundColor: '#0f172a',
   },
-  scroll: {
-    flexGrow: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingTop: Platform.OS === 'android' ? 45 : 10, 
+    paddingBottom: 10,
+    zIndex: 10,
+  },
+  floatingBackButton: {
+    backgroundColor: "rgba(30, 41, 59, 0.8)",
+    borderWidth: 1,
+    borderColor: "rgba(71, 85, 105, 0.4)",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
+  },
+  backButtonText: {
+    color: '#f8fafc',
+    fontWeight: '700',
+    fontSize: 14,
+  },
+  headerPrice: {
+    color: '#70FFE2',
+    fontWeight: '800',
+    fontSize: 18,
+  },
+  scrollContent: {
+    paddingHorizontal: 16,
+    paddingTop: 5,
+    paddingBottom: 40,
+  },
+  mainWrapper: {
+    maxWidth: 600,
+    alignSelf: 'center',
+    width: '100%',
+  },
+  headerArea: {
+    marginBottom: 15,
+    marginTop: 5,
   },
   title: {
-    textAlign: "center",
-    color: "#ffffff",
-    fontSize: 34,
-    fontWeight: "900",
-    lineHeight: 42,
-    marginBottom: 20,
+    fontSize: 30,
+    fontWeight: '900',
+    color: '#f8fafc',
+    letterSpacing: -0.8,
+    lineHeight: 36,
   },
-  titleAccent: {
-    color: "#70FFE2",
+  galleryArea: {
+    marginTop: 0,
+    borderRadius: 24,
+    overflow: 'hidden',
   },
-  subtitle: {
-    textAlign: "center",
-    color: "#cbd5e1",
+  whiteText: {
+    color: 'white',
     fontSize: 18,
-    lineHeight: 28,
-    maxWidth: 360,
-    marginBottom: 32,
   },
-  btnGradient: {
-    paddingVertical: 16,
-    paddingHorizontal: 36,
-    borderRadius: 14,
-    minWidth: 220,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.35,
-    shadowRadius: 12,
-    elevation: 8,
+  errorContainer: {
+    backgroundColor: 'rgba(239, 68, 68, 0.1)',
+    borderWidth: 1,
+    borderColor: '#ef4444',
+    padding: 16,
+    borderRadius: 12,
+    margin: 20,
   },
-  btnLabel: {
-    color: "#ffffff",
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  btnPressed: {
-    opacity: 0.92,
-    transform: [{ scale: 0.98 }],
-  },
-  bottomFade: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: 0,
+  errorText: {
+    color: '#ef4444',
+    textAlign: 'center',
   },
 });
