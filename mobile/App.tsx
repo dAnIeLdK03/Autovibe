@@ -6,10 +6,12 @@ import Toast from "react-native-toast-message";
 import RootNavigator from "./src/navigation/RootNavigator";
 import { navigateRef } from "./src/navigation/navigateRef";
 import { store } from "./src/stores/store";
+import AuthRestore from "./src/features/auth/authComponent/authRestore";
 
 export default function App() {
   return (
     <Provider store={store}>
+      <AuthRestore/>
       <SafeAreaProvider>
         <NavigationContainer ref={navigateRef}>
           <RootNavigator />
