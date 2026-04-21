@@ -93,7 +93,7 @@ const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton 
 };
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: 'rgba(30, 41, 59, 0.5)', // slate-800/50
+        backgroundColor: 'rgba(30, 41, 59, 0.5)',
         borderRadius: 24,
         borderWidth: 1,
         borderColor: '#334155',

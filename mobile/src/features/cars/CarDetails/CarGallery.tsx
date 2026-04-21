@@ -81,7 +81,7 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
         visible={isZoomOpen}
         transparent={false}
         animationType="fade"
-        onRequestClose={() => setIsZoomOpen(false)} // Това замества ESCAPE
+        onRequestClose={() => setIsZoomOpen(false)}
       >
         <View style={styles.modalContent}>
           <TouchableOpacity 

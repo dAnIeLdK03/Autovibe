@@ -18,7 +18,6 @@ function CarDetailsInfo({ car, isOwner, handleDelete }: CarDeatilsInfoProps) {
     const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     
-    // Типизираме навигацията
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
@@ -103,7 +102,7 @@ function CarDetailsInfo({ car, isOwner, handleDelete }: CarDeatilsInfoProps) {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: 'rgba(30, 41, 59, 0.75)', // slate-800/75
+        backgroundColor: 'rgba(30, 41, 59, 0.75)', 
         borderRadius: 20,
         padding: 22,
         marginTop: 8,

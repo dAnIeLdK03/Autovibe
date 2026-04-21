@@ -10,7 +10,6 @@ interface NoCarsFoundProps {
 export function NoCarsFound({ onOpenFilters, onResetFilters }: NoCarsFoundProps) {
   return (
     <View style={styles.container}>
-      {/* Икона с "glow" ефект отзад */}
       <View style={styles.iconWrapper}>
         <View style={styles.glow} />
         <MaterialCommunityIcons 
@@ -28,7 +27,6 @@ export function NoCarsFound({ onOpenFilters, onResetFilters }: NoCarsFoundProps)
       </Text>
 
       <View style={styles.buttonContainer}>
-        {/* Бутон за промяна на филтри */}
         <TouchableOpacity 
           style={styles.primaryButton} 
           onPress={onOpenFilters}
@@ -38,7 +36,6 @@ export function NoCarsFound({ onOpenFilters, onResetFilters }: NoCarsFoundProps)
           <Text style={styles.primaryButtonText}>Change filters</Text>
         </TouchableOpacity>
 
-        {/* Бутон за изчистване */}
         <TouchableOpacity 
           style={styles.secondaryButton} 
           onPress={onResetFilters}
@@ -58,10 +55,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 60,
     paddingHorizontal: 20,
-    backgroundColor: 'rgba(30, 41, 59, 0.3)', // slate-900/50
+    backgroundColor: 'rgba(30, 41, 59, 0.3)',
     borderRadius: 32,
     borderWidth: 2,
-    borderColor: '#1e293b', // slate-800
+    borderColor: '#1e293b',
     borderStyle: 'dashed',
     marginVertical: 20,
   },
@@ -75,9 +72,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: 80,
     height: 80,
-    backgroundColor: 'rgba(59, 130, 246, 0.15)', // blue-500/15
+    backgroundColor: 'rgba(59, 130, 246, 0.15)',
     borderRadius: 40,
-    // В RN няма директен blur, затова ползваме прозрачност и заобляне
   },
   title: {
     fontSize: 24,
@@ -95,14 +91,14 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
   buttonContainer: {
-    flexDirection: 'column', // На мобилни е по-добре да са един под друг или в колона
+    flexDirection: 'column', 
     gap: 12,
     width: '100%',
     alignItems: 'center',
   },
   primaryButton: {
     flexDirection: 'row',
-    backgroundColor: '#2563eb', // blue-600
+    backgroundColor: '#2563eb',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 16,
@@ -115,7 +111,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    // Elevation за Android
     elevation: 4,
   },
   primaryButtonText: {

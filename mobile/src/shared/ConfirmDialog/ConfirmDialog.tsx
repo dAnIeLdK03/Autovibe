@@ -28,12 +28,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
             visible={isOpen}
             transparent={true}
             animationType="fade"
-            onRequestClose={onClose} // Важно за Android Back бутона
+            onRequestClose={onClose}
         >
-            {/* Backdrop: натискането извън картата затваря диалога */}
             <Pressable style={styles.backdrop} onPress={onClose}>
                 
-                {/* Prevent propagation: натискането върху самата карта да не затваря диалога */}
                 <Pressable style={styles.card} onPress={(e) => e.stopPropagation()}>
                     <View style={styles.textContainer}>
                         <h3 style={styles.title}>{title}</h3>
@@ -45,7 +43,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                             style={styles.confirmButton} 
                             onPress={() => {
                                 onConfirmClick();
-                                onClose(); // Обикновено затваряме след потвърждение
+                                onClose(); 
                             }}
                         >
                             <Text style={styles.confirmText}>Confirm</Text>
@@ -68,14 +66,14 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
 const styles = StyleSheet.create({
     backdrop: {
         flex: 1,
-        backgroundColor: 'rgba(2, 6, 23, 0.8)', // slate-950 с 80% opacity
+        backgroundColor: 'rgba(2, 6, 23, 0.8)',
         justifyContent: 'center',
         alignItems: 'center',
         padding: 20,
     },
     card: {
-        backgroundColor: '#1e293b', // slate-800
-        borderColor: '#334155', // slate-700
+        backgroundColor: '#1e293b',
+        borderColor: '#334155',
         borderWidth: 1,
         borderRadius: 24,
         padding: 32,
@@ -85,7 +83,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.5,
         shadowRadius: 15,
-        elevation: 10, // за Android сянка
+        elevation: 10, 
     },
     textContainer: {
         alignItems: 'center',
@@ -99,15 +97,15 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     message: {
-        color: '#94a3b8', // slate-400
+        color: '#94a3b8',
         textAlign: 'center',
         fontSize: 16,
     },
     buttonContainer: {
-        gap: 12, // работи в по-новите версии на React Native
+        gap: 12,
     },
     confirmButton: {
-        backgroundColor: '#334155', // slate-700
+        backgroundColor: '#334155',
         paddingVertical: 14,
         borderRadius: 12,
         alignItems: 'center',
@@ -122,7 +120,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cancelText: {
-        color: '#64748b', // slate-500
+        color: '#64748b',
         fontSize: 14,
     }
 });

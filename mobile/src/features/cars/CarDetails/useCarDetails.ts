@@ -10,7 +10,6 @@ import { RootStackParamList } from "../../../navigation/types"; // Твоят т
 import { Alert } from "react-native";
 
 export const useCarDetails = () => {
-    // 1. Взимаме ID-то от route params (React Navigation начин)
     const route = useRoute<RouteProp<RootStackParamList, 'CarDetails'>>();
     const { id } = route.params; 
 
@@ -24,7 +23,6 @@ export const useCarDetails = () => {
     
     const isOwner = car !== null && user !== null && car.sellerId === user.id;
 
-    // 2. Зареждане на данни
     useEffect(() => {
         if (!id || isNaN(carId)) {
             dispatch(setError("Invalid Car ID"));
@@ -40,7 +38,6 @@ export const useCarDetails = () => {
                 setCar(data);
             } catch (error) {
                 handleError(error);
-                // В Native 3 секунди са много време, често се ползва по-бърз Feedback
                 setTimeout(() => {
                     navigation.navigate("CarList");
                 }, 2000);
@@ -51,7 +48,6 @@ export const useCarDetails = () => {
         fetchCar();
     }, [id, dispatch, carId, navigation, handleError]);
 
-    // 3. Изтриване (Native начин с Alert.alert вместо window.confirm)
     const processDelete = async () => {
         dispatch(setLoading(true));
         dispatch(clearError());
@@ -73,7 +69,6 @@ export const useCarDetails = () => {
             return;
         }
 
-        // Вместо window.confirm ползваме Alert
         Alert.alert(
             "Delete Car",
             "Are you sure you want to delete this car?",
