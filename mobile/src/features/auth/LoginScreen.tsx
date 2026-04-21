@@ -13,9 +13,9 @@ import {
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { login, LoginRequest } from '../api/AuthService';
-import { setCredentials } from '../stores/authSlice';
-import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApiErrorMessage';
+import { login, LoginRequest } from '../../api/AuthService';
+import { setCredentials } from '../../stores/authSlice';
+import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
 
 const LoginScreen = () => {
   const [error, setError] = useState<string | null>(null);

@@ -12,9 +12,9 @@ import {
 } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { useNavigation } from '@react-navigation/native';
-import type { RegisterRequest } from '../api/AuthService';
-import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApiErrorMessage';
-import { register as registerUser } from '../api/AuthService';
+import type { RegisterRequest } from '../../api/AuthService';
+import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
+import { register as registerUser } from '../../api/AuthService';
 
 const RegisterScreen = () => {
   const [error, setError] = useState<string | null>(null);
