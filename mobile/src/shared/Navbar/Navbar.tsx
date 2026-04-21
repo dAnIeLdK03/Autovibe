@@ -6,6 +6,7 @@ import type { RootState } from '../../stores/store';
 import { logout } from '../../stores/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import Menu from '../Menu/Menu';
 
 
 const Navbar = () => {
@@ -38,14 +39,12 @@ const Navbar = () => {
 
                 <View style={styles.rightSection}>
                     {isAuthenticated ? (
-                        <>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <Text style={styles.userText} numberOfLines={1}>
                                 {user?.email ?? "Logged in"}
                             </Text>
-                            <Pressable onPress={handleLogout} style={styles.logoutBtn}>
-                                <Text style={styles.logoutBtnText}>Logout</Text>
-                            </Pressable>
-                        </>
+                            <Menu />
+                        </View>
                     ) : (
                         <>
                             <Pressable onPress={() => navigation.navigate("Login")}>
