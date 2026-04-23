@@ -22,9 +22,10 @@ interface CarFormProps {
     submitLabel?: string;
     title: string;
     onRemoveImage?: (index: number) => void;
+    onFormSubmit: () => void;
 }
 
-function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel = "Create", title = "Create Ad" }: CarFormProps) {
+function CarForm({ handleImageChange, imagePreview, onRemoveImage, onFormSubmit, submitLabel = "Create", title = "Create Ad" }: CarFormProps) {
     const { control, formState: { errors }, watch } = useFormContext<CarFormValues>();
     const { error, loading } = useSelector((state: RootState) => state.cars);
     const navigation = useNavigation();
@@ -142,6 +143,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                         <TouchableOpacity
                             style={styles.submitBtn}
                             disabled={loading}
+                            onPress={onFormSubmit}
                         >
                             {loading ? (
                                 <ActivityIndicator color="#0f172a" />
