@@ -18,6 +18,7 @@ import { RootStackParamList } from "../../../navigation/types";
 import CarGallery from "./CarGallery";
 import CarDetailsInfo from "./CarDetailsInfo";
 import { ActivityIndicator } from 'react-native'; 
+import { SkeletonLoader } from '../../../shared/UX/SkeletonLoading';
 
 export default function CarDetails() {
   const { car, isOwner, handleDelete } = useCarDetails();
@@ -27,8 +28,7 @@ export default function CarDetails() {
   if (loading) {
     return (
       <View style={[styles.container, styles.center]}>
-        <ActivityIndicator size="large" color="#70FFE2" />
-        <Text style={{ color: '#94a3b8', marginTop: 10 }}>Loading car details...</Text>
+        <SkeletonLoader type="card" />
       </View>
     );
   }

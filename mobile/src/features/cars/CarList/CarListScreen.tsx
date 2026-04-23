@@ -12,6 +12,7 @@ import { initialFilters } from './constants';
 import CarCard from '../CarComponents/CarCard';
 import { NoCarsFound } from '../../../shared/UX/NoCarsFound';
 import Pagination from '../../../shared/Pagination/pagePagination';
+import { SkeletonLoader } from '../../../shared/UX/SkeletonLoading';
 
 const CarListScreen = () => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -33,7 +34,7 @@ const CarListScreen = () => {
     if (loading && page === 1) {
         return (
             <View style={styles.centerContainer}>
-                <ActivityIndicator size="large" color="#70FFE2" />
+               <SkeletonLoader type="details" count={1} />
             </View>
         );
     }
