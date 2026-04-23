@@ -34,7 +34,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 
                 <Pressable style={styles.card} onPress={(e) => e.stopPropagation()}>
                     <View style={styles.textContainer}>
-                        <h3 style={styles.title}>{title}</h3>
+                        <Text style={styles.title}>{title}</Text>
                         <Text style={styles.message}>{message}</Text>
                     </View>
 

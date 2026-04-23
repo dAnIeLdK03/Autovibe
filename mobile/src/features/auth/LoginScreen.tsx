@@ -16,6 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { login, LoginRequest } from '../../api/AuthService';
 import { setCredentials } from '../../stores/authSlice';
 import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
+import { LoadingSpinner } from '../../shared/UX/LoadingSpinner';
 
 const LoginScreen = () => {
   const [error, setError] = useState<string | null>(null);
@@ -135,7 +136,7 @@ const LoginScreen = () => {
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#0f172a" />
+               <LoadingSpinner />
               ) : (
                 <Text style={styles.buttonText}>Login</Text>
               )}

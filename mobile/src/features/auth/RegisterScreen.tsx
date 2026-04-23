@@ -15,6 +15,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { RegisterRequest } from '../../api/AuthService';
 import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
 import { register as registerUser } from '../../api/AuthService';
+import { LoadingSpinner } from '../../shared/UX/LoadingSpinner';
 
 const RegisterScreen = () => {
   const [error, setError] = useState<string | null>(null);
@@ -221,7 +222,7 @@ const RegisterScreen = () => {
               disabled={loading}
             >
               {loading ? (
-                <ActivityIndicator color="#0f172a" />
+                <LoadingSpinner />
               ) : (
                 <Text style={styles.buttonText}>Register</Text>
               )}
