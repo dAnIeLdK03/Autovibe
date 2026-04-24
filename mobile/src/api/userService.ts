@@ -1,15 +1,15 @@
 import { api } from './api';
 
 export interface EditUserModalProps{
-   isOpen: boolean;
+   isOpen?: boolean;
    onClose: () => void;
    user: UserData | null;
    onSave?: (data: UserData) => void;
 }
 export interface EditPasswordModalProps{
-    isOpen: boolean;
+    isOpen?: boolean;
     onClose: () => void;
-    onSave?: (data: PasswordChange) => void;
+    onSave?: () => void;
 }
 
 export interface UserData{

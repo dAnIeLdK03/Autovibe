@@ -1,10 +1,20 @@
-import { useState } from "react";
-import { EditPasswordModalProps, PasswordChange, UpdatePassword } from "../../../api/userService";
-import { Controller, useForm, Watch } from "react-hook-form";
-import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
+import React, { useState } from "react";
+import { 
+    ActivityIndicator, 
+    KeyboardAvoidingView, 
+    Modal, 
+    Platform, 
+    ScrollView, 
+    Text, 
+    TextInput, 
+    TouchableOpacity, 
+    View, 
+    StyleSheet 
+} from "react-native";
+import { Controller, useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
-import { ActivityIndicator, KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
-import { StyleSheet } from "react-native";
+import { EditPasswordModalProps, UpdatePassword } from "../../../api/userService";
+import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
 
 interface ChangePasswordFields {
     CurrentPassword: string;
@@ -15,7 +25,7 @@ interface ChangePasswordFields {
 const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onSave }) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const methods = useForm<PasswordChange>()
+
     const { control, handleSubmit, watch, formState: { errors } } = useForm<ChangePasswordFields>({
         defaultValues: {
             CurrentPassword: '',
@@ -23,31 +33,39 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
             ConfirmPassword: ''
         }
     });
+
     const newPassword = watch("NewPassword");
+
     if (!isOpen) return null;
 
-    const onSubmit = async (formData: PasswordChange) => {
+    const onSubmit = async (formData: ChangePasswordFields) => {
         try {
             setLoading(true);
             setError(null);
             await UpdatePassword(formData);
+            
             if (onSave) {
-                onSave(formData);
+                onSave();
             }
-            Toast.show({ type: "success", text1: "Password changed successfully" })
+
+            Toast.show({ 
+                type: "success", 
+                text1: "Password changed successfully" 
+            });
+
             setTimeout(() => {
                 onClose();
             }, 2000);
         } catch (err: unknown) {
             const apiMessage = extractApiErrorMessage(err);
             setError(apiMessage);
-        }finally{
+        } finally {
             setLoading(false);
         }
-    }
+    };
 
     return (
-        <Modal transparent visible={true} animationType="slide" onRequestClose={onClose}>
+        <Modal transparent visible={isOpen} animationType="slide" onRequestClose={onClose}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
                 style={styles.overlay}
@@ -56,7 +74,7 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
                     <ScrollView bounces={false} showsVerticalScrollIndicator={false}>
                         <View style={styles.header}>
                             <Text style={styles.title}>Change Password</Text>
-                            <TouchableOpacity onPress={onClose}>
+                            <TouchableOpacity onPress={onClose} hitSlop={10}>
                                 <Text style={styles.closeX}>✕</Text>
                             </TouchableOpacity>
                         </View>
@@ -145,23 +163,94 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
 };
 
 const styles = StyleSheet.create({
-    overlay: { flex: 1, backgroundColor: 'rgba(0, 0, 0, 0.7)', justifyContent: 'center', padding: 20 },
-    card: { backgroundColor: '#1e293b', borderRadius: 24, padding: 24, borderWidth: 1, borderColor: '#334155' },
-    header: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
-    title: { fontSize: 22, fontWeight: 'bold', color: 'white' },
-    closeX: { color: '#94a3b8', fontSize: 22 },
-    label: { fontSize: 13, color: '#94a3b8', marginBottom: 6, textTransform: 'uppercase' },
-    input: { backgroundColor: '#0f172a', borderWidth: 1, borderColor: '#334155', borderRadius: 12, padding: 12, color: 'white' },
-    inputError: { borderColor: '#ef4444' },
-    errorHint: { color: '#ef4444', fontSize: 11, marginTop: 4 },
-    errorBox: { backgroundColor: 'rgba(239, 68, 68, 0.1)', padding: 10, borderRadius: 10, marginBottom: 15, borderLeftWidth: 4, borderLeftColor: '#ef4444' },
-    errorText: { color: '#ef4444', fontSize: 13 },
-    buttonRow: { flexDirection: 'row', gap: 12, marginTop: 30 },
-    btn: { flex: 1, height: 50, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
-    btnCancel: { borderWidth: 1, borderColor: '#334155' },
-    btnSave: { backgroundColor: '#3b82f6' },
-    btnTextCancel: { color: '#94a3b8', fontWeight: '600' },
-    btnTextSave: { color: 'white', fontWeight: 'bold' }
+    overlay: { 
+        flex: 1, 
+        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+        justifyContent: 'center', 
+        padding: 20 
+    },
+    card: { 
+        backgroundColor: '#1e293b', 
+        borderRadius: 24, 
+        padding: 24, 
+        borderWidth: 1, 
+        borderColor: '#334155' 
+    },
+    header: { 
+        flexDirection: 'row', 
+        justifyContent: 'space-between', 
+        marginBottom: 20 
+    },
+    title: { 
+        fontSize: 22, 
+        fontWeight: 'bold', 
+        color: 'white' 
+    },
+    closeX: { 
+        color: '#94a3b8', 
+        fontSize: 22 
+    },
+    label: { 
+        fontSize: 13, 
+        color: '#94a3b8', 
+        marginBottom: 6, 
+        textTransform: 'uppercase' 
+    },
+    input: { 
+        backgroundColor: '#0f172a', 
+        borderWidth: 1, 
+        borderColor: '#334155', 
+        borderRadius: 12, 
+        padding: 12, 
+        color: 'white' 
+    },
+    inputError: { 
+        borderColor: '#ef4444' 
+    },
+    errorHint: { 
+        color: '#ef4444', 
+        fontSize: 11, 
+        marginTop: 4 
+    },
+    errorBox: { 
+        backgroundColor: 'rgba(239, 68, 68, 0.1)', 
+        padding: 10, 
+        borderRadius: 10, 
+        marginBottom: 15, 
+        borderLeftWidth: 4, 
+        borderLeftColor: '#ef4444' 
+    },
+    errorText: { 
+        color: '#ef4444', 
+        fontSize: 13 
+    },
+    buttonRow: { 
+        flexDirection: 'row', 
+        gap: 12, 
+        marginTop: 30 
+    },
+    btn: { 
+        flex: 1, 
+        height: 50, 
+        borderRadius: 12, 
+        justifyContent: 'center', 
+        alignItems: 'center' 
+    },
+    btnCancel: { 
+        borderWidth: 1, 
+        borderColor: '#334155' 
+    },
+    btnSave: { 
+        backgroundColor: '#3b82f6' 
+    },
+    btnTextCancel: { 
+        color: '#94a3b8', 
+        fontWeight: '600' 
+    },
+    btnTextSave: { 
+        color: 'white', 
+        fontWeight: 'bold' 
+    }
 });
 
 export default ChangePassword;
