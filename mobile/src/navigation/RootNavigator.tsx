@@ -8,6 +8,7 @@ import RegisterScreen from "../features/auth/RegisterScreen";
 import CarDetails from "../features/cars/CarDetails/CarDetailsScreen";
 import CarCreate from "../features/cars/CarCreate/CarCreate";
 import CarEdit from "../features/cars/CarEdit/CarEdit";
+import { MyCars } from "../features/cars/MyCars/MyCars";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -25,6 +26,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
       <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}} />
       <Stack.Screen name="CarDetails" component={CarDetails}  options={{headerShown: false}}/>
+      <Stack.Screen name="MyCars" component={MyCars}  options={{headerShown: false}}/>
       <Stack.Screen name="CarCreate" component={CarCreate}  options={{headerShown: false}}/>
       <Stack.Screen name="CarEdit" component={CarEdit}  options={{headerShown: false}}/>
 

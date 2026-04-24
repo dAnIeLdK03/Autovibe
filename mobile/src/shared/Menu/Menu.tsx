@@ -38,7 +38,7 @@ const Menu: React.FC = () => {
     const menuItems = [
         { label: "Home", onClick: () => navigation.navigate("CarList") },
         { label: "Profile", onClick: () => navigation.navigate("Profile") },
-        { label: "Create New Ad", onClick: () => isAuthenticated ? navigation.navigate("CreateAd") : navigation.navigate("Login") },
+        { label: "Create New Ad", onClick: () => isAuthenticated ? navigation.navigate("CarCreate") : navigation.navigate("Login") },
         { label: "My Cars", onClick: () => navigation.navigate("MyCars") },
         { label: "My Favorites", onClick: () => navigation.navigate("Favorites") },
         { label: "Logout", onClick: () => setShowConfirm(true) },
