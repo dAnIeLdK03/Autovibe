@@ -69,13 +69,12 @@ function CarDetailsInfo({ car, isOwner, handleDelete }: CarDeatilsInfoProps) {
                 )}
             </View>
 
-            {/* Actions */}
             {isOwner && (
                 <View style={styles.buttonGroup}>
                     <TouchableOpacity 
                         style={[styles.button, styles.editButton]}
                         //za podobrqvane
-                        onPress={() => navigation.navigate('CarDetails', { id: car.id })}
+                        onPress={() => navigation.navigate('CarEdit', { id: car.id })}
                     >
                         <Text style={styles.buttonText}>Edit</Text>
                     </TouchableOpacity>

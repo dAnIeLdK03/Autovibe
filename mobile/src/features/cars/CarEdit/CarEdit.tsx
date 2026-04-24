@@ -4,7 +4,7 @@ import { FormProvider } from 'react-hook-form';
 import CarForm from '../CarComponents/CarForm'; 
 import { useCarEdit } from './useCarEdit';
 
-export function CarCreate() {
+export function CarEdit() {
   const {
     methods, 
     imagePreview, 
@@ -36,4 +36,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CarCreate;
+export default CarEdit;

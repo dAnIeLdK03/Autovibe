@@ -5,7 +5,8 @@ export type RootStackParamList = {
   Register: undefined;
   CarDetails: {id: number};
   Profile: undefined;
-  CreateAd: undefined;
+  CarCreate: undefined;
+  CarEdit: {id: number};
   MyCars: undefined;
   Favorites: undefined;
 };

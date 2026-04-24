@@ -69,7 +69,6 @@ return(
   >
     <View style={styles.mainWrapper}>
       <View style={styles.headerArea}>
-        {/* Тук премахнахме BadgeRow-а с Used и London */}
         <Text style={styles.title} numberOfLines={2}>
           {car.make} {car.model} {car.year}
         </Text>
