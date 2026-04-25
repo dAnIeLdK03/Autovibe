@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getImageUrl } from '../../../utils/getImageurl';
-//import { FavoriteButton } from './FavoriteCars/FavoriteButton';
+import { FavoriteButton } from './FavoriteCars/FavoriteButton';
 import { CarCardProps } from '../../../api/carsService';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../../navigation/types';
@@ -47,13 +47,12 @@ const CarCard: React.FC<CarCardProps> = ({ car, onDeleteClick, showDeletebutton 
           <Text style={styles.yearText}>{car.year}</Text>
         </View>
 
-        {/* <View style={styles.favoriteContainer}>
+        <View style={styles.favoriteContainer}>
           <FavoriteButton carId={car.id} />
         </View>
-       */}
+       
         </View>
 
-      {/* Информация */}
       <View style={styles.infoContainer}>
         <View style={styles.topRow}>
           <View>

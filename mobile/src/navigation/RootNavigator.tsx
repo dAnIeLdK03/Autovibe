@@ -29,7 +29,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Register" component={RegisterScreen} options={{headerShown: false}} />
       <Stack.Screen name="CarDetails" component={CarDetails}  options={{headerShown: false}}/>
       <Stack.Screen name="MyCars" component={MyCars}  options={{headerShown: false}}/>
-      <Stack.Screen name="MyFavorite" component={MyFavorite}  />
+      <Stack.Screen name="MyFavorite" component={MyFavorite} options={{headerShown: false}}/>
       <Stack.Screen name="Profile" component={Profile}  options={{headerShown: false}}/>
       <Stack.Screen name="CarCreate" component={CarCreate}  options={{headerShown: false}}/>
       <Stack.Screen name="CarEdit" component={CarEdit}  options={{headerShown: false}}/>
