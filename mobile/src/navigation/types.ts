@@ -8,5 +8,5 @@ export type RootStackParamList = {
   CarCreate: undefined;
   CarEdit: {id: number};
   MyCars: undefined;
-  Favorites: undefined;
+  MyFavorite: undefined;
 };
