@@ -15,6 +15,9 @@ import { Controller, useForm } from "react-hook-form";
 import Toast from "react-native-toast-message";
 import { EditPasswordModalProps, UpdatePassword } from "../../../api/userService";
 import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "../../../navigation/types";
 
 interface ChangePasswordFields {
     CurrentPassword: string;
@@ -25,7 +28,7 @@ interface ChangePasswordFields {
 const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onSave }) => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-
+const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { control, handleSubmit, watch, formState: { errors } } = useForm<ChangePasswordFields>({
         defaultValues: {
             CurrentPassword: '',
@@ -56,6 +59,9 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
             setTimeout(() => {
                 onClose();
             }, 2000);
+
+            navigation.navigate("Login");
+
         } catch (err: unknown) {
             const apiMessage = extractApiErrorMessage(err);
             setError(apiMessage);
