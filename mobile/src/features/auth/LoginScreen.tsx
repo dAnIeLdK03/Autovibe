@@ -42,6 +42,7 @@ const LoginScreen = () => {
       const data = await login(formData);
       setLoading(false);
       dispatch(setCredentials({ user: data.user, token: data.token }));
+      navigation.replace("CarList")
     } catch (err: unknown) {
       const errMsg = extractApiErrorMessage(err);
       setError(errMsg?.trim() ? errMsg : "Login failed. Please try again.");

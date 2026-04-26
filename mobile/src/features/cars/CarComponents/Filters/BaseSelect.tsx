@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   button: {
-    flex: 1,
     minWidth: '45%',
     paddingVertical: 12,
     paddingHorizontal: 16,

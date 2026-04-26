@@ -5,7 +5,6 @@ import {
     FlatList,
     TouchableOpacity,
     StyleSheet,
-    ActivityIndicator
 } from 'react-native';
 import { useCarList } from './useCarList';
 import { initialFilters } from './constants';
@@ -13,6 +12,7 @@ import CarCard from '../CarComponents/CarCard';
 import { NoCarsFound } from '../../../shared/UX/NoCarsFound';
 import Pagination from '../../../shared/Pagination/pagePagination';
 import { SkeletonLoader } from '../../../shared/UX/SkeletonLoading';
+import { FilterModal } from '../CarComponents/Filters/FilterModal'; 
 
 const CarListScreen = () => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -21,7 +21,7 @@ const CarListScreen = () => {
 
     const {
         cars, loading, error, filters, page, totalPages, handleApplyFilters,
-        handleUpdateSort, handleReset, handlePageChange
+        handleReset, handlePageChange
     } = useCarList(initialFilters);
 
     const onPageChange = (newPage: number) => {
@@ -34,7 +34,7 @@ const CarListScreen = () => {
     if (loading && page === 1) {
         return (
             <View style={styles.centerContainer}>
-               <SkeletonLoader type="details" count={1} />
+                <SkeletonLoader type="details" count={1} />
             </View>
         );
     }
@@ -51,6 +51,16 @@ const CarListScreen = () => {
 
     return (
         <View style={styles.container}>
+            <FilterModal
+                isOpen={isFilterOpen}
+                onClose={() => setIsFilterOpen(false)}
+                filters={filters}
+                onApply={(finalFilters) => {
+                    handleApplyFilters(finalFilters);
+                    setIsFilterOpen(false);
+                }}
+            />
+
             <FlatList
                 ref={flatListRef}
                 data={cars}
