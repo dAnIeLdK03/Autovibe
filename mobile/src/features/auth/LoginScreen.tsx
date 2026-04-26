@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import { login, LoginRequest } from '../../api/AuthService';
 import { setCredentials } from '../../stores/authSlice';
 import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
 import { LoadingSpinner } from '../../shared/UX/LoadingSpinner';
+import Toast from 'react-native-toast-message';
 
 const LoginScreen = () => {
   const [error, setError] = useState<string | null>(null);
@@ -33,24 +34,24 @@ const LoginScreen = () => {
     }
   });
 
-  const onSubmit = async (formData: LoginRequest) => {
+  const onSubmit = useCallback(async (formData: LoginRequest) => {
+    if(loading) return;
     setLoading(true);
     setError(null);
     try {
       const data = await login(formData);
+      setLoading(false);
       dispatch(setCredentials({ user: data.user, token: data.token }));
-      navigation.replace("CarList");
     } catch (err: unknown) {
       const errMsg = extractApiErrorMessage(err);
       setError(errMsg?.trim() ? errMsg : "Login failed. Please try again.");
-    } finally {
-      setLoading(false);
+      Toast.show({ type: "error", text1: "Wrong credentials.", text2: "Try again."})
     }
-  };
+  },[dispatch, loading]);
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
       style={styles.container}
     >
       <ScrollView
