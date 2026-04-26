@@ -2,8 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import type { RootState } from "../../stores/store";
-import { logout } from "../../stores/authSlice";
+import type { RootState } from '@autovibe/app-state';
+import { logout } from '@autovibe/app-state';
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 
 interface MenuItem {

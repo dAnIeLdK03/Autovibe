@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { getCurrentUser } from '../../../api/AuthService'; 
 import { useDispatch } from 'react-redux';
-import { logout, setCredentials } from '../../../stores/authSlice';
+import { logout, setCredentials } from '@autovibe/app-state';
 
 function AuthRestore() {
     const dispatch = useDispatch();

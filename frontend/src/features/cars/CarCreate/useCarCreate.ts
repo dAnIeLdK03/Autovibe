@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useForm } from "react-hook-form";
 import { useError } from "../../../shared/CustomHooks/useError";
 import type { CarFormValues } from "../CarComponents/CarValidations/CarCreateValidaions";
-import { clearError, setError, setLoading } from "../../../stores/carsSlice";
+import { clearError, setError, setLoading } from '@autovibe/app-state';
 import CarCreateValidaions from "../CarComponents/CarValidations/CarCreateValidaions";
 import { uploadCarImageIfPresent } from "../CarComponents/CarValidations/CarSubmitHelpers";
 import { createCar } from "../../../api/carsService";

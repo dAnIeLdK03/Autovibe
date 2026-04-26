@@ -1,10 +1,10 @@
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearError, setError, setLoading } from "../../../stores/carsSlice";
+import { clearError, setError, setLoading } from '@autovibe/app-state';
 import { deleteCar, getCarById, type CarDetails } from "../../../api/carsService";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useError } from "../../../shared/hooks/useError"; 
 import { RootStackParamList } from "../../../navigation/types"; // Твоят тип
 import { Alert } from "react-native";

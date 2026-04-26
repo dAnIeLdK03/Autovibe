@@ -5,7 +5,7 @@ import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import type { RootStackParamList } from "../navigation/types";
-import type { RootState } from "../stores/store";
+import type { RootState } from '@autovibe/app-state';
 
 type HomeNav = NativeStackNavigationProp<RootStackParamList, "Home">;
 

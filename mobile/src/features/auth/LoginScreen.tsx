@@ -14,7 +14,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { login, LoginRequest } from '../../api/AuthService';
-import { setCredentials } from '../../stores/authSlice';
+import { setCredentials } from '@autovibe/app-state';
 import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
 import { LoadingSpinner } from '../../shared/UX/LoadingSpinner';
 import Toast from 'react-native-toast-message';

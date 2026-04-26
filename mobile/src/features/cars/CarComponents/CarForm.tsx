@@ -13,7 +13,7 @@ import { useFormContext, Controller } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import type { CarFormValues } from './CarValidations/CarCreateValidations';
-import type { RootState } from '../../../stores/store';
+import type { RootState } from '@autovibe/app-state';
 import { getImageUrl } from '../../../utils/getImageurl';
 
 interface CarFormProps {

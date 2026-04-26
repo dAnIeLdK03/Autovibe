@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useNavigate } from "react-router";
-import { clearError, setCars, setError, setLoading } from "../../../stores/carsSlice";
+import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import { deleteCar, getCarsByUserId } from "../../../api/carsService";
 import { useCallback, useEffect, useState } from "react";
 

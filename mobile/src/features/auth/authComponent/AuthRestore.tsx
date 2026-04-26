@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { getCurrentUser } from "../../../api/AuthService";
-import { logout, setCredentials } from "../../../stores/authSlice";
+import { logout, setCredentials } from '@autovibe/app-state';
 
 function AuthRestore() {
     const dispatch = useDispatch();

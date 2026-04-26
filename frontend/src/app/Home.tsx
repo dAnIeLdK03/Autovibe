@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import type { RootState } from '../stores/store';
+import type { RootState } from '@autovibe/app-state';
 
 function Home() {
   const navigate = useNavigate();

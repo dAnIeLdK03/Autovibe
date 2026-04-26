@@ -2,8 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import type { RootState } from '../../stores/store';
-import { logout } from '../../stores/authSlice';
+import type { RootState } from '@autovibe/app-state';
+import { logout } from '@autovibe/app-state';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import Menu from '../Menu/Menu';

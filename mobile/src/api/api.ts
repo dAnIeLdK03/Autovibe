@@ -4,7 +4,7 @@ import { extractApiErrorMessage } from "../shared/extractErrorMessage/extractApi
 import { navigateRef } from "../navigation/navigateRef";
 import Toast from "react-native-toast-message";
 import { store } from "../stores/store";
-import { logout as logoutAction } from "../stores/authSlice";
+import { logout as logoutAction } from '@autovibe/app-state';
 
 export const API_ORIGIN = process.env.EXPO_PUBLIC_API_URL;
 if (!API_ORIGIN?.trim()) {

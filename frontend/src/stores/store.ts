@@ -1,15 +1,10 @@
-import { configureStore } from '@reduxjs/toolkit'
-import authReducer from './authSlice'
-import carsReducer from './carsSlice'
-import favoritesReducer from './favoritesSlice'
+import { createAutovibeStore, type AppDispatch, type RootState } from '@autovibe/app-state'
+import { addFavorite, deleteFavorite, getFavoritesByUserId } from '../api/favoriteService'
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+export const store = createAutovibeStore({
+  addFavorite,
+  deleteFavorite,
+  getFavoritesByUserId,
+})
 
-export const store = configureStore({
-    reducer: {
-        auth: authReducer,
-        cars: carsReducer,
-        favorites: favoritesReducer
-    },
-});
+export type { RootState, AppDispatch }

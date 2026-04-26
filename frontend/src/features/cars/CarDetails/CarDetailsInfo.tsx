@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog"; 
 import { useState } from "react";
 import type { CarDetails } from "../../../api/carsService";

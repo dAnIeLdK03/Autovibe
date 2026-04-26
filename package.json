@@ -1,0 +1,9 @@
+{
+  "name": "autovibe",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "frontend",
+    "mobile"
+  ]
+}

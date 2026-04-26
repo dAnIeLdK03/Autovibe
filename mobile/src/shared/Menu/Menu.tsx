@@ -10,8 +10,8 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { logout } from "../../stores/authSlice";
-import type { RootState } from "../../stores/store";
+import { logout } from '@autovibe/app-state';
+import type { RootState } from '@autovibe/app-state';
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/types";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";

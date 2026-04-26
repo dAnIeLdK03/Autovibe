@@ -18,8 +18,8 @@ import NotFound from "../features/cars/CarComponents/NotFound";
 import CarCreate from "../features/cars/CarCreate/CarCreate";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../stores/store";
-import { loadFavoriteIds } from "../stores/favoritesSlice";
+import type { AppDispatch, RootState } from '@autovibe/app-state';
+import { loadFavoriteIds } from '@autovibe/app-state';
 import MyFavorite from "../features/cars/CarComponents/FavoriteCars/MyFavorite";
 
 

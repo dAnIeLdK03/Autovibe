@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
-import type { RootState } from "../../../../stores/store"
+import type { RootState } from '@autovibe/app-state'
 import { useCallback, useEffect, useState } from "react";
-import { clearError, setCars, setError, setLoading } from "../../../../stores/carsSlice";
+import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import { deleteFavorite, getFavoritesByUserId } from "../../../../api/favoriteService";
 
 

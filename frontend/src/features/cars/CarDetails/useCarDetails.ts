@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { clearError, setError, setLoading } from "../../../stores/carsSlice";
+import { clearError, setError, setLoading } from '@autovibe/app-state';
 import { deleteCar, getCarById, type CarDetails } from "../../../api/carsService";
 import { useNavigate, useParams } from "react-router";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useError } from "../../../shared/CustomHooks/useError"; 
 
 

@@ -1,8 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
-import type { RootState } from "../../stores/store";
-import { logout } from "../../stores/authSlice";
+import type { RootState } from '@autovibe/app-state';
+import { logout } from '@autovibe/app-state';
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import Menu from "../Menu/Menu";
 

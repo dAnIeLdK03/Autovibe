@@ -9,7 +9,7 @@ import {
   Platform,
 } from 'react-native';
 import { useSelector } from "react-redux";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useCarDetails } from "./useCarDetails";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useCallback, useEffect, useState } from "react";
-import { clearError, setCars, setError, setLoading } from "../../../stores/carsSlice";
+import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import { deleteCar, getCarsByUserId } from "../../../api/carsService";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../../navigation/types";

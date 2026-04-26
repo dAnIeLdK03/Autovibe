@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import type { CarDetails } from "../../../api/carsService";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";

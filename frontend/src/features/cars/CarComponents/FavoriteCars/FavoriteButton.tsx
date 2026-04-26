@@ -1,7 +1,7 @@
 import { LuHeart } from "react-icons/lu";
 import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch, RootState } from "../../../../stores/store";
-import { toggleFavorite } from "../../../../stores/favoritesSlice";
+import type { AppDispatch, RootState } from '@autovibe/app-state';
+import { toggleFavorite } from '@autovibe/app-state';
 import toast from "react-hot-toast";
 
 interface Props {

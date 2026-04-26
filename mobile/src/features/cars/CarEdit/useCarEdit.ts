@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { getCarById, updateCar } from "../../../api/carsService";
 import { useForm } from "react-hook-form";
-import { setLoading, setError, clearError } from '../../../stores/carsSlice';
+import { setLoading, setError, clearError } from '@autovibe/app-state';
 import type { CarFormValues } from "../CarComponents/CarValidations/CarCreateValidations";
 import CarCreateValidations from "../CarComponents/CarValidations/CarCreateValidations";
 import { useNavigation, useRoute } from "@react-navigation/native";

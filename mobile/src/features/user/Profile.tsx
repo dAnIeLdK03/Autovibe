@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useNavigation } from "@react-navigation/native";
 import { useError } from "../../shared/hooks/useError";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../navigation/types";
-import { logout, updateUserData } from "../../stores/authSlice";
+import { logout, updateUserData } from '@autovibe/app-state';
 import { deleteUser } from "../../api/userService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { SkeletonLoader } from "../../shared/UX/SkeletonLoading";

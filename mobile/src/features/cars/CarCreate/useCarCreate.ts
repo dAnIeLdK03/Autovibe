@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { useForm } from "react-hook-form";
-import { clearError, setError, setLoading } from "../../../stores/carsSlice";
+import { clearError, setError, setLoading } from '@autovibe/app-state';
 import { createCar } from "../../../api/carsService";
 import { useError } from "../../../shared/hooks/useError";
 import CarCreateValidaions, { CarFormValues } from "../CarComponents/CarValidations/CarCreateValidations";

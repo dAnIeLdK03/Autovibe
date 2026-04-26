@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { Car } from '../stores/carsSlice';
+import type { Car } from '@autovibe/app-state';
 
 
 

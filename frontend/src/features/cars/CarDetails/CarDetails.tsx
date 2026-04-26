@@ -1,6 +1,6 @@
 import type { CarDetails } from "../../../api/carsService";
 import { useSelector } from "react-redux";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { SkeletonLoader } from "../../../shared/UX/SkeletonLoader";
 import { useCarDetails } from "./useCarDetails";
 import { useNavigate } from "react-router";

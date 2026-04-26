@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import type { RootState } from '../../stores/store';
-import { updateUserData } from '../../stores/authSlice';
+import type { RootState } from '@autovibe/app-state';
+import { updateUserData } from '@autovibe/app-state';
 import { deleteUser } from '../../api/userService';
 import { useNavigate } from 'react-router-dom';
-import { logout } from '../../stores/authSlice';
+import { logout } from '@autovibe/app-state';
 import { SkeletonLoader } from '../../shared/UX/SkeletonLoader';
 import { useError } from '../../shared/CustomHooks/useError';
 import ConfirmDialog from '../../shared/ConfirmDialog/ConfirmDialog';

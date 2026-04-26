@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCars, type CarFilters } from '../../../api/carsService';
-import { clearError, setCars, setLoading } from '../../../stores/carsSlice';
-import type { RootState } from '../../../stores/store';
+import { clearError, setCars, setLoading } from '@autovibe/app-state';
+import type { RootState } from '@autovibe/app-state';
 
 export const useCarList = (initialFilters: CarFilters) => {
     const dispatch = useDispatch();

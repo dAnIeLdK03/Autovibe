@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../../api/AuthService';
-import { setCredentials } from '../../stores/authSlice';
+import { setCredentials } from '@autovibe/app-state';
 import { useForm } from 'react-hook-form';
 import type { LoginRequest } from '../../api/AuthService';
 import LoadingSpinner from '../../shared/UX/LoadingSpinner';

@@ -2,8 +2,8 @@ import React from 'react';
 import { TouchableOpacity, StyleSheet } from 'react-native';
 import { Heart } from 'lucide-react-native'; 
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../../stores/store";
-import { toggleFavorite } from "../../../../stores/favoritesSlice";
+import type { AppDispatch, RootState } from '@autovibe/app-state';
+import { toggleFavorite } from '@autovibe/app-state';
 import Toast from "react-native-toast-message";
 
 interface Props {

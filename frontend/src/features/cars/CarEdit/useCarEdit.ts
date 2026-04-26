@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import type { RootState } from "../../../stores/store";
+import type { RootState } from '@autovibe/app-state';
 import { getCarById, updateCar } from "../../../api/carsService";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { setLoading, setError, clearError } from '../../../stores/carsSlice';
+import { setLoading, setError, clearError } from '@autovibe/app-state';
 import type { CarFormValues } from "../CarComponents/CarValidations/CarCreateValidaions";
 import { useError } from "../../../shared/CustomHooks/useError";
 import CarCreateValidaions from "../CarComponents/CarValidations/CarCreateValidaions";
