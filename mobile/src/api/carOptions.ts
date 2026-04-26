@@ -1,5 +1,3 @@
-import type { CarFilters } from "./carsService";
-
 export const fuelTypeOptions = [
   { value: 'Petrol', label: 'Petrol' },
   { value: 'Diesel', label: 'Diesel' },
@@ -26,14 +24,6 @@ export const sortOptions = [
   { id: 'PriceDesc', label: 'Price: Dsc' },
   { id: 'YearDesc', label: 'Year' },
 ];
-
-export interface SortedCarsProps {
-  isOpen: boolean;
-  onClose: () => void;
-  sortOptionId: string;
-  updateSort: (key: keyof CarFilters, value: CarFilters[keyof CarFilters]) => void;
-  onApply: () => void;
-};
 
 export const transmissionTypes = [
   { value: 'Manual', label: 'Manual' },

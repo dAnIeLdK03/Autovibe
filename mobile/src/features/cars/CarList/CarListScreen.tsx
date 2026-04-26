@@ -12,7 +12,8 @@ import CarCard from '../CarComponents/CarCard';
 import { NoCarsFound } from '../../../shared/UX/NoCarsFound';
 import Pagination from '../../../shared/Pagination/pagePagination';
 import { SkeletonLoader } from '../../../shared/UX/SkeletonLoading';
-import { FilterModal } from '../CarComponents/Filters/FilterModal'; 
+import { FilterModal } from '../CarComponents/Filters/FilterModal';
+import { SortModal } from '../CarComponents/Filters/SortModal';
 
 const CarListScreen = () => {
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -20,8 +21,16 @@ const CarListScreen = () => {
     const flatListRef = useRef<FlatList>(null);
 
     const {
-        cars, loading, error, filters, page, totalPages, handleApplyFilters,
-        handleReset, handlePageChange
+        cars,
+        loading,
+        error,
+        filters,
+        page,
+        totalPages,
+        handleApplyFilters,
+        handleReset,
+        handlePageChange,
+        handleUpdateSort 
     } = useCarList(initialFilters);
 
     const onPageChange = (newPage: number) => {
@@ -51,6 +60,14 @@ const CarListScreen = () => {
 
     return (
         <View style={styles.container}>
+            <SortModal
+                visible={isSortOpen}
+                sortOptionId={filters.sortType ?? ""}
+                updateSort={handleUpdateSort}
+                onApply={() => setIsSortOpen(false)}
+                onClose={() => setIsSortOpen(false)}
+            />
+
             <FilterModal
                 isOpen={isFilterOpen}
                 onClose={() => setIsFilterOpen(false)}
@@ -80,6 +97,7 @@ const CarListScreen = () => {
 
                         <View style={styles.buttonRow}>
                             <TouchableOpacity
+                                activeOpacity={0.7}
                                 style={styles.actionButton}
                                 onPress={() => setIsSortOpen(true)}
                             >
@@ -87,6 +105,7 @@ const CarListScreen = () => {
                             </TouchableOpacity>
 
                             <TouchableOpacity
+                                activeOpacity={0.7}
                                 style={styles.actionButton}
                                 onPress={() => setIsFilterOpen(true)}
                             >
@@ -96,19 +115,23 @@ const CarListScreen = () => {
                     </View>
                 }
                 ListEmptyComponent={
-                    <NoCarsFound
-                        onOpenFilters={() => setIsFilterOpen(true)}
-                        onResetFilters={handleReset}
-                    />
+                    !loading ? (
+                        <NoCarsFound
+                            onOpenFilters={() => setIsFilterOpen(true)}
+                            onResetFilters={handleReset}
+                        />
+                    ) : null
                 }
                 ListFooterComponent={
-                    <View style={{ paddingBottom: 40 }}>
-                        <Pagination
-                            currentPage={page}
-                            totalPages={totalPages}
-                            onPageChange={onPageChange}
-                        />
-                    </View>
+                    cars.length > 0 ? (
+                        <View style={{ paddingBottom: 40 }}>
+                            <Pagination
+                                currentPage={page}
+                                totalPages={totalPages}
+                                onPageChange={onPageChange}
+                            />
+                        </View>
+                    ) : null
                 }
             />
         </View>
@@ -157,8 +180,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(30, 41, 59, 0.5)',
         borderWidth: 1,
         borderColor: '#334155',
-        paddingVertical: 10,
-        paddingHorizontal: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 20,
         borderRadius: 16,
     },
     buttonText: {
