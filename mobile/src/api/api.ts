@@ -3,8 +3,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { extractApiErrorMessage } from "../shared/extractErrorMessage/extractApiErrorMessage";
 import { navigateRef } from "../navigation/navigateRef";
 import Toast from "react-native-toast-message";
-import { store } from "../stores/store";
-import { logout as logoutAction } from '@autovibe/app-state';
+import { logout as logoutAction } from "@autovibe/app-state";
 
 export const API_ORIGIN = process.env.EXPO_PUBLIC_API_URL;
 if (!API_ORIGIN?.trim()) {
@@ -43,6 +42,7 @@ api.interceptors.response.use(
 
     if (status === 401) {
       await AsyncStorage.removeItem("token");
+      const { store } = await import("../stores/store");
       store.dispatch(logoutAction());
       if (navigateRef.isReady()) {
         navigateRef.reset({
