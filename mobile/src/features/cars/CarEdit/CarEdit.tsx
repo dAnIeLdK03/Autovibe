@@ -16,13 +16,13 @@ export function CarEdit() {
   return (
     <FormProvider {...methods}>
       <View style={styles.container}>
-        <CarForm 
-          handleImageChange={handleImageChange} 
-          imagePreview={imagePreview} 
-          submitLabel='Create' 
-          title='Create Ad' 
+        <CarForm
+          handleImageChange={handleImageChange}
+          imagePreview={imagePreview}
+          submitLabel="Create"
+          title="Create Ad"
           onRemoveImage={removeImage}
-          onFormSubmit={methods.handleSubmit(onSubmit)}
+          onSubmit={onSubmit}
         />
       </View>
     </FormProvider>
