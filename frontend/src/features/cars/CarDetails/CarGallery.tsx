@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { getImageUrl } from "../../../utils/getImageUrl";
 import { TransformComponent, TransformWrapper } from "react-zoom-pan-pinch";
+import { FavoriteButton } from "../CarComponents/FavoriteCars/FavoriteButton";
 
 interface CarGalleryProps {
+  carId: number;
   imageUrls: string[] | undefined;
   make: string;
   model: string;
   year: number;
 }
 
-function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
+function CarGallery({ carId, imageUrls, make, model, year }: CarGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
 
@@ -87,6 +89,9 @@ function CarGallery({ imageUrls, make, model, year }: CarGalleryProps) {
           className="w-full h-[500px] md:h-[600px] object-cover cursor-zoom-in"
           onClick={() => setIsZoomOpen(true)}
         />
+        <div className="absolute top-4 right-4 z-30">
+          <FavoriteButton carId={carId} />
+        </div>
 
         <div className="absolute top-4 left-4 bg-slate-900/80 backdrop-blur-md text-[#70FFE2] text-sm font-bold px-4 py-2 rounded-full border border-slate-700">
           {year}

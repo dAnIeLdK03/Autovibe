@@ -48,6 +48,7 @@ export default function CarDetails() {
         </h1>
 
         <CarGallery
+          carId={car.id}
           imageUrls={car.imageUrls}
           make={car.make}
           model={car.model}
