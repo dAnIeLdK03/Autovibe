@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 using System.Reflection.Metadata;
 using Autovibe.API.Extensions;
 using Autovibe.API.Exceptions;
+using Microsoft.AspNetCore.RateLimiting;
 
 
 namespace Autovibe.API.Controllers
@@ -115,6 +116,7 @@ namespace Autovibe.API.Controllers
         //POST: api/cars/upload-image
         [HttpPost("upload-image")]
         [Authorize]
+        [EnableRateLimiting("upload")]
         public async Task<ActionResult> UploadImage([FromForm] IFormFile file)
         {
                 var imageUrl = await _carService.UploadImageAsync(file);

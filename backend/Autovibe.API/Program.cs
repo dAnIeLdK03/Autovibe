@@ -13,6 +13,8 @@ using FluentValidation.AspNetCore;
 using Autovibe.API.Validations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -91,6 +93,56 @@ if (string.IsNullOrWhiteSpace(connectionString))
 builder.Services.AddDbContext<AppDbContext>(op => op.UseMySql(connectionString,
 ServerVersion.AutoDetect(connectionString)));
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.OnRejected = async(context, ct) =>
+    {
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+        await context.HttpContext.Response.WriteAsJsonAsync( new
+        {
+            error = "Too many requests. Try again later."
+        }, ct);
+    };
+
+     options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+  {
+      var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+      return RateLimitPartition.GetFixedWindowLimiter(
+          partitionKey: ip,
+          factory: _ => new FixedWindowRateLimiterOptions
+          {
+              PermitLimit = 100,
+              Window = TimeSpan.FromMinutes(1),
+              AutoReplenishment = true
+          });
+  });
+
+  options.AddPolicy("auth", httpContext =>
+  {
+      var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+      return RateLimitPartition.GetFixedWindowLimiter(
+          partitionKey: ip,
+          factory: _ => new FixedWindowRateLimiterOptions
+          {
+              PermitLimit = 10,
+              Window = TimeSpan.FromMinutes(1),
+              AutoReplenishment = true
+          });
+  });
+  options.AddPolicy("upload", httpContext =>
+  {
+      var ip = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+      return RateLimitPartition.GetFixedWindowLimiter(
+          partitionKey: ip,
+          factory: _ => new FixedWindowRateLimiterOptions
+          {
+              PermitLimit = 20,
+              Window = TimeSpan.FromMinutes(1),
+              AutoReplenishment = true
+          });
+  });
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -107,6 +159,7 @@ if (app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 
+
 //middleware
 
 app.UseHttpsRedirection();
@@ -117,6 +170,9 @@ app.UseExceptionHandler();
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
+
 app.MapControllers();
 
 app.Run();

@@ -15,6 +15,7 @@ using System.Reflection.Metadata;
 using Autovibe.API.Services;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Exceptions;
+using Microsoft.AspNetCore.RateLimiting;
 
 
 
@@ -34,7 +35,8 @@ namespace Autovibe.API.Controllers
         }
 
         [AllowAnonymous]
-    [HttpPost("register")]
+        [HttpPost("register")]
+        [EnableRateLimiting("auth")]
         public async Task<ActionResult<UserDto>> Register([FromBody] UserRegisterDto registerDto)
         {
             var result = await _authService.Enroll(registerDto);
@@ -47,6 +49,7 @@ namespace Autovibe.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
+        [EnableRateLimiting("auth")]
         public async Task<ActionResult<AuthResponseDto>> Login([FromBody] UserLoginDto loginDto)
         {
 
