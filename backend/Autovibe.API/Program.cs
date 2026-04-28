@@ -173,6 +173,17 @@ app.UseAuthorization();
 
 app.UseRateLimiter();
 
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }))
+    .AllowAnonymous();
+
+app.MapGet("/ready", async (AppDbContext db, CancellationToken ct) =>
+{
+    var canConnect = await db.Database.CanConnectAsync(ct);
+    return canConnect
+        ? Results.Ok(new { status = "ready" })
+        : Results.StatusCode(StatusCodes.Status503ServiceUnavailable);
+}).AllowAnonymous();
+
 app.MapControllers();
 
 app.Run();
