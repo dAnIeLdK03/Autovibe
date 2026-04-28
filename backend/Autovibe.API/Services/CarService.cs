@@ -102,15 +102,19 @@ namespace Autovibe.API.Services
             };
         }
 
-        public async Task DeleteAsync(int id, int userId)
+        public async Task<bool> DeleteAsync(int id, int userId)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
             car.ThrowIfNull($"Car with id {id} was not found");
 
             car.ThrowIfForbidden(car.UserId != userId, "You do not have permission do update this car");
 
-            _context.Cars.Remove(car);
+            car.IsDeleted=true;
+            car.DeletedAt = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
+
+            return true;
 
         }
 
@@ -164,6 +168,17 @@ namespace Autovibe.API.Services
                 PageNumber = pageNumber,
                 PageSize = pageSize
             };
+        }
+
+
+
+        [HttpGet("deleted")]
+        public async Task<ActionResult<IEnumerable<Car>>> GetDeletedCars()
+        {
+            return await _context.Cars
+            .IgnoreQueryFilters()
+            .Where(c => c.IsDeleted)
+            .ToListAsync();
         }
     }
 }

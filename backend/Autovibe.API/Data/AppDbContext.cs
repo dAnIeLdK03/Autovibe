@@ -29,6 +29,9 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Car>()
+            .HasQueryFilter(c => !c.IsDeleted);
+
+        modelBuilder.Entity<Car>()
            .Property(c => c.ImageUrls)
            .HasConversion(
             v => v == null || v.Count == 0 ? "[]" : JsonSerializer.Serialize(v, (JsonSerializerOptions?) null),
