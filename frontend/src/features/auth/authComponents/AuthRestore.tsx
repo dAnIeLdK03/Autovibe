@@ -8,16 +8,22 @@ function AuthRestore() {
     useEffect(() => {
         const fetchToken = async () => {
             try {
-                const token = localStorage.getItem("token");
-                if (token) {
-                    const user = await getCurrentUser();
-                    if (user) {
-                        dispatch(setCredentials({ user: user, token: token }));
-                    }
+                const token = sessionStorage.getItem("token");
+                if(!token){
+                    dispatch(logout());
+                    return;
                 }
+
+                const user = await getCurrentUser();
+                if(user){
+                    dispatch(setCredentials({user, token}));
+                }else{
+                    throw new Error("User not found");
+                }
+
             } catch (error) {
                 console.error("Error fetching current user:", error);
-                localStorage.removeItem("token");
+                sessionStorage.removeItem("token");
                 dispatch(logout());
             }
         }
