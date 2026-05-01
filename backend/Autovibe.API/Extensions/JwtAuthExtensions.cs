@@ -10,11 +10,22 @@ public static class JwtAuthExtensions
 {
     public static IServiceCollection AddJwtAuth(this IServiceCollection services, IConfiguration config)
     {
-        var jwtKey = config["Jwt:Key"];
-        if (string.IsNullOrWhiteSpace(jwtKey))
-            throw new InvalidOperationException("JWT key not found in configuration.");
+        var jwtSettings = config.GetSection("Jwt");
 
-        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
+        var key = jwtSettings["Key"];
+        var issuer = jwtSettings["Issuer"];
+        var audience = jwtSettings["Audience"];
+
+        if (string.IsNullOrWhiteSpace(key))
+            throw new InvalidOperationException("JWT Key is missing in configuration.");
+
+        if (string.IsNullOrWhiteSpace(issuer))
+            throw new InvalidOperationException("JWT Issuer is missing in configuration.");
+
+        if (string.IsNullOrWhiteSpace(audience))
+            throw new InvalidOperationException("JWT Audience is missing in configuration.");
+
+        var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
 
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -23,8 +34,14 @@ public static class JwtAuthExtensions
                 {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = signingKey,
-                    ValidateIssuer = false,
-                    ValidateAudience = false,
+
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+
+                    ValidateAudience = true,
+                    ValidAudience = audience,
+
+                    ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
             });

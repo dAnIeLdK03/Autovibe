@@ -107,6 +107,15 @@ namespace Autovibe.API.Services
 
         private string GenerateJwtToken(User user)
         {
+            if (string.IsNullOrWhiteSpace(_jwtSettings.Key))
+                throw new InvalidOperationException("JWT Key is missing in configuration.");
+
+            if (string.IsNullOrWhiteSpace(_jwtSettings.Issuer))
+                throw new InvalidOperationException("JWT Issuer is missing in configuration.");
+
+            if (string.IsNullOrWhiteSpace(_jwtSettings.Audience))
+                throw new InvalidOperationException("JWT Audience is missing in configuration.");
+
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -118,10 +127,10 @@ namespace Autovibe.API.Services
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "Autovibe.API",
-                audience: "Autovibe.API",
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(_jwtSettings.ExpirationInMinutes),
+                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.ExpirationInMinutes),
                 signingCredentials: credentials
             );
 
