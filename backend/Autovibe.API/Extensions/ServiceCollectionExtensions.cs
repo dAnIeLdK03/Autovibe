@@ -1,9 +1,11 @@
 using Autovibe.API.Interfaces;
+using Autovibe.API.Models;
 using Autovibe.API.Services;
 using Autovibe.API.Validations;
 using FluentValidation.AspNetCore;
-using Microsoft.Extensions.DependencyInjection;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Autovibe.API.Extensions;
 
@@ -14,6 +16,11 @@ public static class ServiceCollectionExtensions
         services.AddControllers()
             .AddJsonOptions(opt =>
                 opt.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("AdminOnly", policy => policy.RequireRole(nameof(Role.Admin)));
+        });
 
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();

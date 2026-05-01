@@ -20,7 +20,11 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<User>()
             .Property(u => u.PasswordHash)
             .IsRequired();
-
+        modelBuilder.Entity<User>()
+            .Property(u => u.Role)
+            .HasConversion(
+                v => v.ToString().ToLowerInvariant(),
+                v => Enum.Parse<Role>(v, true));
 
         modelBuilder.Entity<Car>()
             .HasOne(c => c.User)

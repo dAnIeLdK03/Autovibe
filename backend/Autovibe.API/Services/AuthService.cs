@@ -55,7 +55,8 @@ namespace Autovibe.API.Services
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 PhoneNumber = registerDto.PhoneNumber,
-                CreatedAt = DateTime.Now
+                CreatedAt = DateTime.Now,
+                Role = Role.User
             };
 
             _context.Users.Add(user);
@@ -69,7 +70,8 @@ namespace Autovibe.API.Services
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 CreatedAt = user.CreatedAt ?? DateTime.Now,
-                UpdatedAt = user.UpdatedAt ?? DateTime.Now
+                UpdatedAt = user.UpdatedAt ?? DateTime.Now,
+                Role = user.Role
             };
         }
 
@@ -108,7 +110,8 @@ namespace Autovibe.API.Services
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Role, user.Role.ToString())
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));

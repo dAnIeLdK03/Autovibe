@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Autovibe.API.Models;
 
 namespace Autovibe.API.DTOs.Users;
 
@@ -13,5 +14,7 @@ public class UserDto
 
     public DateTime CreatedAt {get; set; }
     public DateTime UpdatedAt {get; set; }
+
+    public Role Role {get; set;}
 
 }

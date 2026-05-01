@@ -20,5 +20,7 @@ public class User
     public DateTime? CreatedAt {get; set; } = DateTime.Now;
     public DateTime? UpdatedAt {get; set; } = DateTime.Now;
 
-    public List<Car> Cars {get; set; } = new List<Car>(); //navigation property, not a column in the database.
+    public Role Role {get; set;} = Role.User;
+
+    public List<Car> Cars {get; set; } = new List<Car>(); 
 }

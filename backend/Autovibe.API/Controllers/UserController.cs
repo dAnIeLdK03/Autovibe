@@ -27,7 +27,6 @@ namespace Autovibe.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<UserDto>> GetMe()
         {
             
@@ -67,6 +66,7 @@ namespace Autovibe.API.Controllers
         }
 
         [HttpDelete("{id}")]
+
         public async Task<ActionResult> DeleteUser(int id)
         {
             var userId = User.GetUserId();
@@ -80,6 +80,7 @@ namespace Autovibe.API.Controllers
         }
 
         [HttpPut("change-password")]
+
         public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {
             var userId = User.GetUserId();
