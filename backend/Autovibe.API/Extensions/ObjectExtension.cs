@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Autovibe.API.Exceptions;
+using SixLabors.ImageSharp;
 
 public static class ObjectExtension
 {
@@ -76,6 +77,35 @@ public static class ObjectExtension
             throw new BadRequestException("Wrong file format.");
         }
     }
+
+    public static void ThrowIfImageISInvalid(this IFormFile file)
+    {
+        if(file == null || file.Length == 0)
+        {
+            throw new BadRequestException("The file is empty or do not exists.");
+        }
+        try
+        {
+            using var stream = file.OpenReadStream();
+            var imageInfo = Image.Identify(stream);
+            if(imageInfo == null)
+            {
+                throw new BadRequestException("The file is not valid image.");
+            }
+        }
+        catch (InvalidImageContentException)
+        {
+            throw new BadRequestException("The image is corrupted or the format is not supported.");
+        }
+        catch(Exception)
+        {
+            throw new BadRequestException("An error occurred while processing the file.");
+        }
+
+    }
+
+
+
 
     public static void EnsureDirectoryExists(this string serverPath)
     {

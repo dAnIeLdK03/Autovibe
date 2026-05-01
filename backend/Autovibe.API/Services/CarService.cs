@@ -131,6 +131,8 @@ namespace Autovibe.API.Services
 
             string serverPath = Path.Combine(_env.WebRootPath, "images", "cars");
             serverPath.EnsureDirectoryExists();
+
+            file.ThrowIfImageISInvalid();
             
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var fullPath = Path.Combine(serverPath, fileName);
