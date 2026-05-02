@@ -8,11 +8,14 @@ public static class WebApplicationExtensions
 {
     public static WebApplication UseAppPipeline(this WebApplication app)
     {
+        app.UseExceptionHandler();
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseDeveloperExceptionPage();
+        }
         app.UseStaticFiles();
         app.UseHttpsRedirection();
         app.UseRouting();
-
-        app.UseExceptionHandler();
 
         app.UseCors();
         app.UseAuthentication();
@@ -51,5 +54,19 @@ public static class WebApplicationExtensions
         }
 
         return app;
+    }
+
+    public static IServiceCollection AddApiLimits(this IServiceCollection services)
+    {
+        services.Configure<Microsoft.AspNetCore.Http.Features.FormOptions>(options => {
+            options.MultipartBodyLengthLimit = 10 * 1024 * 1024;
+    });
+
+        services.Configure<Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerOptions>(options =>
+        {
+            options.Limits.MaxRequestBodySize = 10 * 1024 * 1024;
+        });
+
+        return services;
     }
 }

@@ -117,6 +117,7 @@ namespace Autovibe.API.Controllers
         [HttpPost("upload-image")]
         [Authorize]
         [EnableRateLimiting("upload")]
+        [RequestSizeLimit(5 * 1024 * 1024)]
         public async Task<ActionResult> UploadImage([FromForm] IFormFile file)
         {
                 var imageUrl = await _carService.UploadImageAsync(file);
