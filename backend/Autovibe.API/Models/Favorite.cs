@@ -9,6 +9,7 @@ public class Favorite
 
     public int CarId { get; set; }
     public Car Car { get; set; } = null!;
+    public bool IsDeleted {get; set;}
 
     public DateTime? CreatedAt { get; set; }
 }

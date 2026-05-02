@@ -28,7 +28,7 @@ namespace Autovibe.API.Services
                 throw new NotFoundException("Car cannot be found");
             }
 
-            var already = await _context.Favorites.AnyAsync(f => f.UserId == userId && f.CarId == carId);
+            var already = await _context.Favorites.AnyAsync(f => f.UserId == userId && f.CarId == carId && f.IsDeleted == false);
             if (already)
                 return;
 
@@ -36,7 +36,8 @@ namespace Autovibe.API.Services
             {
                 UserId = userId,
                 CarId = carId,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                IsDeleted = false
             });
 
             await _context.SaveChangesAsync();
@@ -50,7 +51,9 @@ namespace Autovibe.API.Services
             if (row is null)
                 return;
 
-            _context.Favorites.Remove(row);
+            row.IsDeleted = true;
+            row.CreatedAt = DateTime.UtcNow;
+
             await _context.SaveChangesAsync();
 
         }
@@ -59,21 +62,24 @@ namespace Autovibe.API.Services
         {
             pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
             pageSize.THrowIfLessThanAndMoreThan(1, 18, "Page size cannot be less than 1 or greater than 18.");
+
             var favoritesQuery = _context.Favorites
                 .AsNoTracking()
-                .Where(f => f.UserId == userId);
+                .Where(f => f.UserId == userId && !f.IsDeleted);
+
             var totalCount = await favoritesQuery.CountAsync();
-            var items = await favoritesQuery
+
+            var carEntities = await favoritesQuery
                 .OrderByDescending(f => f.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Join(
-                    _context.Cars.AsNoTracking(),
-                    f => f.CarId,
-                    c => c.Id,
-                    (f, c) => c)
-                .Select(c => c.ListDto())
+                .Select(f => f.Car)
                 .ToListAsync();
+
+            var items = carEntities
+                .Where(c => c != null)
+                .Select(c => c.ListDto())
+                .ToList();
             return new PageResponse<CarListDto>
             {
                 Items = items,
@@ -85,8 +91,9 @@ namespace Autovibe.API.Services
 
         public async Task<bool> IsFavorite(int userId, int carId)
         {
-            return await _context.Favorites.AnyAsync(f => f.UserId == userId && f.CarId == carId);
+            return await _context.Favorites.AnyAsync(f => f.UserId == userId && f.CarId == carId && !f.IsDeleted);
         }
 
     }
 }
+

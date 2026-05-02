@@ -31,9 +31,11 @@ public class AppDbContext : DbContext
             .WithMany(u => u.Cars)
             .HasForeignKey(c => c.UserId)
             .OnDelete(DeleteBehavior.Cascade);
-
         modelBuilder.Entity<Car>()
             .HasQueryFilter(c => !c.IsDeleted);
+
+        modelBuilder.Entity<Favorite>()
+            .HasQueryFilter(f => f.Car != null && !f.Car.IsDeleted && !f.IsDeleted);
 
         modelBuilder.Entity<Car>()
            .Property(c => c.ImageUrls)

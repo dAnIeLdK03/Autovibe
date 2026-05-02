@@ -112,6 +112,15 @@ namespace Autovibe.API.Services
             car.IsDeleted=true;
             car.DeletedAt = DateTime.UtcNow;
 
+            var favorites = await _context.Favorites
+                .Where(f => f.CarId == car.Id && !f.IsDeleted)
+                .ToListAsync();
+
+            foreach( var fav in favorites)
+            {
+                fav.IsDeleted = true;
+            }
+
             await _context.SaveChangesAsync();
 
             return true;
