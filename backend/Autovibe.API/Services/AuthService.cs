@@ -100,7 +100,8 @@ namespace Autovibe.API.Services
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
                     CreatedAt = user.CreatedAt ?? DateTime.Now,
-                    UpdatedAt = user.UpdatedAt ?? DateTime.Now
+                    UpdatedAt = user.UpdatedAt ?? DateTime.Now,
+                    Role = user.Role
                 }
             };
         }
