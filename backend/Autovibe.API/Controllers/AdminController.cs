@@ -1,5 +1,4 @@
 using Autovibe.API.DTOs.Users;
-using Autovibe.API.Extensions;
 using Autovibe.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +21,6 @@ namespace Autovibe.API.Controllers
         public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
         {
             var result = await _adminService.GetAllUsersAsync();
-            result.ThrowIfNull("Unable to load users.");
             return Ok(result);
         }
     }

@@ -24,7 +24,7 @@ public class AppDbContext : DbContext
             .Property(u => u.Role)
             .HasConversion(
                 v => v.ToString().ToLowerInvariant(),
-                v => Enum.Parse<Role>(v, true));
+                v => ParseStoredRole(v));
 
         modelBuilder.Entity<Car>()
             .HasOne(c => c.User)
@@ -70,6 +70,15 @@ public class AppDbContext : DbContext
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     { }
 
+    private static Role ParseStoredRole(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+            return Role.User;
+
+        return Enum.TryParse<Role>(value.Trim(), ignoreCase: true, out var role)
+            ? role
+            : Role.User;
+    }
 
     public DbSet<Car> Cars { get; set; }
     public DbSet<User> Users { get; set; }
