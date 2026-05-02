@@ -28,18 +28,31 @@ namespace Autovibe.API.Services
                 throw new NotFoundException("Car cannot be found");
             }
 
-            var already = await _context.Favorites.AnyAsync(f => f.UserId == userId && f.CarId == carId && f.IsDeleted == false);
-            if (already)
-                return;
-
-            _context.Favorites.Add(new Favorite
+            var already = await _context.Favorites
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(f => f.UserId == userId && f.CarId == carId);
+            if (already != null)
             {
-                UserId = userId,
-                CarId = carId,
-                CreatedAt = DateTime.UtcNow,
-                IsDeleted = false
-            });
+                if (!already.IsDeleted)
+                {
+                    return;
+                }
 
+                already.IsDeleted = false;
+                already.CreatedAt = DateTime.UtcNow;
+
+            }
+            else
+            {
+
+                _context.Favorites.Add(new Favorite
+                {
+                    UserId = userId,
+                    CarId = carId,
+                    CreatedAt = DateTime.UtcNow,
+                    IsDeleted = false
+                });
+            }
             await _context.SaveChangesAsync();
         }
 
