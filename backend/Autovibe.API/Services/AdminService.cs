@@ -53,5 +53,32 @@ namespace Autovibe.API.Services
             };
         }
 
+        public async Task UpdateUserRoleAsync(int targetUserId, Role newRole, int actingAdminId)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == targetUserId);
+
+            user.ThrowIfNull($"User with id {targetUserId} was not found");
+
+            if(user.Role == Role.Admin && newRole == Role.User)
+            {
+                var adminCount = await _context.Users.CountAsync(u => u.Role == Role.Admin);
+                if(adminCount == 1)
+                {
+                    throw new BadRequestException("You cannot remove tha last administrator in the system.");
+                }
+            }
+
+            if(targetUserId == actingAdminId)
+            {
+                throw new BadRequestException("You cannot change your own role");
+            }
+
+            user.Role = newRole;
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _context.SaveChangesAsync();
+        }
+
+
     }
 }

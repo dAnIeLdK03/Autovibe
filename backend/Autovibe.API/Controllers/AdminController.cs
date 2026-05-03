@@ -1,6 +1,7 @@
 using Autovibe.API.Data;
 using Autovibe.API.DTOs.Cars;
 using Autovibe.API.DTOs.Users;
+using Autovibe.API.Extensions;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -41,6 +42,23 @@ namespace Autovibe.API.Controllers
             .ToListAsync();
         }
 
+        [HttpPatch("{id}/role")]
+        public async Task<ActionResult> UpdateUserRole(int id, [FromBody] AdminUpdateUserRoleDto dto)
+        {
+            var adminId = User.GetUserId();
 
+            adminId.ThrowIfNull("Log in first");
+
+            id.ThrowIfLessThan(0, "Invalid car id.");
+
+            await _adminService.UpdateUserRoleAsync(id, dto.Role, adminId!.Value);
+
+                return Ok(new
+                {
+                    Id = id,
+                    NewRole = dto.Role.ToString(),
+                    Message = "User role updated successfully"
+                });
+        }
     }
 }
