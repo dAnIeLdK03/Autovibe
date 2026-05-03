@@ -180,16 +180,6 @@ namespace Autovibe.API.Services
                 PageSize = pageSize
             };
         }
-
-
-
-        [HttpGet("deleted")]
-        public async Task<ActionResult<IEnumerable<Car>>> GetDeletedCars()
-        {
-            return await _context.Cars
-            .IgnoreQueryFilters()
-            .Where(c => c.IsDeleted)
-            .ToListAsync();
-        }
+      
     }
 }
