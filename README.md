@@ -39,6 +39,13 @@ CORS for local dev is `Cors:AllowedOrigins` in `appsettings.json` (defaults to `
 
 **DB:** create database + user, then either import `setup_database.sql` with mysql client, or `dotnet ef database update` from `backend/Autovibe.API`.
 
+**Admin (JWT `Admin` role):** users have a `Role` in the DB (`User` / `Admin`). First admin: register a user, then `UPDATE Users SET Role = 'admin' WHERE Email = '...';` (values are stored lowercase) and log in again for a new token. Endpoints (all require `Authorization: Bearer …` and `Admin` unless noted):
+
+- `GET /api/Admin` — paged user list: `pageNumber`, `pageSize` (defaults 1 / 18), optional `email` (contains filter). Returns `PageResponse` like cars.
+- `PATCH /api/Admin/{id}/role` — body `{ "role": 0 | 1 }` (enum: `Admin` = 0, `User` = 1). Cannot demote yourself or remove the last admin.
+
+Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test with Postman/curl.
+
 ## Frontend
 
 You need `VITE_API_URL` or the app dies on startup (see `frontend/src/services/api.ts`). Example `frontend/.env`:
