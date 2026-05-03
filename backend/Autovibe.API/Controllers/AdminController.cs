@@ -1,4 +1,5 @@
 using Autovibe.API.Data;
+using Autovibe.API.DTOs.Cars;
 using Autovibe.API.DTOs.Users;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
@@ -24,9 +25,9 @@ namespace Autovibe.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsers()
+        public async Task<ActionResult<PageResponse<UserDto>>> GetUsers([FromQuery] AdminUserFilterDto request)
         {
-            var result = await _adminService.GetAllUsersAsync();
+            var result = await _adminService.GetAllUsersAsync(request);
             return Ok(result);
         }
 
@@ -39,5 +40,7 @@ namespace Autovibe.API.Controllers
             .Where(c => c.IsDeleted)
             .ToListAsync();
         }
+
+
     }
 }

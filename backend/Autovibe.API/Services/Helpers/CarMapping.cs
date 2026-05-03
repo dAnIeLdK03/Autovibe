@@ -1,5 +1,6 @@
 using Autovibe.API.Models;
 using Autovibe.API.DTOs.Cars;
+using Autovibe.API.DTOs.Users;
 namespace Autovibe.API.Services.Helpers
 {
     public static class CarMapping
@@ -108,6 +109,21 @@ namespace Autovibe.API.Services.Helpers
             car.Condition = request.Condition;
             car.ImageUrls = request.ImageUrls ?? new List<string>();
             car.UpdatedAt = DateTime.UtcNow;
+        }
+
+        public static UserDto UserListDto (this User u)
+        {
+            return new UserDto
+            {
+                Id = u.Id,
+                Email = u.Email,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                PhoneNumber = u.PhoneNumber,
+                CreatedAt = u.CreatedAt,
+                UpdatedAt = u.UpdatedAt,
+                Role = u.Role
+            };
         }
     }
 }

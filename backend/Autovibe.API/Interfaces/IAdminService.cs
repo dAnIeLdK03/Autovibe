@@ -1,3 +1,4 @@
+using Autovibe.API.DTOs.Cars;
 using Autovibe.API.DTOs.Users;
 using Autovibe.API.Models;
 
@@ -5,5 +6,5 @@ namespace Autovibe.API.Interfaces;
 
 public interface IAdminService
 {
-    Task<IEnumerable<UserDto>> GetAllUsersAsync();
+    Task<PageResponse<UserDto>> GetAllUsersAsync(AdminUserFilterDto request);
 }
