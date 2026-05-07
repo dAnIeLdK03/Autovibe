@@ -43,6 +43,7 @@ CORS for local dev is `Cors:AllowedOrigins` in `appsettings.json` (defaults to `
 
 - `GET /api/Admin` — paged user list: `pageNumber`, `pageSize` (defaults 1 / 18), optional `email` (contains filter). Returns `PageResponse` like cars.
 - `PATCH /api/Admin/{id}/role` — body `{ "role": 0 | 1 }` (enum: `Admin` = 0, `User` = 1). Cannot demote yourself or remove the last admin.
+- `PATCH /api/Admin/{userId}/status` — block/unblock a user: `{ "isBlocked": true|false, "blockedUntil": "...", "blockReason": "..." }`. Blocked users get **403** on authenticated endpoints.
 
 Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test with Postman/curl.
 
