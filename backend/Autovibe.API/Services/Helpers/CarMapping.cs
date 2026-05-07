@@ -122,7 +122,10 @@ namespace Autovibe.API.Services.Helpers
                 PhoneNumber = u.PhoneNumber,
                 CreatedAt = u.CreatedAt,
                 UpdatedAt = u.UpdatedAt,
-                Role = u.Role
+                Role = u.Role,
+                IsBlocked = u.IsBlocked,
+                BlockedUntil = u.BlockedUntil,
+                BlockReason = u.BlockReason
             };
         }
     }

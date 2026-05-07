@@ -45,7 +45,11 @@ namespace Autovibe.API.Services
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
                 CreatedAt = user.CreatedAt ?? DateTime.Now,
-                UpdatedAt = user.UpdatedAt ?? DateTime.Now
+                UpdatedAt = user.UpdatedAt ?? DateTime.Now,
+                Role = user.Role,
+                IsBlocked = user.IsBlocked,
+                BlockedUntil = user.BlockedUntil,
+                BlockReason = user.BlockReason
             };
         }
 
@@ -77,7 +81,11 @@ namespace Autovibe.API.Services
                 LastName = updatedUser.LastName,
                 PhoneNumber = updatedUser.PhoneNumber,
                 CreatedAt = updatedUser.CreatedAt ?? DateTime.Now,
-                UpdatedAt = updatedUser.UpdatedAt ?? DateTime.Now
+                UpdatedAt = updatedUser.UpdatedAt ?? DateTime.Now,
+                Role = updatedUser.Role,
+                IsBlocked = updatedUser.IsBlocked,
+                BlockedUntil = updatedUser.BlockedUntil,
+                BlockReason = updatedUser.BlockReason
             };
         }
 

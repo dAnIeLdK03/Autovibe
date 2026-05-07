@@ -84,20 +84,23 @@ namespace Autovibe.API.Services
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             user.ThrowIfNull($"User with id {userId} was not found");
 
-            if(dto.IsBlocked == false)
+            if (dto.IsBlocked == false)
             {
                 user.IsBlocked = false;
-                user.BlockReason = null;
+                user.BlockedUntil = null;
                 user.BlockReason = null;
             }
 
-            else if(dto.IsBlocked == true || dto.BlockReason != null)
+            else
             {
-                user.IsBlocked = true;
+                if (dto.IsBlocked.HasValue)
+                    user.IsBlocked = dto.IsBlocked.Value;
 
-                if (dto.BlockedUntil.HasValue) user.BlockedUntil = dto.BlockedUntil;
+                if (dto.BlockedUntil.HasValue)
+                    user.BlockedUntil = dto.BlockedUntil.Value;
 
-                if (!string.IsNullOrEmpty(dto.BlockReason)) user.BlockReason = dto.BlockReason;
+                if (!string.IsNullOrWhiteSpace(dto.BlockReason))
+                    user.BlockReason = dto.BlockReason.Trim();
             }
 
             user.UpdatedAt = DateTime.UtcNow;

@@ -1,4 +1,5 @@
 using Autovibe.API.Data;
+using Autovibe.API.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
@@ -19,6 +20,7 @@ public static class WebApplicationExtensions
 
         app.UseCors();
         app.UseAuthentication();
+        app.UseMiddleware<UserBlockMiddleware>();
         app.UseAuthorization();
 
         app.UseRateLimiter();

@@ -17,4 +17,8 @@ public class UserDto
 
     public Role Role { get; set; } = Role.User;
 
+    public bool? IsBlocked {get; set; }
+    public DateTime? BlockedUntil {get; set;}
+    public string? BlockReason {get; set;} = string.Empty;
+
 }
