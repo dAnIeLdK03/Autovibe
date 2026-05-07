@@ -79,6 +79,32 @@ namespace Autovibe.API.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            user.ThrowIfNull($"User with id {userId} was not found");
+
+            if(dto.IsBlocked == false)
+            {
+                user.IsBlocked = false;
+                user.BlockReason = null;
+                user.BlockReason = null;
+            }
+
+            else if(dto.IsBlocked == true || dto.BlockReason != null)
+            {
+                user.IsBlocked = true;
+
+                if (dto.BlockedUntil.HasValue) user.BlockedUntil = dto.BlockedUntil;
+
+                if (!string.IsNullOrEmpty(dto.BlockReason)) user.BlockReason = dto.BlockReason;
+            }
+
+            user.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+        }
+
 
     }
 }

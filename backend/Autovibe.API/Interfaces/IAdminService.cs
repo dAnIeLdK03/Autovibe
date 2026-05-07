@@ -8,4 +8,5 @@ public interface IAdminService
 {
     Task<PageResponse<UserDto>> GetAllUsersAsync(AdminUserFilterDto request);
     Task UpdateUserRoleAsync(int targetUserId, Role newRole, int actingAdminId);
+    Task UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto);
 }

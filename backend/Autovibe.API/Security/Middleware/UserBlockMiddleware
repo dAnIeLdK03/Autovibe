@@ -1,0 +1,22 @@
+
+using System.Security.Claims;
+
+namespace Autovibe.API.Middleware;
+
+public class UserBlockMiddleware
+{
+    private readonly RequestDelegate _next;
+    public UserBlockMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+
+    public async Task InvokeAsync(HttpContext context, AppDbContext dbContext)
+    {
+        if(context.User.Iddentity?.IsAuthenticated == true)
+        {
+            var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier);
+            if(userIdClaim != null &&)
+        }
+    }
+}
