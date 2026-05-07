@@ -22,5 +22,9 @@ public class User
 
     public Role Role {get; set;} = Role.User;
 
+    public bool IsBlocked {get; set;}
+    public DateTime BlockedUntil {get; set;}
+    public string? BlockReason {get; set;} = string.Empty;
+
     public List<Car> Cars {get; set; } = new List<Car>(); 
 }
