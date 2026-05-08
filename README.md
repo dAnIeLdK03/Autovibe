@@ -43,9 +43,14 @@ CORS for local dev is `Cors:AllowedOrigins` in `appsettings.json` (defaults to `
 
 - `GET /api/Admin` — paged user list: `pageNumber`, `pageSize` (defaults 1 / 18), optional `email` (contains filter). Returns `PageResponse` like cars.
 - `PATCH /api/Admin/{id}/role` — body `{ "role": 0 | 1 }` (enum: `Admin` = 0, `User` = 1). Cannot demote yourself or remove the last admin.
-- `PATCH /api/Admin/{userId}/status` — block/unblock a user: `{ "isBlocked": true|false, "blockedUntil": "...", "blockReason": "..." }`. Blocked users get **403** on authenticated endpoints.
+- `PATCH /api/Admin/{userId}/status` — block/unblock a user: `{ "isBlocked": true|false, "blockedUntil": "...", "blockReason": "..." }`. Users are blocked if `isBlocked=true` **or** `blockedUntil` is in the future.
 
 Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test with Postman/curl.
+
+**Recent backend notes (2026-05-08):**
+- JWT secret was rotated and secrets were removed from repo config — make sure you set `Jwt:*` via user-secrets / env.
+- Rate limiting was adjusted to work behind proxies.
+- FluentValidation auto-validation adapters were removed; validators are registered via DI and `JwtSettings` is validated on startup.
 
 ## Frontend
 
