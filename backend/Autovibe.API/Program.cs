@@ -1,4 +1,5 @@
 using Autovibe.API.Extensions;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +10,7 @@ builder.Services.AddApiLimits();
 
 var app = builder.Build();
 
+app.UseForwardedHeaders();
 app.UseSwaggerIfDev();
 app.UseAppPipeline();
 app.MapHealthEndpoints();
