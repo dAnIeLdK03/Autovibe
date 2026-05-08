@@ -9,6 +9,7 @@ using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.HttpOverrides;
 using System.Net;
 using System.Security.Claims;
+using FluentValidation;
 
 namespace Autovibe.API.Extensions;
 
@@ -98,7 +99,12 @@ public static class InfrastructureExtensions
             });
         });
 
-        services.Configure<JwtSettings>(config.GetSection("Jwt"));
+        services.AddOptions<JwtSettings>()
+            .Bind(config.GetSection("Jwt"))
+            .Validate(settings => !string.IsNullOrEmpty(settings.Key), "JWT Sigjning Key is missing!")
+            .ValidateOnStart();
+
+        services.AddValidatorsFromAssemblyContaining<Program>();
 
         return services;
     }

@@ -2,11 +2,10 @@ using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
 using Autovibe.API.Services;
 using Autovibe.API.Validations;
-using FluentValidation.AspNetCore;
-using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
+using FluentValidation;
 
 namespace Autovibe.API.Extensions;
 
@@ -38,8 +37,6 @@ public static class ServiceCollectionExtensions
                 }));
         });
 
-        services.AddFluentValidationAutoValidation();
-        services.AddFluentValidationClientsideAdapters();
         services.AddValidatorsFromAssemblyContaining<CarCreateDtoValidations>();
 
         services.AddEndpointsApiExplorer();
