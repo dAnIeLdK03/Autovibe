@@ -41,16 +41,11 @@ namespace Autovibe.API.Services
             var items = users.Select(u => u.UserListDto()).ToList();
 
 
-            var totalPages = (int)Math.Ceiling((double)totalItems / request.PageSize);
-
 
             return new PageResponse<UserDto>
-            {
-                Items = items,
-                TotalPages = totalPages,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize
-            };
+            (
+                items, totalItems, request.PageSize, request.PageNumber
+            );
         }
 
         public async Task UpdateUserRoleAsync(int targetUserId, Role newRole, int actingAdminId)

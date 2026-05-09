@@ -80,7 +80,7 @@ namespace Autovibe.API.Services
                 .AsNoTracking()
                 .Where(f => f.UserId == userId && !f.IsDeleted);
 
-            var totalCount = await favoritesQuery.CountAsync();
+            var totalItems = await favoritesQuery.CountAsync();
 
             var carEntities = await favoritesQuery
                 .OrderByDescending(f => f.CreatedAt)
@@ -93,13 +93,11 @@ namespace Autovibe.API.Services
                 .Where(c => c != null)
                 .Select(c => c.ListDto())
                 .ToList();
+
             return new PageResponse<CarListDto>
-            {
-                Items = items,
-                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
+            (
+                items, totalItems, pageSize, pageNumber
+            );
         }
 
         public async Task<bool> IsFavorite(int userId, int carId)

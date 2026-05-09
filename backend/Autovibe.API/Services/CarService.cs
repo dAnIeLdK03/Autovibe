@@ -85,21 +85,17 @@ namespace Autovibe.API.Services
 
             var totalItems = await query.CountAsync();
 
-            var cars = await query
+            var items = await query
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(c => c.ListDto())
                 .ToListAsync();
 
-            var totalPages = (int)Math.Ceiling((double)totalItems / request.PageSize);
 
             return new PageResponse<CarListDto>
-            {
-                Items = cars,
-                TotalPages = totalPages,
-                PageNumber = request.PageNumber,
-                PageSize = request.PageSize
-            };
+            (
+                items, totalItems, request.PageSize, request.PageNumber
+            );
         }
 
         public async Task<bool> DeleteAsync(int id, int userId)
@@ -164,7 +160,7 @@ namespace Autovibe.API.Services
             .AsNoTracking()
             .Where(c => c.UserId == userId);
 
-            var totalCount = await query.CountAsync();
+            var totalItems = await query.CountAsync();
 
             var items = await query
                 .Skip((pageNumber - 1) * pageSize)
@@ -173,12 +169,9 @@ namespace Autovibe.API.Services
                 .ToListAsync();
 
             return new PageResponse<CarListDto>
-            {
-                Items = items,
-                TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize),
-                PageNumber = pageNumber,
-                PageSize = pageSize
-            };
+            (
+                items, totalItems, pageNumber, pageSize
+            );
         }
       
     }

@@ -47,7 +47,6 @@ CORS for local dev is `Cors:AllowedOrigins` in `appsettings.json` (defaults to `
 
 Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test with Postman/curl.
 
-**Recent backend notes (2026-05-08):**
 - JWT secret was rotated and secrets were removed from repo config — make sure you set `Jwt:*` via user-secrets / env.
 - Rate limiting was adjusted to work behind proxies.
 - FluentValidation auto-validation adapters were removed; validators are registered via DI and `JwtSettings` is validated on startup.
