@@ -51,6 +51,19 @@ Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test
 - Rate limiting was adjusted to work behind proxies.
 - FluentValidation auto-validation adapters were removed; validators are registered via DI and `JwtSettings` is validated on startup.
 
+## Tests (backend)
+
+From repo root:
+
+```bash
+dotnet test backend/Autovibe.API.Tests/Autovibe.API.Tests.csproj -c Release
+```
+
+Notes:
+- **Integration tests** use `WebApplicationFactory` + **EF InMemory DB** (see `backend/Autovibe.API.Tests/CustomWebApplicationFactory.cs`).
+- There is an **end-to-end smoke test** that hits every controller at least once: `AllEndpointsSmokeTests`.
+- The smoke test exercises `POST /api/cars/upload-image` with a tiny PNG; it can create files under `backend/Autovibe.API/wwwroot/images/cars/` if your test host runs with a real webroot. If you see untracked PNGs, don’t commit them.
+
 ## Frontend
 
 You need `VITE_API_URL` or the app dies on startup (see `frontend/src/services/api.ts`). Example `frontend/.env`:
