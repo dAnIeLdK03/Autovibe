@@ -103,6 +103,18 @@ namespace Autovibe.API.Services
 
         }
 
+        public async Task HardDeleteCarAsync(int id)
+        {
+            var car = await _context.Cars
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+            
+            car.ThrowIfNull($"Car with id {id} was not found");
+
+            _context.Cars.Remove(car);
+            await _context.SaveChangesAsync();
+
+        }
 
     }
 }

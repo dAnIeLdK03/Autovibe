@@ -78,5 +78,14 @@ namespace Autovibe.API.Controllers
                 IsBlocked = dto.IsBlocked ?? true
             });
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> HardDeleteCar(int id)
+        {
+            id.ThrowIfNull("Invalid user id.");
+
+            await _adminService.HardDeleteCarAsync(id);
+            return NoContent();
+        }
     }
 }
