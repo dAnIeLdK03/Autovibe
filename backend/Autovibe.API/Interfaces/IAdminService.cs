@@ -10,4 +10,6 @@ public interface IAdminService
     Task UpdateUserRoleAsync(int targetUserId, Role newRole, int actingAdminId);
     Task UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto);
     Task HardDeleteCarAsync(int id);
+    Task<bool> RestoreCarAsync(int id);
+
 }

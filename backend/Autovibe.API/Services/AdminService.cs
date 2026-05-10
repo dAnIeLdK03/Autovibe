@@ -117,5 +117,30 @@ namespace Autovibe.API.Services
 
         }
 
+        public async Task<bool> RestoreCarAsync(int id)
+        {
+            var car = await _context.Cars
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            car.ThrowIfNull($"Car with id {id} was not found");
+
+                car.IsDeleted = false;
+                car.UpdatedAt = DateTime.UtcNow;
+
+            var favoriteToRestore = await _context.Favorites
+                .IgnoreQueryFilters()
+                .Where(f => f.CarId == car.Id && f.IsDeleted)
+                .ToListAsync();
+
+            foreach(var fav in favoriteToRestore)
+            {
+                fav.IsDeleted = false;
+            }
+
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

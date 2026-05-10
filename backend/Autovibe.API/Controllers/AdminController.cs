@@ -87,5 +87,18 @@ namespace Autovibe.API.Controllers
             await _adminService.HardDeleteCarAsync(id);
             return NoContent();
         }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<ActionResult> RestoreCar(int id)
+        {
+            id.ThrowIfNull("Log in first.");
+
+            var result = await _adminService.RestoreCarAsync(id);
+
+            result.ThrowIfNull("Car cannot be found");
+
+            return Ok(result);
+        }
+
     }
 }
