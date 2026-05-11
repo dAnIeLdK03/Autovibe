@@ -42,11 +42,13 @@ CORS for local dev is `Cors:AllowedOrigins` in `appsettings.json` (defaults to `
 **Admin (JWT `Admin` role):** users have a `Role` in the DB (`User` / `Admin`). First admin: register a user, then `UPDATE Users SET Role = 'admin' WHERE Email = '...';` (values are stored lowercase) and log in again for a new token. Endpoints (all require `Authorization: Bearer …` and `Admin` unless noted):
 
 - `GET /api/Admin` — paged user list: `pageNumber`, `pageSize` (defaults 1 / 18), optional `email` (contains filter). Returns `PageResponse` like cars.
-- `PATCH /api/Admin/{id}/role` — body `{ "role": 0 | 1 }` (enum: `Admin` = 0, `User` = 1). Cannot demote yourself or remove the last admin.
-- `PATCH /api/Admin/{userId}/status` — block/unblock a user: `{ "isBlocked": true|false, "blockedUntil": "...", "blockReason": "..." }`. Users are blocked if `isBlocked=true` **or** `blockedUntil` is in the future.
-- `GET /api/Admin/deleted` — soft-deleted car listings (`IsDeleted`), for admin tooling / panel.
-- `DELETE /api/Admin/{id}` — **hard** delete a car by id (only works if the listing is already soft-deleted). Returns `204 No Content`.
-- `PATCH /api/Admin/{id}/restore` — undo soft-delete on a car (and restores related soft-deleted favorites). Returns `200` with `true` on success.
+- `PATCH /api/Admin/{id}/role` — `{id}` is a **user** id. Body `{ "role": 0 | 1 }` (enum: `Admin` = 0, `User` = 1). Cannot demote yourself or remove the last admin.
+- `PATCH /api/Admin/{userId}/status` — `{userId}` is a **user** id. Block/unblock: `{ "isBlocked": true|false, "blockedUntil": "...", "blockReason": "..." }`. Users are blocked if `isBlocked=true` **or** `blockedUntil` is in the future.
+- `GET /api/Admin/deleted` — soft-deleted car listings. Returns a JSON array of **`CarListDto`** (same general shape as `GET /api/cars`, including `shortDescription`, `isDeleted`, `deletedAt`, `userId`, `imageUrls`), ordered by deletion time. Not raw EF entities.
+- `DELETE /api/Admin/{id}` — `{id}` is a **car** id. **Hard** delete (only if the listing is already soft-deleted). Returns `204 No Content`.
+- `PATCH /api/Admin/{id}/restore` — `{id}` is a **car** id. Undo soft-delete on that car (and restores related soft-deleted favorites). Returns `200` with `true` on success.
+
+**Moderation on listings:** an admin may also call `PUT /api/cars/{id}` and `DELETE /api/cars/{id}` like the owner (JWT must include the `Admin` role). Soft-deleted cars are hidden from normal queries; use `/api/Admin/deleted` and restore/hard-delete there instead.
 
 Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test with Postman/curl.
 
