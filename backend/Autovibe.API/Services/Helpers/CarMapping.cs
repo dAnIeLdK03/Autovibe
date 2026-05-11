@@ -26,6 +26,8 @@ namespace Autovibe.API.Services.Helpers
                 Location = c.Location,
                 SteeringWheel = c.SteeringWheel,
                 Condition = c.Condition,
+                IsDeleted = c.IsDeleted,
+                DeletedAt = c.DeletedAt,
                 UserId = c.UserId,
                 ImageUrls = c.ImageUrls ?? new List<string>()
             };

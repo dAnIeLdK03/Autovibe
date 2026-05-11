@@ -22,7 +22,9 @@ public class CarListDto
     public string SteeringWheel {get; set;} = string.Empty;
     public string Condition {get; set;} = string.Empty;
 
-    
+    public bool IsDeleted {get; set;}
+    public DateTime? DeletedAt {get; set;}
+
     public int UserId {get; set; }
 
     public bool? IsFavorite {get; set; }    

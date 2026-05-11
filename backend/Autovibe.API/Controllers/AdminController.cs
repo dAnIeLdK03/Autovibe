@@ -4,6 +4,7 @@ using Autovibe.API.DTOs.Users;
 using Autovibe.API.Extensions;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
+using Autovibe.API.Services.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -34,12 +35,15 @@ namespace Autovibe.API.Controllers
 
 
         [HttpGet("deleted")]
-        public async Task<ActionResult<IEnumerable<Car>>> GetDeletedCars()
-        {
-            return await _context.Cars
-            .IgnoreQueryFilters()
-            .Where(c => c.IsDeleted)
-            .ToListAsync();
+  public async Task<ActionResult<IEnumerable<CarListDto>>> GetDeletedCars()        {
+            var cars = await _context.Cars
+          .AsNoTracking()
+          .IgnoreQueryFilters()
+          .Where(c => c.IsDeleted)
+          .OrderByDescending(c => c.DeletedAt ?? c.UpdatedAt)
+          .ToListAsync();
+            return Ok(cars.Select(c => c.ListDto()));
+
         }
 
         [HttpPatch("{id}/role")]
@@ -53,18 +57,18 @@ namespace Autovibe.API.Controllers
 
             await _adminService.UpdateUserRoleAsync(id, dto.Role, adminId!.Value);
 
-                return Ok(new
-                {
-                    Id = id,
-                    NewRole = dto.Role.ToString(),
-                    Message = "User role updated successfully"
-                });
+            return Ok(new
+            {
+                Id = id,
+                NewRole = dto.Role.ToString(),
+                Message = "User role updated successfully"
+            });
         }
 
         [HttpPatch("{userId}/status")]
         public async Task<ActionResult> UpdateUserStatus(int userId, [FromBody] AdminUpdateStatusDto dto)
         {
-            if((dto.IsBlocked == true || dto.BlockedUntil != null) && string.IsNullOrWhiteSpace(dto.BlockReason))
+            if ((dto.IsBlocked == true || dto.BlockedUntil != null) && string.IsNullOrWhiteSpace(dto.BlockReason))
             {
                 throw new BadRequestException("A reason must be provided when blocking a user.");
             }
