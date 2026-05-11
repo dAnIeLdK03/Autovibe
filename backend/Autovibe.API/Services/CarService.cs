@@ -31,13 +31,14 @@ namespace Autovibe.API.Services
             _context = context;
             _env = env;
         }
-        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId)
+        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId, bool isAdmin)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
 
             car.ThrowIfNull($"Car with id {id} was not found");
-            
-            car.ThrowIfForbidden(car.UserId != userId, "You do not have permission do update this car");
+
+            car.ThrowIfForbidden(car.UserId != userId && !isAdmin, "You do not have permission do update this car");
+
 
             request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
@@ -98,12 +99,12 @@ namespace Autovibe.API.Services
             );
         }
 
-        public async Task<bool> DeleteAsync(int id, int userId)
+        public async Task<bool> DeleteAsync(int id, int userId, bool isAdmin)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
             car.ThrowIfNull($"Car with id {id} was not found");
 
-            car.ThrowIfForbidden(car.UserId != userId, "You do not have permission do delete this car");
+            car.ThrowIfForbidden(car.UserId != userId && !isAdmin, "You do not have permission do delete this car");
 
             car.IsDeleted=true;
             car.DeletedAt = DateTime.UtcNow;

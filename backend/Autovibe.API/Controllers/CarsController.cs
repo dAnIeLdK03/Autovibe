@@ -91,7 +91,9 @@ namespace Autovibe.API.Controllers
 
                 id.ThrowIfLessThan(0, "Invalid car id.");
 
-            var result = await _carService.UpdateAsync(id, updateDto, userId.Value);
+                bool isAdmin = User.IsInRole(nameof(Role.Admin));
+
+            var result = await _carService.UpdateAsync(id, updateDto, userId.Value, isAdmin);
 
                 result.ThrowIfNull("Car cannot be found");
 
@@ -103,13 +105,15 @@ namespace Autovibe.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCar(int id)
         {
-            var userId = User?.GetUserId();
+            var userId = User.GetUserId();
 
                 userId.ThrowIfNull("Unathorized");
 
                 id.ThrowIfLessThan(0, "Invalid car id.");
 
-            await _carService.DeleteAsync(id, userId.Value);
+                bool isAdmin = User.IsInRole(nameof(Role.Admin));
+
+            await _carService.DeleteAsync(id, userId.Value, isAdmin);
             return NoContent();
         }
 
