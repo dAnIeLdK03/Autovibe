@@ -62,12 +62,10 @@ export interface UpdateUserStatusAdminResponse {
     isBlocked: boolean;
 };
 
-/** Тяло към `PATCH /api/admin/{userId}/role`. */
 export interface UpdateAdminUserRoleBody {
     role: UserRole;
 }
 
-/** Отговор от сървъра (camelCase JSON). */
 export interface UpdateAdminUserRoleResponse {
     id: number;
     newRole: string;
@@ -101,5 +99,9 @@ export const hardDeleteCarAdmin = async (carId: number): Promise<void> => {
     await api.delete(`/admin/${carId}`);
 };
 
+export const restoreCarAdmin = async (carId: number): Promise<boolean> => {
+    const response = await api.patch(`/admin/${carId}/restore`);
+    return response.data;
+};
 
 
