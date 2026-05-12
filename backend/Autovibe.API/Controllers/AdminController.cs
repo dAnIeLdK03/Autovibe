@@ -35,7 +35,7 @@ namespace Autovibe.API.Controllers
 
 
         [HttpGet("deleted")]
-  public async Task<ActionResult<IEnumerable<CarListDto>>> GetDeletedCars()        {
+  public async Task<ActionResult<IEnumerable<CarListDto>>> GetDeletedCars(){
             var cars = await _context.Cars
           .AsNoTracking()
           .IgnoreQueryFilters()
