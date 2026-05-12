@@ -19,6 +19,12 @@ export interface AdminUserDto {
     blockReason?: string | null;
 }
 
+export interface UpdateAdminUserStatus {
+    isBlocked?: boolean | null;
+    blockedUntil?: string | null;
+    blockReason?: string | null;
+}
+
 export interface AdminUsersPageResponse {
     items: AdminUserDto[];
     totalPages: number;
@@ -47,6 +53,23 @@ export const getAdminUsers = async (
     }
 
     const response = await api.get<AdminUsersPageResponse>(`/admin?${search.toString()}`);
+    return response.data;
+};
+
+export interface UpdateUserStatusAdminResponse {
+    message: string;
+    userId: number;
+    isBlocked: boolean;
+}
+
+export const updateUserStatusAdmin = async (
+    userId: number,
+    data: UpdateAdminUserStatus
+): Promise<UpdateUserStatusAdminResponse> => {
+    const response = await api.patch<UpdateUserStatusAdminResponse>(
+        `/admin/${userId}/status`,
+        data
+    );
     return response.data;
 };
 
