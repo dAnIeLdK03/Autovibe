@@ -1,4 +1,4 @@
-import { getAdminUsers, UserRole, type AdminUserDto } from '../../../api/adminService'
+import { getAdminUsers, UserRole, type AdminUserDto, updateUserRoleAdmin } from '../../../api/adminService'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { extractApiErrorMessage } from '../../../shared/extractErrorMessage/extractApiErrorMessage'
@@ -22,6 +22,23 @@ export const useUserList = () => {
   const [totalPages, setTotalPages] = useState(0)
   const [emailFilter, setEmailFilter] = useState('')
   const [appliedEmail, setAppliedEmail] = useState('')
+
+ const handleToggleRole = useCallback(async (userId: number, currentRole: UserRole) => {
+  const newRole = currentRole === UserRole.Admin ? UserRole.User : UserRole.Admin;
+
+  try {
+    await updateUserRoleAdmin(userId, { role: newRole });
+
+    const updatedUsers = users.map((u) => 
+      u.id === userId ? { ...u, role: newRole } : u
+    );
+    
+    dispatch(setAdminUsers(updatedUsers));
+  } catch (e: unknown) {
+    const errorMsg = extractApiErrorMessage(e);
+    dispatch(setAdminError(`Failed to update role: ${errorMsg}`));
+  }
+}, [users, dispatch]);
 
   const fetchUsers = useCallback(async () => {
     dispatch(setAdminLoading(true))
@@ -84,6 +101,7 @@ export const useUserList = () => {
     forbidden,
     roleLabel,
     handlePageChange,
-    handleReset
+    handleReset,
+    handleToggleRole
   }
 }
