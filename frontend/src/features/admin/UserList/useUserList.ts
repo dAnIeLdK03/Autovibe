@@ -27,7 +27,7 @@ export const useUserList = () => {
     dispatch(setAdminLoading(true))
     dispatch(clearAdminError())
     dispatch(setAdminForbidden(false))
-
+    
     try {
       const res = await getAdminUsers({
         pageNumber: page,

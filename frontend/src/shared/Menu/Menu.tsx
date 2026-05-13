@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import type { RootState } from '@autovibe/app-state';
 import { logout } from '@autovibe/app-state';
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
+import { UserRole } from "../../api/adminService";
 
 interface MenuItem {
     label: string;
@@ -20,7 +21,9 @@ const Menu: React.FC = () => {
 
     const toggleMenu = () => setIsOpen((prev) => !prev);
 
-    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
+
+    const isAdmin = user?.role === UserRole.Admin;
 
     useEffect(() => {
         const listener = (event: MouseEvent) => {
@@ -42,14 +45,18 @@ const Menu: React.FC = () => {
         navigate("/login");
     };
 
+
+
     const menuItems: MenuItem[] = [
         { label: "Home", onClick: () => navigate("/cars") },
         { label: "Profile", onClick: () => navigate("/profile") },
         { label: "Create New Ad", onClick: () => isAuthenticated ? navigate("/cars/new") : navigate("/login") },
         { label: "My Cars", onClick: () => navigate("/cars/my") },
         { label: "My Favorites", onClick: () => navigate("/favorites") },
+        ...(isAdmin
+            ? [{ label: "Users", onClick: () => navigate("/admin/users") } satisfies MenuItem]
+            : []),
         { label: "Logout", onClick: openConfirm },
-        { label: "Users", onClick: () => navigate("admin/users")},
     ];
 
     return (

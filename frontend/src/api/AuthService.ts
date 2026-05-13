@@ -22,6 +22,8 @@ interface AuthResponse{
         firstName?: string;
         lastName?: string;
         phoneNumber?: string;
+        /** `0` = Admin, `1` = User — same as API `Role` / `UserRole`. */
+        role?: number;
     }
 };
 
@@ -31,6 +33,8 @@ export interface User{
     firstName?: string;
     lastName?: string;
     phoneNumber?: string;
+    /** `0` = Admin, `1` = User — from login or `GET /user`. */
+    role?: number;
 }
 
 export const login = async(data: LoginRequest): Promise<AuthResponse> => {
