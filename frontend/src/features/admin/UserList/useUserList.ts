@@ -58,6 +58,17 @@ export const useUserList = () => {
     setAppliedEmail(emailFilter.trim())
   }
 
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    window.scrollTo({top: 0, behavior: "smooth"});
+  }
+
+  const handleReset = () => {
+  setEmailFilter(""); 
+  setAppliedEmail("");   
+  setPage(1);
+};
+
   const roleLabel = (r: UserRole) => (r === UserRole.Admin ? 'Admin' : 'User')
 
   return {
@@ -72,5 +83,7 @@ export const useUserList = () => {
     error,
     forbidden,
     roleLabel,
+    handlePageChange,
+    handleReset
   }
 }

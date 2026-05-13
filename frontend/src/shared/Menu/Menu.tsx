@@ -49,6 +49,7 @@ const Menu: React.FC = () => {
         { label: "My Cars", onClick: () => navigate("/cars/my") },
         { label: "My Favorites", onClick: () => navigate("/favorites") },
         { label: "Logout", onClick: openConfirm },
+        { label: "Users", onClick: () => navigate("admin/users")},
     ];
 
     return (

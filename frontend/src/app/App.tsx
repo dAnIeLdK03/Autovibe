@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from '@autovibe/app-state';
 import { loadFavoriteIds } from '@autovibe/app-state';
 import MyFavorite from "../features/cars/CarComponents/FavoriteCars/MyFavorite";
+import UserList from "../features/admin/UserList/UserList";
 
 
 
@@ -51,6 +52,7 @@ function App() {
         <Route path="/favorites" element={<MyFavorite />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/admin/users" element={<UserList />} />
       </Routes>
     </BrowserRouter>
   );
