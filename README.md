@@ -85,6 +85,8 @@ cd frontend && npm install && npm run dev
 
 Opens on **5173** by default.
 
+**Admin (frontend):** route **`/admin/users`** — paged user list from `GET /api/admin`, optional email search, reset, and shared pagination. Requires a JWT whose role is **Admin**; otherwise the API returns **403** and the page shows a permission error. While logged in, the account menu includes **Users** linking to this route.
+
 ## Running locally
 
 1. MySQL up, schema applied.
