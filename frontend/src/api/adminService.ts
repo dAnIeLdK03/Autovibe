@@ -5,7 +5,7 @@ export enum UserRole {
     User = 1,
 }
 
-export interface AdminUserDto {
+export interface AdminUserDto{
     id: number;
     email: string;
     firstName?: string | null;
@@ -36,6 +36,10 @@ export interface AdminUsersPageResponse {
 export interface GetAdminUsersParams {
     pageNumber?: number;
     pageSize?: number;
+    email?: string;
+}
+
+export interface AdminUserFilters{
     email?: string;
 }
 
