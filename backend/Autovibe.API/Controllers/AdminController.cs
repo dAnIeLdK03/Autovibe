@@ -18,12 +18,14 @@ namespace Autovibe.API.Controllers
     {
         private readonly IAdminService _adminService;
         private readonly AppDbContext _context;
+        private readonly ICarService _carService;
 
 
-        public AdminController(IAdminService adminService, AppDbContext context)
+        public AdminController(IAdminService adminService, AppDbContext context, ICarService carService)
         {
             _adminService = adminService;
             _context = context;
+            _carService = carService;
         }
 
         [HttpGet]
@@ -101,6 +103,18 @@ namespace Autovibe.API.Controllers
 
             result.ThrowIfNull("Car cannot be found");
 
+            return Ok(result);
+        }
+
+        [HttpGet("{userId}/cars")]
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetUserCars(
+            int userId,
+            int pageNumber = 1,
+            int pageSize = 9)
+        {
+            userId.ThrowIfLessThan(1, "Invalid user id.");
+
+            var result = await _carService.GetUserCarsAsync(userId, pageNumber, pageSize);
             return Ok(result);
         }
 

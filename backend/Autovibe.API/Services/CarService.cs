@@ -171,7 +171,7 @@ namespace Autovibe.API.Services
 
             return new PageResponse<CarListDto>
             (
-                items, totalItems, pageNumber, pageSize
+                items, totalItems, pageSize, pageNumber
             );
         }
       

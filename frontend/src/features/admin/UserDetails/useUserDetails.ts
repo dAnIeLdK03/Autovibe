@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   getAdminUserById,
+  getAdminUserCars,
   UserRole,
   type AdminUserDto,
 } from "../../../api/adminService";
 import axios from "axios";
 import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
 import { useParams } from "react-router-dom";
+import type { Car } from "@autovibe/app-state";
 
 export const useUserDetails = () => {
   const { userId: userIdParam } = useParams<{ userId: string }>();
@@ -20,6 +22,10 @@ export const useUserDetails = () => {
   const [error, setError] = useState<string | null>(null);
   const [forbidden, setForbidden] = useState(false);
   const [notFound, setNotFound] = useState(false);
+
+  const [cars, setCars] = useState<Car[]>([]);
+  const [carsLoading, setCarsLoading] = useState(false);
+  const [carsError, setCarsError] = useState<string | null>(null);
 
   const fetchUser = useCallback(async () => {
     if (invalidId) {
@@ -58,9 +64,34 @@ export const useUserDetails = () => {
     }
   }, [userId, invalidId]);
 
+  const fetchCars = useCallback(async () => {
+    if (invalidId) {
+      setCars([]);
+      setCarsError(null);
+      setCarsLoading(false);
+      return;
+    }
+
+    setCarsLoading(true);
+    setCarsError(null);
+    try {
+      const res = await getAdminUserCars(userId, 1, 18);
+      setCars((res.items ?? []) as Car[]);
+    } catch (e: unknown) {
+      setCarsError(extractApiErrorMessage(e));
+      setCars([]);
+    } finally {
+      setCarsLoading(false);
+    }
+  }, [userId, invalidId]);
+
   useEffect(() => {
     void fetchUser();
   }, [fetchUser]);
+
+  useEffect(() => {
+    void fetchCars();
+  }, [fetchCars]);
 
   const roleLabel = (r: UserRole) => (r === UserRole.Admin ? "Admin" : "User");
 
@@ -80,5 +111,8 @@ export const useUserDetails = () => {
     roleLabel,
     formatDate,
     refetch: fetchUser,
+    cars,
+    carsLoading,
+    carsError,
   };
 };

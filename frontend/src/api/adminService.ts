@@ -1,4 +1,5 @@
 import { api } from './api';
+import type { CarsPageResponse } from './carsService';
 
 export enum UserRole {
     Admin = 0,
@@ -111,6 +112,28 @@ export const restoreCarAdmin = async (carId: number): Promise<boolean> => {
 export const getAdminUserById = async (userId: number): Promise<AdminUserDto> => {
     const response = await api.get<AdminUserDto>(`/admin/${userId}`);
     return response.data;
-}
+};
 
+export const getAdminUserCars = async (
+    userId: number,
+    pageNumber = 1,
+    pageSize = 9
+): Promise<CarsPageResponse> => {
+    const search = new URLSearchParams();
+    search.set('pageNumber', String(pageNumber));
+    search.set('pageSize', String(pageSize));
+    const response = await api.get<CarsPageResponse>(
+        `/admin/${userId}/cars?${search.toString()}`
+    );
+    const data = response.data;
+    if (!data || !Array.isArray(data.items)) {
+        throw new Error('Unable to load cars.');
+    }
+    return {
+        items: data.items,
+        totalPages: data.totalPages ?? 0,
+        pageNumber: data.pageNumber ?? pageNumber,
+        pageSize: data.pageSize ?? pageSize,
+    };
+};
 
