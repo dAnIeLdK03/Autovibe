@@ -1,0 +1,151 @@
+import { Link } from "react-router-dom";
+import { LuArrowLeft, LuShield, LuUser } from "react-icons/lu";
+import { SkeletonLoader } from "../../../shared/UX/SkeletonLoader";
+import { useUserDetails } from "./useUserDetails";
+import { UserRole } from "../../../api/adminService";
+
+function UserDetails() {
+  const {
+    user,
+    loading,
+    error,
+    forbidden,
+    notFound,
+    invalidId,
+    roleLabel,
+  } = useUserDetails();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
+        <div className="flex justify-center m-5">
+          <SkeletonLoader type="details" count={2} />
+        </div>
+      </div>
+    );
+  }
+
+  if (invalidId) {
+    return (
+      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20 text-white">
+        <div className="max-w-2xl mx-auto">
+          <Link
+            to="/admin/users"
+            className="inline-flex items-center gap-2 text-[#70FFE2] font-bold text-sm mb-8 hover:underline"
+          >
+            <LuArrowLeft size={18} />
+            Back to users
+          </Link>
+          <div className="bg-amber-500/10 border border-amber-500/40 text-amber-200 p-4 rounded-xl">
+            Invalid user link.
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || forbidden || notFound) {
+    return (
+      <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20 text-white">
+        <div className="max-w-2xl mx-auto">
+          <Link
+            to="/admin/users"
+            className="inline-flex items-center gap-2 text-[#70FFE2] font-bold text-sm mb-8 hover:underline"
+          >
+            <LuArrowLeft size={18} />
+            Back to users
+          </Link>
+          <div className="bg-red-500/10 border border-red-500 text-red-400 p-4 rounded-xl">
+            {forbidden
+              ? "You do not have permission for this action."
+              : notFound
+                ? "User not found."
+                : error}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-20 text-white">
+      <div className="max-w-2xl mx-auto">
+        <Link
+          to="/admin/users"
+          className="inline-flex items-center gap-2 text-[#70FFE2] font-bold text-sm mb-10 hover:underline"
+        >
+          <LuArrowLeft size={18} />
+          Back to users
+        </Link>
+
+        <div className="bg-slate-800/40 border border-slate-700 rounded-3xl p-8 shadow-xl">
+          <div className="flex items-start gap-4 mb-8">
+            <div className="p-4 rounded-2xl bg-slate-700/50 text-[#70FFE2]">
+              <LuUser size={28} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-xs font-mono text-slate-500 mb-1">ID {user.id}</p>
+              <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight truncate">
+                {[user.firstName, user.lastName].filter(Boolean).join(" ") || "—"}
+              </h1>
+              <p className="text-slate-400 mt-1 truncate">{user.email}</p>
+            </div>
+            <span
+              className={`shrink-0 text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full border ${
+                user.role === UserRole.Admin
+                  ? "bg-red-500/10 text-red-400 border-red-500/20"
+                  : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+              }`}
+            >
+              {roleLabel(user.role)}
+            </span>
+          </div>
+
+          <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm border-t border-slate-700 pt-8">
+            <div>
+              <dt className="text-slate-500 font-medium mb-1">Phone</dt>
+              <dd className="text-slate-200">{user.phoneNumber?.trim() || "—"}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-500 font-medium mb-1">Created</dt>
+              <dd className="text-slate-200">{(user.createdAt)}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-500 font-medium mb-1">Updated</dt>
+              <dd className="text-slate-200">{(user.updatedAt)}</dd>
+            </div>
+            <div className="sm:col-span-2">
+              <dt className="text-slate-500 font-medium mb-1 flex items-center gap-2">
+                <LuShield size={14} />
+                Block status
+              </dt>
+              <dd className="text-slate-200">
+                {user.isBlocked ? (
+                  <span className="text-red-400 font-semibold">Blocked</span>
+                ) : (
+                  <span className="text-emerald-400 font-semibold">Active</span>
+                )}
+                {user.isBlocked && user.blockedUntil && (
+                  <span className="text-slate-400 block mt-1">
+                    Until: {(user.blockedUntil)}
+                  </span>
+                )}
+                {user.isBlocked && user.blockReason && (
+                  <span className="text-slate-400 block mt-1">
+                    Reason: {user.blockReason}
+                  </span>
+                )}
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default UserDetails;

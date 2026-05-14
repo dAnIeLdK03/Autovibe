@@ -1,72 +1,84 @@
 import { useCallback, useEffect, useState } from "react";
-import { getAdminUserById, UserRole, type AdminUserDto } from "../../../api/adminService";
+import {
+  getAdminUserById,
+  UserRole,
+  type AdminUserDto,
+} from "../../../api/adminService";
 import axios from "axios";
 import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
-import { useParams } from "react-router";
-
+import { useParams } from "react-router-dom";
 
 export const useUserDetails = () => {
-    const {id} = useParams<{id: string}>();
+  const { userId: userIdParam } = useParams<{ userId: string }>();
 
-    const userId = Number(id);
-    const invalidId = !userId || userId < 1;
+  const userId =
+    userIdParam && /^\d+$/.test(userIdParam) ? Number(userIdParam) : NaN;
+  const invalidId = !Number.isInteger(userId) || userId < 1;
 
-    const [user, setUser] = useState<AdminUserDto | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [forbidden, setForbidden] = useState(false);
-    const [notFound, setNotFound] = useState(false);
+  const [user, setUser] = useState<AdminUserDto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [forbidden, setForbidden] = useState(false);
+  const [notFound, setNotFound] = useState(false);
 
-    const fetchUser = useCallback(async () => {
-        if(invalidId){
-            setUser(null);
-            setLoading(false);
-            setError(null);
-            setForbidden(false);
-            setNotFound(false);
+  const fetchUser = useCallback(async () => {
+    if (invalidId) {
+      setUser(null);
+      setError(null);
+      setForbidden(false);
+      setNotFound(false);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setForbidden(false);
+    setNotFound(false);
+
+    try {
+      const data = await getAdminUserById(userId);
+      setUser(data);
+    } catch (e: unknown) {
+      setUser(null);
+      if (axios.isAxiosError(e)) {
+        const status = e.response?.status;
+        if (status === 403) {
+          setForbidden(true);
+        } else if (status === 404) {
+          setNotFound(true);
+        } else {
+          setError(extractApiErrorMessage(e));
         }
-        
-        setLoading(true);
-        setError(null);
-        setForbidden(false);
-        setNotFound(false);
-        try{
-            const data = await getAdminUserById(userId);
-            setUser(data);
-        }catch(e: unknown){
-            setUser(null);
-            if(axios.isAxiosError(e)){
-                const status = e.response?.status;
-                if(status === 403){
-                    setForbidden(true);
-                }else if(status === 404){
-                    setNotFound(true);
-                }else{
-                    setError(extractApiErrorMessage(e));
-                }
-            }else{
-                setError(extractApiErrorMessage(e));
-            }
-        }
-        finally{
-            setLoading(false);
-        }
-    }, [userId, invalidId])
+      } else {
+        setError(extractApiErrorMessage(e));
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [userId, invalidId]);
 
-    useEffect(() => {
-       void fetchUser();
-    }, [fetchUser])
+  useEffect(() => {
+    void fetchUser();
+  }, [fetchUser]);
 
-     const roleLabel = (r: UserRole) => (r === UserRole.Admin ? 'Admin' : 'User')
+  const roleLabel = (r: UserRole) => (r === UserRole.Admin ? "Admin" : "User");
 
-    return{
-        user,
-        loading,
-        error,
-        forbidden,
-        notFound,
-        invalidId,
-        roleLabel,
-        refetch: fetchUser,
-    };
+  const formatDate = (iso: string | null | undefined) => {
+    if (!iso) return "—";
+    const d = new Date(iso);
+    return Number.isNaN(d.getTime()) ? iso : d.toLocaleString();
+  };
+
+  return {
+    user,
+    loading,
+    error,
+    forbidden,
+    notFound,
+    invalidId,
+    roleLabel,
+    formatDate,
+    refetch: fetchUser,
+  };
 };

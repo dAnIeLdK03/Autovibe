@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { LuSearch, LuUserCog } from "react-icons/lu";
 import { SkeletonLoader } from "../../../shared/UX/SkeletonLoader";
 import { useUserList } from "./useUserList";
@@ -117,10 +118,12 @@ function UserList() {
 
                 <div className="pt-4 border-t border-slate-700 flex items-center justify-between">
                   <span className="text-xs text-slate-500 font-mono italic">ID: {user.id}</span>
-                  <button className="text-xs font-bold text-[#70FFE2] opacity-0 group-hover:opacity-100 transition-opacity"
+                  <Link
+                    to={`/admin/users/${user.id}`}
+                    className="text-xs font-bold text-[#70FFE2] opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     View Details →
-                  </button>
+                  </Link>
                 </div>
               </div>
             ))}
