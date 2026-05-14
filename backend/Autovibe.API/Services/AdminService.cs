@@ -142,6 +142,30 @@ namespace Autovibe.API.Services
 
             return true;
         }
+
+        public async Task<UserDto> AdminGetUserAsync(int id)
+        {
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            user.ThrowIfNull("User not found");
+
+            return new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                CreatedAt = user.CreatedAt ?? DateTime.Now,
+                UpdatedAt = user.UpdatedAt ?? DateTime.Now,
+                Role = user.Role,
+                IsBlocked = user.IsBlocked,
+                BlockedUntil = user.BlockedUntil,
+                BlockReason = user.BlockReason
+            };
+        }
     
     
     }

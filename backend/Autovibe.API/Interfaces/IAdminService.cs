@@ -11,5 +11,6 @@ public interface IAdminService
     Task UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto);
     Task HardDeleteCarAsync(int id);
     Task<bool> RestoreCarAsync(int id);
+    Task<UserDto> AdminGetUserAsync(int id);
 
 }

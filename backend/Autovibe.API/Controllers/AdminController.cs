@@ -104,5 +104,12 @@ namespace Autovibe.API.Controllers
             return Ok(result);
         }
 
+         [HttpGet("{id}")]
+        public async Task<ActionResult<UserDto>> GetUserById(int id)
+        {
+            var result = await _adminService.AdminGetUserAsync(id);
+            return Ok(result);
+        }
+
     }
 }
