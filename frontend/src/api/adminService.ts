@@ -1,5 +1,4 @@
 import { api } from './api';
-import type { UserData } from './userService';
 
 export enum UserRole {
     Admin = 0,
@@ -109,8 +108,8 @@ export const restoreCarAdmin = async (carId: number): Promise<boolean> => {
     return response.data;
 };
 
-export const getUser = async(): Promise<UserData> => {
-    const response = await api.get(`/user`);
+export const getAdminUserById = async (userId: number): Promise<AdminUserDto> => {
+    const response = await api.get<AdminUserDto>(`/admin/${userId}`);
     return response.data;
 }
 
