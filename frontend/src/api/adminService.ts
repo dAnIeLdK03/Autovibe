@@ -1,4 +1,5 @@
 import { api } from './api';
+import type { UserData } from './userService';
 
 export enum UserRole {
     Admin = 0,
@@ -107,5 +108,10 @@ export const restoreCarAdmin = async (carId: number): Promise<boolean> => {
     const response = await api.patch(`/admin/${carId}/restore`);
     return response.data;
 };
+
+export const getUser = async(): Promise<UserData> => {
+    const response = await api.get(`/user`);
+    return response.data;
+}
 
 
