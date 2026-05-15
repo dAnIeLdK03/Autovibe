@@ -9,6 +9,8 @@ import axios from "axios";
 import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
 import { useParams } from "react-router-dom";
 import type { Car } from "@autovibe/app-state";
+import { deleteUser } from "../../../api/userService";
+import { useError } from "../../../shared/CustomHooks/useError";
 
 export const useUserDetails = () => {
   const { userId: userIdParam } = useParams<{ userId: string }>();
@@ -26,6 +28,8 @@ export const useUserDetails = () => {
   const [cars, setCars] = useState<Car[]>([]);
   const [carsLoading, setCarsLoading] = useState(false);
   const [carsError, setCarsError] = useState<string | null>(null);
+  const { handleError } = useError();
+
 
   const fetchUser = useCallback(async () => {
     if (invalidId) {
@@ -101,6 +105,30 @@ export const useUserDetails = () => {
     return Number.isNaN(d.getTime()) ? iso : d.toLocaleString();
   };
 
+  const handleDeleteUser = async (targetUserId: number) => {
+    if (!user) {
+      setError("You are not logged in.");
+      return false;
+    }
+    if (user.role !== UserRole.Admin) {
+      setError("You do not have permission to perform this action.");
+      return false;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      await deleteUser(targetUserId);
+      return true;
+    } catch (error) {
+      handleError(error);
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return {
     user,
     loading,
@@ -114,5 +142,6 @@ export const useUserDetails = () => {
     cars,
     carsLoading,
     carsError,
+    handleDeleteUser
   };
 };

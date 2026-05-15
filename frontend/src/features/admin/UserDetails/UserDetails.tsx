@@ -1,9 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { LuArrowLeft, LuCar, LuShield, LuUser } from "react-icons/lu";
 import { SkeletonLoader } from "../../../shared/UX/SkeletonLoader";
 import { useUserDetails } from "./useUserDetails";
 import { UserRole } from "../../../api/adminService";
 import { UserListingMiniCard } from "./UserListingMiniCard";
+import { useState } from "react";
+import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog";
 
 function UserDetails() {
   const {
@@ -18,7 +20,22 @@ function UserDetails() {
     cars,
     carsLoading,
     carsError,
+    handleDeleteUser,
   } = useUserDetails();
+
+  const navigate = useNavigate();
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleDeleteClick = async () => {
+    if (!user || user.id === undefined) {
+      return;
+    }
+    const success = await handleDeleteUser(user?.id);
+    if (success) {
+      setShowDeleteConfirm(false);
+      navigate("/admin/users");
+    }
+  };
 
   if (loading) {
     return (
@@ -101,53 +118,73 @@ function UserDetails() {
                 <p className="text-slate-400 mt-1 truncate">{user.email}</p>
               </div>
               <span
-                className={`shrink-0 text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full border ${
-                  user.role === UserRole.Admin
-                    ? "bg-red-500/10 text-red-400 border-red-500/20"
-                    : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                }`}
+                className={`shrink-0 text-[10px] uppercase tracking-widest font-black px-3 py-1 rounded-full border ${user.role === UserRole.Admin
+                  ? "bg-red-500/10 text-red-400 border-red-500/20"
+                  : "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                  }`}
               >
                 {roleLabel(user.role)}
               </span>
             </div>
 
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm border-t border-slate-700 pt-8">
-              <div>
-                <dt className="text-slate-500 font-medium mb-1">Phone</dt>
-                <dd className="text-slate-200">{user.phoneNumber?.trim() || "—"}</dd>
+            <div className="flex flex-col sm:flex-row justify-between items-start gap-6 border-t border-slate-700 pt-8">
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm flex-1 w-full">
+                <div>
+                  <dt className="text-slate-500 font-medium mb-1">Phone</dt>
+                  <dd className="text-slate-200">{user.phoneNumber?.trim() || "—"}</dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500 font-medium mb-1">Created</dt>
+                  <dd className="text-slate-200">{formatDate(user.createdAt)}</dd>
+                </div>
+                <div>
+                  <dt className="text-slate-500 font-medium mb-1">Updated</dt>
+                  <dd className="text-slate-200">{formatDate(user.updatedAt)}</dd>
+                </div>
+                <div className="sm:col-span-2">
+                  <dt className="text-slate-500 font-medium mb-1 flex items-center gap-2">
+                    <LuShield size={14} />
+                    Block status
+                  </dt>
+                  <dd className="text-slate-200">
+                    {user.isBlocked ? (
+                      <span className="text-red-400 font-semibold">Blocked</span>
+                    ) : (
+                      <span className="text-emerald-400 font-semibold">Active</span>
+                    )}
+                    {user.isBlocked && user.blockedUntil && (
+                      <span className="text-slate-400 block mt-1">
+                        Until: {formatDate(user.blockedUntil)}
+                      </span>
+                    )}
+                    {user.isBlocked && user.blockReason && (
+                      <span className="text-slate-400 block mt-1">
+                        Reason: {user.blockReason}
+                      </span>
+                    )}
+                  </dd>
+                </div>
+              </dl>
+
+              <div className="flex sm:flex-col gap-2 w-full sm:w-auto shrink-0 justify-end">
+                <button className="px-4 py-2 text-xs font-semibold bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition"
+                  onClick={() => setShowDeleteConfirm(true)}
+                >
+                  Delete
+                </button>
+                <ConfirmDialog
+                  isOpen={showDeleteConfirm}
+                  title="Delete Account"
+                  message="Are you sure you want to delete your account?"
+                  onConfirmClick={handleDeleteClick}
+                  onClose={() => setShowDeleteConfirm(false)}
+                />
+                <button className="px-4 py-2 text-xs font-semibold bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition">
+                  {user.isBlocked ? "Unblock" : "Block"}
+                </button>
               </div>
-              <div>
-                <dt className="text-slate-500 font-medium mb-1">Created</dt>
-                <dd className="text-slate-200">{formatDate(user.createdAt)}</dd>
-              </div>
-              <div>
-                <dt className="text-slate-500 font-medium mb-1">Updated</dt>
-                <dd className="text-slate-200">{formatDate(user.updatedAt)}</dd>
-              </div>
-              <div className="sm:col-span-2">
-                <dt className="text-slate-500 font-medium mb-1 flex items-center gap-2">
-                  <LuShield size={14} />
-                  Block status
-                </dt>
-                <dd className="text-slate-200">
-                  {user.isBlocked ? (
-                    <span className="text-red-400 font-semibold">Blocked</span>
-                  ) : (
-                    <span className="text-emerald-400 font-semibold">Active</span>
-                  )}
-                  {user.isBlocked && user.blockedUntil && (
-                    <span className="text-slate-400 block mt-1">
-                      Until: {formatDate(user.blockedUntil)}
-                    </span>
-                  )}
-                  {user.isBlocked && user.blockReason && (
-                    <span className="text-slate-400 block mt-1">
-                      Reason: {user.blockReason}
-                    </span>
-                  )}
-                </dd>
-              </div>
-            </dl>
+
+            </div>
           </div>
         </div>
 
