@@ -18,8 +18,12 @@ If the banner image above breaks after you rename files, point the `<img src>` a
 
 ```
 backend/Autovibe.API/   — API, migrations, setup_database.sql
-frontend/             — Vite app
+frontend/               — Vite app
+mobile/                 — Expo app (optional)
+packages/               — shared workspace packages (e.g. app state)
 ```
+
+The repo root is an **npm workspace** — from the root you can run `npm install` once to wire up `frontend`, `mobile`, and `packages/*`.
 
 If you cloned into a folder that already contains another copy of the same repo, don’t edit the nested duplicate by mistake.
 
@@ -71,7 +75,7 @@ Notes:
 
 ## Frontend
 
-You need `VITE_API_URL` or the app dies on startup (see `frontend/src/services/api.ts`). Example `frontend/.env`:
+You need `VITE_API_URL` or the app dies on startup (see `frontend/src/api/api.ts`). Example `frontend/.env`:
 
 ```env
 VITE_API_URL=http://localhost:5258
