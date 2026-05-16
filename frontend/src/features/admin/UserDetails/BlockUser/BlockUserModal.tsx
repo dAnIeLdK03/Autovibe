@@ -8,22 +8,15 @@ import { extractApiErrorMessage } from "../../../../shared/extractErrorMessage/e
 
 type BlockFormValues = {
     blockReason: string;
-    blockedUntil: string;
+    blockedUntil: Date;
 };
-
-function toDatetimeLocalValue(iso: string): string {
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return "";
-    const pad = (n: number) => String(n).padStart(2, "0");
-    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
-}
 
 const BlockUserModal: React.FC<BlockUserModalProps> = ({ isOpen, onClose, user, onSave }) => {
     const [error, setError] = useState<string | null>(null);
     const [submitting, setSubmitting] = useState(false);
 
     const methods = useForm<BlockFormValues>({
-        defaultValues: { blockReason: "", blockedUntil: "" },
+        defaultValues: { blockReason: "", blockedUntil: undefined},
     });
     const { register, handleSubmit, reset, formState: { errors } } = methods;
 
@@ -34,7 +27,7 @@ const BlockUserModal: React.FC<BlockUserModalProps> = ({ isOpen, onClose, user, 
         setError(null);
         reset({
             blockReason: "",
-            blockedUntil: user.blockedUntil ? toDatetimeLocalValue(user.blockedUntil) : "",
+            blockedUntil: new Date(user.blockedUntil ?? new Date),
         });
     }, [isOpen, user, reset]);
 
@@ -150,7 +143,7 @@ const BlockUserModal: React.FC<BlockUserModalProps> = ({ isOpen, onClose, user, 
                                     Blocked until <span className="text-slate-500">(optional)</span>
                                 </label>
                                 <input
-                                    type="datetime-local"
+                                    type="date"
                                     className={`w-full bg-slate-900 border ${errors.blockedUntil ? "border-red-500" : "border-slate-700"} text-white rounded-xl px-4 py-2.5 outline-none`}
                                     {...register("blockedUntil")}
                                 />
