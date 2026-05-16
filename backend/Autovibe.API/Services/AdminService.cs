@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Autovibe.API.Exceptions;
 using Autovibe.API.Data;
 using Autovibe.API.DTOs.Users;
 using Autovibe.API.Interfaces;

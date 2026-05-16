@@ -15,6 +15,13 @@ public class UserBlockMiddleware
 
     public async Task InvokeAsync(HttpContext context, AppDbContext dbContext)
     {
+        var path = context.Request.Path;
+        if (path.StartsWithSegments("/api/auth/login") || path.StartsWithSegments("/api/auth/register"))
+        {
+            await _next(context);
+            return;
+        }
+
         if (context.User.Identity?.IsAuthenticated == true)
         {
             var userIdClaim = context.User.FindFirst(ClaimTypes.NameIdentifier);

@@ -26,7 +26,15 @@ export interface ApiErrorResponse {
   details?: string;
 }
 
+const isAuthRoute = (url?: string) => {
+  if (!url) return false;
+  return /\/auth\/(login|register)\/?$/i.test(url);
+};
+
 api.interceptors.request.use(async (config) => {
+  if (isAuthRoute(config.url)) {
+    return config;
+  }
   const token = await AsyncStorage.getItem("token");
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -39,16 +47,19 @@ api.interceptors.response.use(
   async (error) => {
     const message = extractApiErrorMessage(error);
     const status = error.response?.status;
+    const requestUrl = error.config?.url ?? '';
 
     if (status === 401) {
       await AsyncStorage.removeItem("token");
-      const { store } = await import("../stores/store");
-      store.dispatch(logoutAction());
-      if (navigateRef.isReady()) {
-        navigateRef.reset({
-          index: 0,
-          routes: [{ name: "Login" }],
-        });
+      if (!isAuthRoute(requestUrl)) {
+        const { store } = await import("../stores/store");
+        store.dispatch(logoutAction());
+        if (navigateRef.isReady()) {
+          navigateRef.reset({
+            index: 0,
+            routes: [{ name: "Login" }],
+          });
+        }
       }
       return Promise.reject(error);
     }
@@ -67,10 +78,11 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    if (!isAuthRoute(requestUrl)) {
     if (status === 403) {
       Toast.show({
         type: "error",
-        text1: "You are not allowed to perform this action.",
+        text1: message,
         position: "top",
         visibilityTime: 4000,
       });
@@ -82,6 +94,7 @@ api.interceptors.response.use(
         position: "top",
         visibilityTime: 5000,
       });
+    }
     }
 
     return Promise.reject(error);

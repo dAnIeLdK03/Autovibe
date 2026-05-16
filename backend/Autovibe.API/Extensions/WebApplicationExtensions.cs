@@ -10,10 +10,6 @@ public static class WebApplicationExtensions
     public static WebApplication UseAppPipeline(this WebApplication app)
     {
         app.UseExceptionHandler();
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseDeveloperExceptionPage();
-        }
         app.UseStaticFiles();
         app.UseHttpsRedirection();
         app.UseRouting();

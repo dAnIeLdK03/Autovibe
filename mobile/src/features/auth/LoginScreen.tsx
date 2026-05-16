@@ -45,8 +45,11 @@ const LoginScreen = () => {
       navigation.replace("CarList")
     } catch (err: unknown) {
       const errMsg = extractApiErrorMessage(err);
-      setError(errMsg?.trim() ? errMsg : "Login failed. Please try again.");
-      Toast.show({ type: "error", text1: "Wrong credentials.", text2: "Try again."})
+      const display = errMsg?.trim() ? errMsg : "Login failed. Please try again.";
+      setError(display);
+      Toast.show({ type: "error", text1: "Login failed", text2: display });
+    } finally {
+      setLoading(false);
     }
   },[dispatch, loading]);
 

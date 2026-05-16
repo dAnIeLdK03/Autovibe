@@ -1,35 +1,33 @@
 import axios from 'axios';
-import type { ApiErrorResponse } from '../../api/api';
 
-export const extractApiErrorMessage = (error: unknown): string => {
-  
-  if(axios.isAxiosError(error)){
-  const data = error.response?.data;
-  
-  if(data?.errors){
-    const allErrors = Object.values(data.errors).flat();
-    return allErrors.join(" ");
-  }
+function messageFromResponseData(data: unknown): string | undefined {
+    if (data == null) return undefined;
+    if (typeof data === 'string' && data.trim()) return data;
+    if (typeof data !== 'object') return undefined;
 
-  if(typeof data === 'string') return data;
-  if(data?.message) return data.message;
+    const record = data as Record<string, unknown>;
+    const msg = record.message ?? record.Message;
+    if (typeof msg === 'string' && msg.trim()) return msg;
 
-  if (axios.isAxiosError(error)) {
-    const apiError = error.response?.data as ApiErrorResponse;
-    
-    if (apiError?.message) {
-      return apiError.message;
+    if (record.errors && typeof record.errors === 'object') {
+        const allErrors = Object.values(record.errors as Record<string, unknown>).flat();
+        const text = allErrors.filter((e): e is string => typeof e === 'string').join(' ');
+        if (text.trim()) return text;
     }
 
-    return error.message || "Network error occured.";
-  }
+    return undefined;
 }
 
-  if (error instanceof Error) {
-    return error.message;
-  }
+export const extractApiErrorMessage = (error: unknown): string => {
+    if (axios.isAxiosError(error)) {
+        const fromBody = messageFromResponseData(error.response?.data);
+        if (fromBody) return fromBody;
+        return error.message || 'Network error occurred.';
+    }
 
-  return "An unexpectted error occured";
+    if (error instanceof Error) {
+        return error.message;
+    }
 
-
+    return 'An unexpected error occurred';
 };

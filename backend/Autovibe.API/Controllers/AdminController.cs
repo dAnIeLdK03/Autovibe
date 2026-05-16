@@ -1,3 +1,4 @@
+using Autovibe.API.Exceptions;
 using Autovibe.API.Data;
 using Autovibe.API.DTOs.Cars;
 using Autovibe.API.DTOs.Users;

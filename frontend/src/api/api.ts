@@ -23,7 +23,15 @@ export interface ApiErrorResponse {
     details?: string;
 }
 
+const isAuthRoute = (url?: string) => {
+    if (!url) return false;
+    return /\/auth\/(login|register)\/?$/i.test(url);
+};
+
 api.interceptors.request.use(config => {
+    if (isAuthRoute(config.url)) {
+        return config;
+    }
     const token = localStorage.getItem("token");
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -34,13 +42,17 @@ api.interceptors.request.use(config => {
 api.interceptors.response.use(response => response, error => {
     const message = extractApiErrorMessage(error);
     const status = error.response?.status;
+    const requestUrl = error.config?.url ?? '';
 
     if (status === 401) {
         localStorage.removeItem("token");
-        window.location.href = "/login";
+        if (!isAuthRoute(requestUrl)) {
+            window.location.href = "/login";
+        }
         return Promise.reject(error);
     }
 
+    if (!isAuthRoute(requestUrl)) {
     if (status === 403) {
         toast.error(message, {
             duration: 4000,
@@ -62,6 +74,7 @@ api.interceptors.response.use(response => response, error => {
                 secondary: '#fff',
             },
         });
+    }
     }
 
     return Promise.reject(error);

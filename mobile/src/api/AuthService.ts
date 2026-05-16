@@ -36,6 +36,7 @@ export interface User{
 }
 
 export const login = async(data: LoginRequest): Promise<AuthResponse> => {
+    await AsyncStorage.removeItem("token");
     const response = await api.post("auth/login", data);
     await AsyncStorage.setItem("token", response.data.token);
     return response.data;
