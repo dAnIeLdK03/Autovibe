@@ -25,7 +25,7 @@ namespace Autovibe.API.Services
     {
         private readonly AppDbContext _context;
         private readonly JwtSettings _jwtSettings;
-        
+
         public AuthService(
             AppDbContext context,
             ILogger<AuthService> logger,
@@ -38,7 +38,7 @@ namespace Autovibe.API.Services
         public async Task<UserDto> Enroll(UserRegisterDto registerDto)
         {
             var userExists = await _context.Users.AnyAsync(u => u.Email == registerDto.Email);
-            
+
             userExists.ThrowIfTrue("User with this email already exists.");
 
             if (registerDto.Password != registerDto.ConfirmPassword)
@@ -80,16 +80,34 @@ namespace Autovibe.API.Services
 
         public async Task<AuthResponseDto> Sign(UserLoginDto loginDto)
         {
+
             var user = await _context.Users
-                    .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+                   .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
             user.ThrowIfNull("User was not found");
+            var now = DateTime.UtcNow;
+            var isBlocked =
+                user.IsBlocked ||
+                (user.BlockedUntil.HasValue && user.BlockedUntil.Value > now);
 
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
                 throw new UnauthorizedException("Invalid password.");
             }
-            
+            if (isBlocked)
+            {
+                var message = string.IsNullOrWhiteSpace(user.BlockReason)
+                    ? "Your account has been blocked. Please contact support."
+                    : $"Your account has been blocked, Reason: {user.BlockReason.Trim()}";
+
+                if (user.BlockedUntil.HasValue && user.BlockedUntil.Value > now)
+                {
+                    message += $" Blocked until {user.BlockedUntil.Value:u} UTC.";
+                }
+
+                throw new ForbiddenException(message);
+            }
+
             var token = GenerateJwtToken(user);
 
             return new AuthResponseDto

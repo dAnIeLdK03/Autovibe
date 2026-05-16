@@ -42,7 +42,7 @@ api.interceptors.response.use(response => response, error => {
     }
 
     if (status === 403) {
-        toast.error("You are not allowed to perform this action.", {
+        toast.error(message, {
             duration: 4000,
             position: "top-right",
         });
