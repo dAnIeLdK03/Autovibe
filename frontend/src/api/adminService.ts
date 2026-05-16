@@ -33,6 +33,12 @@ export interface AdminUsersPageResponse {
     pageSize: number;
     totalItems: number;
 }
+export interface BlockUserModalProps {
+    isOpen: boolean;
+    onClose: () => void;
+    user: AdminUserDto | null;
+    onSave?: () => void;
+}
 
 export interface GetAdminUsersParams {
     pageNumber?: number;

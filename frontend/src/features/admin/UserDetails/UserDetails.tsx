@@ -6,6 +6,7 @@ import { UserRole } from "../../../api/adminService";
 import { UserListingMiniCard } from "./UserListingMiniCard";
 import { useState } from "react";
 import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog";
+import BlockUserModal from "./BlockUser/BlockUserModal";
 
 function UserDetails() {
   const {
@@ -21,10 +22,12 @@ function UserDetails() {
     carsLoading,
     carsError,
     handleDeleteUser,
+    refetch,
   } = useUserDetails();
 
   const navigate = useNavigate();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showBlockModal, setShowBlockModal] = useState(false);
 
   const handleDeleteClick = async () => {
     if (!user || user.id === undefined) {
@@ -179,9 +182,18 @@ function UserDetails() {
                   onConfirmClick={handleDeleteClick}
                   onClose={() => setShowDeleteConfirm(false)}
                 />
-                <button className="px-4 py-2 text-xs font-semibold bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition">
+                <button
+                  className="px-4 py-2 text-xs font-semibold bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/20 rounded-xl transition"
+                  onClick={() => setShowBlockModal(true)}
+                >
                   {user.isBlocked ? "Unblock" : "Block"}
                 </button>
+                <BlockUserModal
+                  isOpen={showBlockModal}
+                  onClose={() => setShowBlockModal(false)}
+                  user={user}
+                  onSave={() => void refetch()}
+                />
               </div>
 
             </div>

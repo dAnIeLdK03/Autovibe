@@ -6,6 +6,9 @@ export interface EditUserModalProps{
    user: UserData | null;
    onSave?: (data: UserData) => void;
 }
+
+
+
 export interface EditPasswordModalProps{
     isOpen: boolean;
     onClose: () => void;
