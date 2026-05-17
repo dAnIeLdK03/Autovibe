@@ -20,6 +20,11 @@ export interface AdminUserDto{
     blockReason?: string | null;
 }
 
+export interface getDeletedCarsDto{
+    IsDeleted: boolean | null;
+    DateTime: Date | null;
+}
+
 export interface UpdateAdminUserStatus {
     isBlocked?: boolean | null;
     blockedUntil?: string | null;
@@ -143,8 +148,11 @@ export const getAdminUserCars = async (
     };
 };
 
-export const getDeletedCars = async () => {
-    const response = await api.get(`/admin/deleted`);
+export const getDeletedCars = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
+    const params = new URLSearchParams();
+        params.append('pageNumber', page.toString());
+        params.append('pageSize', pageSize.toString());
+    const response = await api.get(`/admin/deleted?${params}`);
     return response.data;
 }
 
