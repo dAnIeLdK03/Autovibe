@@ -38,13 +38,14 @@ namespace Autovibe.API.Controllers
 
 
         [HttpGet("deleted")]
-  public async Task<ActionResult<IEnumerable<CarListDto>>> GetDeletedCars(){
+        public async Task<ActionResult<IEnumerable<CarListDto>>> GetDeletedCars()
+        {
             var cars = await _context.Cars
-          .AsNoTracking()
-          .IgnoreQueryFilters()
-          .Where(c => c.IsDeleted)
-          .OrderByDescending(c => c.DeletedAt ?? c.UpdatedAt)
-          .ToListAsync();
+              .AsNoTracking()
+              .IgnoreQueryFilters()
+              .Where(c => c.IsDeleted)
+              .OrderByDescending(c => c.DeletedAt ?? c.UpdatedAt)
+              .ToListAsync();
             return Ok(cars.Select(c => c.ListDto()));
 
         }
@@ -119,7 +120,7 @@ namespace Autovibe.API.Controllers
             return Ok(result);
         }
 
-         [HttpGet("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserById(int id)
         {
             var result = await _adminService.AdminGetUserAsync(id);

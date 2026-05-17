@@ -143,3 +143,8 @@ export const getAdminUserCars = async (
     };
 };
 
+export const getDeletedCars = async () => {
+    const response = await api.get(`/admin/deleted`);
+    return response.data;
+}
+
