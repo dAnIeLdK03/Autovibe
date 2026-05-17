@@ -38,7 +38,7 @@ namespace Autovibe.API.Controllers
 
 
         [HttpGet("deleted")]
-        public async Task<ActionResult<PageResponse<CarListDto>>> GetDeletedCars(DeletedCarsDto request)
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetDeletedCars([FromQuery]DeletedCarsDto request)
         {
             var result = await _adminService.GetDeletedCarsAsync(request);
                 result.ThrowIfNull("Unable to load cars.");

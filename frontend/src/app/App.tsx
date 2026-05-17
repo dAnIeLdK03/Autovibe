@@ -23,6 +23,7 @@ import { loadFavoriteIds } from '@autovibe/app-state';
 import MyFavorite from "../features/cars/CarComponents/FavoriteCars/MyFavorite";
 import UserList from "../features/admin/UserList/UserList";
 import UserDetails from "../features/admin/UserDetails/UserDetails";
+import DeletedCars from "../features/admin/DeletedCars/DeletedCars";
 
 
 
@@ -54,6 +55,8 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/admin/users/:userId" element={<UserDetails />} />
         <Route path="/admin/users" element={<UserList />} />
+        <Route path="/admin/deleted" element={<DeletedCars />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

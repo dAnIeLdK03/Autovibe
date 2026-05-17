@@ -54,7 +54,9 @@ const Menu: React.FC = () => {
         { label: "My Cars", onClick: () => navigate("/cars/my") },
         { label: "My Favorites", onClick: () => navigate("/favorites") },
         ...(isAdmin
-            ? [{ label: "Users", onClick: () => navigate("/admin/users") } satisfies MenuItem]
+            ? [{ label: "Users", onClick: () => navigate("/admin/users") } satisfies MenuItem,
+                {label: "DeletedCars", onClick: () => navigate("/admin/deleted")} satisfies MenuItem
+            ]
             : []),
         { label: "Logout", onClick: openConfirm },
     ];
