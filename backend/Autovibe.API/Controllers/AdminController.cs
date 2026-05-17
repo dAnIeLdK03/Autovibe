@@ -38,15 +38,11 @@ namespace Autovibe.API.Controllers
 
 
         [HttpGet("deleted")]
-        public async Task<ActionResult<IEnumerable<CarListDto>>> GetDeletedCars()
+        public async Task<ActionResult<PageResponse<CarListDto>>> GetDeletedCars(DeletedCarsDto request)
         {
-            var cars = await _context.Cars
-              .AsNoTracking()
-              .IgnoreQueryFilters()
-              .Where(c => c.IsDeleted)
-              .OrderByDescending(c => c.DeletedAt ?? c.UpdatedAt)
-              .ToListAsync();
-            return Ok(cars.Select(c => c.ListDto()));
+            var result = await _adminService.GetDeletedCarsAsync(request);
+                result.ThrowIfNull("Unable to load cars.");
+            return Ok(result);
 
         }
 

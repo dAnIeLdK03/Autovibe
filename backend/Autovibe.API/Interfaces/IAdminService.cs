@@ -12,5 +12,6 @@ public interface IAdminService
     Task HardDeleteCarAsync(int id);
     Task<bool> RestoreCarAsync(int id);
     Task<UserDto> AdminGetUserAsync(int id);
+    Task<PageResponse<CarListDto>> GetDeletedCarsAsync(DeletedCarsDto request);
 
 }

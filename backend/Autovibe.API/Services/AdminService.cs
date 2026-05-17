@@ -168,6 +168,31 @@ namespace Autovibe.API.Services
             };
         }
     
+        public async Task<PageResponse<CarListDto>> GetDeletedCarsAsync(DeletedCarsDto request)
+        {
+            request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
+
+            request.PageSize.THrowIfLessThanAndMoreThan(1,18, "Page size cannot be less than 1 or greater than 18.");
+        
+            var query = _context.Cars
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .Where(c => c.IsDeleted)
+                .OrderByDescending(c => c.DeletedAt ?? c.UpdatedAt);
+
+                var totalItems = await query.CountAsync();
+
+                var cars = await query
+                    .Skip((request.PageNumber - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .Select(c => c.ListDto())
+                    .ToListAsync();
+
+            return new PageResponse<CarListDto>
+            (
+                cars, totalItems, request.PageSize, request.PageNumber
+            );
+        }
     
     }
 }
