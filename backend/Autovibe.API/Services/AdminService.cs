@@ -22,7 +22,7 @@ namespace Autovibe.API.Services
         {
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(1,18, "Page size cannot be less than 1 or greater than 18.");
+            request.PageSize.THrowIfLessThanAndMoreThan(1, 18, "Page size cannot be less than 1 or greater than 18.");
 
             IQueryable<User> query = _context.Users.AsNoTracking();
             if (!string.IsNullOrWhiteSpace(request.Email))
@@ -55,16 +55,16 @@ namespace Autovibe.API.Services
 
             user.ThrowIfNull($"User with id {targetUserId} was not found");
 
-            if(user.Role == Role.Admin && newRole == Role.User)
+            if (user.Role == Role.Admin && newRole == Role.User)
             {
                 var adminCount = await _context.Users.CountAsync(u => u.Role == Role.Admin);
-                if(adminCount == 1)
+                if (adminCount == 1)
                 {
                     throw new BadRequestException("You cannot remove tha last administrator in the system.");
                 }
             }
 
-            if(targetUserId == actingAdminId)
+            if (targetUserId == actingAdminId)
             {
                 throw new BadRequestException("You cannot change your own role");
             }
@@ -110,7 +110,7 @@ namespace Autovibe.API.Services
                 .IgnoreQueryFilters()
                 .Where(c => c.IsDeleted && c.Id == id)
                 .FirstOrDefaultAsync();
-            
+
             car.ThrowIfNull($"Car with id {id} was not found");
 
             _context.Cars.Remove(car);
@@ -126,15 +126,15 @@ namespace Autovibe.API.Services
 
             car.ThrowIfNull($"Car with id {id} was not found");
 
-                car.IsDeleted = false;
-                car.UpdatedAt = DateTime.UtcNow;
+            car.IsDeleted = false;
+            car.UpdatedAt = DateTime.UtcNow;
 
             var favoriteToRestore = await _context.Favorites
                 .IgnoreQueryFilters()
                 .Where(f => f.CarId == car.Id && f.IsDeleted)
                 .ToListAsync();
 
-            foreach(var fav in favoriteToRestore)
+            foreach (var fav in favoriteToRestore)
             {
                 fav.IsDeleted = false;
             }
@@ -167,32 +167,44 @@ namespace Autovibe.API.Services
                 BlockReason = user.BlockReason
             };
         }
-    
+
         public async Task<PageResponse<CarListDto>> GetDeletedCarsAsync(DeletedCarsDto request)
         {
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(1,18, "Page size cannot be less than 1 or greater than 18.");
-        
+            request.PageSize.THrowIfLessThanAndMoreThan(1, 18, "Page size cannot be less than 1 or greater than 18.");
+
             var query = _context.Cars
                 .AsNoTracking()
                 .IgnoreQueryFilters()
                 .Where(c => c.IsDeleted)
                 .OrderByDescending(c => c.DeletedAt ?? c.UpdatedAt);
 
-                var totalItems = await query.CountAsync();
+            var totalItems = await query.CountAsync();
 
-                var cars = await query
-                    .Skip((request.PageNumber - 1) * request.PageSize)
-                    .Take(request.PageSize)
-                    .Select(c => c.ListDto())
-                    .ToListAsync();
+            var cars = await query
+                .Skip((request.PageNumber - 1) * request.PageSize)
+                .Take(request.PageSize)
+                .Select(c => c.ListDto())
+                .ToListAsync();
 
             return new PageResponse<CarListDto>
             (
                 cars, totalItems, request.PageSize, request.PageNumber
             );
         }
-    
+
+        public async Task<CarDetailsDto?> GetDeletedCarsDetailsAsync(int id)
+        {
+            var car = await _context.Cars
+                .AsNoTracking()
+                .IgnoreQueryFilters()
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == id && c.IsDeleted);
+
+            return car.ThrowIfNull($"Car with id {id} was not found")!.DetailsDto();
+
+        }
+
     }
 }

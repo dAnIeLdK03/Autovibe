@@ -123,5 +123,19 @@ namespace Autovibe.API.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}/deleted")]
+        public async Task<ActionResult<CarDetailsDto>> GetDeletedCarsDetails(int id)
+        {
+            id.ThrowIfLessThan(0, "Invalid car id.");
+
+            var result = await _adminService.GetDeletedCarsDetailsAsync(id);
+            
+            result.ThrowIfNull("Car cannot be found");
+
+            return Ok(result);
+
+        }
+
+
     }
 }

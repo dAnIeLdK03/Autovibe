@@ -13,5 +13,5 @@ public interface IAdminService
     Task<bool> RestoreCarAsync(int id);
     Task<UserDto> AdminGetUserAsync(int id);
     Task<PageResponse<CarListDto>> GetDeletedCarsAsync(DeletedCarsDto request);
-
+    Task<CarDetailsDto?>GetDeletedCarsDetailsAsync(int id);
 }
