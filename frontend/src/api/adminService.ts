@@ -1,5 +1,5 @@
 import { api } from './api';
-import type { CarsPageResponse } from './carsService';
+import type { CarDetails, CarsPageResponse } from './carsService';
 
 export enum UserRole {
     Admin = 0,
@@ -155,4 +155,9 @@ export const getDeletedCars = async (page: number, pageSize: number): Promise<Ca
     const response = await api.get(`/admin/deleted?${params}`);
     return response.data;
 }
+
+export const getDeletedCarById = async (id: number): Promise<CarDetails> => {
+    const response = await api.get(`/admin/deleted/${id}`);
+    return response.data;
+};
 
