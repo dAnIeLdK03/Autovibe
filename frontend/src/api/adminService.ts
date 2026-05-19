@@ -157,7 +157,7 @@ export const getDeletedCars = async (page: number, pageSize: number): Promise<Ca
 }
 
 export const getDeletedCarById = async (id: number): Promise<CarDetails> => {
-    const response = await api.get(`/admin/deleted/${id}`);
+    const response = await api.get(`/admin/${id}/deleted`);
     return response.data;
 };
 

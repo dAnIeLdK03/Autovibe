@@ -15,7 +15,7 @@ return (
     >
 
       <div className="relative h-56 bg-slate-700 overflow-hidden cursor-pointer "
-        onClick={() => navigate(`/cars/${deletedCar.id}`)}
+            onClick={() => navigate(`/admin/deleted/${deletedCar.id}`)}
       >
         {deletedCar.imageUrls && deletedCar.imageUrls.length > 0 ? (
           <img
@@ -68,7 +68,7 @@ return (
         <div className="mt-auto flex flex-wrap gap-2 pt-4 border-t border-slate-700/50">
           <button
             className="flex-1 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-lg transition-all"
-            onClick={() => navigate(`/cars/${deletedCar.id}`)}
+            onClick={() => navigate(`/admin/deleted/${deletedCar.id}`)}
           >
             Details
           </button>

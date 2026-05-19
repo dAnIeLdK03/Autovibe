@@ -51,6 +51,7 @@ export default function DeletedCarDetails() {
           make={car.make}
           model={car.model}
           year={car.year}
+          showFavorite={false}
         />
 
         <CarDetailsInfo
