@@ -95,6 +95,33 @@ export interface CarCardProps {
     showDeletebutton?: boolean;
 };
 
+export interface DeletedCarCardProps {
+    deletedCar: {
+        id: number,
+        bodyType: string;
+        make: string,
+        model: string,
+        year: number,
+        price: number,
+        mileage: number,
+        power: number,
+        fuelType: string,
+        transmission: string,
+        color: string,
+        shortDescription: string,
+        location: string,
+        steeringWheel: string,
+        condition: string,
+
+        imageUrls?: string[];
+
+        isDeleted?: boolean | null;
+        dateTime?: Date | null;
+    }
+    onDeleteClick?: (id: number) => void;
+    showDeletebutton?: boolean;
+};
+
 export interface CarFilters{
     fuelType?: string;
     transmission?: string;

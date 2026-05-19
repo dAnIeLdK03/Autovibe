@@ -1,7 +1,7 @@
 import Pagination from "../../../shared/Pagination/pagePagination";
 import EmptyState from "../../../shared/UX/EmptyState";
 import { SkeletonLoader } from "../../../shared/UX/SkeletonLoader";
-import CarCard from "../../cars/CarComponents/CarCard";
+import DeletedCarCard from "./DeletedCard/DeletedCarCard";
 import { useDeletedCars } from "./useDeletedCars";
 
 function DeletedCars() {
@@ -50,9 +50,9 @@ function DeletedCars() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {cars.map((car) => (
-            <CarCard
+            <DeletedCarCard
               key={car.id}
-              car={car}
+              deletedCar={car}
             />
           ))}
         </div>
