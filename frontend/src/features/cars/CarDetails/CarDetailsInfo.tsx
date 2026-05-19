@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 
 interface CarDeatilsInfoProps {
     car: CarDetails
-    isOwner: boolean;
+    isOwner?: boolean;
     handleDelete:() => void;
 }
 function CarDetailsInfo({car, isOwner, handleDelete}: CarDeatilsInfoProps) {
