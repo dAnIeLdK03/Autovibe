@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import type { RootState } from '@autovibe/app-state'
 import { useCallback, useEffect, useState } from "react";
 import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
-import { getDeletedCars } from "../../../api/adminService";
+import { getDeletedCars, hardDeleteCarAdmin } from "../../../api/adminService";
 
 
 export const useDeletedCars = () => {
@@ -10,8 +10,8 @@ export const useDeletedCars = () => {
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    //const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-    //const [favoriteCarIdToDelete, setFavoriteCarIdToDelete] = useState<number | null>(null);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [carIdToDelete, setCarIdToDelete] = useState<number | null>(null);
     const { cars, loading, error } = useSelector((state: RootState) => state.cars);
 
 
@@ -40,21 +40,20 @@ export const useDeletedCars = () => {
         fetchCars();
     }, [fetchCars])
 
-    /*
+
     const handleDeleteClick = (id: number) => {
-        setFavoriteCarIdToDelete(id);
+        setCarIdToDelete(id);
         setShowDeleteConfirm(true);
     };
 
     const handleConfirmDelete: () => Promise<void> = async () => {
-            if (favoriteCarIdToDelete == null) return;
+            if (carIdToDelete == null) return;
             dispatch(setLoading(true));
             dispatch(clearError());
             try {
-                await hardDeleteCarAdmin(favoriteCarIdToDelete);
-                dispatch(setCars(cars.filter((c) => c.id !== favoriteCarIdToDelete)));
+                await hardDeleteCarAdmin(carIdToDelete);
+                dispatch(setCars(cars.filter((c) => c.id !== carIdToDelete)));
                 setShowDeleteConfirm(false);
-                setFavoriteCarIdToDelete(null);
             } catch {
                 dispatch(setError("Unable to delete car."));
             } finally {
@@ -63,9 +62,9 @@ export const useDeletedCars = () => {
         };
         const handleCancelDelete = () => {
             setShowDeleteConfirm(false);
-            setFavoriteCarIdToDelete(null);
+            setCarIdToDelete(null);
         };
-        */
+    
 
         
 return {
@@ -75,9 +74,9 @@ return {
         page,
         totalPages,
         setPage,
-        //showDeleteConfirm,
-        //handleDeleteClick,
-        //handleConfirmDelete,
-        //handleCancelDelete,
+        showDeleteConfirm,
+        handleDeleteClick,
+        handleConfirmDelete,
+        handleCancelDelete,
     }
 }

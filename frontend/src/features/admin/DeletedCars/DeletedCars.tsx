@@ -1,3 +1,4 @@
+import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog";
 import Pagination from "../../../shared/Pagination/pagePagination";
 import EmptyState from "../../../shared/UX/EmptyState";
 import { SkeletonLoader } from "../../../shared/UX/SkeletonLoader";
@@ -7,7 +8,10 @@ import { useDeletedCars } from "./useDeletedCars";
 function DeletedCars() {
 
     const {
-        cars, loading, error, page, totalPages, setPage,
+        cars, loading, error, page, totalPages, setPage, showDeleteConfirm,
+        handleDeleteClick,
+        handleConfirmDelete,
+        handleCancelDelete,
       } = useDeletedCars();
 
       if (loading) {
@@ -53,6 +57,8 @@ function DeletedCars() {
             <DeletedCarCard
               key={car.id}
               deletedCar={car}
+              onDeleteClick={handleDeleteClick}
+              showDeletebutton={true}
             />
           ))}
         </div>
@@ -65,7 +71,13 @@ function DeletedCars() {
             }}
           />
       </div>
-
+             <ConfirmDialog
+        isOpen={showDeleteConfirm}
+        title="Delete Car"
+        message="Are you sure you want to delete this car?"
+        onConfirmClick={() => void handleConfirmDelete()}
+        onClose={handleCancelDelete}
+      />
     </div>
   );
 }

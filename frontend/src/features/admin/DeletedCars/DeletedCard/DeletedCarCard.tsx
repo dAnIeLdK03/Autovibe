@@ -75,7 +75,6 @@ return (
 
           {showDeleteBtn && (
             <button
-
               className="flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-lg transition-all"
               onClick={() => onDeleteClick?.(deletedCar.id)}
             >

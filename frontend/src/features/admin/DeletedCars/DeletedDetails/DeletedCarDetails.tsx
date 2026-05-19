@@ -37,7 +37,7 @@ export default function DeletedCarDetails() {
     <div className="min-h-screen bg-slate-900 font-sans p-6 md:p-12 pt-5">
       <button
         className="flex-1 px-3 py-2 bg-slate-700 hover:bg-slate-600 text-white text-sm font-bold rounded-lg transition-all"
-        onClick={() => navigate("/cars")}>
+        onClick={() => navigate("/admin/deleted")}>
         🡰 Back
       </button>
       <div className="max-w-3xl mx-auto">
