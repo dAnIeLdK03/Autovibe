@@ -8,7 +8,7 @@ function AuthRestore() {
     useEffect(() => {
         const fetchToken = async () => {
             try {
-                const token = sessionStorage.getItem("token");
+                const token = localStorage.getItem("token");
                 if(!token){
                     dispatch(logout());
                     return;
@@ -23,7 +23,7 @@ function AuthRestore() {
 
             } catch (error) {
                 console.error("Error fetching current user:", error);
-                sessionStorage.removeItem("token");
+                localStorage.removeItem("token");
                 dispatch(logout());
             }
         }
