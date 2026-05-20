@@ -28,6 +28,9 @@ export interface CarDetails {
     sellerLastName: string;
     sellerPhoneNumber: string;
 
+    isDeleted?: boolean | null;
+    dateTime?: Date | null;
+
     imageUrls?: string[];
 
 };

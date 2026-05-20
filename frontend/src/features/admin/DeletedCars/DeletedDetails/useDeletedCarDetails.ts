@@ -4,7 +4,7 @@ import type { CarDetails } from "../../../../api/carsService";
 import { useDispatch, useSelector } from "react-redux";
 import { useError } from "../../../../shared/CustomHooks/useError";
 import { clearError, setError, setLoading, type RootState } from "@autovibe/app-state";
-import { getDeletedCarById, hardDeleteCarAdmin, UserRole } from "../../../../api/adminService";
+import { getDeletedCarById, hardDeleteCarAdmin, restoreCarAdmin, UserRole } from "../../../../api/adminService";
 
 
 export const useDeletedCarDetails = () => {
@@ -50,10 +50,9 @@ export const useDeletedCarDetails = () => {
     const handleDelete = async () => {
         if(!car){
             dispatch(setError("Car not found."));
-            navigate("/cars");
+            navigate("/admin/deleted");
             return;
         }
-        if(!id || !window.confirm("Are you sure?")) return;
         if(user?.role !== UserRole.Admin){
             dispatch(setError("You don't have permission to delete this."));
             return;
@@ -72,5 +71,27 @@ export const useDeletedCarDetails = () => {
         }
     };
 
-    return{car, handleDelete}
+    const handleRestore = async () => {
+         if(!car){
+            dispatch(setError("Car not found."));
+            navigate("/admin/deleted");
+            return;
+        }
+        if(user?.role !== UserRole.Admin){
+            dispatch(setError("You don't have permission to delete this."));
+            return;
+        }
+            dispatch(setLoading(true));
+            dispatch(clearError());
+            try{
+                await restoreCarAdmin(carId);
+                navigate("/admin/deleted");
+                dispatch(setLoading(false));
+            }catch(error){
+                handleError(error);
+                dispatch(setLoading(false));
+            }
+    };
+
+    return{car, handleDelete, handleRestore}
 }
