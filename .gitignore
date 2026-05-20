@@ -286,7 +286,6 @@ psd
 thumb
 sketch
 
-frontend/dist/
 
 frontend/.env
 frontend/.env.local
