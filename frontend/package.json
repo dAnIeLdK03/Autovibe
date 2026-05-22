@@ -13,7 +13,6 @@
     "@autovibe/app-state": "*",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@reduxjs/toolkit": "^2.11.2",
-    "@tanstack/react-query": "^5.90.20",
     "axios": "^1.13.3",
     "framer-motion": "^12.38.0",
     "lucide-react": "^0.563.0",

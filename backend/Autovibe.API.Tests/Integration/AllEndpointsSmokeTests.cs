@@ -23,7 +23,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
     [Fact]
     public async Task Anonymous_HealthAndReady_AreReachable()
     {
-        // These are the two anonymous probes used by infra / local dev to verify the app is up and the DB is reachable.
         var health = await _client.GetAsync("/health");
         Assert.Equal(HttpStatusCode.OK, health.StatusCode);
 
@@ -44,8 +43,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
     [Fact]
     public async Task Full_SmokeFlow_Covers_All_Controllers()
     {
-        // Goal: one high-signal integration test that touches every controller at least once.
-        // It’s intentionally a "happy path" smoke test: if this fails, something core broke.
         var email = $"e2e_{Guid.NewGuid():N}@t.com";
         const string password = "TestPassword123!";
 
@@ -80,8 +77,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
             token = doc.RootElement.GetProperty("token").GetString()!;
         }
 
-        // We read the user id from the DB to keep the test resilient to DTO/response changes
-        // (we're testing endpoint behavior, not exact response schemas here).
         int userId;
         using (var scope = _factory.Services.CreateScope())
         {
@@ -89,7 +84,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
             userId = db.Users.Single(u => u.Email == email).Id;
         }
 
-        // --- User controller (auth required) ---
         {
             using var req = new HttpRequestMessage(HttpMethod.Get, "/api/user").WithBearer(token);
             var res = await _client.SendAsync(req);
@@ -134,14 +128,11 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
             Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
         }
 
-        // --- Cars controller ---
         int carId;
         {
-            // GET list is anonymous; keep it in the smoke test because it’s a primary public endpoint.
             var list = await _client.GetAsync("/api/cars?pageNumber=1&pageSize=5&sortType=Newest");
             list.EnsureSuccessStatusCode();
 
-            // Create a car as the logged-in user. Payload must satisfy FluentValidation rules.
             using var req = new HttpRequestMessage(HttpMethod.Post, "/api/cars").WithBearer(token);
             req.Content = new StringContent(
                 JsonSerializer.Serialize(new
@@ -173,13 +164,11 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
         }
 
         {
-            // GET details (anon)
             var details = await _client.GetAsync($"/api/cars/{carId}");
             details.EnsureSuccessStatusCode();
         }
 
         {
-            // Update
             using var req = new HttpRequestMessage(HttpMethod.Put, $"/api/cars/{carId}").WithBearer(token);
             req.Content = new StringContent(
                 JsonSerializer.Serialize(new
@@ -208,7 +197,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
         }
 
         {
-            // My cars
             using var req = new HttpRequestMessage(HttpMethod.Get, "/api/cars/my-cars?pageNumber=1&pageSize=5")
                 .WithBearer(token);
             var res = await _client.SendAsync(req);
@@ -216,8 +204,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
         }
 
         {
-            // Upload image uses ImageSharp validation; we include a tiny valid PNG to exercise the full pipeline
-            // without relying on filesystem fixtures.
             var png = Convert.FromBase64String(
                 "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADElEQVR4nGP4//8/AAX+Av4N70a4AAAAAElFTkSuQmCC");
 
@@ -236,15 +222,12 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
         }
 
         {
-            // Delete
             using var req = new HttpRequestMessage(HttpMethod.Delete, $"/api/cars/{carId}").WithBearer(token);
             var res = await _client.SendAsync(req);
             Assert.Equal(HttpStatusCode.NoContent, res.StatusCode);
         }
 
-        // --- Favorites controller ---
         {
-            // Favorite an existing car (factory seeds car id=1) to avoid coupling this test to car-creation ordering.
             using var addReq = new HttpRequestMessage(HttpMethod.Post, "/api/favorites/1").WithBearer(token);
             addReq.Content = new StringContent("", Encoding.UTF8, "application/json");
             var addRes = await _client.SendAsync(addReq);
@@ -259,13 +242,11 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
             Assert.Equal(HttpStatusCode.NoContent, delRes.StatusCode);
         }
 
-        // --- Admin controller ---
         var adminEmail = $"admin_e2e_{Guid.NewGuid():N}@t.com";
         const string adminPassword = "TestPassword123!";
         var adminToken = await TestHttpHelpers.SeedUserAndLoginAsync(_factory, _client, adminEmail, adminPassword, Role.Admin);
 
         {
-            // Admin list is the "main" admin endpoint; smoke it with paging params.
             using var req = new HttpRequestMessage(HttpMethod.Get, "/api/admin?pageNumber=1&pageSize=5").WithBearer(adminToken);
             var res = await _client.SendAsync(req);
             res.EnsureSuccessStatusCode();
@@ -278,7 +259,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
         }
 
         {
-            // Block the previously registered user: this exercises admin-only policy + service logic.
             using var req = new HttpRequestMessage(HttpMethod.Patch, $"/api/admin/{userId}/status").WithBearer(adminToken);
             req.Content = new StringContent(
                 JsonSerializer.Serialize(new
@@ -294,7 +274,6 @@ public class AllEndpointsSmokeTests : IClassFixture<CustomWebApplicationFactory>
         }
 
         {
-            // Role change is allowed for admins; use an idempotent value to avoid depending on initial role.
             using var req = new HttpRequestMessage(HttpMethod.Patch, $"/api/admin/{userId}/role").WithBearer(adminToken);
             req.Content = new StringContent(
                 JsonSerializer.Serialize(new { role = Role.User }, JsonOpts),
