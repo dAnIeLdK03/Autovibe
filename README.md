@@ -4,11 +4,20 @@
 
 # Autovibe
 
-Small full-stack thing for car listings — .NET API + React (Vite). Auth, CRUD, image uploads. Nothing fancy.
+Full-stack car listings app — .NET API + React (Vite). Auth, CRUD, image uploads, favorites, soft-delete with admin restore/hard-delete.
 
-**Stack:** ASP.NET Core, EF Core + Pomelo (MySQL), JWT, FluentValidation on the backend. React 19, Redux, RHF, Axios on the frontend.
+**Stack:** ASP.NET Core, EF Core + Pomelo (MySQL), JWT, FluentValidation on the backend. React 19, Redux (`@autovibe/app-state`), RHF, Axios, Tailwind on the frontend. Optional Expo app under `mobile/`.
 
 If the banner image above breaks after you rename files, point the `<img src>` at whatever you committed (paths are relative to repo root).
+
+## Features
+
+- Register / login (JWT), profile update, change password
+- Browse, filter, and paginate car listings; car details with seller info (when logged in)
+- Create / edit / soft-delete your listings; image upload
+- Favorites (add, remove, paginated list)
+- **Admin:** user list & details, block/unblock, role toggle, view any user’s cars
+- **Admin:** soft-deleted cars — list, details, restore, permanent hard-delete
 
 ## What you need installed
 
@@ -18,9 +27,10 @@ If the banner image above breaks after you rename files, point the `<img src>` a
 
 ```
 backend/Autovibe.API/   — API, migrations, setup_database.sql
-frontend/               — Vite app
+backend/Autovibe.API.Tests/ — integration + smoke tests
+frontend/               — Vite + React web app
 mobile/                 — Expo app (optional)
-packages/               — shared workspace packages (e.g. app state)
+packages/app-state/     — shared Redux store (web + mobile)
 ```
 
 The repo root is an **npm workspace** — from the root you can run `npm install` once to wire up `frontend`, `mobile`, and `packages/*`.
@@ -43,16 +53,64 @@ CORS for local dev is `Cors:AllowedOrigins` in `appsettings.json` (defaults to `
 
 **DB:** create database + user, then either import `setup_database.sql` with mysql client, or `dotnet ef database update` from `backend/Autovibe.API`.
 
-**Admin (JWT `Admin` role):** users have a `Role` in the DB (`User` / `Admin`). First admin: register a user, then `UPDATE Users SET Role = 'admin' WHERE Email = '...';` (values are stored lowercase) and log in again for a new token. Endpoints (all require `Authorization: Bearer …` and `Admin` unless noted):
+Soft-deleted cars are hidden from normal queries (EF global filter). Favorites tied to deleted cars are soft-deleted too and come back on restore.
 
-- `GET /api/Admin` — paged user list: `pageNumber`, `pageSize` (defaults 1 / 18), optional `email` (contains filter). Returns `PageResponse` like cars.
-- `PATCH /api/Admin/{id}/role` — `{id}` is a **user** id. Body `{ "role": 0 | 1 }` (enum: `Admin` = 0, `User` = 1). Cannot demote yourself or remove the last admin.
-- `PATCH /api/Admin/{userId}/status` — `{userId}` is a **user** id. Block/unblock: `{ "isBlocked": true|false, "blockedUntil": "...", "blockReason": "..." }`. Users are blocked if `isBlocked=true` **or** `blockedUntil` is in the future.
-- `GET /api/Admin/deleted` — soft-deleted car listings. Returns a JSON array of **`CarListDto`** (same general shape as `GET /api/cars`, including `shortDescription`, `isDeleted`, `deletedAt`, `userId`, `imageUrls`), ordered by deletion time. Not raw EF entities.
-- `DELETE /api/Admin/{id}` — `{id}` is a **car** id. **Hard** delete (only if the listing is already soft-deleted). Returns `204 No Content`.
-- `PATCH /api/Admin/{id}/restore` — `{id}` is a **car** id. Undo soft-delete on that car (and restores related soft-deleted favorites). Returns `200` with `true` on success.
+### First admin user
 
-**Moderation on listings:** an admin may also call `PUT /api/cars/{id}` and `DELETE /api/cars/{id}` like the owner (JWT must include the `Admin` role). Soft-deleted cars are hidden from normal queries; use `/api/Admin/deleted` and restore/hard-delete there instead.
+Users have a `Role` in the DB (`user` / `admin`, stored lowercase). Register normally, then promote yourself and log in again for a fresh JWT:
+
+```sql
+UPDATE Users SET Role = 'admin' WHERE Email = 'your@email.com';
+```
+
+Enum in code: `Admin` = 0, `User` = 1. JWT role claim uses `Admin` (case-insensitive check).
+
+### API overview
+
+Base path: `/api`. Most routes need `Authorization: Bearer <token>` unless marked anonymous.
+
+| Area | Method | Path | Notes |
+|------|--------|------|--------|
+| Auth | POST | `/auth/register` | Anonymous, rate-limited |
+| Auth | POST | `/auth/login` | Returns `{ token, user }` |
+| User | GET | `/user` | Current user (`GET /user` in frontend) |
+| User | PUT | `/user/{id}` | Own profile only |
+| User | PUT | `/user/change-password` | |
+| User | DELETE | `/user/{id}` | Own account only |
+| Cars | GET | `/cars` | Anonymous, filters + `PageResponse` |
+| Cars | GET | `/cars/{id}` | Anonymous, `CarDetailsDto` |
+| Cars | GET | `/cars/my-cars` | Owner’s listings |
+| Cars | POST | `/cars` | Create |
+| Cars | PUT | `/cars/{id}` | Owner or admin |
+| Cars | DELETE | `/cars/{id}` | Soft-delete; owner or admin |
+| Cars | POST | `/cars/upload-image` | Multipart, max 5 MB, rate-limited |
+| Favorites | GET | `/favorites` | Paginated `CarListDto` |
+| Favorites | POST | `/favorites/{carId}` | |
+| Favorites | DELETE | `/favorites/{carId}` | |
+
+`PageResponse<T>` shape: `{ items, totalPages, pageNumber, pageSize, totalItems }`.
+
+**`CarDetailsDto`** includes seller fields, `imageUrls`, and moderation fields: `isDeleted`, `deletedAt` (camelCase in JSON).
+
+**`CarListDto`** includes `shortDescription`, `isDeleted`, `deletedAt`, `userId`, `imageUrls`.
+
+### Admin API (`AdminOnly` policy)
+
+All routes under `/api/Admin` require JWT with **Admin** role.
+
+| Method | Path | `{id}` / params | Description |
+|--------|------|-----------------|-------------|
+| GET | `/Admin` | Query: `pageNumber`, `pageSize`, optional `email` | Paged users (`UserDto`) |
+| GET | `/Admin/{id}` | User id | Single user |
+| PATCH | `/Admin/{id}/role` | User id. Body: `{ "role": 0 \| 1 }` | Cannot demote self or last admin |
+| PATCH | `/Admin/{userId}/status` | User id. Block: `{ "isBlocked", "blockedUntil", "blockReason" }` | Reason required when blocking |
+| GET | `/Admin/{userId}/cars` | User id. `pageNumber`, `pageSize` | That user’s active listings |
+| GET | `/Admin/deleted` | `pageNumber`, `pageSize` | Paged soft-deleted cars (`CarListDto`) |
+| GET | `/Admin/{id}/deleted` | **Car** id | Deleted car details (`CarDetailsDto`, includes `isDeleted`) |
+| PATCH | `/Admin/{id}/restore` | **Car** id | Undo soft-delete (+ related favorites). `200` + `true` |
+| DELETE | `/Admin/{id}` | **Car** id | **Hard** delete (only if already soft-deleted). `204` |
+
+**Moderation on live listings:** admin may also `PUT` / `DELETE` `/api/cars/{id}` like the owner. Use `/Admin/deleted` + restore/hard-delete for removed listings.
 
 Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test with Postman/curl.
 
@@ -84,12 +142,35 @@ VITE_API_URL=http://localhost:5258
 No `/api` at the end — the axios instance adds `/api`. Vite dev server proxies `/api` to that host (`vite.config.ts`).
 
 ```bash
+# from repo root (recommended)
+npm install
+
+# or only frontend
 cd frontend && npm install && npm run dev
 ```
 
-Opens on **5173** by default.
+Opens on **5173** by default. JWT is stored in `localStorage` under `token`.
 
-**Admin (frontend):** route **`/admin/users`** — paged user list from `GET /api/admin`, optional email search, reset, and shared pagination. Requires a JWT whose role is **Admin**; otherwise the API returns **403** and the page shows a permission error. While logged in, the account menu includes **Users** linking to this route.
+### Routes
+
+| Path | Description |
+|------|-------------|
+| `/` | Home |
+| `/login`, `/register` | Auth |
+| `/cars` | List + filters |
+| `/cars/:id` | Car details |
+| `/cars/new`, `/cars/:id/edit` | Create / edit (owner) |
+| `/cars/my` | My listings |
+| `/favorites` | Saved cars |
+| `/profile` | Profile & password |
+| `/admin/users` | Admin user list |
+| `/admin/users/:userId` | User details, block, role, their cars |
+| `/admin/deleted` | Soft-deleted cars |
+| `/admin/deleted/:id` | Deleted car details — **Restore** / hard-delete (admin menu: **DeletedCars**) |
+
+**Admin UI:** account menu shows **Users** and **DeletedCars** when `user.role === 0` (Admin). API calls return **403** without admin role; pages show permission errors.
+
+Restore button on deleted details requires `car.isDeleted` from the API (included in `CarDetailsDto` since the DTO/mapping update).
 
 ## Running locally
 
@@ -99,7 +180,7 @@ Opens on **5173** by default.
 
 Then:
 - Terminal 1: `cd backend/Autovibe.API && dotnet run` → API (usually **5258**, check launch settings if it differs).
-- Terminal 2: `cd frontend && npm run dev`.
+- Terminal 2: `cd frontend && npm run dev` (or `npm run dev --workspace=frontend` from root).
 
 ## Random commands
 
@@ -116,6 +197,8 @@ Publish API, `npm run build` for frontend (`frontend/dist/`). Set real connectio
 ## When something’s wrong
 
 - **Blank error on app load** — missing `VITE_API_URL`.
-- **401** — not logged in or token expired.
+- **401** — not logged in or token expired; log in again.
+- **403 on admin pages** — user is not admin, or old token before role change (re-login).
+- **Restore button missing** — `GET /api/Admin/{id}/deleted` must return `isDeleted: true`; admin role required in UI.
 - **CORS** — origin in backend config doesn’t match where you opened the app.
 - **Images broken** — wrong base URL or static files not served from `wwwroot`.
