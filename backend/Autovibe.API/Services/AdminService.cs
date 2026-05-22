@@ -12,10 +12,12 @@ namespace Autovibe.API.Services
     public class AdminService : IAdminService
     {
         private readonly AppDbContext _context;
+        private readonly IWebHostEnvironment _env;
 
-        public AdminService(AppDbContext context)
+        public AdminService(AppDbContext context, IWebHostEnvironment env)
         {
             _context = context;
+            _env = env;
         }
 
         public async Task<PageResponse<UserDto>> GetAllUsersAsync(AdminUserFilterDto request)
@@ -112,6 +114,20 @@ namespace Autovibe.API.Services
                 .FirstOrDefaultAsync();
 
             car.ThrowIfNull($"Car with id {id} was not found");
+
+            string relativePath = Path.Combine("images", "cars", id.ToString());
+            string absolutePath = Path.Combine(_env.WebRootPath, relativePath);
+
+            if (Directory.Exists(absolutePath))
+            {
+                try
+                {
+                    Directory.Delete(absolutePath, recursive: true);
+                }catch
+                {
+                    throw new NotFoundException("There are not images for this car.");
+                }
+            }
 
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
