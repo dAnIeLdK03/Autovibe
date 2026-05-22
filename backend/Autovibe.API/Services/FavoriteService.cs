@@ -6,6 +6,7 @@ using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Services.Helpers;
+using Autovibe.API.Constants;
 
 namespace Autovibe.API.Services
 {
@@ -74,7 +75,10 @@ namespace Autovibe.API.Services
         public async Task<PageResponse<CarListDto>> GetPageAsync(int userId, int pageNumber, int pageSize)
         {
             pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
-            pageSize.THrowIfLessThanAndMoreThan(1, 18, "Page size cannot be less than 1 or greater than 18.");
+            pageSize.THrowIfLessThanAndMoreThan(
+                PaginationConstants.MinPageSize,
+                PaginationConstants.MaxPageSize,
+                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
 
             var favoritesQuery = _context.Favorites
                 .AsNoTracking()

@@ -12,6 +12,7 @@ using System.Reflection.Metadata;
 using Autovibe.API.Services.Helpers;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
+using Autovibe.API.Constants;
 
 
 
@@ -65,7 +66,7 @@ namespace Autovibe.API.Services
                         .AsNoTracking()
                         .Include(c => c.User)
                         .FirstOrDefaultAsync(c => c.Id == id);
-           
+
             return car.ThrowIfNull($"Car with id {id} was not found")!.DetailsDto();
         }
 
@@ -74,7 +75,10 @@ namespace Autovibe.API.Services
 
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(1,18, "Page size cannot be less than 1 or greater than 18.");
+            request.PageSize.THrowIfLessThanAndMoreThan(
+                PaginationConstants.MinPageSize,
+                PaginationConstants.MaxPageSize,
+                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
 
 
             var query = _context.Cars
@@ -106,14 +110,14 @@ namespace Autovibe.API.Services
 
             car.ThrowIfForbidden(car.UserId != userId && !isAdmin, "You do not have permission do delete this car");
 
-            car.IsDeleted=true;
+            car.IsDeleted = true;
             car.DeletedAt = DateTime.UtcNow;
 
             var favorites = await _context.Favorites
                 .Where(f => f.CarId == car.Id && !f.IsDeleted)
                 .ToListAsync();
 
-            foreach( var fav in favorites)
+            foreach (var fav in favorites)
             {
                 fav.IsDeleted = true;
             }
@@ -139,7 +143,7 @@ namespace Autovibe.API.Services
             serverPath.EnsureDirectoryExists();
 
             file.ThrowIfImageISInvalid();
-            
+
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var fullPath = Path.Combine(serverPath, fileName);
 
@@ -155,7 +159,10 @@ namespace Autovibe.API.Services
         {
             pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            pageSize.THrowIfLessThanAndMoreThan(1,18, "Page size cannot be less than 1 or greater than 18.");
+            pageSize.THrowIfLessThanAndMoreThan(
+            PaginationConstants.MinPageSize,
+            PaginationConstants.MaxPageSize,
+            $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
 
             var query = _context.Cars
             .AsNoTracking()
@@ -174,6 +181,6 @@ namespace Autovibe.API.Services
                 items, totalItems, pageSize, pageNumber
             );
         }
-      
+
     }
 }

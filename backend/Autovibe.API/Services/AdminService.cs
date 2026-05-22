@@ -6,6 +6,7 @@ using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
 using Autovibe.API.Services.Helpers;
 using Autovibe.API.DTOs.Cars;
+using Autovibe.API.Constants;
 
 namespace Autovibe.API.Services
 {
@@ -24,7 +25,10 @@ namespace Autovibe.API.Services
         {
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(1, 18, "Page size cannot be less than 1 or greater than 18.");
+            request.PageSize.THrowIfLessThanAndMoreThan(
+                PaginationConstants.MinPageSize,
+                PaginationConstants.MaxPageSize,
+                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
 
             IQueryable<User> query = _context.Users.AsNoTracking();
             if (!string.IsNullOrWhiteSpace(request.Email))
@@ -123,7 +127,8 @@ namespace Autovibe.API.Services
                 try
                 {
                     Directory.Delete(absolutePath, recursive: true);
-                }catch
+                }
+                catch
                 {
                     throw new NotFoundException("There are not images for this car.");
                 }
@@ -188,7 +193,10 @@ namespace Autovibe.API.Services
         {
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(1, 18, "Page size cannot be less than 1 or greater than 18.");
+            request.PageSize.THrowIfLessThanAndMoreThan(
+                PaginationConstants.MinPageSize,
+                PaginationConstants.MaxPageSize,
+                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
 
             var query = _context.Cars
                 .AsNoTracking()
