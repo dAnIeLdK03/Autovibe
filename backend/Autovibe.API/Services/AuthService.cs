@@ -92,7 +92,7 @@ namespace Autovibe.API.Services
 
             if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
             {
-                throw new UnauthorizedException("Invalid password.");
+                throw new UnauthorizedException("Invalid email or password.");
             }
             if (isBlocked)
             {
@@ -105,7 +105,7 @@ namespace Autovibe.API.Services
                     message += $" Blocked until {user.BlockedUntil.Value:u} UTC.";
                 }
 
-                throw new ForbiddenException(message);
+                user.ThrowIfForbidden(true, message);
             }
 
             var token = GenerateJwtToken(user);
