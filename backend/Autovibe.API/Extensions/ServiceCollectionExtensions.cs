@@ -37,8 +37,6 @@ public static class ServiceCollectionExtensions
                 }));
         });
 
-        services.AddValidatorsFromAssemblyContaining<CarCreateDtoValidations>();
-
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {

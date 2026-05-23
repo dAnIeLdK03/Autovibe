@@ -1,4 +1,8 @@
+using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Extensions;
+using Autovibe.API.Validations;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,6 +11,9 @@ builder.Services.AddAppCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddApiLimits();
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<CarCreateDtoValidations>();
 
 var app = builder.Build();
 

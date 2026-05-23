@@ -104,8 +104,6 @@ public static class InfrastructureExtensions
             .Validate(settings => !string.IsNullOrEmpty(settings.Key), "JWT Sigjning Key is missing!")
             .ValidateOnStart();
 
-        services.AddValidatorsFromAssemblyContaining<Program>();
-
         return services;
     }
 }
