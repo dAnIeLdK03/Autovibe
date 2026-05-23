@@ -119,21 +119,28 @@ namespace Autovibe.API.Services
 
             car.ThrowIfNull($"Car with id {id} was not found");
 
-            string relativePath = Path.Combine("images", "cars", id.ToString());
-            string absolutePath = Path.Combine(_env.WebRootPath, relativePath);
 
-            if (Directory.Exists(absolutePath))
+            if (car.ImageUrls != null && car.ImageUrls.Any())
             {
-                try
+                foreach (var imageUrl in car.ImageUrls)
                 {
-                    Directory.Delete(absolutePath, recursive: true);
-                }
-                catch
-                {
-                    throw new NotFoundException("There are not images for this car.");
+                    if (string.IsNullOrWhiteSpace(imageUrl)) continue;
+                    string fileName = Path.GetFileName(imageUrl);
+                    string absoluteFilePath = Path.Combine(_env.WebRootPath, "images", "cars", fileName);
+
+                    if (File.Exists(absoluteFilePath))
+                    {
+                        try
+                        {
+                            File.Delete(absoluteFilePath);
+                        }
+                        catch
+                        {
+                            throw new NotFoundException("There is no images for this car to delete");
+                        }
+                    }
                 }
             }
-
             _context.Cars.Remove(car);
             await _context.SaveChangesAsync();
 
