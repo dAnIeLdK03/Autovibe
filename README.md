@@ -10,6 +10,19 @@ Full-stack car listings app — .NET API + React (Vite). Auth, CRUD, image uploa
 
 If the banner image above breaks after you rename files, point the `<img src>` at whatever you committed (paths are relative to repo root).
 
+## Contents
+
+- [Features](#features)
+- [What you need installed](#what-you-need-installed)
+- [Layout](#layout)
+- [Backend](#backend)
+- [Tests (backend)](#tests-backend)
+- [Frontend](#frontend)
+- [Mobile (optional)](#mobile-optional)
+- [Running locally](#running-locally)
+- [Production](#production)
+- [When something’s wrong](#when-somethings-wrong)
+
 ## Features
 
 - Register / login (JWT), profile update, change password
@@ -171,6 +184,28 @@ Opens on **5173** by default. JWT is stored in `localStorage` under `token`.
 **Admin UI:** account menu shows **Users** and **DeletedCars** when `user.role === 0` (Admin). API calls return **403** without admin role; pages show permission errors.
 
 Restore button on deleted details requires `car.isDeleted` from the API (included in `CarDetailsDto` since the DTO/mapping update).
+
+## Mobile (optional)
+
+Expo app under `mobile/` — same API and shared Redux store (`@autovibe/app-state`) as the web app.
+
+Create `mobile/.env` with the API origin (no `/api` suffix):
+
+```env
+# Android emulator → host machine
+EXPO_PUBLIC_API_URL=http://10.0.2.2:5258
+
+# Physical device on same Wi‑Fi — use your machine's LAN IP instead
+# EXPO_PUBLIC_API_URL=http://192.168.x.x:5258
+```
+
+From repo root (after `npm install`):
+
+```bash
+cd mobile && npm run start
+```
+
+Then press `a` (Android) or `i` (iOS) in the Expo CLI, or scan the QR code with Expo Go. The API must be running and reachable from the device/emulator.
 
 ## Running locally
 
