@@ -29,7 +29,7 @@ public class UserBlockMiddleware
             {
                 var userStatus = await dbContext.Users
                     .AsNoTracking()
-                    .Select(u => new { u.Id, u.IsBlocked, u.BlockedUntil })
+                    .Select(u => new { u.Id, u.IsBlocked, u.BlockedUntil, u.BlockReason, u.IsPermanentlyBlocked })
                     .FirstOrDefaultAsync(u => u.Id == userId);
 
                 if (userStatus != null)
@@ -43,7 +43,12 @@ public class UserBlockMiddleware
                         context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         await context.Response.WriteAsJsonAsync(new
                         {
-                            message = "Your account is blocked. Access denied."
+                            message = userStatus.IsPermanentlyBlocked
+                                ? "Your account has been permanently blocked."
+                                : $"Your account is temporary blocked until {userStatus.BlockedUntil : 0}",
+                                    blockReason = userStatus.BlockReason,
+                                    blockedUntil = userStatus.BlockedUntil,
+                                    isPermanent = userStatus.IsBlocked
                         });
                         return;
                     }

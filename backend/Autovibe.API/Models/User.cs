@@ -26,5 +26,6 @@ public class User
     public DateTime? BlockedUntil {get; set;}
     public string? BlockReason {get; set;} = string.Empty;
 
+    public bool IsPermanentlyBlocked => IsBlocked && BlockedUntil is null;
     public List<Car> Cars {get; set; } = new List<Car>(); 
 }
