@@ -36,7 +36,7 @@ namespace Autovibe.API.Services
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
 
-            car.ThrowIfNull($"Car with id {id} was not found");
+            car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
             car.ThrowIfForbidden(car.UserId != userId && !isAdmin, "You do not have permission do update this car");
 
@@ -106,7 +106,7 @@ namespace Autovibe.API.Services
         public async Task<bool> DeleteAsync(int id, int userId, bool isAdmin)
         {
             var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
-            car.ThrowIfNull($"Car with id {id} was not found");
+            car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
             car.ThrowIfForbidden(car.UserId != userId && !isAdmin, "You do not have permission do delete this car");
 

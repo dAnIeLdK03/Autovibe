@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Numerics;
 using Autovibe.API.Exceptions;
 using SixLabors.ImageSharp;
 
@@ -11,6 +12,15 @@ public static class ObjectExtension
             throw new NotFoundException(message);
         }
 
+        return obj;
+    }
+
+    public static T ThrowIfInvalidId<T>(this T obj, string message) where T : INumber<T>
+    {
+        if(obj < T.One)
+        {
+            throw new BadRequestException(message);
+        }
         return obj;
     }
 

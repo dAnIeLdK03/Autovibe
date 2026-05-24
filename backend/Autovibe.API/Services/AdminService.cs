@@ -59,7 +59,7 @@ namespace Autovibe.API.Services
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == targetUserId);
 
-            user.ThrowIfNull($"User with id {targetUserId} was not found");
+            user!.Id.ThrowIfInvalidId($"User with id {targetUserId} was not found");
 
             if (user.Role == Role.Admin && newRole == Role.User)
             {
@@ -84,7 +84,7 @@ namespace Autovibe.API.Services
         public async Task UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            user.ThrowIfNull($"User with id {userId} was not found");
+            user!.Id.ThrowIfInvalidId($"User with id {userId} was not found");
 
             if (dto.IsBlocked == false)
             {
@@ -117,7 +117,7 @@ namespace Autovibe.API.Services
                 .Where(c => c.IsDeleted && c.Id == id)
                 .FirstOrDefaultAsync();
 
-            car.ThrowIfNull($"Car with id {id} was not found");
+            car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
 
             if (car.ImageUrls != null && car.ImageUrls.Any())
@@ -152,7 +152,7 @@ namespace Autovibe.API.Services
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(c => c.Id == id);
 
-            car.ThrowIfNull($"Car with id {id} was not found");
+            car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
             car.IsDeleted = false;
             car.UpdatedAt = DateTime.UtcNow;
@@ -178,7 +178,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user.ThrowIfNull("User not found");
+            user!.Id.ThrowIfInvalidId("User not found");
 
             return new UserDto
             {

@@ -35,7 +35,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user.ThrowIfNull("User not found");
+            user!.Id.ThrowIfInvalidId("User not found");
 
             return new UserDto
             {
@@ -58,7 +58,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user.ThrowIfNull("User not found");
+            user!.Id.ThrowIfInvalidId("User not found");
 
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
@@ -71,7 +71,7 @@ namespace Autovibe.API.Services
             var updatedUser = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == user.Id);
 
-            updatedUser.ThrowIfNull("User not found after update.");
+            updatedUser!.Id.ThrowIfInvalidId("User not found after update.");
 
             return new UserDto
             {
@@ -94,7 +94,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user.ThrowIfNull("User not found");
+            user!.Id.ThrowIfInvalidId("User not found");
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
@@ -105,7 +105,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user.ThrowIfNull("User not found");
+            user!.Id.ThrowIfInvalidId("User not found");
 
             if (!BCrypt.Net.BCrypt.Verify(changePasswordDto.CurrentPassword, user.PasswordHash))
             {
