@@ -34,8 +34,8 @@ namespace Autovibe.API.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                CreatedAt = user.CreatedAt ?? DateTime.Now,
-                UpdatedAt = user.UpdatedAt ?? DateTime.Now,
+                CreatedAt = user.CreatedAt ?? DateTime.UtcNow,
+                UpdatedAt = user.UpdatedAt ?? DateTime.UtcNow,
                 Role = user.Role,
                 IsBlocked = user.IsBlocked,
                 BlockedUntil = user.BlockedUntil,
@@ -54,7 +54,7 @@ namespace Autovibe.API.Services
             user.LastName = updateDto.LastName;
             user.PhoneNumber = updateDto.PhoneNumber;
 
-            user.UpdatedAt = DateTime.Now;
+            user.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
@@ -70,8 +70,8 @@ namespace Autovibe.API.Services
                 FirstName = updatedUser.FirstName,
                 LastName = updatedUser.LastName,
                 PhoneNumber = updatedUser.PhoneNumber,
-                CreatedAt = updatedUser.CreatedAt ?? DateTime.Now,
-                UpdatedAt = updatedUser.UpdatedAt ?? DateTime.Now,
+                CreatedAt = updatedUser.CreatedAt ?? DateTime.UtcNow,
+                UpdatedAt = updatedUser.UpdatedAt ?? DateTime.UtcNow,
                 Role = updatedUser.Role,
                 IsBlocked = updatedUser.IsBlocked,
                 BlockedUntil = updatedUser.BlockedUntil,

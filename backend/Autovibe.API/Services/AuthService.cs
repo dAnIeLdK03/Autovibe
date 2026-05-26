@@ -45,7 +45,7 @@ namespace Autovibe.API.Services
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
                 PhoneNumber = registerDto.PhoneNumber,
-                CreatedAt = DateTime.Now,
+                CreatedAt = DateTime.UtcNow,
                 Role = Role.User
             };
 
@@ -59,8 +59,8 @@ namespace Autovibe.API.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 PhoneNumber = user.PhoneNumber,
-                CreatedAt = user.CreatedAt ?? DateTime.Now,
-                UpdatedAt = user.UpdatedAt ?? DateTime.Now,
+                CreatedAt = user.CreatedAt ?? DateTime.UtcNow,
+                UpdatedAt = user.UpdatedAt ?? DateTime.UtcNow,
                 Role = user.Role,
                 IsBlocked = user.IsBlocked,
                 BlockedUntil = user.BlockedUntil,
@@ -110,8 +110,8 @@ namespace Autovibe.API.Services
                     FirstName = user.FirstName,
                     LastName = user.LastName,
                     PhoneNumber = user.PhoneNumber,
-                    CreatedAt = user.CreatedAt ?? DateTime.Now,
-                    UpdatedAt = user.UpdatedAt ?? DateTime.Now,
+                    CreatedAt = user.CreatedAt ?? DateTime.UtcNow,
+                    UpdatedAt = user.UpdatedAt ?? DateTime.UtcNow,
                     Role = user.Role,
                     IsBlocked = user.IsBlocked,
                     BlockedUntil = user.BlockedUntil,
