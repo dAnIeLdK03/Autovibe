@@ -3,6 +3,7 @@ using Autovibe.API.DTOs.Users;
 using Autovibe.API.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Interfaces;
+using Autovibe.API.Services.Helpers;
 
 
 
@@ -25,22 +26,10 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user!.Id.ThrowIfInvalidId("User not found");
+            user.ThrowIfNull("User not found");
+            user.Id.ThrowIfInvalidId("id for user not found");
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber,
-                CreatedAt = user.CreatedAt ?? DateTime.UtcNow,
-                UpdatedAt = user.UpdatedAt ?? DateTime.UtcNow,
-                Role = user.Role,
-                IsBlocked = user.IsBlocked,
-                BlockedUntil = user.BlockedUntil,
-                BlockReason = user.BlockReason
-            };
+            return user.UserListDto();
         }
 
         public async Task<UserDto> UpdateUserAsync(int id, UserUpdateDto updateDto)
@@ -48,7 +37,8 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user!.Id.ThrowIfInvalidId("User not found");
+            user.ThrowIfNull("User not found");
+            user.Id.ThrowIfInvalidId("id for user not found");
 
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
@@ -63,20 +53,7 @@ namespace Autovibe.API.Services
 
             updatedUser!.Id.ThrowIfInvalidId("User not found after update.");
 
-            return new UserDto
-            {
-                Id = updatedUser.Id,
-                Email = updatedUser.Email,
-                FirstName = updatedUser.FirstName,
-                LastName = updatedUser.LastName,
-                PhoneNumber = updatedUser.PhoneNumber,
-                CreatedAt = updatedUser.CreatedAt ?? DateTime.UtcNow,
-                UpdatedAt = updatedUser.UpdatedAt ?? DateTime.UtcNow,
-                Role = updatedUser.Role,
-                IsBlocked = updatedUser.IsBlocked,
-                BlockedUntil = updatedUser.BlockedUntil,
-                BlockReason = updatedUser.BlockReason
-            };
+            return user.UserListDto();
         }
 
         public async Task DeleteUserAsync(int id)

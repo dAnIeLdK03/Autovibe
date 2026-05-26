@@ -178,22 +178,10 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
 
-            user!.Id.ThrowIfInvalidId("User not found");
+            user.ThrowIfNull("User not found");
+            user.Id.ThrowIfInvalidId("User not found");
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber,
-                CreatedAt = user.CreatedAt ?? DateTime.UtcNow,
-                UpdatedAt = user.UpdatedAt ?? DateTime.UtcNow,
-                Role = user.Role,
-                IsBlocked = user.IsBlocked,
-                BlockedUntil = user.BlockedUntil,
-                BlockReason = user.BlockReason
-            };
+            return user.UserListDto();
         }
 
         public async Task<PageResponse<CarListDto>> GetDeletedCarsAsync(DeletedCarsDto request)
