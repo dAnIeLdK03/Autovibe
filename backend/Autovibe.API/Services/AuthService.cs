@@ -28,7 +28,6 @@ namespace Autovibe.API.Services
 
         public AuthService(
             AppDbContext context,
-            ILogger<AuthService> logger,
             IOptions<JwtSettings> jwtOptions)
         {
             _context = context;

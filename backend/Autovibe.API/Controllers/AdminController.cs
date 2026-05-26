@@ -18,14 +18,12 @@ namespace Autovibe.API.Controllers
     public class AdminController : ControllerBase
     {
         private readonly IAdminService _adminService;
-        private readonly AppDbContext _context;
         private readonly ICarService _carService;
 
 
-        public AdminController(IAdminService adminService, AppDbContext context, ICarService carService)
+        public AdminController(IAdminService adminService, ICarService carService)
         {
             _adminService = adminService;
-            _context = context;
             _carService = carService;
         }
 

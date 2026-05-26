@@ -22,8 +22,7 @@ namespace Autovibe.API.Services
         private readonly AppDbContext _context;
 
         public UserService(
-            AppDbContext context,
-            ILogger<UserService> logger
+            AppDbContext context
         )
         {
             _context = context;

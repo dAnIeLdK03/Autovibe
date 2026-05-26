@@ -21,7 +21,7 @@ namespace Autovibe.API.Controllers
     {
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService, ILogger<UserController> logger)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
