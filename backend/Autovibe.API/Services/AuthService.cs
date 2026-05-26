@@ -2,21 +2,12 @@ using Autovibe.API.Data;
 using Autovibe.API.DTOs.Users;
 using Autovibe.API.Exceptions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Http;
-using System.Reflection.Metadata;
 using System.Security.Claims;
-using Autovibe.API.Controllers;
-using Microsoft.AspNetCore.Mvc;
 using Autovibe.API.Models;
-using BCrypt.Net;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authorization;
-using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Options;
-using Autovibe.API.Services;
 using Autovibe.API.Interfaces;
-using Microsoft.Extensions.Logging;
 using System.Text;
 
 namespace Autovibe.API.Services

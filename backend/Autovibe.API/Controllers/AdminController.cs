@@ -1,14 +1,10 @@
 using Autovibe.API.Exceptions;
-using Autovibe.API.Data;
 using Autovibe.API.DTOs.Cars;
 using Autovibe.API.DTOs.Users;
 using Autovibe.API.Extensions;
 using Autovibe.API.Interfaces;
-using Autovibe.API.Models;
-using Autovibe.API.Services.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Autovibe.API.Controllers
 {

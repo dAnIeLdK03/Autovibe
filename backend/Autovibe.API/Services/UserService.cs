@@ -1,17 +1,8 @@
 using Autovibe.API.Data;
 using Autovibe.API.DTOs.Users;
 using Autovibe.API.Exceptions;
-using Autovibe.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Interfaces;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
-using System.Reflection.Metadata;
-using Microsoft.AspNetCore.Mvc;
-using System.Runtime.CompilerServices;
-using System.Security.Claims;
-using BCrypt.Net;
 
 
 

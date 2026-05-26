@@ -1,9 +1,7 @@
-
 using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Extensions;
 using Autovibe.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Autovibe.API.Controllers

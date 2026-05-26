@@ -1,17 +1,9 @@
 using Autovibe.API.Data;
 using Autovibe.API.DTOs.Cars;
-using Autovibe.API.Exceptions;
 using Autovibe.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Interfaces;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
-using System.Reflection.Metadata;
 using Autovibe.API.Services.Helpers;
-using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Mvc;
 using Autovibe.API.Constants;
 
 

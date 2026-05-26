@@ -1,15 +1,9 @@
-using Autovibe.API.Data;
 using Autovibe.API.DTOs.Users;
-using Autovibe.API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using System.Runtime.CompilerServices;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Exceptions;
 using Autovibe.API.Extensions;
-using Microsoft.AspNetCore.RateLimiting;
 
 
 namespace Autovibe.API.Controllers

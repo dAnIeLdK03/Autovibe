@@ -3,13 +3,8 @@ using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
-using System.Reflection.Metadata;
 using Autovibe.API.Extensions;
-using Autovibe.API.Exceptions;
 using Microsoft.AspNetCore.RateLimiting;
 
 
