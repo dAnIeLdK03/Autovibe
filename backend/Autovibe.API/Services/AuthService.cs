@@ -31,11 +31,6 @@ namespace Autovibe.API.Services
 
             userExists.ThrowIfTrue("User with this email already exists.");
 
-            if (registerDto.Password != registerDto.ConfirmPassword)
-            {
-                throw new BadRequestException("Passwords do not match.");
-            }
-
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(registerDto.Password);
 
             var user = new User
