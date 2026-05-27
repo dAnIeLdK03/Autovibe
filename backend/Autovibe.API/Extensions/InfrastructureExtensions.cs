@@ -46,12 +46,16 @@ public static class InfrastructureExtensions
             });
         });
 
-        var cs = config.GetConnectionString("DefaultConnection");
-        if (string.IsNullOrWhiteSpace(cs))
+        var connectionString = config.GetConnectionString("DefaultConnection");
+        if (string.IsNullOrWhiteSpace(connectionString))
             throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
+        var serverVersionString = config["DatabaseSettings:ServerVersion"] ?? "8.0.45-mysql";
+        var serverVersion = ServerVersion.Parse(serverVersionString);
+        
         services.AddDbContext<AppDbContext>(op =>
-            op.UseMySql(cs, ServerVersion.AutoDetect(cs)));
+            op.UseMySql(connectionString, serverVersion));
+
+
 
         services.AddRateLimiter(options =>
         {
