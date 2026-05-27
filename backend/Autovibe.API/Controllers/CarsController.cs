@@ -73,7 +73,11 @@ namespace Autovibe.API.Controllers
 
                 result.ThrowIfNull("Unable to create new car");
 
-            return Ok(result);
+            return CreatedAtAction(
+                nameof(GetCar),
+                new {id = result.Id },
+                result
+            );
         }
 
         //PUT: api/cars/{id}
