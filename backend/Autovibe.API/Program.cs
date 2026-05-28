@@ -1,5 +1,6 @@
 using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Extensions;
+using Autovibe.API.Services.BackgroundSevices;
 using Autovibe.API.Validations;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -14,6 +15,7 @@ builder.Services.AddApiLimits();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CarCreateDtoValidations>();
+builder.Services.AddHostedService<CarImageCleanupWorker>();
 
 var app = builder.Build();
 
