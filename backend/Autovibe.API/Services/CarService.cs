@@ -24,14 +24,34 @@ namespace Autovibe.API.Services
             _context = context;
             _env = env;
         }
-        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId, bool isAdmin)
+        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId, bool isAdmin, IFormFile file)
         {
-            var car = await _context.Cars.FirstOrDefaultAsync(c => c.Id == id);
+            var car = await _context.Cars
+                .Include(c => c.ImageUrls)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
             car.ThrowIfForbidden(car.UserId != userId && !isAdmin, "You do not have permission do update this car");
 
+            if(file != null){
+            var oldImage = car.ImageUrls.FirstOrDefault();
+            if (oldImage != null)
+            {
+                car.ImageUrls.Remove(oldImage);
+
+                var fileName = Path.GetFileName(oldImage);
+                var oldFilePath = Path.Combine(_env.WebRootPath, "images", "cars", fileName);
+
+                if (File.Exists(oldFilePath))
+                {
+                    File.Delete(oldFilePath);
+                }
+            }
+
+            string newImageName = await UploadImageAsync(file);
+            car.ImageUrls.Add(newImageName);
+            }
 
             request.ApplyTo(car, userId);
             await _context.SaveChangesAsync();
