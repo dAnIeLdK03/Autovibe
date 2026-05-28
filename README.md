@@ -93,7 +93,7 @@ Base path: `/api`. Most routes need `Authorization: Bearer <token>` unless marke
 | Cars | GET | `/cars` | Anonymous, filters + `PageResponse` |
 | Cars | GET | `/cars/{id}` | Anonymous, `CarDetailsDto` |
 | Cars | GET | `/cars/my-cars` | Owner’s listings |
-| Cars | POST | `/cars` | Create |
+| Cars | POST | `/cars` | Create — returns `201 Created` with `Location` header |
 | Cars | PUT | `/cars/{id}` | Owner or admin |
 | Cars | DELETE | `/cars/{id}` | Soft-delete; owner or admin |
 | Cars | POST | `/cars/upload-image` | Multipart, max 5 MB, rate-limited |
@@ -130,6 +130,8 @@ Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test
 - JWT secret was rotated and secrets were removed from repo config — make sure you set `Jwt:*` via user-secrets / env.
 - Rate limiting was adjusted to work behind proxies.
 - FluentValidation auto-validation adapters were removed; validators are registered via DI and `JwtSettings` is validated on startup.
+- Read-only queries (`AdminService`, `CarService`, `FavoriteService`, `UserService`) use `AsNoTracking()` for better EF Core performance.
+- All timestamps use `DateTime.UtcNow` for consistency.
 
 ## Tests (backend)
 
@@ -224,6 +226,8 @@ Then:
 ## Images
 
 Authenticated upload: `POST /api/cars/upload-image`. Files go under `wwwroot/images/cars/`, API returns paths like `/images/cars/...`. Frontend builds full URLs with `getImageUrl` + same base as `VITE_API_URL` — if images 404, that’s usually the first place to check.
+
+**Cleanup:** `CarImageCleanupWorker` runs nightly as a hosted background service. It scans `wwwroot/images/cars/` and physically deletes any image files that no longer exist in the database, preventing orphaned files from accumulating on disk.
 
 ## Production
 
