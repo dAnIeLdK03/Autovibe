@@ -103,6 +103,7 @@ namespace Autovibe.API.Services
             var totalItems = await query.CountAsync();
 
             var items = await query
+                .AsNoTracking()
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(c => c.ListDto())
@@ -183,6 +184,7 @@ namespace Autovibe.API.Services
             var totalItems = await query.CountAsync();
 
             var items = await query
+                .AsNoTracking()
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(c => c.ListDto())

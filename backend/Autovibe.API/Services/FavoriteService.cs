@@ -87,6 +87,7 @@ namespace Autovibe.API.Services
             var totalItems = await favoritesQuery.CountAsync();
 
             var carEntities = await favoritesQuery
+                .AsNoTracking()
                 .OrderByDescending(f => f.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)

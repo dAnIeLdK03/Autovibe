@@ -24,6 +24,7 @@ namespace Autovibe.API.Services
         {
 
             var user = await _context.Users
+                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             user.ThrowIfNull("User not found");
