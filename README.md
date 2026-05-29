@@ -6,7 +6,7 @@
 
 Full-stack car listings app — .NET API + React (Vite). Auth, CRUD, image uploads, favorites, soft-delete with admin restore/hard-delete.
 
-**Stack:** ASP.NET Core, EF Core + Pomelo (MySQL), JWT, FluentValidation on the backend. React 19, Redux (`@autovibe/app-state`), RHF, Axios, Tailwind on the frontend. Optional Expo app under `mobile/`.
+**Stack:** ASP.NET Core, EF Core + Pomelo (MySQL), JWT, FluentValidation, Mapster on the backend. React 19, Redux (`@autovibe/app-state`), RHF, Axios, Tailwind on the frontend. Optional Expo app under `mobile/`.
 
 If the banner image above breaks after you rename files, point the `<img src>` at whatever you committed (paths are relative to repo root).
 
@@ -132,6 +132,8 @@ Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test
 - FluentValidation auto-validation adapters were removed; validators are registered via DI and `JwtSettings` is validated on startup.
 - Read-only queries (`AdminService`, `CarService`, `FavoriteService`, `UserService`) use `AsNoTracking()` for better EF Core performance.
 - All timestamps use `DateTime.UtcNow` for consistency.
+- Role strings in controllers use `AppRoles` constants (`Constants/AppRoles.cs`) instead of hardcoded strings — no magic strings in `[Authorize(Roles = ...)]`.
+- **Mapster 7.4.0** added for object mapping — `UserListDto` and other mappings use `.Adapt<T>()` instead of manual property assignment.
 
 ## Tests (backend)
 
