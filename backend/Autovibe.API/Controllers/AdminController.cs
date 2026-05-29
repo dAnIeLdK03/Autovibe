@@ -5,10 +5,11 @@ using Autovibe.API.Extensions;
 using Autovibe.API.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Autovibe.API.Constants;
 
 namespace Autovibe.API.Controllers
 {
-    [Authorize(Policy = "AdminOnly")]
+    [Authorize(Roles = AppRoles.Admin)]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase

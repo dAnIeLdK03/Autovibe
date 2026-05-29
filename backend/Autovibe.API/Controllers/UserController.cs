@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Exceptions;
 using Autovibe.API.Extensions;
+using Autovibe.API.Constants;
 
 
 namespace Autovibe.API.Controllers
@@ -42,7 +43,7 @@ namespace Autovibe.API.Controllers
             var userId = User.GetUserId();
             userId.ThrowIfNull("User can't be found");
 
-            bool isAdmin = User.IsInRole("Admin");
+            bool isAdmin = User.IsInRole(AppRoles.Admin);
 
             if (id != userId.Value && isAdmin)
             {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Autovibe.API.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
+using Autovibe.API.Constants;
 
 
 namespace Autovibe.API.Controllers
@@ -90,7 +91,7 @@ namespace Autovibe.API.Controllers
 
                 id.ThrowIfLessThan(0, "Invalid car id.");
 
-                bool isAdmin = User.IsInRole(nameof(Role.Admin));
+                bool isAdmin = User.IsInRole(AppRoles.Admin);
 
             var result = await _carService.UpdateAsync(id, updateDto, userId.Value, isAdmin, file);
 
@@ -110,7 +111,7 @@ namespace Autovibe.API.Controllers
 
                 id.ThrowIfLessThan(0, "Invalid car id.");
 
-                bool isAdmin = User.IsInRole(nameof(Role.Admin));
+                bool isAdmin = User.IsInRole(AppRoles.Admin);
 
             await _carService.DeleteAsync(id, userId.Value, isAdmin);
             return NoContent();
