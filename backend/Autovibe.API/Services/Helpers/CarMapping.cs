@@ -1,6 +1,8 @@
 using Autovibe.API.Models;
 using Autovibe.API.DTOs.Cars;
 using Autovibe.API.DTOs.Users;
+using Mapster;
+
 namespace Autovibe.API.Services.Helpers
 {
     public static class CarMapping
@@ -117,20 +119,8 @@ namespace Autovibe.API.Services.Helpers
 
         public static UserDto UserListDto (this User u)
         {
-            return new UserDto
-            {
-                Id = u.Id,
-                Email = u.Email,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                PhoneNumber = u.PhoneNumber,
-                CreatedAt = u.CreatedAt,
-                UpdatedAt = u.UpdatedAt,
-                Role = u.Role,
-                IsBlocked = u.IsBlocked,
-                BlockedUntil = u.BlockedUntil,
-                BlockReason = u.BlockReason
-            };
+            return u.Adapt<UserDto>();
+        
         }
     }
 }
