@@ -52,7 +52,7 @@ public static class ObjectExtension
         return value;
     }
 
-    public static int THrowIfLessThanAndMoreThan(this int value, int min, int max, string message)
+    public static int ThrowIfLessThanAndMoreThan(this int value, int min, int max, string message)
     {
         if(value < min || value > max)
         {
@@ -88,7 +88,7 @@ public static class ObjectExtension
         }
     }
 
-    public static void ThrowIfImageISInvalid(this IFormFile file)
+    public static void ThrowIfImageIsInvalid(this IFormFile file)
     {
         if(file == null || file.Length == 0)
         {

@@ -107,7 +107,7 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-                userId.ThrowIfNull("Unathorized");
+                userId.ThrowIfNull("Unauthorized");
 
                 id.ThrowIfLessThan(0, "Invalid car id.");
 

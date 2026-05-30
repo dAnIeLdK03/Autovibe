@@ -9,11 +9,11 @@ namespace Autovibe.API.Validations
         {
             RuleFor(x => x.FirstName)
             .MinimumLength(3).WithMessage("First name must be at least 3 characters")
-            .MaximumLength(50).WithMessage("First name can't contain more thna 50 characters");
+            .MaximumLength(50).WithMessage("First name can't contain more than 50 characters");
             
              RuleFor(x => x.LastName)
-            .MinimumLength(3).WithMessage("First name must be at least 3 characters")
-            .MaximumLength(50).WithMessage("First name can't contain more thna 50 characters");
+            .MinimumLength(3).WithMessage("Last name must be at least 3 characters")
+            .MaximumLength(50).WithMessage("Last name can't contain more than 50 characters");
             
             RuleFor(x => x.PhoneNumber)
             .Matches(@"^[0-9]+$").WithMessage("Invalid format. Use digits and optional '+' in front .")

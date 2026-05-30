@@ -25,7 +25,7 @@ namespace Autovibe.API.Services
         {
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(
+            request.PageSize.ThrowIfLessThanAndMoreThan(
                 PaginationConstants.MinPageSize,
                 PaginationConstants.MaxPageSize,
                 $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
@@ -67,7 +67,7 @@ namespace Autovibe.API.Services
                 var adminCount = await _context.Users.CountAsync(u => u.Role == Role.Admin);
                 if (adminCount == 1)
                 {
-                    throw new BadRequestException("You cannot remove tha last administrator in the system.");
+                    throw new BadRequestException("You cannot remove the last administrator in the system.");
                 }
             }
 
@@ -190,7 +190,7 @@ namespace Autovibe.API.Services
         {
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(
+            request.PageSize.ThrowIfLessThanAndMoreThan(
                 PaginationConstants.MinPageSize,
                 PaginationConstants.MaxPageSize,
                 $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");

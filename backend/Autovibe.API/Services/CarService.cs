@@ -87,7 +87,7 @@ namespace Autovibe.API.Services
 
             request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            request.PageSize.THrowIfLessThanAndMoreThan(
+            request.PageSize.ThrowIfLessThanAndMoreThan(
                 PaginationConstants.MinPageSize,
                 PaginationConstants.MaxPageSize,
                 $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
@@ -155,7 +155,7 @@ namespace Autovibe.API.Services
             string serverPath = Path.Combine(_env.WebRootPath, "images", "cars");
             serverPath.EnsureDirectoryExists();
 
-            file.ThrowIfImageISInvalid();
+            file.ThrowIfImageIsInvalid();
 
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
             var fullPath = Path.Combine(serverPath, fileName);
@@ -172,7 +172,7 @@ namespace Autovibe.API.Services
         {
             pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
 
-            pageSize.THrowIfLessThanAndMoreThan(
+            pageSize.ThrowIfLessThanAndMoreThan(
             PaginationConstants.MinPageSize,
             PaginationConstants.MaxPageSize,
             $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");

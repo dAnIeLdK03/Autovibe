@@ -75,7 +75,7 @@ namespace Autovibe.API.Services
         public async Task<PageResponse<CarListDto>> GetPageAsync(int userId, int pageNumber, int pageSize)
         {
             pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
-            pageSize.THrowIfLessThanAndMoreThan(
+            pageSize.ThrowIfLessThanAndMoreThan(
                 PaginationConstants.MinPageSize,
                 PaginationConstants.MaxPageSize,
                 $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
