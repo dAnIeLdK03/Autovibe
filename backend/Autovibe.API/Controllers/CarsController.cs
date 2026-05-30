@@ -53,7 +53,7 @@ namespace Autovibe.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CarDetailsDto>> GetCar(int id)
         {
-            id.ThrowIfLessThan(0, "Invalid car id.");
+            id.ThrowIfLessThan(1, "Invalid car id.");
 
             var result = await _carService.GetCarDetailsAsync(id);
 
@@ -89,7 +89,7 @@ namespace Autovibe.API.Controllers
 
                 userId.ThrowIfNull("Log in first");
 
-                id.ThrowIfLessThan(0, "Invalid car id.");
+                id.ThrowIfLessThan(1, "Invalid car id.");
 
                 bool isAdmin = User.IsInRole(AppRoles.Admin);
 
@@ -109,7 +109,7 @@ namespace Autovibe.API.Controllers
 
                 userId.ThrowIfNull("Unauthorized");
 
-                id.ThrowIfLessThan(0, "Invalid car id.");
+                id.ThrowIfLessThan(1, "Invalid car id.");
 
                 bool isAdmin = User.IsInRole(AppRoles.Admin);
 
