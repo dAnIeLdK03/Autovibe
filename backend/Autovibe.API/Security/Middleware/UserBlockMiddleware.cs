@@ -45,7 +45,7 @@ public class UserBlockMiddleware
                         {
                             message = userStatus.IsPermanentlyBlocked
                                 ? "Your account has been permanently blocked."
-                                : $"Your account is temporary blocked until {userStatus.BlockedUntil : 0}",
+                                : $"Your account is temporary blocked until {userStatus.BlockedUntil : yyyy-MM-dd HH:mm}UTC",
                                     blockReason = userStatus.BlockReason,
                                     blockedUntil = userStatus.BlockedUntil,
                                     isPermanent = userStatus.IsBlocked
