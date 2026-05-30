@@ -8,11 +8,11 @@ namespace Autovibe.API.Services.BackgroundSevices
 {
     public class CarImageCleanupWorker : BackgroundService
     {
-        private readonly ILogger _logger;
+        private readonly ILogger<CarImageCleanupWorker> _logger;
         private readonly IWebHostEnvironment _env;
         private readonly IServiceProvider _serviceProvider;
 
-        public CarImageCleanupWorker(ILogger logger, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public CarImageCleanupWorker(ILogger<CarImageCleanupWorker> logger, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _env = env;
