@@ -7,6 +7,7 @@ using Autovibe.API.Models;
 using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Services.Helpers;
 using Autovibe.API.Constants;
+using Mapster;
 
 namespace Autovibe.API.Services
 {
@@ -91,12 +92,11 @@ namespace Autovibe.API.Services
                 .OrderByDescending(f => f.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(f => f.Car)
+                .Select(f => f.Car.Adapt<CarListDto>())
                 .ToListAsync();
 
             var items = carEntities
                 .Where(c => c != null)
-                .Select(c => c.ListDto())
                 .ToList();
 
             return new PageResponse<CarListDto>
