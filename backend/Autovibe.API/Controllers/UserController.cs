@@ -45,7 +45,7 @@ namespace Autovibe.API.Controllers
 
             bool isAdmin = User.IsInRole(AppRoles.Admin);
 
-            if (id != userId.Value && isAdmin)
+            if (id != userId.Value && !isAdmin)
             {
                 throw new ForbiddenException("You are not allowed for this action.");
             }
