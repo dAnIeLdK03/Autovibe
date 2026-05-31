@@ -135,9 +135,9 @@ namespace Autovibe.API.Services
                         {
                             File.Delete(absoluteFilePath);
                         }
-                        catch
+                        catch(Exception ex)
                         {
-                            throw new NotFoundException("There is no images for this car to delete");
+                            throw new Exception("There is no images for this car to delete", ex);
                         }
                     }
                 }
