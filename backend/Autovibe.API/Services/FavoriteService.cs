@@ -67,7 +67,6 @@ namespace Autovibe.API.Services
                 return;
 
             row.IsDeleted = true;
-            row.CreatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
 
