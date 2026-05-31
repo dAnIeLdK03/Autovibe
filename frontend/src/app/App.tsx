@@ -25,6 +25,8 @@ import UserList from "../features/admin/UserList/UserList";
 import UserDetails from "../features/admin/UserDetails/UserDetails";
 import DeletedCars from "../features/admin/DeletedCars/DeletedCars";
 import DeletedCarDetails from "../features/admin/DeletedCars/DeletedDetails/DeletedCarDetails";
+import { ProtectedRoute } from "./ProtectedRoute";
+import { AdminRoute } from "./AdminRoute";
 
 
 
@@ -49,16 +51,21 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/cars" element={<CarList />} />
         <Route path="/cars/:id" element={<CarDetails />} />
+
+        <Route element={<ProtectedRoute/>}>
         <Route path="/cars/new" element={<CarCreate />} />
         <Route path="/cars/:id/edit" element={<CarEdit />} />
         <Route path="/cars/my" element={<MyCars />} />
         <Route path="/favorites" element={<MyFavorite />} />
         <Route path="/profile" element={<Profile />} />
+        </Route>
+
+        <Route element={<AdminRoute />}>
         <Route path="/admin/users/:userId" element={<UserDetails />} />
         <Route path="/admin/users" element={<UserList />} />
         <Route path="/admin/deleted" element={<DeletedCars />} />
         <Route path="/admin/deleted/:id" element={<DeletedCarDetails />}/>
-
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
