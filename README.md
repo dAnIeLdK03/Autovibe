@@ -60,6 +60,8 @@ dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=...;Databa
 dotnet user-secrets set "Jwt:Key" "<long random string>"
 ```
 
+See `backend/Autovibe.API/UserSecrets.example.json` for the expected structure.
+
 MS docs: https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets
 
 CORS for local dev is `Cors:AllowedOrigins` in `appsettings.json` (defaults to `http://localhost:5173`). Bump it if Vite isn’t on 5173.
@@ -150,7 +152,7 @@ Notes:
 
 ## Frontend
 
-You need `VITE_API_URL` or the app dies on startup (see `frontend/src/api/api.ts`). Example `frontend/.env`:
+You need `VITE_API_URL` or the app dies on startup (see `frontend/src/api/api.ts`). Copy `frontend/.env.example` to `frontend/.env` and fill in the value:
 
 ```env
 VITE_API_URL=http://localhost:5258
@@ -188,6 +190,10 @@ Opens on **5173** by default. JWT is stored in `localStorage` under `token`.
 **Admin UI:** account menu shows **Users** and **DeletedCars** when `user.role === 0` (Admin). API calls return **403** without admin role; pages show permission errors.
 
 Restore button on deleted details requires `car.isDeleted` from the API (included in `CarDetailsDto` since the DTO/mapping update).
+
+Routes are protected by `ProtectedRoute` (requires login) and `AdminRoute` (requires admin role) guards — unauthenticated users are redirected to `/login`, non-admins to `/`.
+
+Image uploads are validated on the frontend before the request is sent — only `image/*` types and files under 5 MB are accepted (`useCarCreate`, `useCarEdit`).
 
 ## Mobile (optional)
 
