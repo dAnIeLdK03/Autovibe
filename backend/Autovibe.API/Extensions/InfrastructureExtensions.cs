@@ -105,7 +105,7 @@ public static class InfrastructureExtensions
 
         services.AddOptions<JwtSettings>()
             .Bind(config.GetSection("Jwt"))
-            .Validate(settings => !string.IsNullOrEmpty(settings.Key), "JWT Sigjning Key is missing!")
+            .Validate(settings => !string.IsNullOrEmpty(settings.Key), "JWT Signing Key is missing!")
             .ValidateOnStart();
 
         return services;
