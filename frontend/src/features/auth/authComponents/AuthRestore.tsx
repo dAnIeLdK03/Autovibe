@@ -1,10 +1,16 @@
 import { useEffect } from 'react'
 import { getCurrentUser } from '../../../api/AuthService'; 
 import { useDispatch } from 'react-redux';
-import { logout, setCredentials } from '@autovibe/app-state';
+import { logout, setCredentials, setError } from '@autovibe/app-state';
 
 function AuthRestore() {
     const dispatch = useDispatch();
+    const msg = (err: unknown) =>
+        err && typeof err === "object" &&
+            "message" in err ? String((err as
+                { message: string }).message) : "Unable to load user.";
+
+
     useEffect(() => {
         const fetchToken = async () => {
             try {
@@ -22,7 +28,7 @@ function AuthRestore() {
                 }
 
             } catch (error) {
-                console.error("Error fetching current user:", error);
+                dispatch(setError(msg(error)))
                 localStorage.removeItem("token");
                 dispatch(logout());
             }
