@@ -13,6 +13,10 @@ import { uploadCarImageIfPresent } from "../CarComponents/CarValidations/CarSubm
 
 
 export const useCarEdit = () => {
+  const MAX_FILE_SIZE_MB = 5;
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 *1024;
+  const ALLOWED_EXTENSIONS = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
   const { id } = useParams();
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
@@ -25,7 +29,7 @@ export const useCarEdit = () => {
 
   const methods = useForm<CarFormValues>();
   const { reset } = methods;
-  const {handleError} = useError();
+  const { handleError } = useError();
 
   useEffect(() => {
     const fetchCar = async () => {
@@ -70,56 +74,67 @@ export const useCarEdit = () => {
     }
 
     const errorMessage = CarCreateValidaions(formData);
-  if (errorMessage) {
-    dispatch(setError(errorMessage));
-    return;
-  }
-
-  dispatch(setLoading(true));
-
-  try {
-    let newImageUrls: string[] = [];
-    if (selectedFiles.length > 0) {
-      const uploadResult = await uploadCarImageIfPresent(selectedFiles); 
-      
-      if (uploadResult.error) {
-        dispatch(setError(uploadResult.error));
-        dispatch(setLoading(false));
-        return;
-      }
-      newImageUrls = uploadResult.imageUrls;
+    if (errorMessage) {
+      dispatch(setError(errorMessage));
+      return;
     }
 
-    const remainingOldImageUrls = imagePreview.filter(
-      (url): url is string => typeof url === "string" && !url.startsWith("blob")
-    );
+    dispatch(setLoading(true));
 
-    const finalImageUrls = [...remainingOldImageUrls, ...newImageUrls].filter(
-      (u): u is string => typeof u === "string" && u.length > 0
-    );
+    try {
+      let newImageUrls: string[] = [];
+      if (selectedFiles.length > 0) {
+        const uploadResult = await uploadCarImageIfPresent(selectedFiles);
 
-    await updateCar(
-      Number(id),
-      {
-        ...formData,
-        description: formData.description ?? '',
-      }, 
-      finalImageUrls
-    );
+        if (uploadResult.error) {
+          dispatch(setError(uploadResult.error));
+          dispatch(setLoading(false));
+          return;
+        }
+        newImageUrls = uploadResult.imageUrls;
+      }
 
-    navigate(`/cars/${id}`);
-    toast.success("Car updated successfully!");
-  }
-  catch (error) {
-    handleError(error);
-  } finally {
-    dispatch(setLoading(false));
-  }
+      const remainingOldImageUrls = imagePreview.filter(
+        (url): url is string => typeof url === "string" && !url.startsWith("blob")
+      );
+
+      const finalImageUrls = [...remainingOldImageUrls, ...newImageUrls].filter(
+        (u): u is string => typeof u === "string" && u.length > 0
+      );
+
+      await updateCar(
+        Number(id),
+        {
+          ...formData,
+          description: formData.description ?? '',
+        },
+        finalImageUrls
+      );
+
+      navigate(`/cars/${id}`);
+      toast.success("Car updated successfully!");
+    }
+    catch (error) {
+      handleError(error);
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
+
+      const validFiles = files.filter(file => {
+        const isValidType = ALLOWED_EXTENSIONS.includes(file.type);
+        const isValidSize = file.size <= MAX_FILE_SIZE_BYTES;
+        return isValidSize && isValidType
+      });
+
+      if (validFiles.length !== files.length) {
+        handleError(`The files were rejected. The images must be JPEG/PNG/WEBP/GIF and to ${MAX_FILE_SIZE_MB}MB.`);
+      }
+      if (validFiles.length === 0) return;
 
       const newPreviews = files.map(file => URL.createObjectURL(file));
 
