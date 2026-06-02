@@ -12,6 +12,10 @@ import { createCar } from "../../../api/carsService";
 import toast from "react-hot-toast";
 
 export const useCarCreate = () => {
+  const MAX_FILE_SIZE_MB = 5;
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 *1024;
+  const ALLOWED_EXTENSIONS = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+
   const { user } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -67,6 +71,18 @@ export const useCarCreate = () => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files);
+
+      const validFiles = files.filter(file => {
+        const isValidType = ALLOWED_EXTENSIONS.includes(file.type);
+        const isValidSize = file.size <= MAX_FILE_SIZE_BYTES;
+        return isValidSize && isValidType
+      });
+
+      if(validFiles.length !== files.length){
+        handleError(`The files were rejected. The images must be JPEG/PNG/WEBP/GIF and to ${MAX_FILE_SIZE_MB}MB.`);
+      }
+      if(validFiles.length === 0) return;
+
       const newPreviews = files.map(file => URL.createObjectURL(file));
 
       setImagePreview(prev => [...prev, ...newPreviews]);
