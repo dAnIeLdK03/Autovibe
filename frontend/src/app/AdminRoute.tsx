@@ -8,7 +8,7 @@ import { Navigate, Outlet } from "react-router-dom";
 export const AdminRoute: React.FC<ProtectedRouteProps> =({
     redirectPath = '/login'
 }) => {
-    const isAuthenticated = useSelector((s: RootState) => s.auth);
+    const isAuthenticated = useSelector((s: RootState) => s.auth.isAuthenticated);
     const role = useSelector((s:RootState) => s.auth.user?.role)
     if(!isAuthenticated){
         return <Navigate to = {redirectPath} replace />;
