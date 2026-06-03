@@ -40,7 +40,6 @@ namespace Autovibe.API.Services
             var totalItems = await query.CountAsync();
 
             var users = await query
-                .AsNoTracking()
                 .OrderBy(u => u.Id)
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
@@ -204,7 +203,6 @@ namespace Autovibe.API.Services
             var totalItems = await query.CountAsync();
 
             var cars = await query
-                .AsNoTracking()
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
                 .Select(c => c.ListDto())
