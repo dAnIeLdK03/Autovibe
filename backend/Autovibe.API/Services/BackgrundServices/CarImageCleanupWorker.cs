@@ -20,19 +20,23 @@ namespace Autovibe.API.Services.BackgroundSevices
         }
 
         
+        private DateTime _lastRun = DateTime.MinValue;
+        
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Car image cleanup worker started successfully");
-
+            
             while (!stoppingToken.IsCancellationRequested)
             {
+
                 var now = DateTime.UtcNow;
 
-                if(now.Hour == 3)
+                if(now.Hour == 3 && _lastRun.Date < now.Date)
                 {
                     try
                     {
                         await CleanOrphanedImagesAsync();
+                        _lastRun = now;
                     }catch(Exception ex)
                     {
                         _logger.LogError(ex, "Error during cleaning images");
