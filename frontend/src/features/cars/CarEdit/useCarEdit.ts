@@ -52,7 +52,8 @@ export const useCarEdit = () => {
         }
 
         if (fetchedSellerId == null || Number(fetchedSellerId) !== Number(user.id)) {
-          dispatch(setError("You are not allowed to edit this car."));
+          navigate(-1);
+          return;
         }
       } catch {
         dispatch(setError("Unable to load car."));
