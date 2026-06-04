@@ -178,7 +178,7 @@ function UserDetails() {
                 <ConfirmDialog
                   isOpen={showDeleteConfirm}
                   title="Delete Account"
-                  message="Are you sure you want to delete your account?"
+                  message="Are you sure you want to delete this user's account?"
                   onConfirmClick={handleDeleteClick}
                   onClose={() => setShowDeleteConfirm(false)}
                 />

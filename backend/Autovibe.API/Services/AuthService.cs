@@ -69,7 +69,7 @@ namespace Autovibe.API.Services
             var user = await _context.Users
                    .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
 
-            user.ThrowIfNull("User was not found");
+            user.ThrowIfNull("Invalid email or password.");
             var now = DateTime.UtcNow;
             var isBlocked =
                 user.IsBlocked ||
