@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { register as registerUser } from '../../api/AuthService';
 import { useForm } from 'react-hook-form';
 import type { RegisterRequest } from '../../api/AuthService';
-import axios from 'axios';
 import LoadingSpinner from '../../shared/UX/LoadingSpinner';
 import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
 
@@ -24,19 +23,7 @@ function Register() {
       await registerUser(dataToApi);
       navigate("/login");
     } catch (error: unknown) {
-
-      const errMsg = extractApiErrorMessage(error);
-
-      if (axios.isAxiosError(error)) {
-        setError(errMsg);
-      }
-      else if (error instanceof Error) {
-        setError(errMsg);
-      }
-      else if (typeof error === "string") {
-        setError(errMsg);
-      }
-      setError(typeof errMsg === 'string' ? errMsg : JSON.stringify(errMsg));
+      setError(extractApiErrorMessage(error));
     }
     finally {
       setLoading(false);
