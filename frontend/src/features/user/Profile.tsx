@@ -43,7 +43,6 @@ function Profile() {
         setLoading(true);
         setError(null);
         try {
-          setShowDeleteConfirm(true);
           await deleteUser(user.id);
           dispatch(logout());
           localStorage.removeItem("token");
