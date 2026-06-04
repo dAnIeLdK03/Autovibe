@@ -1,17 +1,20 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { register as registerUser } from '../../api/AuthService';
 import { useForm } from 'react-hook-form';
 import type { RegisterRequest } from '../../api/AuthService';
 import LoadingSpinner from '../../shared/UX/LoadingSpinner';
 import { extractApiErrorMessage } from '../../shared/extractErrorMessage/extractApiErrorMessage';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@autovibe/app-state';
 
 function Register() {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<RegisterRequest>();
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const {isAuthenticated} = useSelector((s:RootState) => s.auth);
 
   const navigate = useNavigate();
 
@@ -29,6 +32,8 @@ function Register() {
       setLoading(false);
     }
   }
+
+  if(isAuthenticated) return <Navigate to="/cars" replace />
 
   return (
 

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { login } from '../../api/AuthService';
-import { setCredentials } from '@autovibe/app-state';
+import { setCredentials, type RootState } from '@autovibe/app-state';
 import { useForm } from 'react-hook-form';
 import type { LoginRequest } from '../../api/AuthService';
 import LoadingSpinner from '../../shared/UX/LoadingSpinner';
@@ -14,7 +14,7 @@ function Login() {
 
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const {isAuthenticated} = useSelector((s:RootState) => s.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -32,6 +32,8 @@ function Login() {
       setLoading(false);
     }
   };
+
+  if(isAuthenticated) return <Navigate to="/cars" replace />
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans">
