@@ -20,9 +20,7 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
                 onSave(formData);
             }
             toast.success("Password changed successfully")
-            setTimeout(() => {
-                onClose();
-            }, 2000);
+            onClose();
         } catch (err: unknown) {
             const apiMessage = extractApiErrorMessage(err);
             setError(apiMessage);
