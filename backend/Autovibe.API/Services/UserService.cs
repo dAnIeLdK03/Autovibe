@@ -49,11 +49,6 @@ namespace Autovibe.API.Services
 
             await _context.SaveChangesAsync();
 
-            var updatedUser = await _context.Users
-                .FirstOrDefaultAsync(u => u.Id == user.Id);
-
-            updatedUser!.Id.ThrowIfInvalidId("User not found after update.");
-
             return user.UserListDto();
         }
 
