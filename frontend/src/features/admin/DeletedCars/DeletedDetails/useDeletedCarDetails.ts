@@ -36,9 +36,10 @@ export const useDeletedCarDetails = () => {
                 setCar(data);
             }catch(error){
                 handleError(error);
-                setTimeout(() => {
+                const timer = setTimeout(() => {
                     navigate("/cars");
-                }, 3000)
+                }, 3000);
+                return () => clearTimeout(timer);
             }finally{
                 dispatch(setLoading(false));
             }
