@@ -35,8 +35,7 @@ export const useMyCars = () => {
 
         try {
             const response = await getCarsByUserId(page, 9);
-            const allCars = response.items ?? [];
-            const myCars = allCars.filter((c) => c.userId === user.id);
+            const myCars = response.items ?? [];
             dispatch(setCars(myCars));
             setTotalPages(response.totalPages ?? 0);
         } catch (err) {
