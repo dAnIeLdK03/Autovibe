@@ -54,7 +54,9 @@ export const useCarDetails = () => {
             navigate("/cars");
             return;
         }
-        if (!id || !window.confirm("Are you sure?")) return;
+        if (!id) return;
+
+
         if (car.sellerId !== user?.id) {
             dispatch(setError("You are not the owner of this car."));
             return;
