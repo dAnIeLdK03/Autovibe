@@ -31,3 +31,8 @@ export const extractApiErrorMessage = (error: unknown): string => {
 
     return 'An unexpected error occurred';
 };
+
+export const msg = (err: unknown) =>
+        err && typeof err === "object" &&
+            "message" in err ? String((err as
+                { message: string }).message) : "Unable to load your cars.";

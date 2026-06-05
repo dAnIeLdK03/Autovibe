@@ -3,6 +3,7 @@ import type { RootState } from '@autovibe/app-state'
 import { useCallback, useEffect, useState } from "react";
 import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import { deleteFavorite, getFavoritesByUserId } from "../../../../api/favoriteService";
+import { msg } from "../../../../shared/extractErrorMessage/extractApiErrorMessage";
 
 
 export const useMyFavorite = () => {
@@ -14,11 +15,6 @@ export const useMyFavorite = () => {
     const [favoriteCarIdToDelete, setFavoriteCarIdToDelete] = useState<number | null>(null);
     const { cars, loading, error } = useSelector((state: RootState) => state.cars);
 
-
-    const msg = (err: unknown) =>
-        err && typeof err === "object" &&
-            "message" in err ? String((err as
-                { message: string }).message) : "Unable to load your cars.";
 
     const fetchCars = useCallback(async () => {
 

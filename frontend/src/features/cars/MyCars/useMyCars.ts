@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import { deleteCar, getCarsByUserId } from "../../../api/carsService";
 import { useCallback, useEffect, useState } from "react";
+import { msg } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
 
 
 export const useMyCars = () => {
@@ -19,11 +20,7 @@ export const useMyCars = () => {
 
 
 
-    const msg = (err: unknown) =>
-        err && typeof err === "object" &&
-            "message" in err ? String((err as
-                { message: string }).message) : "Unable to load your cars.";
-
+    
     const fetchCars = useCallback(async () => {
         if (!isAuthenticated || !user?.id) {
             navigate("/login");
