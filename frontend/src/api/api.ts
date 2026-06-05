@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { extractApiErrorMessage } from '../shared/extractErrorMessage/extractApiErrorMessage';
 import toast from 'react-hot-toast';
+import { useDispatch } from 'react-redux';
+import { logout } from '@autovibe/app-state';
 
 export const API_ORIGIN = import.meta.env.VITE_API_URL;
 if (!API_ORIGIN?.trim()) {
@@ -46,8 +48,9 @@ api.interceptors.response.use(response => response, error => {
 
     if (status === 401) {
         localStorage.removeItem("token");
+        const dispatch = useDispatch();
         if (!isAuthRoute(requestUrl)) {
-            window.location.href = "/login";
+            dispatch(logout());
         }
         return Promise.reject(error);
     }
