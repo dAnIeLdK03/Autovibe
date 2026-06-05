@@ -24,7 +24,7 @@ export const useMyCars = () => {
             "message" in err ? String((err as
                 { message: string }).message) : "Unable to load your cars.";
 
-    const fecthCars = useCallback(async () => {
+    const fetchCars = useCallback(async () => {
         if (!isAuthenticated || !user?.id) {
             navigate("/login");
             return;
@@ -47,8 +47,8 @@ export const useMyCars = () => {
     }, [page, user?.id, isAuthenticated, navigate, dispatch])
 
     useEffect(() => {
-        fecthCars();
-    }, [fecthCars])
+        fetchCars();
+    }, [fetchCars])
 
 
     const handleDeleteClick = (id: number) => {
