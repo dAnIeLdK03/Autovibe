@@ -57,10 +57,6 @@ export const useCarDetails = () => {
         if (!id) return;
 
 
-        if (car.sellerId !== user?.id) {
-            dispatch(setError("You are not the owner of this car."));
-            return;
-        }
         if (!isOwner) {
             dispatch(setError("You don't have permission to delete this."));
             return;
