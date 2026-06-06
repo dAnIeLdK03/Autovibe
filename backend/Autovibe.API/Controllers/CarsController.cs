@@ -93,7 +93,7 @@ namespace Autovibe.API.Controllers
 
                 bool isAdmin = User.IsInRole(AppRoles.Admin);
 
-            var result = await _carService.UpdateAsync(id, updateDto, userId.Value, isAdmin);
+            var result = await _carService.UpdateAsync(id, updateDto);
 
                 result.ThrowIfNull("Car cannot be found");
 

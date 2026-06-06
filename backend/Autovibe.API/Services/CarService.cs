@@ -24,7 +24,7 @@ namespace Autovibe.API.Services
             _context = context;
             _env = env;
         }
-        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId, bool isAdmin)
+        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request)
         {
             var car = await _context.Cars
                 .Include(c => c.ImageUrls)
@@ -32,10 +32,9 @@ namespace Autovibe.API.Services
 
             car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
-            car.ThrowIfForbidden(car.UserId != userId && !isAdmin, "You do not have permission do update this car");
 
 
-            request.ApplyTo(car, userId);
+            request.ApplyTo(car);
             await _context.SaveChangesAsync();
             await _context.Entry(car).Reference(c => c.User).LoadAsync();
 

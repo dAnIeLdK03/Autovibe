@@ -97,7 +97,7 @@ namespace Autovibe.API.Services.Helpers
 
             };
         }
-        public static void ApplyTo(this CarUpdateDto request, Car car, int userId)
+        public static void ApplyTo(this CarUpdateDto request, Car car)
         {
             car.BodyType = request.BodyType;
             car.Make = request.Make;
