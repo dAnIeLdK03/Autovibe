@@ -55,7 +55,7 @@ namespace Autovibe.API.Services.Helpers
                 SteeringWheel = c.SteeringWheel,
                 Condition = c.Condition,
                 IsDeleted = c.IsDeleted,
-                DeletedAt = c.DeletedAt,
+            DeletedAt = c.DeletedAt,
 
                 CreatedAt = c.CreatedAt,
                 UpdatedAt = c.UpdatedAt,

@@ -42,7 +42,7 @@ public static class CarQueryHelpers
         }
         if(filters.Power.HasValue && filters.Power > 0)
         {
-            query = query.Where(c => c.Power == filters.Power);
+            query = query.Where(c => c.Power >= filters.Power);
         }
         if(!string.IsNullOrEmpty(filters.BodyType) && filters.BodyType != "BodyType")
         {
