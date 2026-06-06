@@ -83,7 +83,7 @@ namespace Autovibe.API.Controllers
 
         //PUT: api/cars/{id}
         [HttpPut("{id}")]
-        public async Task<ActionResult<CarDetailsDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto, IFormFile file)
+        public async Task<ActionResult<CarDetailsDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
         {
             var userId = User.GetUserId();
 
@@ -93,7 +93,7 @@ namespace Autovibe.API.Controllers
 
                 bool isAdmin = User.IsInRole(AppRoles.Admin);
 
-            var result = await _carService.UpdateAsync(id, updateDto, userId.Value, isAdmin, file);
+            var result = await _carService.UpdateAsync(id, updateDto, userId.Value, isAdmin);
 
                 result.ThrowIfNull("Car cannot be found");
 
