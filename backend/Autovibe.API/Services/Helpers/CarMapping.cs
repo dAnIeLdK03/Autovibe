@@ -61,9 +61,9 @@ namespace Autovibe.API.Services.Helpers
                 UpdatedAt = c.UpdatedAt,
 
                 SellerId = c.UserId,
-                SellerFirstName = c.User.FirstName,
-                SellerLastName = c.User.LastName,
-                SellerPhoneNumber = c.User.PhoneNumber,
+                SellerFirstName = c.User?.FirstName,
+                SellerLastName = c.User?.LastName,
+                SellerPhoneNumber = c.User?.PhoneNumber,
 
                 ImageUrls = c.ImageUrls
             };
