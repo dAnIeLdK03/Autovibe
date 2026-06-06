@@ -20,11 +20,6 @@ export interface AdminUserDto{
     blockReason?: string | null;
 }
 
-export interface getDeletedCarsDto{
-    IsDeleted: boolean | null;
-    DateTime: Date | null;
-}
-
 export interface UpdateAdminUserStatus {
     isBlocked?: boolean | null;
     blockedUntil?: string | null;
