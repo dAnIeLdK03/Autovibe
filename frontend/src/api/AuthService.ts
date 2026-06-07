@@ -54,8 +54,8 @@ export const logout = async(): Promise<void> => {
 }
 
 export const getCurrentUser = async(): Promise<User | null> => {
-    const token = await api.get("/user");
-    return token.data;
+    const response = await api.get("/user");
+    return response.data;
 }
 
 
