@@ -17,8 +17,3 @@ export const getFavoritesByUserId = async (page: number, pageSize: number): Prom
     const response = await api.get(`/favorites?${params.toString()}`);
     return response.data;
 }
-
-export const isFavorite = async(carId: number): Promise<boolean> => {
-    const response = await api.get(`/favorites/contains/${carId}`);
-    return response.data;
-}
