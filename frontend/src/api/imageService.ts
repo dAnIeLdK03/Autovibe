@@ -10,5 +10,5 @@ export const uploadImage = async(file: File): Promise<string> => {
         }
     });
     
-    return typeof response.data === 'string' ? response.data : response.data.url || response.data.imageUrl || response.data;
+    return response.data.url as string;
 }
