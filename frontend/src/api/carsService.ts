@@ -35,27 +35,8 @@ export interface CarDetails {
 
 };
 
-interface CreateCarRequest {
-    bodyType: string;
-    make: string;
-    model: string;
-    year: number;
-    price: number;
-    mileage: number;
-    power: number;
-    fuelType: string;
-    transmission: string;
-    color: string;
-    description: string;
-    location: string;
-    steeringWheel: string;
-    condition: string;
 
-    imageUrls?: string[];
-
-};
-
-export interface UpdateCarRequest {
+export interface CarRequest {
     bodyType: string;
     make: string;
     model: string;
@@ -230,12 +211,12 @@ export const getCarById = async (id: number): Promise<CarDetails> => {
     return response.data;
 };
 
-export const createCar = async (data: CreateCarRequest): Promise<CarDetails> => {
+export const createCar = async (data: CarRequest): Promise<CarDetails> => {
     const response = await api.post("/cars", data);
     return response.data;
 };
 
-export const updateCar = async (id: number, data: UpdateCarRequest, imageUrls?: string[]): Promise<CarDetails> => {
+export const updateCar = async (id: number, data: CarRequest, imageUrls?: string[]): Promise<CarDetails> => {
     const response = await api.put(`/cars/${id}`, { ...data, imageUrls: imageUrls });
     return response.data;
 };
