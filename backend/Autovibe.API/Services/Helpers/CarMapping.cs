@@ -68,7 +68,7 @@ namespace Autovibe.API.Services.Helpers
                 ImageUrls = c.ImageUrls
             };
         }
-        public static Car ToEntity(this CarCreateDto request, int userId)
+        public static Car ToEntity(this CarUpdateDto request, int userId)
         {
             return new Car
             {

@@ -64,7 +64,7 @@ namespace Autovibe.API.Controllers
 
         //POST: api/cars
         [HttpPost]
-        public async Task<ActionResult<CarDetailsDto>> CreateCar([FromBody] CarCreateDto createDto)
+        public async Task<ActionResult<CarDetailsDto>> CreateCar([FromBody] CarUpdateDto createDto)
         {
             var userId = User.GetUserId();
 

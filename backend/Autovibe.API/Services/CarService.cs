@@ -42,7 +42,7 @@ namespace Autovibe.API.Services
             return car.DetailsDto();
         }
 
-        public async Task<CarDetailsDto?> CreateAsync(CarCreateDto request, int userId)
+        public async Task<CarDetailsDto?> CreateAsync(CarUpdateDto request, int userId)
         {
             Car car = request.ToEntity(userId);
             _context.Cars.Add(car);
