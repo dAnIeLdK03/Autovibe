@@ -95,8 +95,8 @@ Base path: `/api`. Most routes need `Authorization: Bearer <token>` unless marke
 | Cars | GET | `/cars` | Anonymous, filters + `PageResponse` |
 | Cars | GET | `/cars/{id}` | Anonymous, `CarDetailsDto` |
 | Cars | GET | `/cars/my-cars` | Owner’s listings |
-| Cars | POST | `/cars` | Create — returns `201 Created` with `Location` header |
-| Cars | PUT | `/cars/{id}` | Owner or admin |
+| Cars | POST | `/cars` | Create — body: `CarUpdateDto`; returns `201 Created` with `Location` header |
+| Cars | PUT | `/cars/{id}` | Update — same `CarUpdateDto` body as create; owner or admin |
 | Cars | DELETE | `/cars/{id}` | Soft-delete; owner or admin |
 | Cars | POST | `/cars/upload-image` | Multipart, max 5 MB, rate-limited |
 | Favorites | GET | `/favorites` | Paginated `CarListDto` |
@@ -136,6 +136,8 @@ Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test
 - All timestamps use `DateTime.UtcNow` for consistency.
 - Role strings in controllers use `AppRoles` constants (`Constants/AppRoles.cs`) instead of hardcoded strings — no magic strings in `[Authorize(Roles = ...)]`.
 - **Mapster 7.4.0** added for object mapping — `UserListDto` and other mappings use `.Adapt<T>()` instead of manual property assignment.
+- `CarCreateDto` removed — create and update both use `CarUpdateDto` (identical fields, one model).
+- `PUT /api/cars/{id}` no longer handles image replacement inline; use `POST /api/cars/upload-image` for all image changes.
 
 ## Tests (backend)
 
@@ -191,7 +193,7 @@ Opens on **5173** by default. JWT is stored in `localStorage` under `token`.
 
 Restore button on deleted details requires `car.isDeleted` from the API (included in `CarDetailsDto` since the DTO/mapping update).
 
-Routes are protected by `ProtectedRoute` (requires login) and `AdminRoute` (requires admin role) guards — unauthenticated users are redirected to `/login`, non-admins to `/`.
+Routes are protected by `ProtectedRoute` (requires login) and `AdminRoute` (requires admin role) guards — unauthenticated users are redirected to `/login`, non-admins to `/`. Authenticated users visiting `/login` or `/register` are redirected to `/cars`.
 
 Image uploads are validated on the frontend before the request is sent — only `image/*` types and files under 5 MB are accepted (`useCarCreate`, `useCarEdit`).
 
