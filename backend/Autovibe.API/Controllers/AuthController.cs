@@ -41,7 +41,6 @@ namespace Autovibe.API.Controllers
         {
 
                 var result = await _authService.Sign(loginDto);
-                if (result == null)
                     
                     result.ThrowIfNull("Login failure.");
 
