@@ -9,30 +9,7 @@ namespace Autovibe.API.Services.Helpers
     {
         public static CarListDto ListDto(this Car c)
         {
-            return new CarListDto
-            {
-                Id = c.Id,
-                BodyType = c.BodyType,
-                Make = c.Make,
-                Model = c.Model,
-                Year = c.Year,
-                Price = c.Price,
-                Mileage = c.Mileage,
-                Power = c.Power,
-                FuelType = c.FuelType,
-                Transmission = c.Transmission,
-                Color = c.Color,
-                ShortDescription = c.Description != null && c.Description.Length > 100
-                    ? c.Description.Substring(0, 100) + "..."
-                    : c.Description,
-                Location = c.Location,
-                SteeringWheel = c.SteeringWheel,
-                Condition = c.Condition,
-                IsDeleted = c.IsDeleted,
-                DeletedAt = c.DeletedAt,
-                UserId = c.UserId,
-                ImageUrls = c.ImageUrls ?? new List<string>()
-            };
+            return c.Adapt<CarListDto>();
         }
 
         public static CarDetailsDto DetailsDto(this Car c)
