@@ -37,36 +37,7 @@ namespace Autovibe.API.Services.Helpers
 
         public static CarDetailsDto DetailsDto(this Car c)
         {
-            return new CarDetailsDto
-            {
-                Id = c.Id,
-                BodyType = c.BodyType,
-                Make = c.Make,
-                Model = c.Model,
-                Year = c.Year,
-                Price = c.Price,
-                Mileage = c.Mileage,
-                Power = c.Power,
-                FuelType = c.FuelType,
-                Transmission = c.Transmission,
-                Color = c.Color,
-                Description = c.Description,
-                Location = c.Location,
-                SteeringWheel = c.SteeringWheel,
-                Condition = c.Condition,
-                IsDeleted = c.IsDeleted,
-            DeletedAt = c.DeletedAt,
-
-                CreatedAt = c.CreatedAt,
-                UpdatedAt = c.UpdatedAt,
-
-                SellerId = c.UserId,
-                SellerFirstName = c.User?.FirstName,
-                SellerLastName = c.User?.LastName,
-                SellerPhoneNumber = c.User?.PhoneNumber,
-
-                ImageUrls = c.ImageUrls
-            };
+            return c.Adapt<CarDetailsDto>();
         }
         public static Car ToEntity(this CarUpdateDto request, int userId)
         {
