@@ -135,8 +135,8 @@ Swagger (`/swagger` in Development): use **Authorize** with the raw JWT, or test
 - Read-only queries (`AdminService`, `CarService`, `FavoriteService`, `UserService`) use `AsNoTracking()` for better EF Core performance.
 - All timestamps use `DateTime.UtcNow` for consistency.
 - Role strings in controllers use `AppRoles` constants (`Constants/AppRoles.cs`) instead of hardcoded strings — no magic strings in `[Authorize(Roles = ...)]`.
-- **Mapster 7.4.0** added for object mapping — `UserListDto` and other mappings use `.Adapt<T>()` instead of manual property assignment.
-- `CarCreateDto` removed — create and update both use `CarUpdateDto` (identical fields, one model).
+- **Mapster 7.4.0** — `ListDto`, `DetailsDto`, and `UserListDto` in `CarMapping.cs` now use `.Adapt<T>()` instead of manual property assignment. `ToEntity` and `ApplyTo` remain manual due to extra parameters and mutation pattern.
+- `CarCreateDto` removed — create and update both use `CarUpdateDto` (identical fields, one model). `CarCreateDtoValidations` updated accordingly.
 - `PUT /api/cars/{id}` no longer handles image replacement inline; use `POST /api/cars/upload-image` for all image changes.
 
 ## Tests (backend)
