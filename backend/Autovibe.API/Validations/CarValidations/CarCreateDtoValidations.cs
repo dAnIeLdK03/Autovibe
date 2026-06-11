@@ -4,7 +4,7 @@ using Autovibe.API.DTOs.Cars;
 
 namespace Autovibe.API.Validations
 {
-    public class CarCreateDtoValidations : AbstractValidator<CarCreateDto>
+    public class CarCreateDtoValidations : AbstractValidator<CarUpdateDto>
     {
         public CarCreateDtoValidations()
         {
