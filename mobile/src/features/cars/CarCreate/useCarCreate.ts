@@ -33,7 +33,7 @@ export const useCarCreate = () => {
         if (user === null) {
             navigation.navigate("Login");
         }
-    }, [user]);
+    }, [user, navigation]);
 
     const onSubmit = async (formData: CarFormValues) => {
         dispatch(clearError());
