@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Modal,
   View,
@@ -27,6 +27,10 @@ interface FilterProps {
 
 export const FilterModal = ({ isOpen, onClose, filters, onApply }: FilterProps) => {
     const [tempFilters, setTempFilters] = useState<CarFilters>(filters);
+
+    useEffect(() => {
+      setTempFilters(filters);
+    }, [filters]);
 
     const handleReset = () => {
         setTempFilters(initialFilters);
