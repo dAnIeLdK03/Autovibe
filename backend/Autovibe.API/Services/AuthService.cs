@@ -9,6 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Options;
 using Autovibe.API.Interfaces;
 using System.Text;
+using Autovibe.API.Services.Helpers;
 
 namespace Autovibe.API.Services
 {
@@ -47,20 +48,7 @@ namespace Autovibe.API.Services
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return new UserDto
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber,
-                CreatedAt = user.CreatedAt ?? DateTime.UtcNow,
-                UpdatedAt = user.UpdatedAt ?? DateTime.UtcNow,
-                Role = user.Role,
-                IsBlocked = user.IsBlocked,
-                BlockedUntil = user.BlockedUntil,
-                BlockReason = user.BlockReason
-            };
+           return user.UserListDto();
         }
 
         public async Task<AuthResponseDto> Sign(UserLoginDto loginDto)
