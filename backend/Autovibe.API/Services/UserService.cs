@@ -28,7 +28,6 @@ namespace Autovibe.API.Services
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             user.ThrowIfNull("User not found");
-            user.Id.ThrowIfInvalidId("id for user not found");
 
             return user.UserListDto();
         }
@@ -39,7 +38,6 @@ namespace Autovibe.API.Services
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             user.ThrowIfNull("User not found");
-            user.Id.ThrowIfInvalidId("id for user not found");
 
             user.FirstName = updateDto.FirstName;
             user.LastName = updateDto.LastName;
