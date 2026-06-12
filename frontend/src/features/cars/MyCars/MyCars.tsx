@@ -1,5 +1,5 @@
-import CarCard from "../CarComponents/CarCard"; 
-import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog"; 
+import CarCard from "../CarComponents/CarCard";
+import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog";
 import EmptyState from "../../../shared/UX/EmptyState";
 import Pagination from "../../../shared/Pagination/pagePagination";
 import { SkeletonLoader } from "../../../shared/UX/SkeletonLoader";
@@ -12,23 +12,20 @@ function MyCars() {
     showDeleteConfirm, handleDeleteClick, handleCancelDelete,
     handleConfirmDelete
   } = useMyCars();
- 
+
 
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-       <SkeletonLoader type="details" count={3} />
+        <SkeletonLoader type="details" count={3} />
       </div>
     );
-  }
-  if(cars.length === 0){
-    <EmptyState />
   }
 
   if (!loading && !error && cars.length === 0) {
     return (
       <EmptyState />
-    );
+    )
   }
 
   return (
@@ -43,7 +40,7 @@ function MyCars() {
               Manage your listings ({cars.length} {cars.length === 1 ? "ad" : "ads"})
             </p>
           </div>
-         
+
         </div>
 
         {error && (
@@ -63,13 +60,13 @@ function MyCars() {
           ))}
         </div>
         <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={(newPage: number) => {
-              setPage(newPage);
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          />
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage: number) => {
+            setPage(newPage);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
       </div>
 
       <ConfirmDialog

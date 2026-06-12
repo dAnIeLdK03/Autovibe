@@ -56,22 +56,16 @@ export function MyCars() {
                         <Text style={styles.errorText}>{error}</Text>
                     </View>
                 )}
-
-                {loading && cars.length === 0 ? (
-                    <ActivityIndicator size="large" color="#70FFE2" style={{ marginTop: 20 }} />
-                ) : (
-                    <View style={styles.grid}>
-                        {cars.map((car) => (
-                            <CarCard
-                                key={car.id}
-                                car={car}
-                                onDeleteClick={() => handleDeletePress(car.id)}
-                                showDeletebutton={true}
-                            />
-                        ))}
-                    </View>
-                )}
-
+                <View style={styles.grid}>
+                    {cars.map((car) => (
+                        <CarCard
+                            key={car.id}
+                            car={car}
+                            onDeleteClick={() => handleDeletePress(car.id)}
+                            showDeletebutton={true}
+                        />
+                    ))}
+                </View>
                 {totalPages > 1 && (
                     <Pagination
                         currentPage={page}
