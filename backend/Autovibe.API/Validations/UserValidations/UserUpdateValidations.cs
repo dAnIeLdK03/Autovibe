@@ -10,14 +10,13 @@ namespace Autovibe.API.Validations
             RuleFor(x => x.FirstName)
             .MinimumLength(3).WithMessage("First name must be at least 3 characters")
             .MaximumLength(50).WithMessage("First name can't contain more than 50 characters");
-            
-             RuleFor(x => x.LastName)
-            .MinimumLength(3).WithMessage("Last name must be at least 3 characters")
-            .MaximumLength(50).WithMessage("Last name can't contain more than 50 characters");
-            
+
+            RuleFor(x => x.LastName)
+           .MinimumLength(3).WithMessage("Last name must be at least 3 characters")
+           .MaximumLength(50).WithMessage("Last name can't contain more than 50 characters");
+
             RuleFor(x => x.PhoneNumber)
-            .Matches(@"^[0-9]+$").WithMessage("Invalid format. Use digits and optional '+' in front .")
-            .Must(phone => !phone.Contains(" ")).WithMessage("The phone number must not contain spaces..")
+            .Matches(@"^\\+?[0-9]+$").WithMessage("Invalid format. Use digits and optional '+' in front .")
             .Length(10).WithMessage("Phone number must be 10 digits long");
         }
     }
