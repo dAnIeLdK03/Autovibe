@@ -17,26 +17,6 @@ public static class ServiceCollectionExtensions
             .AddJsonOptions(opt =>
                 opt.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("AdminOnly", policy =>
-                policy.RequireAssertion(context =>
-                {
-                    var user = context.User;
-                    if (user.Identity?.IsAuthenticated != true)
-                        return false;
-                    foreach (var claim in user.Claims)
-                    {
-                        var isRoleClaim = claim.Type == System.Security.Claims.ClaimTypes.Role
-                            || claim.Type.Equals("role", StringComparison.OrdinalIgnoreCase);
-                        if (isRoleClaim && claim.Value.Equals(nameof(Role.Admin), StringComparison.OrdinalIgnoreCase))
-                            return true;
-                    }
-
-                    return false;
-                }));
-        });
-
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen(options =>
         {
