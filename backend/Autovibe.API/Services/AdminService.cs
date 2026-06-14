@@ -81,7 +81,7 @@ namespace Autovibe.API.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto)
+        public async Task<UserDto> UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             user!.Id.ThrowIfInvalidId($"User with id {userId} was not found");
@@ -92,7 +92,6 @@ namespace Autovibe.API.Services
                 user.BlockedUntil = null;
                 user.BlockReason = null;
             }
-
             else
             {
                 if (dto.IsBlocked.HasValue)
@@ -108,6 +107,7 @@ namespace Autovibe.API.Services
             user.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
+            return user.UserListDto();
         }
 
         public async Task HardDeleteCarAsync(int id)
