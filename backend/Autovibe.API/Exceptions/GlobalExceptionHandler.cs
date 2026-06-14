@@ -5,10 +5,12 @@ using Autovibe.API.Exceptions;
 public class GlobalExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> _logger;
+    private readonly IWebHostEnvironment _env;
 
-    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger, IWebHostEnvironment env)
     {
         _logger = logger;
+        _env = env;
     }
 
     public async ValueTask<bool> TryHandleAsync(
@@ -40,7 +42,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         };
 
         // Specially for development, send more info
-        if(Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+        if(_env.IsDevelopment())
         {
             response.Details = exception.StackTrace;
         }
