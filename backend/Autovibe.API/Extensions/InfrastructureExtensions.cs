@@ -25,7 +25,7 @@ public static class InfrastructureExtensions
             options.KnownNetworks.Clear();
             options.KnownProxies.Clear();
 
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("127.0.0.1"), 12));
+            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("127.0.0.0.0"), 8));
 
             options.KnownProxies.Add(IPAddress.IPv6Loopback);
             options.KnownProxies.Add(IPAddress.Loopback);
