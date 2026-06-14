@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCars, type CarFilters } from '../../../api/carsService';
-import { clearError, setCars, setLoading } from '@autovibe/app-state';
+import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import type { RootState } from '@autovibe/app-state';
 
 export const useCarList = (initialFilters: CarFilters) => {
@@ -31,6 +31,7 @@ export const useCarList = (initialFilters: CarFilters) => {
             dispatch(setCars(response.items ?? []));
             setTotalPages(response.totalPages ?? 0);
         } catch {
+            dispatch(setError("Unable to load cars. Please try again."));
             dispatch(setCars([]));
             setTotalPages(0);
         } finally {
