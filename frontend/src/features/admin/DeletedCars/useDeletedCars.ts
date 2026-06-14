@@ -7,7 +7,7 @@ import { msg } from "../../../shared/extractErrorMessage/extractApiErrorMessage"
 
 
 export const useDeletedCars = () => {
-    const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+    const { isAuthenticated } = useSelector((state: RootState) => state.auth);
     const dispatch = useDispatch();
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
@@ -30,7 +30,7 @@ export const useDeletedCars = () => {
         } finally {
             dispatch(setLoading(false));
         }
-    }, [page, user?.id, isAuthenticated, dispatch])
+    }, [page, isAuthenticated, dispatch])
 
     useEffect(() => {
         fetchCars();
