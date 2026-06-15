@@ -30,7 +30,12 @@ export default function DeletedCarDetails() {
     );
   }
   if (car === null) {
-    return <h2>Car not found.</h2>;
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+        <p className="text-white text-xl">Car not found.</p>
+      </div>
+    );
+
   }
 
   return (
