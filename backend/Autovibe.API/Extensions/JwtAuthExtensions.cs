@@ -11,12 +11,17 @@ public static class JwtAuthExtensions
 {
     public static IServiceCollection AddJwtAuth(this IServiceCollection services, IConfiguration config)
     {
-        var jwtSettings = config.GetSection("Jwt");
+        var jwtSettings = config.GetSection("Jwt").Get<JwtSettings>();
 
-        var key = jwtSettings["Key"];
-        var issuer = jwtSettings["Issuer"];
-        var audience = jwtSettings["Audience"];
+        if(jwtSettings == null)
+        {
+            throw new InvalidOperationException("JWT settings are not configured properly.");
+        }
 
+        var key = jwtSettings.Key;
+        var issuer = jwtSettings.Issuer;
+        var audience = jwtSettings.Audience;
+        
         if (string.IsNullOrWhiteSpace(key))
             throw new InvalidOperationException("JWT Key is missing in configuration.");
 
