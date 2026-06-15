@@ -58,8 +58,8 @@ public class UserBlockMiddleware
                 {
                     var now = DateTime.UtcNow;
                     var isTemporarilyBlocked = userStatus.BlockedUntil != null && userStatus.BlockedUntil > now;
-                    var isPermanentlyBlocked = userStatus.IsBlocked;
-
+                    var isBlockedFlag = userStatus.IsBlocked;
+                    var isPermanentlyBlocked = userStatus.IsBlocked && userStatus.BlockedUntil is null;
                     if (isPermanentlyBlocked || isTemporarilyBlocked)
                     {
                         context.Response.StatusCode = StatusCodes.Status403Forbidden;
