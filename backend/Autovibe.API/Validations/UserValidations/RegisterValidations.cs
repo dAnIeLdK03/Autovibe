@@ -16,10 +16,6 @@ namespace Autovibe.API.Validations
             .NotEmpty().WithMessage("Password is required")
             .MinimumLength(6).WithMessage("Password must be at least 6 characters long");
 
-            RuleFor(x => x.ConfirmPassword)
-            .NotEmpty().WithMessage("Confirm password is required")
-            .Matches(x => x.Password).WithMessage("Passwords do not match");
-        
             RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("First name is required");
 
