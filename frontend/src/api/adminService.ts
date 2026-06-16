@@ -133,7 +133,7 @@ export const getAdminUserCars = async (
     );
     const data = response.data;
     if (!data || !Array.isArray(data.items)) {
-        throw new Error('Unable to load cars.');
+       return {items: [], totalPages:0, pageNumber, pageSize};
     }
     return {
         items: data.items,
