@@ -22,8 +22,7 @@ function Register() {
     setLoading(true);
     setError(null);
     try {
-      const { ...dataToApi } = formData;
-      await registerUser(dataToApi);
+      await registerUser(formData);
       navigate("/login");
     } catch (error: unknown) {
       setError(extractApiErrorMessage(error));
