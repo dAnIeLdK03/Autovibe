@@ -17,20 +17,20 @@ public static class InfrastructureExtensions
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config)
     {
-         services.Configure<ForwardedHeadersOptions>(options =>
-        {
-            options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+        services.Configure<ForwardedHeadersOptions>(options =>
+       {
+           options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
 
-            options.ForwardLimit = 1;
-            options.KnownNetworks.Clear();
-            options.KnownProxies.Clear();
+           options.ForwardLimit = 1;
+           options.KnownNetworks.Clear();
+           options.KnownProxies.Clear();
 
-            options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("127.0.0.0.0"), 8));
+           options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("127.0.0.0.0"), 8));
 
-            options.KnownProxies.Add(IPAddress.IPv6Loopback);
-            options.KnownProxies.Add(IPAddress.Loopback);
+           options.KnownProxies.Add(IPAddress.IPv6Loopback);
+           options.KnownProxies.Add(IPAddress.Loopback);
 
-        });
+       });
 
         services.AddExceptionHandler<GlobalExceptionHandler>();
         services.AddProblemDetails();
@@ -51,7 +51,7 @@ public static class InfrastructureExtensions
             throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         var serverVersionString = config["DatabaseSettings:ServerVersion"] ?? "8.0.45-mysql";
         var serverVersion = ServerVersion.Parse(serverVersionString);
-        
+
         services.AddDbContext<AppDbContext>(op =>
             op.UseMySql(connectionString, serverVersion));
 
@@ -101,7 +101,21 @@ public static class InfrastructureExtensions
                     AutoReplenishment = true
                 });
             });
+
+            options.AddPolicy("cars", httpContext =>
+            {
+                var userId = httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var key = userId ?? httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+                return RateLimitPartition.GetFixedWindowLimiter(key, _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 20,
+                    Window = TimeSpan.FromMinutes(1),
+                    AutoReplenishment = true
+
+                });
+            });
         });
+
 
         services.AddOptions<JwtSettings>()
             .Bind(config.GetSection("Jwt"))

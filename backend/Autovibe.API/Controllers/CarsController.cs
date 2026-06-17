@@ -65,6 +65,7 @@ namespace Autovibe.API.Controllers
 
         //POST: api/cars
         [HttpPost]
+        [EnableRateLimiting("cars")]
         public async Task<ActionResult<CarDetailsDto>> CreateCar([FromBody] CarUpdateDto createDto)
         {
             var userId = User.GetUserId();
@@ -84,6 +85,7 @@ namespace Autovibe.API.Controllers
 
         //PUT: api/cars/{id}
         [HttpPut("{id}")]
+        [EnableRateLimiting("cars")]
         public async Task<ActionResult<CarDetailsDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
         {
             var userId = User.GetUserId();
@@ -109,6 +111,7 @@ namespace Autovibe.API.Controllers
 
         //DELETE: api/cars/{id}
         [HttpDelete("{id}")]
+        [EnableRateLimiting("cars")]
         public async Task<ActionResult> DeleteCar(int id)
         {
             var userId = User.GetUserId();
