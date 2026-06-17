@@ -3,6 +3,7 @@ import type { ProtectedRouteProps } from "./ProtectedRoute";
 import { useSelector } from "react-redux";
 import type { RootState } from "@autovibe/app-state";
 import { Navigate, Outlet } from "react-router-dom";
+import { UserRole } from "../api/adminService";
 
 
 export const AdminRoute: React.FC<ProtectedRouteProps> =({
@@ -15,7 +16,7 @@ export const AdminRoute: React.FC<ProtectedRouteProps> =({
     }
 
     // 0 = Admin
-    if(role !== 0){
+    if(role !== UserRole.Admin){
         return <Navigate to = {redirectPath} replace />;
     }
 
