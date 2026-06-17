@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Autovibe.API.Extensions;
 using Microsoft.AspNetCore.RateLimiting;
 using Autovibe.API.Constants;
+using Autovibe.API.Exceptions;
 
 
 namespace Autovibe.API.Controllers
@@ -30,7 +31,7 @@ namespace Autovibe.API.Controllers
         {
             var result = await _carService.GetAllAsync(request);
 
-                result.ThrowIfNull("Unable to load cars.");
+            result.ThrowIfNull("Unable to load cars.");
 
             return Ok(result);
         }
@@ -41,7 +42,7 @@ namespace Autovibe.API.Controllers
         {
 
             var userId = User.GetUserId();
-            
+
             userId.ThrowIfNull("Log in first");
 
             var result = await _carService.GetUserCarsAsync(userId.Value, pageNumber, pageSize);
@@ -57,7 +58,7 @@ namespace Autovibe.API.Controllers
 
             var result = await _carService.GetCarDetailsAsync(id);
 
-                result.ThrowIfNull("Car cannot be found");
+            result.ThrowIfNull("Car cannot be found");
 
             return Ok(result);
         }
@@ -68,15 +69,15 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-                userId.ThrowIfNull("Log in first");
+            userId.ThrowIfNull("Log in first");
 
             var result = await _carService.CreateAsync(createDto, userId.Value);
 
-                result.ThrowIfNull("Unable to create new car");
+            result.ThrowIfNull("Unable to create new car");
 
             return CreatedAtAction(
                 nameof(GetCar),
-                new {id = result.Id },
+                new { id = result.Id },
                 result
             );
         }
@@ -87,15 +88,20 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-                userId.ThrowIfNull("Log in first");
+            userId.ThrowIfNull("Log in first");
 
-                id.ThrowIfLessThan(1, "Invalid car id.");
+            id.ThrowIfLessThan(1, "Invalid car id.");
 
-                bool isAdmin = User.IsInRole(AppRoles.Admin);
+            bool isAdmin = User.IsInRole(AppRoles.Admin);
+
+            if (!isAdmin)
+            {
+                throw new ForbiddenException("You are not allowed to update this car.");
+            }
 
             var result = await _carService.UpdateAsync(id, updateDto);
 
-                result.ThrowIfNull("Car cannot be found");
+            result.ThrowIfNull("Car cannot be found");
 
             return Ok(result);
 
@@ -107,11 +113,11 @@ namespace Autovibe.API.Controllers
         {
             var userId = User.GetUserId();
 
-                userId.ThrowIfNull("Unauthorized");
+            userId.ThrowIfNull("Unauthorized");
 
-                id.ThrowIfLessThan(1, "Invalid car id.");
+            id.ThrowIfLessThan(1, "Invalid car id.");
 
-                bool isAdmin = User.IsInRole(AppRoles.Admin);
+            bool isAdmin = User.IsInRole(AppRoles.Admin);
 
             await _carService.DeleteAsync(id, userId.Value, isAdmin);
             return NoContent();
@@ -124,8 +130,8 @@ namespace Autovibe.API.Controllers
         [RequestSizeLimit(5 * 1024 * 1024)]
         public async Task<ActionResult> UploadImage(IFormFile file)
         {
-                var imageUrl = await _carService.UploadImageAsync(file);
-                return Ok(new { url = imageUrl });
+            var imageUrl = await _carService.UploadImageAsync(file);
+            return Ok(new { url = imageUrl });
         }
     }
 }
