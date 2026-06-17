@@ -2,9 +2,9 @@ import React from 'react'
 import { useFormContext } from 'react-hook-form'
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
-import type { CarFormValues } from './CarValidations/CarCreateValidaions'; 
-import type { RootState } from '@autovibe/app-state'; 
-import { getImageUrl } from '../../../utils/getImageUrl'; 
+import type { CarFormValues } from './CarValidations/CarCreateValidaions';
+import type { RootState } from '@autovibe/app-state';
+import { getImageUrl } from '../../../utils/getImageUrl';
 import { BaseSelect } from './Filters/BaseSelect';
 import { bodyTypes, Condition, fuelTypeOptions, transmissionTypes, wheelTypes } from '../../../api/carOptions';
 
@@ -41,7 +41,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
     return (
         <div className="min-h-screen flex items-center justify-center bg-slate-900 font-sans p-4">
             <div className="w-full max-w-2xl p-8 bg-slate-800/40 backdrop-blur-2xl rounded-[2.5rem] border border-slate-700/50 shadow-2xl">
-                
+
                 <div className="mb-8 text-center">
                     <h2 className="text-3xl font-black text-white mb-2">{title}</h2>
                     <p className="text-slate-500 text-sm">Fill in the technical specifications below</p>
@@ -55,7 +55,7 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
 
                 <div className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                       
+
                         <div>
                             <label className={labelClasses}>Make</label>
                             <input type="text" className={inputClasses} placeholder="e.g. Audi" {...register("make", { required: "Required" })} />
@@ -88,59 +88,61 @@ function CarForm({ handleImageChange, imagePreview, onRemoveImage, submitLabel =
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div className="md:col-span-1">
-                            <BaseSelect
-                                variant='dropdown'
-                                label='Fuel'
-                                options={fuelTypeOptions}
-                                value={fuelType ?? ""}
-                                onChange={(val) => setValue("fuelType", val, {shouldValidate: true})}
-                            />
-                        </div>
-                         <div className="md:col-span-1">
-                            <BaseSelect
-                                variant='dropdown'
-                                label='Body Type'
-                                options={bodyTypes}
-                                value={bodyType ?? ""}
-                                onChange={(val) => setValue("bodyType", val, {shouldValidate: true})}
-                            />
-                        </div>
-                        <div className="md:col-span-1">
-                            <BaseSelect
-                                variant='dropdown'
-                                label='Transmission'
-                                options={transmissionTypes}
-                                value={transmissionType ?? ""}
-                                onChange={(val) => setValue("transmission", val, {shouldValidate: true})}
-                            />
-                        </div>
-                        <div className="md:col-span-1">
-                            <BaseSelect
-                                variant='dropdown'
-                                label='Steering Wheel'
-                                options={wheelTypes}
-                                value={wheelType ?? ""}
-                                onChange={(val) => setValue("steeringWheel", val, {shouldValidate: true})}
-                            />
-                        </div>
-                        <div className="md:col-span-1">
-                            <label className={labelClasses}>Color</label>
-                            <input type="text" className={inputClasses} placeholder="Color" {...register("color", { required: true })}  />
-                        </div>
-                        <div className="md:col-span-1">
-                            <label className={labelClasses}>Location</label>
-                            <input type="text" className={inputClasses} placeholder="Location" {...register("location", { required: true })} />
-                        </div>
-                        <div className="md:col-span-1">
-                            <BaseSelect
-                                variant='dropdown'
-                                label='Condition'
-                                options={Condition}
-                                value={conditionType ?? ""}
-                                onChange={(val) => setValue("condition", val, {shouldValidate: true})}
-                            />
+                        <fieldset disabled={loading}>
+                            <div className="md:col-span-1">
+                                <BaseSelect
+                                    variant='dropdown'
+                                    label='Fuel'
+                                    options={fuelTypeOptions}
+                                    value={fuelType ?? ""}
+                                    onChange={(val) => setValue("fuelType", val, { shouldValidate: true })}
+                                />
                             </div>
+                            <div className="md:col-span-1">
+                                <BaseSelect
+                                    variant='dropdown'
+                                    label='Body Type'
+                                    options={bodyTypes}
+                                    value={bodyType ?? ""}
+                                    onChange={(val) => setValue("bodyType", val, { shouldValidate: true })}
+                                />
+                            </div>
+                            <div className="md:col-span-1">
+                                <BaseSelect
+                                    variant='dropdown'
+                                    label='Transmission'
+                                    options={transmissionTypes}
+                                    value={transmissionType ?? ""}
+                                    onChange={(val) => setValue("transmission", val, { shouldValidate: true })}
+                                />
+                            </div>
+                            <div className="md:col-span-1">
+                                <BaseSelect
+                                    variant='dropdown'
+                                    label='Steering Wheel'
+                                    options={wheelTypes}
+                                    value={wheelType ?? ""}
+                                    onChange={(val) => setValue("steeringWheel", val, { shouldValidate: true })}
+                                />
+                            </div>
+                            <div className="md:col-span-1">
+                                <label className={labelClasses}>Color</label>
+                                <input type="text" className={inputClasses} placeholder="Color" {...register("color", { required: true })} />
+                            </div>
+                            <div className="md:col-span-1">
+                                <label className={labelClasses}>Location</label>
+                                <input type="text" className={inputClasses} placeholder="Location" {...register("location", { required: true })} />
+                            </div>
+                            <div className="md:col-span-1">
+                                <BaseSelect
+                                    variant='dropdown'
+                                    label='Condition'
+                                    options={Condition}
+                                    value={conditionType ?? ""}
+                                    onChange={(val) => setValue("condition", val, { shouldValidate: true })}
+                                />
+                            </div>
+                        </fieldset>
                     </div>
 
                     <div>
