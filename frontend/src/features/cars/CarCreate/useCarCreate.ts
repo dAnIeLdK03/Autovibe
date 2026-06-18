@@ -104,7 +104,7 @@ export const useCarCreate = () => {
   useEffect(() => {
     return () => {
       imagePreview.forEach(url => {
-        if (url && typeof url === 'string' && url.startsWith('blob:')) {
+        if (url && typeof url === 'string' && url.startsWith('blob')) {
           URL.revokeObjectURL(url);
         }
       });
