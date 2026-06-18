@@ -7,22 +7,24 @@ import { useDeletedCars } from "./useDeletedCars";
 
 function DeletedCars() {
 
-    const {
-        cars, loading, error, page, totalPages, setPage, showDeleteConfirm,
-        handleDeleteClick,
-        handleConfirmDelete,
-        handleCancelDelete,
-      } = useDeletedCars();
+  const {
+    cars, loading, error, page, totalPages, setPage, showDeleteConfirm,
+    handleDeleteClick,
+    handleConfirmDelete,
+    handleCancelDelete,
+  } = useDeletedCars();
 
-      if (loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-       <SkeletonLoader type="details" count={3} />
+        <SkeletonLoader type="details" count={3} />
       </div>
     );
   }
-  if(cars.length === 0){
-    <EmptyState />
+  if (cars.length === 0) {
+    return (
+      <EmptyState />
+    )
   }
 
   if (!loading && !error && cars.length === 0) {
@@ -43,7 +45,7 @@ function DeletedCars() {
               Manage listings ({cars.length} {cars.length === 1 ? "ad" : "ads"})
             </p>
           </div>
-         
+
         </div>
 
         {error && (
@@ -63,15 +65,15 @@ function DeletedCars() {
           ))}
         </div>
         <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={(newPage: number) => {
-              setPage(newPage);
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          />
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage: number) => {
+            setPage(newPage);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
       </div>
-             <ConfirmDialog
+      <ConfirmDialog
         isOpen={showDeleteConfirm}
         title="Delete Car"
         message="Are you sure you want to delete this car?"
