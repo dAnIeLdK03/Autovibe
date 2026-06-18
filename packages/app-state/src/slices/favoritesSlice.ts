@@ -8,12 +8,14 @@ export interface FavoritesState {
   ids: number[];
   loading: boolean;
   error: boolean;
+  loadingCarIds: number[];
 }
 
 const initialState: FavoritesState = {
   ids: [],
   loading: false,
   error: false,
+  loadingCarIds: [],
 }
 
 type FavoritesThunkConfig = {
@@ -46,15 +48,26 @@ export const toggleFavorite = createAsyncThunk<
   { carId: number; nextIsFavorite: boolean },
   { carId: number; isFavorite: boolean },
   FavoritesThunkConfig
->('favorites/toggleFavorite', async ({ carId, isFavorite }, { extra }) => {
-  if (isFavorite) {
-    await extra.deleteFavorite(carId)
-    return { carId, nextIsFavorite: false }
-  }
+>(
+  'favorites/toggleFavorite', 
+  async ({ carId, isFavorite }, { extra }) => {
+    if (isFavorite) {
+      await extra.deleteFavorite(carId)
+      return { carId, nextIsFavorite: false }
+    }
 
-  await extra.addFavorite(carId)
-  return { carId, nextIsFavorite: true }
-})
+    await extra.addFavorite(carId)
+    return { carId, nextIsFavorite: true }
+  },
+  {
+    condition: ({ carId }, { getState }) => {
+      const { favorites } = getState()
+      if (favorites.loadingCarIds.includes(carId)) {
+        return false
+      }
+    }
+  }
+)
 
 const favoritesSlice = createSlice({
   name: 'favorites',
@@ -67,6 +80,7 @@ const favoritesSlice = createSlice({
       state.ids = []
       state.loading = false
       state.error = false
+      state.loadingCarIds = []
     },
   },
   extraReducers: (builder) => {
@@ -79,28 +93,43 @@ const favoritesSlice = createSlice({
         state.ids = action.payload
         state.loading = false
         state.error = false
-
       })
       .addCase(loadFavoriteIds.rejected, (state) => {
         state.loading = false
         state.error = true
       })
+      
       .addCase(toggleFavorite.pending, (state, action) => {
-        const {carId, isFavorite} = action.meta.arg;
-        if(isFavorite) state.ids = state.ids.filter(id => id != carId);
-        else state.ids.push(carId);
-      })
-      .addCase(toggleFavorite.rejected, (state, action) => {
-        const {carId, isFavorite} = action.meta.arg;
-        if(isFavorite && !state.ids.includes(carId)) state.ids.push(carId);
-        if(!isFavorite) state.ids = state.ids.filter(id => id != carId);
-        state.error = true;
+        const { carId, isFavorite } = action.meta.arg;
+        
+        state.loadingCarIds.push(carId);
+
+        if (isFavorite) {
+          state.ids = state.ids.filter(id => id !== carId);
+        } else {
+          if (!state.ids.includes(carId)) state.ids.push(carId);
+        }
       })
       .addCase(toggleFavorite.fulfilled, (state, action) => {
         const { carId, nextIsFavorite } = action.payload
+        
+        state.loadingCarIds = state.loadingCarIds.filter(id => id !== carId);
+        
         const has = state.ids.includes(carId)
         if (nextIsFavorite && !has) state.ids.push(carId)
         if (!nextIsFavorite && has) state.ids = state.ids.filter((id) => id !== carId)
+      })
+      .addCase(toggleFavorite.rejected, (state, action) => {
+        const { carId, isFavorite } = action.meta.arg;
+        
+        state.loadingCarIds = state.loadingCarIds.filter(id => id !== carId);
+        state.error = true;
+
+        if (isFavorite) {
+          if (!state.ids.includes(carId)) state.ids.push(carId);
+        } else {
+          state.ids = state.ids.filter(id => id !== carId);
+        }
       })
   },
 })
