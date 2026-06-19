@@ -87,15 +87,15 @@ namespace Autovibe.API.Services
             var totalItems = await favoritesQuery.CountAsync();
 
             var carEntities = await favoritesQuery
-                .AsNoTracking()
+                .Include(f => f.Car)
                 .OrderByDescending(f => f.CreatedAt)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .Select(f => f.Car.Adapt<CarListDto>())
                 .ToListAsync();
 
             var items = carEntities
                 .Where(c => c != null)
+                .Select(f => f.Car.Adapt<CarListDto>())
                 .ToList();
 
             return new PageResponse<CarListDto>
