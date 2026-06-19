@@ -107,11 +107,6 @@ public static class ObjectExtension
         {
             throw new BadRequestException("The image is corrupted or the format is not supported.");
         }
-        catch(Exception)
-        {
-            throw new BadRequestException("An error occurred while processing the file.");
-        }
-
     }
 
 
