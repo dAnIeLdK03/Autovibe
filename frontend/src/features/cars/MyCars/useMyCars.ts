@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import { deleteCar, getCarsByUserId } from "../../../api/carsService";
 import { useCallback, useEffect, useState } from "react";
-import { msg } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
+import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
 
 
 export const useMyCars = () => {
@@ -36,7 +36,7 @@ export const useMyCars = () => {
             dispatch(setCars(myCars));
             setTotalPages(response.totalPages ?? 0);
         } catch (err) {
-            dispatch(setError(msg(err)));
+            dispatch(setError(extractApiErrorMessage(err)));
         } finally {
             dispatch(setLoading(false));
         }

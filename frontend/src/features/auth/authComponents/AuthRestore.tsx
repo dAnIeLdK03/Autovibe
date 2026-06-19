@@ -2,14 +2,10 @@ import { useEffect } from 'react'
 import { getCurrentUser } from '../../../api/AuthService'; 
 import { useDispatch } from 'react-redux';
 import { logout, setCredentials, setError } from '@autovibe/app-state';
+import { extractApiErrorMessage } from '../../../shared/extractErrorMessage/extractApiErrorMessage';
 
 function AuthRestore() {
     const dispatch = useDispatch();
-    const msg = (err: unknown) =>
-        err && typeof err === "object" &&
-            "message" in err ? String((err as
-                { message: string }).message) : "Unable to load user.";
-
 
     useEffect(() => {
         const fetchToken = async () => {
@@ -28,7 +24,7 @@ function AuthRestore() {
                 }
 
             } catch (error) {
-                dispatch(setError(msg(error)))
+                dispatch(setError(extractApiErrorMessage(error)))
                 localStorage.removeItem("token");
                 dispatch(logout());
             }

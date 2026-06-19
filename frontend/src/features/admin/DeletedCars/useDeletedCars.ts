@@ -3,7 +3,7 @@ import type { RootState } from '@autovibe/app-state'
 import { useCallback, useEffect, useState } from "react";
 import { clearError, setCars, setError, setLoading } from '@autovibe/app-state';
 import { getDeletedCars, hardDeleteCarAdmin } from "../../../api/adminService";
-import { msg } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
+import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
 
 
 export const useDeletedCars = () => {
@@ -26,7 +26,7 @@ export const useDeletedCars = () => {
             dispatch(setCars(response.items ?? []));
             setTotalPages(response.totalPages ?? 0);
         } catch (err) {
-            dispatch(setError(msg(err)));
+            dispatch(setError(extractApiErrorMessage(err)));
         } finally {
             dispatch(setLoading(false));
         }
