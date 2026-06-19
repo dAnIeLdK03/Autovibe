@@ -33,8 +33,8 @@ namespace Autovibe.API.Services
             IQueryable<User> query = _context.Users.AsNoTracking();
             if (!string.IsNullOrWhiteSpace(request.Email))
             {
-                var term = request.Email.Trim();
-                query = query.Where(u => u.Email.Contains(term));
+                var term = request.Email.Trim().ToLower();
+                query = query.Where(u => u.Email.ToLower().Contains(term));
             }
 
             var totalItems = await query.CountAsync();
