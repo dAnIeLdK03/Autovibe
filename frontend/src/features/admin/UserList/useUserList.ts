@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { extractApiErrorMessage } from '../../../shared/extractErrorMessage/extractApiErrorMessage'
 import { useDispatch, useSelector } from 'react-redux'
-import type { RootState } from '@autovibe/app-state'
+import type { AdminUser, RootState } from '@autovibe/app-state'
 import {
   clearAdminError,
   setAdminUsers,
@@ -23,28 +23,28 @@ export const useUserList = () => {
   const [emailFilter, setEmailFilter] = useState('')
   const [appliedEmail, setAppliedEmail] = useState('')
 
- const handleToggleRole = useCallback(async (userId: number, currentRole: UserRole) => {
-  const newRole = currentRole === UserRole.Admin ? UserRole.User : UserRole.Admin;
+  const handleToggleRole = useCallback(async (userId: number, currentRole: UserRole) => {
+    const newRole = currentRole === UserRole.Admin ? UserRole.User : UserRole.Admin;
 
-  try {
-    await updateUserRoleAdmin(userId, { role: newRole });
+    try {
+      await updateUserRoleAdmin(userId, { role: newRole });
 
-    const updatedUsers = users.map((u) => 
-      u.id === userId ? { ...u, role: newRole } : u
-    );
-    
-    dispatch(setAdminUsers(updatedUsers));
-  } catch (e: unknown) {
-    const errorMsg = extractApiErrorMessage(e);
-    dispatch(setAdminError(`Failed to update role: ${errorMsg}`));
-  }
-}, [users, dispatch]);
+      const updatedUsers: AdminUser[] = users.map((u) =>
+        u.id === userId ? { ...u, role: newRole } : u
+      );
+
+      dispatch(setAdminUsers(updatedUsers));
+    } catch (e: unknown) {
+      const errorMsg = extractApiErrorMessage(e);
+      dispatch(setAdminError(`Failed to update role: ${errorMsg}`));
+    }
+  }, [users, dispatch]);
 
   const fetchUsers = useCallback(async () => {
     dispatch(setAdminLoading(true))
     dispatch(clearAdminError())
     dispatch(setAdminForbidden(false))
-    
+
     try {
       const res = await getAdminUsers({
         pageNumber: page,
@@ -77,14 +77,14 @@ export const useUserList = () => {
 
   const handlePageChange = (newPage: number) => {
     setPage(newPage);
-    window.scrollTo({top: 0, behavior: "smooth"});
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   const handleReset = () => {
-  setEmailFilter(""); 
-  setAppliedEmail("");   
-  setPage(1);
-};
+    setEmailFilter("");
+    setAppliedEmail("");
+    setPage(1);
+  };
 
   const roleLabel = (r: UserRole) => (r === UserRole.Admin ? 'Admin' : 'User')
 
