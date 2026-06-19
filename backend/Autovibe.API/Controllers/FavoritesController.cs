@@ -42,19 +42,22 @@ namespace Autovibe.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PageResponse<CarListDto>>> Get(int pageNumber=1, int pageSize = 18)
+        public async Task<ActionResult<PageResponse<CarListDto>>> Get(int pageNumber = 1, int pageSize = 18)
         {
             var userId = User.GetUserId();
             userId.ThrowIfNull("Log in first");
+
+            pageNumber.ThrowIfNull("Page can't be 0");
+            pageSize.ThrowIfLessThanAndMoreThan(0, 18, "Page size can't be less than 0 and greater than 18");
 
             var result = await _favoriteService.GetPageAsync(userId.Value, pageNumber, pageSize);
             return Ok(result);
         }
 
-        
+
 
 
     }
 
-    
+
 }
