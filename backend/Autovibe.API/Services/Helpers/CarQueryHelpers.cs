@@ -16,11 +16,11 @@ public static class CarQueryHelpers
         {
             query = query.Where(c => c.Year <= filters.MaxYear.Value);
         }
-        if(!string.IsNullOrEmpty(filters.FuelType) && filters.FuelType != "Fuel")
+        if (!string.IsNullOrEmpty(filters.FuelType) && filters.FuelType != "Fuel")
         {
             query = query.Where(c => c.FuelType == filters.FuelType);
         }
-        if(!string.IsNullOrEmpty(filters.Transmission) && filters.Transmission != "Transmission")
+        if (!string.IsNullOrEmpty(filters.Transmission) && filters.Transmission != "Transmission")
         {
             query = query.Where(c => c.Transmission == filters.Transmission);
         }
@@ -40,31 +40,31 @@ public static class CarQueryHelpers
                 _ => query
             };
         }
-        if(filters.Power.HasValue && filters.Power > 0)
+        if (filters.Power.HasValue && filters.Power > 0)
         {
             query = query.Where(c => c.Power >= filters.Power);
         }
-        if(!string.IsNullOrEmpty(filters.BodyType) && filters.BodyType != "BodyType")
+        if (!string.IsNullOrEmpty(filters.BodyType) && filters.BodyType != "BodyType")
         {
             query = query.Where(c => c.BodyType == filters.BodyType);
         }
-        if(!string.IsNullOrEmpty(filters.Location) && filters.Location != "Location")
+        if (!string.IsNullOrEmpty(filters.Location) && filters.Location != "Location")
         {
             query = query.Where(c => c.Location == filters.Location);
         }
-        if(!string.IsNullOrEmpty(filters.SteeringWheel) && filters.SteeringWheel != "SteeringWheel")
+        if (!string.IsNullOrEmpty(filters.SteeringWheel) && filters.SteeringWheel != "SteeringWheel")
         {
             query = query.Where(c => c.SteeringWheel == filters.SteeringWheel);
         }
-        if(!string.IsNullOrEmpty(filters.Condition) && filters.Condition != "Condition")
+        if (!string.IsNullOrEmpty(filters.Condition) && filters.Condition != "Condition")
         {
             query = query.Where(c => c.Condition == filters.Condition);
         }
-            if(filters.Published.HasValue)
-            {
-                DateTime startDate = DateTime.UtcNow.Date.AddDays(-filters.Published.Value);
-                query = query.Where(c => c.CreatedAt.HasValue && c.CreatedAt.Value >= startDate);   
-            }
+        if (filters.Published.HasValue)
+        {
+            DateTime startDate = DateTime.UtcNow.Date.AddDays(-filters.Published.Value);
+            query = query.Where(c => c.CreatedAt >= startDate);
+        }
         return query;
     }
 
@@ -76,7 +76,7 @@ public static class CarQueryHelpers
             "PriceAsc" => query.OrderBy(c => c.Price),
             "PriceDesc" => query.OrderByDescending(c => c.Price),
             "YearDesc" => query.OrderByDescending(c => c.Year),
-            _  => query.OrderByDescending(c => c.Id)
+            _ => query.OrderByDescending(c => c.Id)
         };
     }
 }
