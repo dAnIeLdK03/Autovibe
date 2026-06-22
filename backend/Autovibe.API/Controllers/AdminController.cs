@@ -48,7 +48,7 @@ namespace Autovibe.API.Controllers
 
             adminId.ThrowIfNull("Log in first");
 
-            id.ThrowIfLessThan(0, "Invalid car id.");
+            id.ThrowIfLessThan(1, "Invalid user id.");
 
             await _adminService.UpdateUserRoleAsync(id, dto.Role, adminId!.Value);
 
