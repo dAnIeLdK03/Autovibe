@@ -48,7 +48,7 @@ namespace Autovibe.API.Controllers
             userId.ThrowIfNull("Log in first");
 
             pageNumber.ThrowIfNull("Page can't be 0");
-            pageSize.ThrowIfLessThanAndMoreThan(0, 18, "Page size can't be less than 0 and greater than 18");
+            pageSize.ThrowIfLessThanAndMoreThan(1, 18, "Page size can't be less than 0 and greater than 18");
 
             var result = await _favoriteService.GetPageAsync(userId.Value, pageNumber, pageSize);
             return Ok(result);
