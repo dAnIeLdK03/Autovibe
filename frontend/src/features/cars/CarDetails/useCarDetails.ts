@@ -4,7 +4,7 @@ import { clearError, setError, setLoading } from '@autovibe/app-state';
 import { deleteCar, getCarById, type CarDetails } from "../../../api/carsService";
 import { useNavigate, useParams } from "react-router";
 import type { RootState } from '@autovibe/app-state';
-import { useError } from "../../../shared/CustomHooks/useError"; 
+import { useError } from "../../../shared/CustomHooks/useError";
 
 
 export const useCarDetails = () => {
@@ -16,12 +16,14 @@ export const useCarDetails = () => {
 
     const [car, setCar] = useState<CarDetails | null>(null);
     const { user } = useSelector((state: RootState) => state.auth);
-    const {handleError} = useError();
+    const { handleError } = useError();
     const isOwner = car !== null && user !== null && car.sellerId === user.id;
-    
+
     const [, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
+        let timer: ReturnType<typeof setTimeout>
+
         if (!id || isNaN(carId)) {
             dispatch(setError("Invalid Car ID"));
             navigate("/cars");
@@ -36,20 +38,22 @@ export const useCarDetails = () => {
                 setCar(data);
             } catch (error) {
                 handleError(error);
-                setTimeout(() => {
+                timer = setTimeout(() => {
                     navigate("/cars");
-                }, 3000)
+                }, 3000);
             } finally {
                 dispatch(setLoading(false));
             }
         };
         fetchCar();
+
+        return () => clearTimeout(timer);
     }, [id, dispatch, carId, navigate, handleError]);
 
-   
+
 
     const handleDelete = async () => {
-        if (!car){
+        if (!car) {
             dispatch(setError("Car not found"));
             navigate("/cars");
             return;
@@ -67,11 +71,11 @@ export const useCarDetails = () => {
             setShowDeleteConfirm(true);
             await deleteCar(carId);
             navigate("/cars");
-        dispatch(setLoading(false));
+            dispatch(setLoading(false));
 
         } catch (error) {
             handleError(error)
-        dispatch(setLoading(false));
+            dispatch(setLoading(false));
 
         }
     };
