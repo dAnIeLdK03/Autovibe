@@ -38,6 +38,9 @@ function CarGallery({ carId, imageUrls, make, model, year, showFavorite }: CarGa
     [nextIdx, prevIdx].forEach((idx) => {
       if (idx >= 0 && idx < validImages.length) {
         const img = new Image();
+        img.onerror = () => {
+          console.warn(`Failed to preload image: ${getImageUrl}`);
+        }
         img.src = getImageUrl(validImages[idx]);
       }
     });
