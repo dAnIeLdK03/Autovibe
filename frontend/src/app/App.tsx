@@ -27,6 +27,7 @@ import DeletedCars from "../features/admin/DeletedCars/DeletedCars";
 import DeletedCarDetails from "../features/admin/DeletedCars/DeletedDetails/DeletedCarDetails";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { AdminRoute } from "./AdminRoute";
+import ErrorBoundary from "../shared/UX/ErrorBoundary";
 
 
 
@@ -42,6 +43,7 @@ function App() {
 
   return (
     <BrowserRouter>
+    <ErrorBoundary>
       <AuthRestore />
       <Navbar />
       <Toaster />
@@ -68,6 +70,7 @@ function App() {
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
