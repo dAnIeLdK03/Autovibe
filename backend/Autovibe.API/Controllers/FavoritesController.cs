@@ -27,7 +27,7 @@ namespace Autovibe.API.Controllers
 
             await _favoriteService.AddAsync(userId.Value, carId);
 
-            return NoContent();
+            return Created();
         }
 
         [HttpDelete("{carId:int}")]
