@@ -86,22 +86,12 @@ namespace Autovibe.API.Controllers
         //PUT: api/cars/{id}
         [HttpPut("{id}")]
         [EnableRateLimiting("cars")]
-        public async Task<ActionResult<CarDetailsDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
+        public async Task<ActionResult<CarDetailsDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto, int userId, bool isAdmin)
         {
-            var userId = User.GetUserId();
-
-            userId.ThrowIfNull("Log in first");
 
             id.ThrowIfLessThan(1, "Invalid car id.");
 
-            bool isAdmin = User.IsInRole(AppRoles.Admin);
-
-            if (!isAdmin)
-            {
-                throw new ForbiddenException("You are not allowed to update this car.");
-            }
-
-            var result = await _carService.UpdateAsync(id, updateDto);
+            var result = await _carService.UpdateAsync(id, updateDto, userId, isAdmin);
 
             result.ThrowIfNull("Car cannot be found");
 

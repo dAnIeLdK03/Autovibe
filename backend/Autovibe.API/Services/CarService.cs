@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Autovibe.API.Interfaces;
 using Autovibe.API.Services.Helpers;
 using Autovibe.API.Constants;
+using Autovibe.API.Exceptions;
 
 
 
@@ -24,15 +25,19 @@ namespace Autovibe.API.Services
             _context = context;
             _env = env;
         }
-        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request)
+        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId, bool isAdmin)
         {
             var car = await _context.Cars
                 .Include(c => c.ImageUrls)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
-
-
+            
+            bool isOwner = car.UserId == userId;
+            if (!isAdmin || !isOwner)
+            {
+                throw new ForbiddenException("You are not allowed to update this car.");
+            }
 
             request.ApplyTo(car);
             await _context.SaveChangesAsync();
