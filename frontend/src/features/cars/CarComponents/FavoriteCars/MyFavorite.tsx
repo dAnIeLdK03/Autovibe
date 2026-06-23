@@ -6,19 +6,21 @@ import { useMyFavorite } from "./useMyFavorite";
 
 function MyFavorite() {
 
-    const {
-        cars, loading, error, page, totalPages, setPage,
-      } = useMyFavorite();
+  const {
+    cars, loading, error, page, totalPages, setPage,
+  } = useMyFavorite();
 
-      if (loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-       <SkeletonLoader type="details" count={3} />
+        <SkeletonLoader type="details" count={3} />
       </div>
     );
   }
-  if(cars.length === 0){
-    <EmptyState />
+  if (cars.length === 0) {
+    return (
+      <EmptyState />
+    );
   }
 
   if (!loading && !error && cars.length === 0) {
@@ -39,7 +41,7 @@ function MyFavorite() {
               Manage your listings ({cars.length} {cars.length === 1 ? "ad" : "ads"})
             </p>
           </div>
-         
+
         </div>
 
         {error && (
@@ -57,13 +59,13 @@ function MyFavorite() {
           ))}
         </div>
         <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPageChange={(newPage: number) => {
-              setPage(newPage);
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }}
-          />
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage: number) => {
+            setPage(newPage);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
       </div>
 
     </div>
