@@ -18,12 +18,12 @@ export const useCarDetails = () => {
     const { user } = useSelector((state: RootState) => state.auth);
     const { handleError } = useError();
     const isOwner = car !== null && user !== null && car.sellerId === user.id;
-
+    const controller = new AbortController();
     const [, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         let timer: ReturnType<typeof setTimeout>
-
+        const { signal } = controller;
         if (!id || isNaN(carId)) {
             dispatch(setError("Invalid Car ID"));
             navigate("/cars");
@@ -37,17 +37,23 @@ export const useCarDetails = () => {
                 const data = await getCarById(carId);
                 setCar(data);
             } catch (error) {
+                if (error instanceof Error && error.name === "AbortError") return;
                 handleError(error);
                 timer = setTimeout(() => {
                     navigate("/cars");
                 }, 3000);
             } finally {
-                dispatch(setLoading(false));
+                if (signal.aborted) {
+                    dispatch(setLoading(false));
+                }
             }
         };
         fetchCar();
 
-        return () => clearTimeout(timer);
+        return () => {
+            controller.abort;
+            clearTimeout(timer);
+        }
     }, [id, dispatch, carId, navigate, handleError]);
 
 

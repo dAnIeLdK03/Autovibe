@@ -14,10 +14,10 @@ export const useMyFavorite = () => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [favoriteCarIdToDelete, setFavoriteCarIdToDelete] = useState<number | null>(null);
     const { cars, loading, error } = useSelector((state: RootState) => state.cars);
-
+    const controller = new AbortController();
 
     const fetchCars = useCallback(async () => {
-
+        const { signal } = controller;
         dispatch(setLoading(true));
         dispatch(clearError());
 
@@ -26,14 +26,21 @@ export const useMyFavorite = () => {
             dispatch(setCars(response.items ?? []));
             setTotalPages(response.totalPages ?? 0);
         } catch (err) {
+            if (err instanceof Error && err.name === "AbortError") return;
             dispatch(setError(extractApiErrorMessage(err)));
         } finally {
-            dispatch(setLoading(false));
+            if (!signal.aborted) {
+                dispatch(setLoading(false));
+            }
         }
     }, [page, isAuthenticated, dispatch])
 
     useEffect(() => {
         fetchCars();
+
+        return () => {
+            controller.abort;
+        }
     }, [fetchCars])
 
     const handleDeleteClick = (id: number) => {
@@ -42,27 +49,27 @@ export const useMyFavorite = () => {
     };
 
     const handleConfirmDelete: () => Promise<void> = async () => {
-            if (favoriteCarIdToDelete == null) return;
-            dispatch(setLoading(true));
-            dispatch(clearError());
-            try {
-                await deleteFavorite(favoriteCarIdToDelete);
-                dispatch(setCars(cars.filter((c) => c.id !== favoriteCarIdToDelete)));
-                setShowDeleteConfirm(false);
-                setFavoriteCarIdToDelete(null);
-            } catch {
-                dispatch(setError("Unable to delete car."));
-            } finally {
-                dispatch(setLoading(false));
-            }
-        };
-        const handleCancelDelete = () => {
+        if (favoriteCarIdToDelete == null) return;
+        dispatch(setLoading(true));
+        dispatch(clearError());
+        try {
+            await deleteFavorite(favoriteCarIdToDelete);
+            dispatch(setCars(cars.filter((c) => c.id !== favoriteCarIdToDelete)));
             setShowDeleteConfirm(false);
             setFavoriteCarIdToDelete(null);
-        };
+        } catch {
+            dispatch(setError("Unable to delete car."));
+        } finally {
+            dispatch(setLoading(false));
+        }
+    };
+    const handleCancelDelete = () => {
+        setShowDeleteConfirm(false);
+        setFavoriteCarIdToDelete(null);
+    };
 
-        
-return {
+
+    return {
         cars,
         loading,
         error,

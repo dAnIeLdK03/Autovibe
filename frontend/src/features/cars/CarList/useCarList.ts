@@ -12,8 +12,10 @@ export const useCarList = (initialFilters: CarFilters) => {
     const [appliedFilters, setAppliedFilters] = useState<CarFilters>(initialFilters);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const controller = new AbortController();
 
     const fetchCars = useCallback(async () => {
+        const { signal } = controller;
         dispatch(setLoading(true));
         dispatch(clearError());
 
@@ -30,17 +32,24 @@ export const useCarList = (initialFilters: CarFilters) => {
             const response = await getCars(page, 18, queryParams);
             dispatch(setCars(response.items ?? []));
             setTotalPages(response.totalPages ?? 0);
-        } catch {
+        } catch (err) {
+            if (err instanceof Error && err.name === 'AbortError') return;
             dispatch(setError("Unable to load cars. Please try again."));
             dispatch(setCars([]));
             setTotalPages(0);
         } finally {
-            dispatch(setLoading(false));
+            if (!signal.aborted) {
+                dispatch(setLoading(false));
+            }
         }
     }, [appliedFilters, filters.sortType, page, dispatch]);
 
     useEffect(() => {
         fetchCars();
+
+        return () => {
+            controller.abort();
+        }
     }, [fetchCars]);
 
     const handleApplyFilters = (finalFilters: CarFilters) => {
