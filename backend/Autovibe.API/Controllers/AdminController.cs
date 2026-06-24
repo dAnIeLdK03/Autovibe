@@ -63,12 +63,17 @@ namespace Autovibe.API.Controllers
         [HttpPatch("{userId}/status")]
         public async Task<ActionResult<UserDto>> UpdateUserStatus(int userId, [FromBody] AdminUpdateStatusDto dto)
         {
+            var adminId = User.GetUserId();
+            adminId.ThrowIfNull("Log in first");
+            
+            userId.ThrowIfLessThan(1, "Invalid user id");
+
             if ((dto.IsBlocked == true || dto.BlockedUntil != null) && string.IsNullOrWhiteSpace(dto.BlockReason))
             {
                 throw new BadRequestException("A reason must be provided when blocking a user.");
             }
 
-            var result = await _adminService.UpdateUserStatusAsync(userId, dto);
+            var result = await _adminService.UpdateUserStatusAsync(userId, dto, adminId!.Value);
 
             return Ok(result);
         }

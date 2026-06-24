@@ -81,7 +81,7 @@ namespace Autovibe.API.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<UserDto> UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto)
+        public async Task<UserDto> UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto, int actingAdminId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             user!.Id.ThrowIfInvalidId($"User with id {userId} was not found");
@@ -106,6 +106,11 @@ namespace Autovibe.API.Services
 
                 if (!string.IsNullOrWhiteSpace(dto.BlockReason))
                     user.BlockReason = dto.BlockReason.Trim();
+            }
+
+            if (userId == actingAdminId)
+            {
+                throw new BadRequestException("You cannot change your own role");
             }
 
             user.UpdatedAt = DateTime.UtcNow;

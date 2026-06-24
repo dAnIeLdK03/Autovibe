@@ -34,7 +34,7 @@ namespace Autovibe.API.Services
             car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
             
             bool isOwner = car.UserId == userId;
-            if (!isAdmin || !isOwner)
+            if (!isAdmin && !isOwner)
             {
                 throw new ForbiddenException("You are not allowed to update this car.");
             }
