@@ -1,7 +1,7 @@
 import { useSelector } from "react-redux";
 import type { RootState } from '@autovibe/app-state';
 import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog";
-import { useState } from "react";
+import React, { useState } from "react";
 import type { CarDetails } from "../../../api/carsService";
 import { useNavigate } from "react-router";
 import { UserRole } from "../../../api/adminService";
@@ -9,10 +9,13 @@ import { UserRole } from "../../../api/adminService";
 interface CarDeatilsInfoProps {
   car: CarDetails
   isOwner?: boolean;
-  handleDelete: () => void;
+  onDeleteClick: () => void;
+  showDeleteConfirm: boolean;
+  setShowDeleteConfirm: React.Dispatch<React.SetStateAction<boolean>>;
+  handleActualDelete: () => void;
   handleRestore?: () => void;
 }
-function CarDetailsInfo({ car, isOwner, handleDelete, handleRestore }: CarDeatilsInfoProps) {
+function CarDetailsInfo({ car, isOwner, handleActualDelete, handleRestore }: CarDeatilsInfoProps) {
 
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -129,7 +132,7 @@ function CarDetailsInfo({ car, isOwner, handleDelete, handleRestore }: CarDeatil
               isOpen={showDeleteConfirm}
               title="Delete Car"
               message="Are you sure you want to delete this car?"
-              onConfirmClick={handleDelete}
+              onConfirmClick={handleActualDelete}
               onClose={() => setShowDeleteConfirm(false)}
             />
           </div>

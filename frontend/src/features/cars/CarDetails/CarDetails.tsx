@@ -8,7 +8,7 @@ import CarGallery from "./CarGallery";
 import CarDetailsInfo from "./CarDetailsInfo";
 
 export default function CarDetails() {
-  const { car, isOwner, handleDelete } = useCarDetails();
+  const { car, isOwner, handleActualDelete, handleDelete, showDeleteConfirm, setShowDeleteConfirm } = useCarDetails();
   const { loading, error } = useSelector((state: RootState) => state.cars);
   const navigate = useNavigate();
 
@@ -64,7 +64,10 @@ export default function CarDetails() {
         <CarDetailsInfo
           car={car}
           isOwner={isOwner}
-          handleDelete={handleDelete}
+          onDeleteClick={handleDelete}
+          showDeleteConfirm={showDeleteConfirm}
+          setShowDeleteConfirm={setShowDeleteConfirm}
+          handleActualDelete={handleActualDelete}
         />
 
       </div>

@@ -18,10 +18,10 @@ export const useCarDetails = () => {
     const { user } = useSelector((state: RootState) => state.auth);
     const { handleError } = useError();
     const isOwner = car !== null && user !== null && car.sellerId === user.id;
-    const controller = new AbortController();
-    const [, setShowDeleteConfirm] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
+        const controller = new AbortController();
         let timer: ReturnType<typeof setTimeout>
         const { signal } = controller;
         if (!id || isNaN(carId)) {
@@ -46,12 +46,13 @@ export const useCarDetails = () => {
                 if (signal.aborted) {
                     dispatch(setLoading(false));
                 }
+                dispatch(setLoading(false));
             }
         };
         fetchCar();
 
         return () => {
-            controller.abort;
+            controller.abort();
             clearTimeout(timer);
         }
     }, [id, dispatch, carId, navigate, handleError]);
@@ -71,21 +72,28 @@ export const useCarDetails = () => {
             dispatch(setError("You don't have permission to delete this."));
             return;
         }
-        dispatch(setLoading(true));
+       
+
+        setShowDeleteConfirm(true);
+        
+    };
+
+    const handleActualDelete = async () => {
+        setShowDeleteConfirm(false);
+        dispatch(setLoading(false));
         dispatch(clearError());
+
         try {
-            setShowDeleteConfirm(true);
             await deleteCar(carId);
             navigate("/cars");
-            dispatch(setLoading(false));
 
         } catch (error) {
             handleError(error)
+        } finally{
             dispatch(setLoading(false));
-
         }
-    };
+    }
 
-    return { car, isOwner, handleDelete }
+    return { car, isOwner, handleDelete, handleActualDelete, showDeleteConfirm, setShowDeleteConfirm }
 
 } 
