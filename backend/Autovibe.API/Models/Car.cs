@@ -33,7 +33,7 @@ public class Car
     public int UserId {get; set; }
     public User User {get; set; } = null!; 
     public DateTime CreatedAt {get; set; }
-    public DateTime UpdatedAt {get; set; }
+    public DateTime? UpdatedAt {get; set; }
 
 
 

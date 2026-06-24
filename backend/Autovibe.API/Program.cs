@@ -12,9 +12,10 @@ builder.Services.AddAppCore();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddJwtAuth(builder.Configuration);
 builder.Services.AddApiLimits();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddValidatorsFromAssemblyContaining<CarCreateDtoValidations>();
+builder.Services.AddValidatorsFromAssemblyContaining<CarUpdateDtoValidations>();
 builder.Services.AddHostedService<CarImageCleanupWorker>();
 
 var app = builder.Build();

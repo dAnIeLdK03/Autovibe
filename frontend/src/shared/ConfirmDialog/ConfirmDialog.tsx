@@ -1,21 +1,31 @@
 import React from 'react';
-import type { ConfirmDialogProps } from '../../api/carsService'; 
+import type { ConfirmDialogProps } from '../../api/carsService';
 
-const ConfirmDialog : React.FC<ConfirmDialogProps> = ({
-    isOpen,
-    title,
-    message,
-    onConfirmClick,
-    onClose
+const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
+  isOpen,
+  title,
+  message,
+  onConfirmClick,
+  onClose
 }) => {
-    
-    if(!isOpen) return null;
 
-    
+  if (!isOpen) return null;
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Escape') {
+      onClose?.();
+    }
+  }
+
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div 
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      tabIndex={0}
+      autoFocus
+      onKeyDown={handleKeyDown}
+    >
+      <div
         className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
         onClick={onClose} // Close dialog when clicking outside the card
       />
@@ -34,7 +44,7 @@ const ConfirmDialog : React.FC<ConfirmDialogProps> = ({
             Confirm
           </button>
 
-          <button 
+          <button
             onClick={onClose}
             className="mt-2 text-slate-500 hover:text-white text-sm transition-colors"
           >
