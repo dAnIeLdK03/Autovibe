@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { FavoriteService } from '../favoriteServiceTypes'
-import type { AuthState } from './authSlice'
+import { logout, type AuthState } from './authSlice'
 import type { CarState } from './carsSlice'
 
 export interface FavoritesState {
@@ -131,6 +131,9 @@ const favoritesSlice = createSlice({
           state.ids = state.ids.filter(id => id !== carId);
         }
       })
+      .addCase(logout, (state) => {
+        return initialState;
+      });
   },
 })
 
