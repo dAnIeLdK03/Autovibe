@@ -8,7 +8,7 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
 
     const [error, setError] = useState<string | null>(null);
     const methods = useForm<PasswordChange>()
-    const { register, getValues, handleSubmit, formState: { errors } } = methods;
+    const { register, getValues, handleSubmit, formState: { errors, isSubmitting } } = methods;
 
     if (!isOpen) return null;
 
@@ -89,8 +89,8 @@ const ChangePassword: React.FC<EditPasswordModalProps> = ({ isOpen, onClose, onS
                             <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-700">
                                 Cancel
                             </button>
-                            <button type="submit" className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-500 shadow-lg">
-                                Save
+                            <button disabled={isSubmitting} type="submit" className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-500 shadow-lg">
+                                {isSubmitting ? "Saving..." : "Save"}
                             </button>
                         </div>
                     </form>
