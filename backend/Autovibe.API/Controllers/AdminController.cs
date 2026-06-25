@@ -81,8 +81,8 @@ namespace Autovibe.API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> HardDeleteCar(int id)
         {
-            id.ThrowIfNull("Invalid user id.");
-
+            id.ThrowIfLessThan(1, "Invalid car id");
+            
             await _adminService.HardDeleteCarAsync(id);
             return NoContent();
         }
