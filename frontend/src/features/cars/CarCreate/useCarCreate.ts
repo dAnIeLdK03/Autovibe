@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 
 export const useCarCreate = () => {
   const MAX_FILE_SIZE_MB = 5;
-  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 *1024;
+  const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
   const ALLOWED_EXTENSIONS = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
 
   const { user } = useSelector((state: RootState) => state.auth);
@@ -26,6 +26,7 @@ export const useCarCreate = () => {
 
   const { handleError } = useError();
   const methods = useForm<CarFormValues>();
+  const { reset } = methods;
 
   useEffect(() => {
     if (user === null) {
@@ -35,7 +36,7 @@ export const useCarCreate = () => {
 
   const onSubmit = async (formData: CarFormValues) => {
     dispatch(clearError());
-    
+
     const errorMessage = CarCreateValidaions(formData);
     if (errorMessage) {
       dispatch(setError(errorMessage));
@@ -46,7 +47,7 @@ export const useCarCreate = () => {
 
     try {
       const uploadResult = await uploadCarImageIfPresent(selectedFiles);
-      
+
       if (uploadResult.error) {
         dispatch(setError(uploadResult.error));
         dispatch(setLoading(false));
@@ -56,11 +57,12 @@ export const useCarCreate = () => {
       await createCar({
         ...formData,
         description: formData.description ?? '',
-        imageUrls: uploadResult.imageUrls 
+        imageUrls: uploadResult.imageUrls
       });
 
       navigate("/cars");
       toast.success("Car created successfully!");
+      reset();
     } catch (error) {
       handleError(error);
     } finally {
@@ -78,10 +80,10 @@ export const useCarCreate = () => {
         return isValidSize && isValidType
       });
 
-      if(validFiles.length !== files.length){
+      if (validFiles.length !== files.length) {
         handleError(`The files were rejected. The images must be JPEG/PNG/WEBP/GIF and to ${MAX_FILE_SIZE_MB}MB.`);
       }
-      if(validFiles.length === 0) return;
+      if (validFiles.length === 0) return;
 
       const newPreviews = files.map(file => URL.createObjectURL(file));
 
