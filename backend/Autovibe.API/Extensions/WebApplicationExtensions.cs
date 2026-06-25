@@ -17,9 +17,9 @@ public static class WebApplicationExtensions
         app.UseCors();
         app.UseAuthentication();
         app.UseMiddleware<UserBlockMiddleware>();
+        app.UseRateLimiter();
         app.UseAuthorization();
 
-        app.UseRateLimiter();
 
         return app;
     }
