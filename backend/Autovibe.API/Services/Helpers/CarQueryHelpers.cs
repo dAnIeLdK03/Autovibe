@@ -1,4 +1,5 @@
 
+using Autovibe.API.Constants;
 using Autovibe.API.DTOs.Cars;
 using Autovibe.API.Models;
 
@@ -16,15 +17,15 @@ public static class CarQueryHelpers
         {
             query = query.Where(c => c.Year <= filters.MaxYear.Value);
         }
-        if (!string.IsNullOrEmpty(filters.FuelType) && filters.FuelType != "Fuel")
+        if (!string.IsNullOrEmpty(filters.FuelType) && filters.FuelType != CarFiltersConstants.Fuel)
         {
             query = query.Where(c => c.FuelType == filters.FuelType);
         }
-        if (!string.IsNullOrEmpty(filters.Transmission) && filters.Transmission != "Transmission")
+        if (!string.IsNullOrEmpty(filters.Transmission) && filters.Transmission != CarFiltersConstants.Transmission)
         {
             query = query.Where(c => c.Transmission == filters.Transmission);
         }
-        if (!string.IsNullOrEmpty(filters.Mileage) && filters.Mileage != "Mileage")
+        if (!string.IsNullOrEmpty(filters.Mileage) && filters.Mileage != CarFiltersConstants.Mileage)
         {
             query = filters.Mileage switch
             {
@@ -44,19 +45,19 @@ public static class CarQueryHelpers
         {
             query = query.Where(c => c.Power >= filters.Power);
         }
-        if (!string.IsNullOrEmpty(filters.BodyType) && filters.BodyType != "BodyType")
+        if (!string.IsNullOrEmpty(filters.BodyType) && filters.BodyType != CarFiltersConstants.BodyType)
         {
             query = query.Where(c => c.BodyType == filters.BodyType);
         }
-        if (!string.IsNullOrEmpty(filters.Location) && filters.Location != "Location")
+        if (!string.IsNullOrEmpty(filters.Location) && filters.Location != CarFiltersConstants.Location)
         {
             query = query.Where(c => c.Location == filters.Location);
         }
-        if (!string.IsNullOrEmpty(filters.SteeringWheel) && filters.SteeringWheel != "SteeringWheel")
+        if (!string.IsNullOrEmpty(filters.SteeringWheel) && filters.SteeringWheel != CarFiltersConstants.SteeringWheel)
         {
             query = query.Where(c => c.SteeringWheel == filters.SteeringWheel);
         }
-        if (!string.IsNullOrEmpty(filters.Condition) && filters.Condition != "Condition")
+        if (!string.IsNullOrEmpty(filters.Condition) && filters.Condition != CarFiltersConstants.Condition)
         {
             query = query.Where(c => c.Condition == filters.Condition);
         }
