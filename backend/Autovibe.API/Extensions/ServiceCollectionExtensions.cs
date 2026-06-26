@@ -41,6 +41,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IFavoriteService, FavoriteService>();
         services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<IImageService, ImageService>();
 
         return services;
     }

@@ -115,16 +115,5 @@ namespace Autovibe.API.Controllers
             await _carService.DeleteAsync(id, userId.Value, isAdmin);
             return NoContent();
         }
-
-        //POST: api/cars/upload-image
-        [HttpPost("upload-image")]
-        [Authorize]
-        [EnableRateLimiting("upload")]
-        [RequestSizeLimit(5 * 1024 * 1024)]
-        public async Task<ActionResult> UploadImage(IFormFile file)
-        {
-            var imageUrl = await _carService.UploadImageAsync(file);
-            return Ok(new { url = imageUrl });
-        }
     }
 }

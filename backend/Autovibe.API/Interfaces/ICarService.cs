@@ -10,5 +10,4 @@ public interface ICarService
     Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto requesta, int userId, bool isAdmin);
     Task<bool> DeleteAsync(int id, int userId, bool isAdmin);
     Task<PageResponse<CarListDto>> GetUserCarsAsync(int userId, int pageNumber, int pageSize);
-    Task<string> UploadImageAsync(IFormFile file);
 }
