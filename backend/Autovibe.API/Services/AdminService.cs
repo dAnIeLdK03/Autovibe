@@ -23,12 +23,7 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<UserDto>> GetAllUsersAsync(AdminUserFilterDto request)
         {
-            request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
-
-            request.PageSize.ThrowIfLessThanAndMoreThan(
-                PaginationConstants.MinPageSize,
-                PaginationConstants.MaxPageSize,
-                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
+            PaginationHelper.Validate(request.PageNumber, request.PageSize);
 
             IQueryable<User> query = _context.Users.AsNoTracking();
             if (!string.IsNullOrWhiteSpace(request.Email))
@@ -47,12 +42,7 @@ namespace Autovibe.API.Services
 
             var items = users.Select(u => u.UserListDto()).ToList();
 
-
-
-            return new PageResponse<UserDto>
-            (
-                items, totalItems, request.PageSize, request.PageNumber
-            );
+            return PaginationHelper.BuildResponse<UserDto>(items, totalItems, request.PageNumber, request.PageSize);
         }
 
         public async Task UpdateUserRoleAsync(int targetUserId, Role newRole, int actingAdminId)
@@ -196,12 +186,7 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<CarListDto>> GetDeletedCarsAsync(DeletedCarsDto request)
         {
-            request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
-
-            request.PageSize.ThrowIfLessThanAndMoreThan(
-                PaginationConstants.MinPageSize,
-                PaginationConstants.MaxPageSize,
-                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
+            PaginationHelper.Validate(request.PageNumber, request.PageSize);
 
             var query = _context.Cars
                 .AsNoTracking()
@@ -217,10 +202,7 @@ namespace Autovibe.API.Services
                 .Select(c => c.ListDto())
                 .ToListAsync();
 
-            return new PageResponse<CarListDto>
-            (
-                cars, totalItems, request.PageSize, request.PageNumber
-            );
+            return PaginationHelper.BuildResponse<CarListDto>(cars, totalItems, request.PageNumber, request.PageSize);
         }
 
         public async Task<CarDetailsDto?> GetDeletedCarsDetailsAsync(int id)

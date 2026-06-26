@@ -74,11 +74,7 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<CarListDto>> GetPageAsync(int userId, int pageNumber, int pageSize)
         {
-            pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
-            pageSize.ThrowIfLessThanAndMoreThan(
-                PaginationConstants.MinPageSize,
-                PaginationConstants.MaxPageSize,
-                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
+            PaginationHelper.Validate(pageNumber, pageSize);
 
             var favoritesQuery = _context.Favorites
                 .AsNoTracking()
@@ -98,10 +94,7 @@ namespace Autovibe.API.Services
                 .Select(f => f.Car.Adapt<CarListDto>())
                 .ToList();
 
-            return new PageResponse<CarListDto>
-            (
-                items, totalItems, pageSize, pageNumber
-            );
+            return PaginationHelper.BuildResponse<CarListDto>(items, totalItems, pageNumber, pageSize);
         }
 
         public async Task<bool> IsFavorite(int userId, int carId)

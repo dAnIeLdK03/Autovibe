@@ -70,14 +70,7 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<CarListDto>> GetAllAsync(CarFiltersDto request)
         {
-
-            request.PageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
-
-            request.PageSize.ThrowIfLessThanAndMoreThan(
-                PaginationConstants.MinPageSize,
-                PaginationConstants.MaxPageSize,
-                $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
-
+            PaginationHelper.Validate(request.PageNumber, request.PageSize);
 
             var query = _context.Cars
             .AsQueryable()
@@ -95,11 +88,7 @@ namespace Autovibe.API.Services
                 .Select(c => c.ListDto())
                 .ToListAsync();
 
-
-            return new PageResponse<CarListDto>
-            (
-                items, totalItems, request.PageSize, request.PageNumber
-            );
+            return PaginationHelper.BuildResponse<CarListDto>(items, totalItems, request.PageNumber, request.PageSize);
         }
 
         public async Task<bool> DeleteAsync(int id, int userId, bool isAdmin)
@@ -156,12 +145,7 @@ namespace Autovibe.API.Services
 
         public async Task<PageResponse<CarListDto>> GetUserCarsAsync(int userId, int pageNumber, int pageSize)
         {
-            pageNumber.ThrowIfLessThan(1, "Page number cannot be less than 1.");
-
-            pageSize.ThrowIfLessThanAndMoreThan(
-            PaginationConstants.MinPageSize,
-            PaginationConstants.MaxPageSize,
-            $"Page size cannot be less than {PaginationConstants.MinPageSize} or greater than {PaginationConstants.MaxPageSize}.");
+            PaginationHelper.Validate(pageNumber, pageSize);
 
             var query = _context.Cars
             .AsNoTracking()
@@ -175,10 +159,7 @@ namespace Autovibe.API.Services
                 .Select(c => c.ListDto())
                 .ToListAsync();
 
-            return new PageResponse<CarListDto>
-            (
-                items, totalItems, pageSize, pageNumber
-            );
+            return PaginationHelper.BuildResponse<CarListDto>(items, totalItems, pageNumber, pageSize);
         }
 
     }
