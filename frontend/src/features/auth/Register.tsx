@@ -148,7 +148,7 @@ function Register() {
               className="w-full px-5 py-4 bg-slate-900/50 border border-slate-700 rounded-2xl text-white outline-none focus:ring-2 focus:ring-[#70FFE2] focus:border-transparent transition-all duration-300 placeholder:text-slate-600"
               placeholder="0897362517"
               {...register("phoneNumber", {
-                required: "Phone name is required",
+                required: "Phone number is required",
                 validate: (value) =>
                   value.length === 10 || "Phone number must be 10 digits"
                 ,

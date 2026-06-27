@@ -78,7 +78,7 @@ namespace Autovibe.API.Services.BackgroundSevices
                     {
                         var fileInfo =  new FileInfo(filePath);
 
-                        if(fileInfo.CreationTimeUtc < DateTime.UtcNow.AddHours(-2))
+                        if(fileInfo.LastWriteTimeUtc < DateTime.UtcNow.AddHours(-2))
                         {
                             File.Delete(filePath);
                             deletedCount++;

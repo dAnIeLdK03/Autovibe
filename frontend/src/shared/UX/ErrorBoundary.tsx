@@ -18,6 +18,10 @@ class ErrorBoundary extends Component<Props, State> {
         return { hasError: true };
     }
 
+    private handleReset =() => {
+        this.setState({hasError: false})
+    }   
+
     public render() {
         if (this.state.hasError) {
             return (
@@ -38,7 +42,7 @@ class ErrorBoundary extends Component<Props, State> {
                         </p>
 
                         <button
-                            onClick={() => window.location.reload()}
+                            onClick={this.handleReset}
                             className="w-full py-3 px-5 rounded-2xl font-medium text-sm bg-slate-800 border border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white shadow-lg active:scale-[0.98] transition-all duration-200"
                         >
                             Try Again
