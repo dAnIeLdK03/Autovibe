@@ -70,7 +70,7 @@ public class UserBlockMiddleware
                                 : $"Your account is temporary blocked until {userStatus.BlockedUntil:yyyy-MM-dd HH:mm} UTC", // Малка корекция на интервала пред UTC
                             blockReason = userStatus.BlockReason,
                             blockedUntil = userStatus.BlockedUntil,
-                            isPermanent = userStatus.IsBlocked
+                            isPermanent = userStatus.IsPermanentlyBlocked
                         });
                         return;
                     }
