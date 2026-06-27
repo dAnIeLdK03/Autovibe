@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import type { RootState } from '@autovibe/app-state';
 import ConfirmDialog from "../../../shared/ConfirmDialog/ConfirmDialog";
-import React, { useState } from "react";
 import type { CarDetails } from "../../../api/carsService";
 import { useNavigate } from "react-router";
 import { UserRole } from "../../../api/adminService";
@@ -15,10 +14,9 @@ interface CarDeatilsInfoProps {
   handleActualDelete: () => void;
   handleRestore?: () => void;
 }
-function CarDetailsInfo({ car, isOwner, handleActualDelete, handleRestore }: CarDeatilsInfoProps) {
+function CarDetailsInfo({ car, isOwner, handleActualDelete, handleRestore, showDeleteConfirm, setShowDeleteConfirm }: CarDeatilsInfoProps) {
 
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const isAdmin = user?.role === UserRole.Admin;
 
