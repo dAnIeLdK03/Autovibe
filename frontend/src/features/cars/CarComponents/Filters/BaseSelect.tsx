@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 
 interface Option {
     label: string;
@@ -16,6 +16,7 @@ interface BaseSelectProps {
 export const BaseSelect = ({ label, options, value, onChange, variant = 'grid' }: BaseSelectProps) => {
     const [isOpen, setIsOpen] = React.useState(false);
     const selectedLabel = options.find(opt => opt.value === value)?.label || ` ${label}`;
+    const baseRef = useRef<HTMLDivElement>(null);
 
     if (variant === 'grid') {
         return (
@@ -37,6 +38,17 @@ export const BaseSelect = ({ label, options, value, onChange, variant = 'grid' }
             </div>
         );
     }
+
+    useEffect(() => {
+        const listener = (event: MouseEvent) => {
+            if(baseRef.current && !baseRef.current.contains(event.target as Node)){
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", listener);
+        return () => document.removeEventListener("mousedown", listener);
+    }, []);
 
     return (
         <div className="flex flex-col gap-2 relative">
