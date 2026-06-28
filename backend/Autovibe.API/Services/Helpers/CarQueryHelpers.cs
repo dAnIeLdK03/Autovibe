@@ -1,6 +1,7 @@
 
 using Autovibe.API.Constants;
 using Autovibe.API.DTOs.Cars;
+using Autovibe.API.Exceptions;
 using Autovibe.API.Models;
 
 namespace Autovibe.API.Services.Helpers;
@@ -9,6 +10,10 @@ public static class CarQueryHelpers
 {
     public static IQueryable<Car> ApplyFilters(this IQueryable<Car> query, CarFiltersDto filters)
     {
+        if(filters.MinYear.HasValue && filters.MaxYear.HasValue && filters.MinYear > filters.MaxYear)
+        {
+            throw new BadRequestException("Minimum year cannot be greater than maximum year.");
+        }
         if (filters.MinYear.HasValue)
         {
             query = query.Where(c => c.Year >= filters.MinYear.Value);
