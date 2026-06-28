@@ -13,8 +13,8 @@ namespace Autovibe.API.Validations
 
             RuleFor(x => x.NewPassword)
             .NotEmpty().WithMessage("New password is required")
-            .MinimumLength(6).WithMessage("New Password must be at least 6 characters");
-
+            .MinimumLength(6).WithMessage("New Password must be at least 6 characters")
+            .NotEqual(x => x.CurrentPassword).WithMessage("New password must differ from current password");
         }
     }
 }
