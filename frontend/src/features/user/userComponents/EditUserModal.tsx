@@ -7,7 +7,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
   const [error, setError] = useState<string | null>(null);
 
   const methods = useForm<UserData>();
-  const { register, handleSubmit, reset, formState: { errors } } = methods;
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = methods;
 
 
 
@@ -103,7 +103,7 @@ const EditUserModal: React.FC<EditUserModalProps> = ({ isOpen, onClose, user, on
               <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-700">
                 Cancel
               </button>
-              <button type="submit" className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-500 shadow-lg">
+              <button type="submit" disabled={isSubmitting} className="flex-1 px-4 py-2.5 rounded-xl bg-blue-600 text-white hover:bg-blue-500 shadow-lg">
                 Save
               </button>
             </div>
