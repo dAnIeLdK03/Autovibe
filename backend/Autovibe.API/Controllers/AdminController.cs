@@ -90,7 +90,7 @@ namespace Autovibe.API.Controllers
         [HttpPatch("{id}/restore")]
         public async Task<ActionResult> RestoreCar(int id)
         {
-            id.ThrowIfNull("Log in first.");
+            id.ThrowIfLessThan(1, "Invalid car id");
 
             var result = await _adminService.RestoreCarAsync(id);
 
@@ -114,6 +114,8 @@ namespace Autovibe.API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDto>> GetUserById(int id)
         {
+            id.ThrowIfLessThan(1, "Invalid user id");
+
             var result = await _adminService.AdminGetUserAsync(id);
             return Ok(result);
         }
@@ -121,7 +123,7 @@ namespace Autovibe.API.Controllers
         [HttpGet("{id}/deleted")]
         public async Task<ActionResult<CarDetailsDto>> GetDeletedCarsDetails(int id)
         {
-            id.ThrowIfLessThan(0, "Invalid car id.");
+            id.ThrowIfLessThan(1, "Invalid car id.");
 
             var result = await _adminService.GetDeletedCarsDetailsAsync(id);
             
