@@ -86,12 +86,11 @@ namespace Autovibe.API.Controllers
         //PUT: api/cars/{id}
         [HttpPut("{id}")]
         [EnableRateLimiting("cars")]
-        public async Task<ActionResult<CarDetailsDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto, int userId, bool isAdmin)
+        public async Task<ActionResult<CarDetailsDto?>> UpdateCar(int id, [FromBody] CarUpdateDto updateDto)
         {
-
             id.ThrowIfLessThan(1, "Invalid car id.");
 
-            var result = await _carService.UpdateAsync(id, updateDto, userId, isAdmin);
+            var result = await _carService.UpdateAsync(id, updateDto);
 
             result.ThrowIfNull("Car cannot be found");
 

@@ -6,6 +6,7 @@ using Autovibe.API.Interfaces;
 using Autovibe.API.Services.Helpers;
 using Autovibe.API.Constants;
 using Autovibe.API.Exceptions;
+using Autovibe.API.Extensions;
 
 
 
@@ -16,17 +17,26 @@ namespace Autovibe.API.Services
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public CarService(
             AppDbContext context,
-            IWebHostEnvironment env
+            IWebHostEnvironment env,
+            IHttpContextAccessor httpContextAccessor
         )
         {
             _context = context;
             _env = env;
+            _httpContextAccessor = httpContextAccessor;
         }
-        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request, int userId, bool isAdmin)
+        public async Task<CarDetailsDto?> UpdateAsync(int id, CarUpdateDto request)
         {
+            var user = _httpContextAccessor.HttpContext?.User;
+            var userId = user?.GetUserId();
+            userId.ThrowIfNull("Log in first");
+
+            var isAdmin = user?.IsInRole(AppRoles.Admin) ?? false;
+
             var car = await _context.Cars
                 .Include(c => c.ImageUrls)
                 .FirstOrDefaultAsync(c => c.Id == id);
