@@ -24,7 +24,7 @@ namespace Autovibe.API.Services
 
         public async Task AddAsync(int userId, int carId)
         {
-            var carExists = await _context.Cars.AnyAsync(c => c.Id == carId);
+            var carExists = await _context.Cars.AnyAsync(c => c.Id == carId && !c.IsDeleted);
             if (!carExists)
             {
                 throw new NotFoundException("Car cannot be found");
