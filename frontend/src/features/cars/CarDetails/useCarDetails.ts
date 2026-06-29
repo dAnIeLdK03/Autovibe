@@ -80,7 +80,7 @@ export const useCarDetails = () => {
 
     const handleActualDelete = async () => {
         setShowDeleteConfirm(false);
-        dispatch(setLoading(false));
+        dispatch(setLoading(true));
         dispatch(clearError());
 
         try {
