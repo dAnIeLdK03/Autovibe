@@ -43,7 +43,7 @@ export const useCarDetails = () => {
                     navigate("/cars");
                 }, 3000);
             } finally {
-                if (signal.aborted) {
+                if (!signal.aborted) {
                     dispatch(setLoading(false));
                 }
                 dispatch(setLoading(false));
