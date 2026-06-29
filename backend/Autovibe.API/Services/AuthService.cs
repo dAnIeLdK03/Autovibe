@@ -28,7 +28,8 @@ namespace Autovibe.API.Services
 
         public async Task<UserDto> Enroll(UserRegisterDto registerDto)
         {
-            var userExists = await _context.Users.AnyAsync(u => u.Email == registerDto.Email);
+            var normalizedEmail = registerDto.Email.ToLower().Trim();
+            var userExists = await _context.Users.AnyAsync(u => u.Email == normalizedEmail);
 
             userExists.ThrowIfTrue("User with this email already exists.");
 
@@ -54,8 +55,9 @@ namespace Autovibe.API.Services
         public async Task<AuthResponseDto> Sign(UserLoginDto loginDto)
         {
 
+            var normalizedEmail = loginDto.Email.ToLower().Trim();
             var user = await _context.Users
-                   .FirstOrDefaultAsync(u => u.Email == loginDto.Email);
+                   .FirstOrDefaultAsync(u => u.Email == normalizedEmail);
 
             user.ThrowIfNull("Invalid email or password.");
             var now = DateTime.UtcNow;
