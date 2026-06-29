@@ -39,7 +39,7 @@ export const useMyFavorite = () => {
         fetchCars();
 
         return () => {
-            controller.abort;
+            controller.abort();
         }
     }, [fetchCars])
 
