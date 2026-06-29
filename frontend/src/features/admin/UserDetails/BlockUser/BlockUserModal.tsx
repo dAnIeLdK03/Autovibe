@@ -27,7 +27,7 @@ const BlockUserModal: React.FC<BlockUserModalProps> = ({ isOpen, onClose, user, 
         setError(null);
         reset({
             blockReason: "",
-            blockedUntil: new Date(user.blockedUntil ?? new Date),
+            blockedUntil: new Date(user.blockedUntil ?? new Date()),
         });
     }, [isOpen, user, reset]);
 
