@@ -46,7 +46,6 @@ export const useCarDetails = () => {
                 if (!signal.aborted) {
                     dispatch(setLoading(false));
                 }
-                dispatch(setLoading(false));
             }
         };
         fetchCar();
