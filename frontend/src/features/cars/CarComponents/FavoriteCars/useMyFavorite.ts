@@ -36,11 +36,9 @@ export const useMyFavorite = () => {
     }, [page, isAuthenticated, dispatch])
 
     useEffect(() => {
+        const controller = new AbortController();
         fetchCars();
-
-        return () => {
-            controller.abort();
-        }
+        return () => controller.abort();
     }, [fetchCars])
 
     const handleDeleteClick = (id: number) => {
