@@ -100,7 +100,7 @@ namespace Autovibe.API.Services
 
             if (userId == actingAdminId)
             {
-                throw new BadRequestException("You cannot change your own role");
+                throw new BadRequestException("You cannot modify yout own accoung status.");
             }
 
             user.UpdatedAt = DateTime.UtcNow;
@@ -135,7 +135,7 @@ namespace Autovibe.API.Services
                         }
                         catch(Exception ex)
                         {
-                            throw new Exception("There is no images for this car to delete", ex);
+                            throw new Exception($"Failed to delete image '{fileName}'", ex);
                         }
                     }
                 }
