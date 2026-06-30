@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi;
 using FluentValidation;
+using Autovibe.API.Services.Helpers;
 
 namespace Autovibe.API.Extensions;
 
@@ -13,6 +14,10 @@ public static class ServiceCollectionExtensions
 {
     public static IServiceCollection AddAppCore(this IServiceCollection services)
     {
+        services.AddHttpContextAccessor();
+        MapsterConfig.Register();
+        services.AddHttpContextAccessor();
+
         services.AddControllers()
             .AddJsonOptions(opt =>
                 opt.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
