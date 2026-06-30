@@ -149,7 +149,7 @@ namespace Autovibe.API.Services
         {
             var car = await _context.Cars
                 .IgnoreQueryFilters()
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id && c.IsDeleted);
 
             car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
