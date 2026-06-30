@@ -38,7 +38,6 @@ namespace Autovibe.API.Services
             var isAdmin = user?.IsInRole(AppRoles.Admin) ?? false;
 
             var car = await _context.Cars
-                .Include(c => c.ImageUrls)
                 .FirstOrDefaultAsync(c => c.Id == id);
 
             car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
