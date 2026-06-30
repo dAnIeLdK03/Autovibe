@@ -45,11 +45,9 @@ export const useCarList = (initialFilters: CarFilters) => {
     }, [appliedFilters, filters.sortType, page, dispatch]);
 
     useEffect(() => {
+        const controller = new AbortController();
         fetchCars();
-
-        return () => {
-            controller.abort();
-        }
+        return () => controller.abort();
     }, [fetchCars]);
 
     const handleApplyFilters = (finalFilters: CarFilters) => {
