@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { getCurrentUser } from '../../../api/AuthService'; 
 import { useDispatch } from 'react-redux';
-import { logout, setCredentials, setError } from '@autovibe/app-state';
-import { extractApiErrorMessage } from '../../../shared/extractErrorMessage/extractApiErrorMessage';
+import { logout, setCredentials } from '@autovibe/app-state';
 
 function AuthRestore() {
     const dispatch = useDispatch();
@@ -23,8 +22,7 @@ function AuthRestore() {
                     throw new Error("User not found");
                 }
 
-            } catch (error) {
-                dispatch(setError(extractApiErrorMessage(error)))
+            } catch {
                 localStorage.removeItem("token");
                 dispatch(logout());
             }
