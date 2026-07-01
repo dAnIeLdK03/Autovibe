@@ -53,9 +53,26 @@ namespace Autovibe.API.Services
         public async Task DeleteUserAsync(int id)
         {
             var user = await _context.Users
+                .Include(u => u.Cars)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
             user!.Id.ThrowIfInvalidId("User not found");
+
+            var now = DateTime.UtcNow;
+            var carIds = user.Cars.Select(c => c.Id).ToList();
+
+            foreach (var car in user.Cars)
+            {
+                car.IsDeleted = true;
+                car.DeletedAt = now;
+            }
+
+            var favorites = await _context.Favorites
+                .Where(f => carIds.Contains(f.CarId) && !f.IsDeleted)
+                .ToListAsync();
+
+            foreach (var fav in favorites)
+                fav.IsDeleted = true;
 
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();

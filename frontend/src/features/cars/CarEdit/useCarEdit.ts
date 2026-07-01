@@ -61,7 +61,7 @@ export const useCarEdit = () => {
       } finally {
         dispatch(setLoading(false));
       }
-    };
+  }
     fetchCar();
   }, [id, user?.id, reset, dispatch, navigate]);
 
