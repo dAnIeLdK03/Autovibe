@@ -41,8 +41,6 @@ export const useCarEdit = () => {
         const fetchedSellerId = data.sellerId;
         setSellerId(fetchedSellerId == null ? null : Number(fetchedSellerId));
 
-        reset({ ...data });
-
         if (data.imageUrls && data.imageUrls.length > 0) {
           setImagePreview(
             (data.imageUrls ?? []).filter(
@@ -51,6 +49,9 @@ export const useCarEdit = () => {
           );
         }
 
+        reset({ ...data });
+
+        
         if (fetchedSellerId == null || Number(fetchedSellerId) !== Number(user.id)) {
           navigate(-1);
           return;
