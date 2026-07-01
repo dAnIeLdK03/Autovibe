@@ -63,7 +63,7 @@ export const useCarEdit = () => {
       }
     };
     fetchCar();
-  }, [id, user?.id, reset, dispatch]);
+  }, [id, user?.id, reset, dispatch, navigate]);
 
 
   const onSubmit = async (formData: CarFormValues) => {
