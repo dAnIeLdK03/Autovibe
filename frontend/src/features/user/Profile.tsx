@@ -49,6 +49,7 @@ function Profile() {
           navigate("/cars");
         } catch (error) {
           handleError(error);
+          setShowDeleteConfirm(false);
         }finally{
           setLoading(false);
         }
