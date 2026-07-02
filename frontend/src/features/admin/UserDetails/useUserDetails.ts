@@ -8,7 +8,8 @@ import {
 import axios from "axios";
 import { extractApiErrorMessage } from "../../../shared/extractErrorMessage/extractApiErrorMessage";
 import { useParams } from "react-router-dom";
-import type { Car } from "@autovibe/app-state";
+import { useSelector } from "react-redux";
+import type { Car, RootState } from "@autovibe/app-state";
 import { deleteUser } from "../../../api/userService";
 import { useError } from "../../../shared/CustomHooks/useError";
 
@@ -19,6 +20,7 @@ export const useUserDetails = () => {
     userIdParam && /^\d+$/.test(userIdParam) ? Number(userIdParam) : NaN;
   const invalidId = !Number.isInteger(userId) || userId < 1;
 
+  const { user: authUser } = useSelector((state: RootState) => state.auth);
   const [user, setUser] = useState<AdminUserDto | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -110,7 +112,7 @@ export const useUserDetails = () => {
       setError("You are not logged in.");
       return false;
     }
-    if (user.role !== UserRole.Admin) {
+    if (authUser?.role !== UserRole.Admin) {
       setError("You do not have permission to perform this action.");
       return false;
     }
