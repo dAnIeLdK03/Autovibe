@@ -15,6 +15,15 @@ public static class ObjectExtension
         return obj;
     }
 
+    public static T ThrowIfNullRequest<T>([NotNull]this T obj, string message)
+    {
+        if (obj == null)
+        {
+            throw new BadRequestException(message);
+        }
+        return obj;
+    }
+
     public static T ThrowIfInvalidId<T>(this T obj, string message) where T : INumber<T>
     {
         if(obj < T.One)

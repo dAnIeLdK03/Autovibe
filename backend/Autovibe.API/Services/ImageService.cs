@@ -14,7 +14,7 @@ namespace Autovibe.API.Services
         }
         public async Task<string> UploadImageAsync(IFormFile file)
         {
-           file.ThrowIfNull("File is null or empty.");
+           file.ThrowIfNullRequest("File is null or empty.");
 
             const long maxFileSize = 5 * 1024 * 1024; // 5MB            
             file.ThrowIfTooLarge(maxFileSize, "File size exceeds the maximum allowed size of 5MB.");
