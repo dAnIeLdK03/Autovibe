@@ -16,7 +16,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddHttpContextAccessor();
         MapsterConfig.Register();
-        services.AddHttpContextAccessor();
 
         services.AddControllers()
             .AddJsonOptions(opt =>
