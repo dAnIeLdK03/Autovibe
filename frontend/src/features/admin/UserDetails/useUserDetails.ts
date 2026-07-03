@@ -43,6 +43,7 @@ export const useUserDetails = () => {
       return;
     }
 
+    setUser(null);
     setLoading(true);
     setError(null);
     setForbidden(false);
