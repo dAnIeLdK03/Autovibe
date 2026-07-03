@@ -86,7 +86,7 @@ namespace Autovibe.API.Services
             {
                 if(dto.BlockedUntil.HasValue && dto.BlockedUntil.Value < DateTime.UtcNow)
                 {
-                    throw new ArgumentException("Blocked date can't be in the past.");
+                    throw new BadRequestException("Blocked date can't be in the past.");
                 }
                 if (dto.IsBlocked.HasValue)
                     user.IsBlocked = dto.IsBlocked.Value;
