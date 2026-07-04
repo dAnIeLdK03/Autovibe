@@ -49,6 +49,9 @@ const carsSlice = createSlice({
     setCars: (state, action: PayloadAction<Car[]>) => {
       state.cars = action.payload;
     },
+    clearCars: (state) => {
+      state.cars = [];
+    },
     setSelectedCar: (state, action: PayloadAction<Car | null>) => {
       state.selectedCar = action.payload;
     },
