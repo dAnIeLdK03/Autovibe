@@ -19,6 +19,7 @@ export const useDeletedCars = () => {
     const fetchCars = useCallback(async () => {
 
         dispatch(setLoading(true));
+        if(!isAuthenticated) return;
         dispatch(clearError());
 
         try {
