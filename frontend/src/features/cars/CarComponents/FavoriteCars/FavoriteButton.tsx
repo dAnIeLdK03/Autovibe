@@ -24,8 +24,13 @@ export const FavoriteButton = ({ carId }: Props) => {
     dispatch(toggleFavorite({ carId, isFavorite }));
   }
 
+  const isToggling = useSelector((s: RootState) =>
+    s.favorites.loadingCarIds.includes(carId)
+  );
+
   return (
     <button
+      disabled={isToggling}
       onClick={handleToggle}
       className="p-2 transition-transform active:scale-125"
     >
