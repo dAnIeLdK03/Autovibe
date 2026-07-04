@@ -115,12 +115,12 @@ export const useUserDetails = () => {
     }
     if (authUser?.role !== UserRole.Admin) {
       setError("You do not have permission to perform this action.");
-      return false; // Спираме процеса, ако логнатият НЕ е админ
+      return false;
     }
 
     if (user.role === UserRole.Admin) {
       setError("You cannot delete another administrator.");
-      return false; // Спираме процеса, ако профилът, КОЙТО СЕ ГЛЕДА, е Админ
+      return false; 
     }
 
     if (user.id === authUser.id) {

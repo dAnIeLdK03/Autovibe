@@ -50,6 +50,7 @@ export const useDeletedCars = () => {
                 await hardDeleteCarAdmin(carIdToDelete);
                 dispatch(setCars(cars.filter((c) => c.id !== carIdToDelete)));
                 setShowDeleteConfirm(false);
+                setCarIdToDelete(null);
             } catch {
                 dispatch(setError("Unable to delete car."));
             } finally {
