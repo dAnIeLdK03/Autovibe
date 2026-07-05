@@ -17,6 +17,11 @@ function CarGallery({ carId, imageUrls, make, model, year, showFavorite }: CarGa
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isZoomOpen, setIsZoomOpen] = useState(false);
 
+  useEffect(() => {
+    setCurrentIndex(0);
+    setIsZoomOpen(false);
+  }, [carId]);
+
   const validImages = (imageUrls ?? [])
     .filter((url) => url && typeof url === "string" && url.trim() !== "")
     .slice(0, 10);
