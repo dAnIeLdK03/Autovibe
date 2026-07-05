@@ -189,12 +189,12 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
     return response.data;
 };
 
-export const getCarsByUserId = async (page: number, pageSize: number): Promise<CarsPageResponse> => {
+export const getCarsByUserId = async (page: number, pageSize: number, signal?: AbortSignal): Promise<CarsPageResponse> => {
      const params = new URLSearchParams();
     params.append('pageNumber', page.toString());
     params.append('pageSize', pageSize.toString());
 
-    const response = await api.get<CarsPageResponse>(`/cars/my-cars?${params.toString()}`);
+    const response = await api.get<CarsPageResponse>(`/cars/my-cars?${params.toString()}`, { signal });
     const data = response.data;
     if (!data || !Array.isArray(data.items)) {
         throw new Error("Unable to load cars.");

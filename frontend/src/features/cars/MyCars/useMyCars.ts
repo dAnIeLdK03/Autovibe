@@ -21,7 +21,7 @@ export const useMyCars = () => {
 
 
     
-    const fetchCars = useCallback(async () => {
+    const fetchCars = useCallback(async (signal: AbortSignal) => {
         if (!isAuthenticated || !user?.id) {
             navigate("/login");
             return;
@@ -31,11 +31,12 @@ export const useMyCars = () => {
         dispatch(clearError());
 
         try {
-            const response = await getCarsByUserId(page, 9);
+            const response = await getCarsByUserId(page, 9, signal);
             const myCars = response.items ?? [];
             dispatch(setCars(myCars));
             setTotalPages(response.totalPages ?? 0);
         } catch (err) {
+            if ((err as { name?: string }).name === 'CanceledError') return;
             dispatch(setError(extractApiErrorMessage(err)));
         } finally {
             dispatch(setLoading(false));
@@ -43,7 +44,9 @@ export const useMyCars = () => {
     }, [page, user?.id, isAuthenticated, navigate, dispatch])
 
     useEffect(() => {
-        fetchCars();
+        const controller = new AbortController();
+        fetchCars(controller.signal);
+        return () => controller.abort();
     }, [fetchCars])
 
 
