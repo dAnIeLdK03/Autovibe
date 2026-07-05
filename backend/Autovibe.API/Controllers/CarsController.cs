@@ -60,6 +60,9 @@ namespace Autovibe.API.Controllers
 
             result.ThrowIfNull("Car cannot be found");
 
+            if (User.Identity?.IsAuthenticated != true)
+                result!.SellerPhoneNumber = null;
+
             return Ok(result);
         }
 
