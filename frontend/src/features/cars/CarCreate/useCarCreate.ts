@@ -85,10 +85,10 @@ export const useCarCreate = () => {
       }
       if (validFiles.length === 0) return;
 
-      const newPreviews = files.map(file => URL.createObjectURL(file));
+      const newPreviews = validFiles.map(file => URL.createObjectURL(file));
 
       setImagePreview(prev => [...prev, ...newPreviews]);
-      setSelectedFiles(prev => [...prev, ...files]);
+      setSelectedFiles(prev => [...prev, ...validFiles]);
     }
   };
 
