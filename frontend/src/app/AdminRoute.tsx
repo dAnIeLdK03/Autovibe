@@ -17,7 +17,7 @@ export const AdminRoute: React.FC<ProtectedRouteProps> =({
 
     // 0 = Admin
     if(role !== UserRole.Admin){
-        return <Navigate to = {redirectPath} replace />;
+        return <Navigate to="/" replace />;
     }
 
     return <Outlet />
