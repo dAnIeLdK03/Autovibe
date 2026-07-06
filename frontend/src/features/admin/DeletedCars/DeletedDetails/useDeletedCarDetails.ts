@@ -19,7 +19,7 @@ export const useDeletedCarDetails = () => {
     const {handleError} = useError();
 
 
-    const [, setShowDeleteConfirm] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     useEffect(() => {
         if (!id || isNaN(carId)) {
@@ -48,7 +48,7 @@ export const useDeletedCarDetails = () => {
     }, [id, dispatch, carId, navigate, handleError]);
 
 
-    const handleDelete = async () => {
+    const handleDelete = () => {
         if(!car){
             dispatch(setError("Car not found."));
             navigate("/admin/deleted");
@@ -58,16 +58,19 @@ export const useDeletedCarDetails = () => {
             dispatch(setError("You don't have permission to delete this."));
             return;
         }
+        setShowDeleteConfirm(true);
+    };
 
+    const handleConfirmDelete = async () => {
         dispatch(setLoading(true));
         dispatch(clearError());
         try{
-            setShowDeleteConfirm(true);
             await hardDeleteCarAdmin(carId);
             navigate("/admin/deleted");
-            dispatch(setLoading(false));
         }catch(error){
             handleError(error);
+            setShowDeleteConfirm(false);
+        }finally{
             dispatch(setLoading(false));
         }
     };
@@ -94,5 +97,5 @@ export const useDeletedCarDetails = () => {
             }
     };
 
-    return{car, handleDelete, handleRestore}
+    return { car, handleDelete, handleConfirmDelete, handleRestore, showDeleteConfirm, setShowDeleteConfirm }
 }
