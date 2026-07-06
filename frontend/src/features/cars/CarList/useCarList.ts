@@ -12,10 +12,8 @@ export const useCarList = (initialFilters: CarFilters) => {
     const [appliedFilters, setAppliedFilters] = useState<CarFilters>(initialFilters);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const controller = new AbortController();
 
-    const fetchCars = useCallback(async () => {
-        const { signal } = controller;
+    const fetchCars = useCallback(async (signal: AbortSignal) => {
         dispatch(setLoading(true));
         dispatch(clearError());
 
@@ -29,7 +27,7 @@ export const useCarList = (initialFilters: CarFilters) => {
                 delete queryParams.power;
             }
 
-            const response = await getCars(page, 18, queryParams);
+            const response = await getCars(page, 18, queryParams, signal);
             dispatch(setCars(response.items ?? []));
             setTotalPages(response.totalPages ?? 0);
         } catch (err) {
@@ -46,7 +44,7 @@ export const useCarList = (initialFilters: CarFilters) => {
 
     useEffect(() => {
         const controller = new AbortController();
-        fetchCars();
+        fetchCars(controller.signal);
         return () => controller.abort();
     }, [fetchCars]);
 

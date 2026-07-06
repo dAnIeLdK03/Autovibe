@@ -142,7 +142,7 @@ export interface ConfirmDialogProps {
     onClose?: () => void;
 }
 
-export const getCars = async (page: number, pageSize: number, filters: CarFilters): Promise<CarsPageResponse> => {
+export const getCars = async (page: number, pageSize: number, filters: CarFilters, signal?: AbortSignal): Promise<CarsPageResponse> => {
     const params = new URLSearchParams();
     params.append('pageNumber', page.toString());
     params.append('pageSize', pageSize.toString());
@@ -185,7 +185,7 @@ export const getCars = async (page: number, pageSize: number, filters: CarFilter
         params.set("sortType", filters.sortType ?? "");
     }
     
-    const response = await api.get(`/cars?${params}`);
+    const response = await api.get(`/cars?${params}`, { signal });
     return response.data;
 };
 
