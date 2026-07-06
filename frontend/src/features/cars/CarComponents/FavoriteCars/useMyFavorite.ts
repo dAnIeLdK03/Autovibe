@@ -14,15 +14,12 @@ export const useMyFavorite = () => {
     const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
     const [favoriteCarIdToDelete, setFavoriteCarIdToDelete] = useState<number | null>(null);
     const { cars, loading, error } = useSelector((state: RootState) => state.cars);
-    const controller = new AbortController();
-
-    const fetchCars = useCallback(async () => {
-        const { signal } = controller;
+    const fetchCars = useCallback(async (signal: AbortSignal) => {
         dispatch(setLoading(true));
         dispatch(clearError());
 
         try {
-            const response = await getFavoritesByUserId(page, 9);
+            const response = await getFavoritesByUserId(page, 9, signal);
             dispatch(setCars(response.items ?? []));
             setTotalPages(response.totalPages ?? 0);
         } catch (err) {
@@ -37,7 +34,7 @@ export const useMyFavorite = () => {
 
     useEffect(() => {
         const controller = new AbortController();
-        fetchCars();
+        fetchCars(controller.signal);
         return () => controller.abort();
     }, [fetchCars])
 
