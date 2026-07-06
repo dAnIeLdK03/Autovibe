@@ -61,6 +61,7 @@ namespace Autovibe.API.Services.BackgroundSevices
 
                 var allActiveImageUrls = await context.Cars
                     .AsNoTracking()
+                    .IgnoreQueryFilters()
                     .SelectMany(c => c.ImageUrls)
                     .ToListAsync();
 
