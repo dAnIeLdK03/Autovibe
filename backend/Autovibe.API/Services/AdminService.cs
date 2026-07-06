@@ -14,11 +14,13 @@ namespace Autovibe.API.Services
     {
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _env;
+        private readonly ILogger<AdminService> _logger;
 
-        public AdminService(AppDbContext context, IWebHostEnvironment env)
+        public AdminService(AppDbContext context, IWebHostEnvironment env, ILogger<AdminService> logger)
         {
             _context = context;
             _env = env;
+            _logger = logger;
         }
 
         public async Task<PageResponse<UserDto>> GetAllUsersAsync(AdminUserFilterDto request)
@@ -119,29 +121,29 @@ namespace Autovibe.API.Services
             car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
 
 
-            if (car.ImageUrls != null && car.ImageUrls.Any())
-            {
-                foreach (var imageUrl in car.ImageUrls)
-                {
-                    if (string.IsNullOrWhiteSpace(imageUrl)) continue;
-                    string fileName = Path.GetFileName(imageUrl);
-                    string absoluteFilePath = Path.Combine(_env.WebRootPath, "images", "cars", fileName);
+            var imageUrls = car.ImageUrls?.Where(u => !string.IsNullOrWhiteSpace(u)).ToList()
+                            ?? new List<string>();
 
-                    if (File.Exists(absoluteFilePath))
+            _context.Cars.Remove(car);
+            await _context.SaveChangesAsync();
+
+            foreach (var imageUrl in imageUrls)
+            {
+                string fileName = Path.GetFileName(imageUrl);
+                string absoluteFilePath = Path.Combine(_env.WebRootPath, "images", "cars", fileName);
+
+                if (File.Exists(absoluteFilePath))
+                {
+                    try
                     {
-                        try
-                        {
-                            File.Delete(absoluteFilePath);
-                        }
-                        catch(Exception ex)
-                        {
-                            throw new Exception($"Failed to delete image '{fileName}'", ex);
-                        }
+                        File.Delete(absoluteFilePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Failed to delete image file '{FileName}' — will be cleaned up by CarImageCleanupWorker.", fileName);
                     }
                 }
             }
-            _context.Cars.Remove(car);
-            await _context.SaveChangesAsync();
 
         }
 
