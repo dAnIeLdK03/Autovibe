@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router";
 import type { RootState } from '@autovibe/app-state';
@@ -23,6 +23,8 @@ export const useCarEdit = () => {
   const dispatch = useDispatch();
 
   const [imagePreview, setImagePreview] = useState<string[]>([]);
+  const imagePreviewRef = useRef<string[]>([]);
+  imagePreviewRef.current = imagePreview;
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [sellerId, setSellerId] = useState<number | null>(null);
 
@@ -158,13 +160,13 @@ export const useCarEdit = () => {
 
   useEffect(() => {
     return () => {
-      imagePreview.forEach(url => {
+      imagePreviewRef.current.forEach(url => {
         if (url && typeof url === 'string' && url.startsWith('blob:')) {
           URL.revokeObjectURL(url);
         }
       });
     };
-  }, [imagePreview]);
+  }, []);
 
   return {
     methods,
