@@ -158,16 +158,6 @@ namespace Autovibe.API.Services
             car.IsDeleted = false;
             car.UpdatedAt = DateTime.UtcNow;
 
-            var favoriteToRestore = await _context.Favorites
-                .IgnoreQueryFilters()
-                .Where(f => f.CarId == car.Id && f.IsDeleted)
-                .ToListAsync();
-
-            foreach (var fav in favoriteToRestore)
-            {
-                fav.IsDeleted = false;
-            }
-
             await _context.SaveChangesAsync();
 
             return true;
