@@ -148,14 +148,16 @@ export const useCarEdit = () => {
   };
 
   const removeImage = (index: number) => {
-    setImagePreview(prev => {
-      const urlToRemove = prev[index];
-      if (urlToRemove && typeof urlToRemove === 'string' && urlToRemove.startsWith('blob')) {
-        URL.revokeObjectURL(urlToRemove);
-      }
-      return prev.filter((_, i) => i !== index);
-    });
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+    const urlToRemove = imagePreview[index];
+    const isBlob = typeof urlToRemove === 'string' && urlToRemove.startsWith('blob');
+
+    if (isBlob) URL.revokeObjectURL(urlToRemove);
+    setImagePreview(prev => prev.filter((_, i) => i !== index));
+
+    if (isBlob) {
+      const fileIndex = imagePreview.slice(0, index).filter(u => u.startsWith('blob')).length;
+      setSelectedFiles(prev => prev.filter((_, i) => i !== fileIndex));
+    }
   };
 
   useEffect(() => {
