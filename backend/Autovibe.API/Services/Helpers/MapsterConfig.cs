@@ -10,9 +10,9 @@ namespace Autovibe.API.Services.Helpers
         {
             TypeAdapterConfig<Car, CarDetailsDto>.NewConfig()
                 .Map(dest => dest.SellerId, src => src.UserId)
-                .Map(dest => dest.SellerFirstName, src => src.User.FirstName)
-                .Map(dest => dest.SellerLastName, src => src.User.LastName)
-                .Map(dest => dest.SellerPhoneNumber, src => src.User.PhoneNumber);
+                .Map(dest => dest.SellerFirstName, src => src.User != null ? src.User.FirstName : null)
+                .Map(dest => dest.SellerLastName, src => src.User != null ? src.User.LastName : null)
+                .Map(dest => dest.SellerPhoneNumber, src => src.User != null ? src.User.PhoneNumber : null);
         
             TypeAdapterConfig<Car, CarListDto>.NewConfig()
                 .Map(dest => dest.ShortDescription, src =>
