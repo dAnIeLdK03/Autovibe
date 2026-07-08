@@ -65,10 +65,6 @@ namespace Autovibe.API.Services
                 user.IsBlocked ||
                 (user.BlockedUntil.HasValue && user.BlockedUntil.Value > now);
 
-            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
-            {
-                throw new UnauthorizedException("Invalid email or password.");
-            }
             if (isBlocked)
             {
                 var message = string.IsNullOrWhiteSpace(user.BlockReason)
@@ -81,6 +77,11 @@ namespace Autovibe.API.Services
                 }
 
                 user.ThrowIfForbidden(true, message);
+            }
+
+            if (!BCrypt.Net.BCrypt.Verify(loginDto.Password, user.PasswordHash))
+            {
+                throw new UnauthorizedException("Invalid email or password.");
             }
 
             var token = GenerateJwtToken(user);
