@@ -8,7 +8,7 @@ import { extractApiErrorMessage } from "../../../../shared/extractErrorMessage/e
 
 type BlockFormValues = {
     blockReason: string;
-    blockedUntil: Date;
+    blockedUntil: string;
 };
 
 const BlockUserModal: React.FC<BlockUserModalProps> = ({ isOpen, onClose, user, onSave }) => {
@@ -25,10 +25,10 @@ const BlockUserModal: React.FC<BlockUserModalProps> = ({ isOpen, onClose, user, 
     useEffect(() => {
         if (!isOpen || !user) return;
         setError(null);
-        reset({
-            blockReason: "",
-            blockedUntil: new Date(user.blockedUntil ?? new Date()),
-        });
+        const blockedUntilValue = user.blockedUntil
+            ? new Date(user.blockedUntil).toISOString().slice(0, 10)
+            : "";
+        reset({ blockReason: "", blockedUntil: blockedUntilValue });
     }, [isOpen, user, reset]);
 
     if (!isOpen || !user) return null;
