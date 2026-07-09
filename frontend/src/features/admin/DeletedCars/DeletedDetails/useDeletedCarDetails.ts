@@ -82,7 +82,7 @@ export const useDeletedCarDetails = () => {
             return;
         }
         if(user?.role !== UserRole.Admin){
-            dispatch(setError("You don't have permission to delete this."));
+            dispatch(setError("You don't have permission to restore this."));
             return;
         }
             dispatch(setLoading(true));
