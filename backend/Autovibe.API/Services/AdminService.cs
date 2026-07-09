@@ -51,7 +51,7 @@ namespace Autovibe.API.Services
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == targetUserId);
 
-            user!.Id.ThrowIfInvalidId($"User with id {targetUserId} was not found");
+            user.ThrowIfNull($"User with id {targetUserId} was not found");
 
             if (user.Role == Role.Admin && newRole == Role.User)
             {
@@ -76,7 +76,7 @@ namespace Autovibe.API.Services
         public async Task<UserDto> UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto, int actingAdminId)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
-            user!.Id.ThrowIfInvalidId($"User with id {userId} was not found");
+            user.ThrowIfNull($"User with id {userId} was not found");
 
             if (dto.IsBlocked == false)
             {
