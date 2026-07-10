@@ -206,8 +206,8 @@ export const getCarsByUserId = async (page: number, pageSize: number, signal?: A
         pageSize: data.pageSize ?? pageSize };
 };
 
-export const getCarById = async (id: number): Promise<CarDetails> => {
-    const response = await api.get(`/cars/${id}`);
+export const getCarById = async (id: number, signal?: AbortSignal): Promise<CarDetails> => {
+    const response = await api.get(`/cars/${id}`, { signal });
     return response.data;
 };
 

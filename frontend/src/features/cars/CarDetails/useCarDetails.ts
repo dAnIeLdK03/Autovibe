@@ -34,10 +34,10 @@ export const useCarDetails = () => {
             dispatch(setLoading(true));
             dispatch(clearError());
             try {
-                const data = await getCarById(carId);
-                setCar(data);
+                const data = await getCarById(carId, signal);
+                if (!signal.aborted) setCar(data);
             } catch (error) {
-                if (error instanceof Error && error.name === "AbortError") return;
+                if (signal.aborted) return;
                 handleError(error);
                 timer = setTimeout(() => {
                     navigate("/cars");
