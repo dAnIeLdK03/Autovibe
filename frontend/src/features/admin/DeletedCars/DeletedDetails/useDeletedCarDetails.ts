@@ -28,23 +28,32 @@ export const useDeletedCarDetails = () => {
             return;
         }
 
+        const controller = new AbortController();
+        const { signal } = controller;
+        let timer: ReturnType<typeof setTimeout>;
+
         const fetchCar = async () => {
             dispatch(setLoading(true));
             dispatch(clearError());
-            try{
-                const data = await getDeletedCarById(carId);
-                setCar(data);
-            }catch(error){
+            try {
+                const data = await getDeletedCarById(carId, signal);
+                if (!signal.aborted) setCar(data);
+            } catch (error) {
+                if (signal.aborted) return;
                 handleError(error);
-                const timer = setTimeout(() => {
+                timer = setTimeout(() => {
                     navigate("/cars");
                 }, 3000);
-                return () => clearTimeout(timer);
-            }finally{
-                dispatch(setLoading(false));
+            } finally {
+                if (!signal.aborted) dispatch(setLoading(false));
             }
         };
         fetchCar();
+
+        return () => {
+            controller.abort();
+            clearTimeout(timer);
+        };
     }, [id, dispatch, carId, navigate, handleError]);
 
 
