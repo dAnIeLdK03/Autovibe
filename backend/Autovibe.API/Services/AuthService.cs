@@ -37,7 +37,7 @@ namespace Autovibe.API.Services
 
             var user = new User
             {
-                Email = registerDto.Email,
+                Email = normalizedEmail,
                 PasswordHash = passwordHash,
                 FirstName = registerDto.FirstName,
                 LastName = registerDto.LastName,
