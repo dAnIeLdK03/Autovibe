@@ -75,6 +75,11 @@ namespace Autovibe.API.Services
 
         public async Task<UserDto> UpdateUserStatusAsync(int userId, AdminUpdateStatusDto dto, int actingAdminId)
         {
+            if (userId == actingAdminId)
+            {
+                throw new BadRequestException("You cannot modify your own account status.");
+            }
+
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
             user.ThrowIfNull($"User with id {userId} was not found");
 
@@ -98,11 +103,6 @@ namespace Autovibe.API.Services
 
                 if (!string.IsNullOrWhiteSpace(dto.BlockReason))
                     user.BlockReason = dto.BlockReason.Trim();
-            }
-
-            if (userId == actingAdminId)
-            {
-                throw new BadRequestException("You cannot modify yout own accoung status.");
             }
 
             user.UpdatedAt = DateTime.UtcNow;
