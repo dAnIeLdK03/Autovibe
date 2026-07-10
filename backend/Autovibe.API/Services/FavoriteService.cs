@@ -90,7 +90,7 @@ namespace Autovibe.API.Services
                 .ToListAsync();
 
             var items = carEntities
-                .Where(c => c != null)
+                .Where(f => f.Car != null)
                 .Select(f => f.Car.Adapt<CarListDto>())
                 .ToList();
 
