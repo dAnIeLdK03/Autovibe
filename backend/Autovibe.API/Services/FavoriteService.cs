@@ -61,6 +61,7 @@ namespace Autovibe.API.Services
         public async Task RemoveAsync(int userId, int carId)
         {
             var row = await _context.Favorites
+                .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(f => f.UserId == userId && f.CarId == carId);
 
             if (row is null)
