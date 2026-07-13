@@ -116,21 +116,23 @@ export const restoreCarAdmin = async (carId: number): Promise<boolean> => {
     return response.data;
 };
 
-export const getAdminUserById = async (userId: number): Promise<AdminUserDto> => {
-    const response = await api.get<AdminUserDto>(`/admin/${userId}`);
+export const getAdminUserById = async (userId: number, signal?: AbortSignal): Promise<AdminUserDto> => {
+    const response = await api.get<AdminUserDto>(`/admin/${userId}`, { signal });
     return response.data;
 };
 
 export const getAdminUserCars = async (
     userId: number,
     pageNumber = 1,
-    pageSize = 9
+    pageSize = 9,
+    signal?: AbortSignal
 ): Promise<CarsPageResponse> => {
     const search = new URLSearchParams();
     search.set('pageNumber', String(pageNumber));
     search.set('pageSize', String(pageSize));
     const response = await api.get<CarsPageResponse>(
-        `/admin/${userId}/cars?${search.toString()}`
+        `/admin/${userId}/cars?${search.toString()}`,
+        { signal }
     );
     const data = response.data;
     if (!data || !Array.isArray(data.items)) {

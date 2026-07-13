@@ -33,7 +33,7 @@ export const useUserDetails = () => {
   const { handleError } = useError();
 
 
-  const fetchUser = useCallback(async () => {
+  const fetchUser = useCallback(async (signal: AbortSignal) => {
     if (invalidId) {
       setUser(null);
       setError(null);
@@ -50,9 +50,10 @@ export const useUserDetails = () => {
     setNotFound(false);
 
     try {
-      const data = await getAdminUserById(userId);
-      setUser(data);
+      const data = await getAdminUserById(userId, signal);
+      if (!signal.aborted) setUser(data);
     } catch (e: unknown) {
+      if (signal.aborted) return;
       setUser(null);
       if (axios.isAxiosError(e)) {
         const status = e.response?.status;
@@ -67,11 +68,11 @@ export const useUserDetails = () => {
         setError(extractApiErrorMessage(e));
       }
     } finally {
-      setLoading(false);
+      if (!signal.aborted) setLoading(false);
     }
   }, [userId, invalidId]);
 
-  const fetchCars = useCallback(async () => {
+  const fetchCars = useCallback(async (signal: AbortSignal) => {
     if (invalidId) {
       setCars([]);
       setCarsError(null);
@@ -82,22 +83,27 @@ export const useUserDetails = () => {
     setCarsLoading(true);
     setCarsError(null);
     try {
-      const res = await getAdminUserCars(userId, 1, 18);
-      setCars((res.items ?? []) as Car[]);
+      const res = await getAdminUserCars(userId, 1, 18, signal);
+      if (!signal.aborted) setCars((res.items ?? []) as Car[]);
     } catch (e: unknown) {
+      if (signal.aborted) return;
       setCarsError(extractApiErrorMessage(e));
       setCars([]);
     } finally {
-      setCarsLoading(false);
+      if (!signal.aborted) setCarsLoading(false);
     }
   }, [userId, invalidId]);
 
   useEffect(() => {
-    void fetchUser();
+    const controller = new AbortController();
+    void fetchUser(controller.signal);
+    return () => controller.abort();
   }, [fetchUser]);
 
   useEffect(() => {
-    void fetchCars();
+    const controller = new AbortController();
+    void fetchCars(controller.signal);
+    return () => controller.abort();
   }, [fetchCars]);
 
   const roleLabel = (r: UserRole) => (r === UserRole.Admin ? "Admin" : "User");
