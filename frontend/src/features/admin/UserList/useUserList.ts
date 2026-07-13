@@ -1,6 +1,7 @@
 import { getAdminUsers, UserRole, type AdminUserDto, updateUserRoleAdmin } from '../../../api/adminService'
 import { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
+import toast from 'react-hot-toast'
 import { extractApiErrorMessage } from '../../../shared/extractErrorMessage/extractApiErrorMessage'
 import { useDispatch, useSelector } from 'react-redux'
 import type { AdminUser, RootState } from '@autovibe/app-state'
@@ -35,8 +36,7 @@ export const useUserList = () => {
 
       dispatch(setAdminUsers(updatedUsers));
     } catch (e: unknown) {
-      const errorMsg = extractApiErrorMessage(e);
-      dispatch(setAdminError(`Failed to update role: ${errorMsg}`));
+      toast.error(`Failed to update role: ${extractApiErrorMessage(e)}`);
     }
   }, [users, dispatch]);
 
