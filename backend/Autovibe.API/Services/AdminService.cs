@@ -118,7 +118,7 @@ namespace Autovibe.API.Services
                 .Where(c => c.IsDeleted && c.Id == id)
                 .FirstOrDefaultAsync();
 
-            car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
+            car.ThrowIfNull($"Car with id {id} was not found");
 
 
             var imageUrls = car.ImageUrls?.Where(u => !string.IsNullOrWhiteSpace(u)).ToList()
@@ -153,7 +153,7 @@ namespace Autovibe.API.Services
                 .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(c => c.Id == id && c.IsDeleted);
 
-            car!.Id.ThrowIfInvalidId($"Car with id {id} was not found");
+            car.ThrowIfNull($"Car with id {id} was not found");
 
             car.IsDeleted = false;
             car.UpdatedAt = DateTime.UtcNow;
