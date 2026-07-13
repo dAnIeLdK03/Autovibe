@@ -51,7 +51,8 @@ export interface AdminUserFilters{
 }
 
 export const getAdminUsers = async (
-    params: GetAdminUsersParams = {}
+    params: GetAdminUsersParams = {},
+    signal?: AbortSignal
 ): Promise<AdminUsersPageResponse> => {
     const pageNumber = params.pageNumber ?? 1;
     const pageSize = params.pageSize ?? 18;
@@ -63,7 +64,7 @@ export const getAdminUsers = async (
         search.set('email', params.email.trim());
     }
 
-    const response = await api.get<AdminUsersPageResponse>(`/admin?${search.toString()}`);
+    const response = await api.get<AdminUsersPageResponse>(`/admin?${search.toString()}`, { signal });
     return response.data;
 };
 

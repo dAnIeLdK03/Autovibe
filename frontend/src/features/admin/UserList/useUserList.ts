@@ -40,7 +40,7 @@ export const useUserList = () => {
     }
   }, [users, dispatch]);
 
-  const fetchUsers = useCallback(async () => {
+  const fetchUsers = useCallback(async (signal: AbortSignal) => {
     dispatch(setAdminLoading(true))
     dispatch(clearAdminError())
     dispatch(setAdminForbidden(false))
@@ -50,10 +50,11 @@ export const useUserList = () => {
         pageNumber: page,
         pageSize: 18,
         email: appliedEmail || undefined,
-      })
+      }, signal)
       dispatch(setAdminUsers((res.items ?? []) as AdminUserDto[]))
       setTotalPages(res.totalPages ?? 0)
     } catch (e: unknown) {
+      if (signal.aborted) return;
       if (axios.isAxiosError(e) && e.response?.status === 403) {
         dispatch(setAdminForbidden(true))
         dispatch(setAdminUsers([]))
@@ -62,12 +63,14 @@ export const useUserList = () => {
         dispatch(setAdminError(extractApiErrorMessage(e)))
       }
     } finally {
-      dispatch(setAdminLoading(false))
+      if (!signal.aborted) dispatch(setAdminLoading(false))
     }
   }, [page, appliedEmail, dispatch])
 
   useEffect(() => {
-    void fetchUsers()
+    const controller = new AbortController()
+    void fetchUsers(controller.signal)
+    return () => controller.abort()
   }, [fetchUsers])
 
   const applyEmailSearch = () => {
